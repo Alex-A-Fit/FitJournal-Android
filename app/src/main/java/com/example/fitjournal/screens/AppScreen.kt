@@ -16,6 +16,7 @@ import com.example.fitjournal.screens.home.HomeScreenTitle
 @Composable
 fun AppScreen(
     modifier: Modifier,
+    screenText: String,
     navigateToDestination: (NavigationInterface) -> Unit
 ) {
     Scaffold(
@@ -32,7 +33,7 @@ fun AppScreen(
         }
     ) { padding ->
         HomeScreen(
-            text = "HomeScreen",
+            text = screenText,
             modifier = Modifier.padding(padding)
         )
     }

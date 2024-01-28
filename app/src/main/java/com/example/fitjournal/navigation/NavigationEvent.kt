@@ -19,9 +19,5 @@ fun navigationEvent(
         NavigationInterface.NavigateToWorkoutStatistics -> {
             navController.navigate(Route.WORKOUT_STATISTICS_SCREEN)
         }
-
-        NavigationInterface.NavigateToApp -> {
-            navController.navigate(Route.APP_SCREEN)
-        }
     }
 }

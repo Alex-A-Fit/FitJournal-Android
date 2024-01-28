@@ -5,20 +5,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fitjournal.navigation.NavigationInterface
 import com.example.fitjournal.navigation.Route
-import com.example.fitjournal.navigation.Route.APP_SCREEN
 import com.example.fitjournal.navigation.Route.LOTTIE_INTRO
+import com.example.fitjournal.navigation.navigationEvent
 import com.example.fitjournal.screens.AppScreen
-import com.example.fitjournal.screens.home.HomeScreen
 import com.example.fitjournal.screens.lottie.LottieHomeScreenAnimation
 import com.example.fitjournal.ui.theme.FitJournalTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,30 +44,40 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         startDestination = LOTTIE_INTRO
                     ) {
-                        composable(APP_SCREEN) {
+                        composable(Route.WORKOUT_LIBRARY_SCREEN) {
                             AppScreen(
                                 modifier = Modifier,
+                                screenText = "Library Screen",
                                 navigateToDestination = { navigation ->
-                                    navigateToDestination(navigationInterface = navigation)
+                                    navigateToDestination(
+                                        navigationInterface = navigation,
+                                        navController = navController
+                                    )
                                 }
                             )
                         }
-                        composable(Route.WORKOUT_LIBRARY_SCREEN) {
-                            HomeScreen(
-                                text = "HomeScreen",
-                                modifier = Modifier.padding()
-                            )
-                        }
                         composable(Route.HOME_SCREEN) {
-                            HomeScreen(
+                            AppScreen(
                                 modifier = Modifier,
-                                text = "Home Screen"
+                                screenText = "Home Screen",
+                                navigateToDestination = { navigation ->
+                                    navigateToDestination(
+                                        navigationInterface = navigation,
+                                        navController = navController
+                                    )
+                                }
                             )
                         }
                         composable(Route.WORKOUT_STATISTICS_SCREEN) {
-                            HomeScreen(
+                            AppScreen(
                                 modifier = Modifier,
-                                text = "Workout Statistics Screen"
+                                screenText = "Stats Screen",
+                                navigateToDestination = { navigation ->
+                                    navigateToDestination(
+                                        navigationInterface = navigation,
+                                        navController = navController
+                                    )
+                                }
                             )
                         }
                         composable(LOTTIE_INTRO) {
@@ -84,11 +93,28 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private fun navigateToDestination(navigationInterface: NavigationInterface){
+private fun navigateToDestination(
+    navigationInterface: NavigationInterface,
+    navController: NavController
+){
     when (navigationInterface){
-        NavigationInterface.NavigateToApp -> NavigationInterface.NavigateToApp
-        NavigationInterface.NavigateToHome -> NavigationInterface.NavigateToHome
-        NavigationInterface.NavigateToWorkoutLibrary -> NavigationInterface.NavigateToWorkoutLibrary
-        NavigationInterface.NavigateToWorkoutStatistics -> NavigationInterface.NavigateToWorkoutStatistics
+        NavigationInterface.NavigateToHome -> {
+            navigationEvent(
+                navigationInterface,
+                navController = navController
+            )
+        }
+        NavigationInterface.NavigateToWorkoutLibrary -> {
+            navigationEvent(
+                navigationInterface,
+                navController = navController
+            )
+        }
+        NavigationInterface.NavigateToWorkoutStatistics -> {
+            navigationEvent(
+                navigationInterface,
+                navController = navController
+            )
+        }
     }
 }
