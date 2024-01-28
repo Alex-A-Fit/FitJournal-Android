@@ -10,7 +10,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.fitjournal.MainActivityUiState
 import com.example.fitjournal.R
 import com.example.fitjournal.navigation.NavigationInterface
-import com.example.fitjournal.navigation.mainActivityNavigation
+import com.example.fitjournal.navigation.navigationEvent
 
 @Composable
 fun LottieHomeScreenAnimation(
@@ -24,7 +24,7 @@ fun LottieHomeScreenAnimation(
         progress = { progress }
     )
     when (mainActivityState) {
-        MainActivityUiState.Success -> mainActivityNavigation(
+        MainActivityUiState.Success -> navigationEvent(
             navigationInterface = NavigationInterface.NavigateToApp,
             navController = navController
         )

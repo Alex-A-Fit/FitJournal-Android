@@ -2,7 +2,7 @@ package com.example.fitjournal.navigation
 
 import androidx.navigation.NavController
 
-fun mainActivityNavigation(
+fun navigationEvent(
     navigationInterface: NavigationInterface,
     navController: NavController
 ) {
