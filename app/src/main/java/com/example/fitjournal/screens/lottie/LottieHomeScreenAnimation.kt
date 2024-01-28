@@ -25,7 +25,7 @@ fun LottieHomeScreenAnimation(
     )
     when (mainActivityState) {
         MainActivityUiState.Success -> mainActivityNavigation(
-            navigationInterface = NavigationInterface.NavigateToHome,
+            navigationInterface = NavigationInterface.NavigateToApp,
             navController = navController
         )
         else -> Unit
