@@ -12,14 +12,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
-    var homeScreenState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
+    var appScreenState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
         private set
+
+
+
     fun runSplashScreen() {
         viewModelScope.launch {
             delay(2000L)
-            homeScreenState = MainActivityUiState.Success
+            appScreenState = MainActivityUiState.Success
         }
     }
+
+
 }
 
 sealed interface MainActivityUiState {

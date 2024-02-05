@@ -1,4 +1,4 @@
-package com.example.fitjournal.ui.theme
+package com.example.fitjournal.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

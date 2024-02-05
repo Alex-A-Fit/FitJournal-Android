@@ -1,4 +1,4 @@
-package com.example.fitjournal.components
+package com.example.fitjournal.components.navigation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.fitjournal.R
 import com.example.fitjournal.navigation.NavigationInterface
-import com.example.fitjournal.ui.theme.Spacing
+import com.example.fitjournal.theme.Spacing
 
 @Composable
 fun BottomAppBar(

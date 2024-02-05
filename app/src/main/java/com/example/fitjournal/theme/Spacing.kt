@@ -1,4 +1,4 @@
-package com.example.fitjournal.ui.theme
+package com.example.fitjournal.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.dp

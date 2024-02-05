@@ -2,27 +2,27 @@ package com.example.fitjournal.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.fitjournal.components.BottomAppBar
-import com.example.fitjournal.components.TopAppBar
+import com.example.fitjournal.components.navigation.BottomAppBar
 import com.example.fitjournal.navigation.NavigationInterface
-import com.example.fitjournal.screens.home.HomeScreen
-import com.example.fitjournal.screens.home.HomeScreenTitle
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppScreen(
-    modifier: Modifier,
-    screenText: String,
+    modifier: Modifier = Modifier,
+    snackBarModifier: Modifier = Modifier,
+    topAppBar: @Composable () -> Unit,
+    snackBarHostState: SnackbarHostState,
+    mainScreen: @Composable (Modifier) -> Unit,
     navigateToDestination: (NavigationInterface) -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(appBarTitle = { HomeScreenTitle() })
+            topAppBar()
         },
         bottomBar = {
             BottomAppBar(
@@ -30,11 +30,14 @@ fun AppScreen(
                     navigateToDestination(navRoute)
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackBarHostState,
+                modifier = snackBarModifier
+            )
         }
     ) { padding ->
-        HomeScreen(
-            text = screenText,
-            modifier = Modifier.padding(padding)
-        )
+        mainScreen(Modifier.padding(padding))
     }
 }

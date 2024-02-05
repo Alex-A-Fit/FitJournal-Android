@@ -1,4 +1,4 @@
-package com.example.fitjournal.ui.theme
+package com.example.fitjournal.theme
 
 import androidx.compose.ui.graphics.Color
 
