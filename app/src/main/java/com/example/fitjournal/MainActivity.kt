@@ -5,21 +5,26 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.fitjournal.components.datepicker.DatePicker
+import com.example.fitjournal.components.datepicker.FitJournalDatePicker
+import com.example.fitjournal.components.navigation.TopAppBar
+import com.example.fitjournal.model.events.HomeScreenEvents
 import com.example.fitjournal.navigation.NavigationInterface
 import com.example.fitjournal.navigation.Route
 import com.example.fitjournal.navigation.Route.LOTTIE_INTRO
@@ -28,8 +33,8 @@ import com.example.fitjournal.screens.AppScreen
 import com.example.fitjournal.screens.home.HomeScreen
 import com.example.fitjournal.screens.home.HomeScreenViewModel
 import com.example.fitjournal.screens.lottie.LottieHomeScreenAnimation
-import com.example.fitjournal.ui.theme.FitJournalTheme
-import com.example.fitjournal.ui.theme.Spacing
+import com.example.fitjournal.theme.FitJournalTheme
+import com.example.fitjournal.theme.Spacing
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,6 +50,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             FitJournalTheme {
                 val navController = rememberNavController()
+                val snackState = remember { SnackbarHostState() }
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -58,11 +65,20 @@ class MainActivity : ComponentActivity() {
                         composable(Route.WORKOUT_LIBRARY_SCREEN) {
                             AppScreen(
                                 modifier = Modifier,
-                                appBarTitle = { HomeScreenTitle() },
-                                mainScreen = { mainScreenModifier ->
-                                    HomeScreen(
-                                        modifier = mainScreenModifier
+                                snackBarHostState = snackState,
+                                topAppBar = {
+                                    TopAppBar(
+                                        appBarTitle = { HomeScreenTitle() },
+                                        modifier = Modifier.fillMaxWidth(),
                                     )
+                                },
+                                mainScreen = { mainScreenModifier ->
+//                                    HomeScreen(
+//                                        modifier = mainScreenModifier,
+//                                        homeScreenState = homeViewModel.homeScreenState,
+//                                        homeScreenEvents = ::homeScreenEvents,
+//                                        snackBarHostState = snackState
+//                                        )
                                 },
                                 navigateToDestination = { navigation ->
                                     navigateToDestination(
@@ -75,14 +91,37 @@ class MainActivity : ComponentActivity() {
                         composable(Route.HOME_SCREEN) {
                             AppScreen(
                                 modifier = Modifier,
-                                appBarTitle = { DatePicker(modifier = Modifier,
-                                    getPreviousDate = { homeViewModel.getPreviousDate() },
-                                    getNextDate = { homeViewModel.getNextDate() },
-                                    currentDate = homeViewModel.homeScreenState.currentDate
-                                ) },
+                                snackBarHostState = snackState,
+                                topAppBar = {
+                                    TopAppBar(
+                                        appBarTitle = {
+                                            FitJournalDatePicker(modifier = Modifier,
+                                                getPreviousDate = { homeViewModel.getPreviousDate() },
+                                                getNextDate = { homeViewModel.getNextDate() },
+                                                currentDate = homeViewModel.homeScreenState.currentDate,
+                                                showDatePickerDialog = {
+                                                    homeViewModel.showDatePickerDialog()
+                                                }
+                                            )
+                                        },
+                                        modifier = Modifier.fillMaxWidth(),
+                                        endAlignedActionIcon = {
+                                            IconButton(onClick = { /*TODO*/ }) {
+                                                Icon(
+                                                    painter = painterResource(id = R.drawable.ic_icon_filter),
+                                                    contentDescription = "Icon to filter workout cards",
+                                                    modifier = Modifier.size(Spacing.spacing32)
+                                                )
+                                            }
+                                        }
+                                    )
+                                },
                                 mainScreen = { mainScreenModifier ->
                                     HomeScreen(
-                                        modifier = mainScreenModifier
+                                        modifier = mainScreenModifier,
+                                        homeScreenState = homeViewModel.homeScreenState,
+                                        homeScreenEvents = ::homeScreenEvents,
+                                        snackBarHostState = snackState
                                     )
                                 },
                                 navigateToDestination = { navigation ->
@@ -90,25 +129,25 @@ class MainActivity : ComponentActivity() {
                                         navigationInterface = navigation,
                                         navController = navController
                                     )
-                                },
-                                appBarEndAlignedActionIcon = {
-                                    IconButton(onClick = { /*TODO*/ }) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.ic_icon_filter),
-                                            contentDescription = "Icon to filter workout cards",
-                                            modifier = Modifier.size(Spacing.spacing32)
-                                        )
-                                    }
                                 }
                             )
                         }
                         composable(Route.WORKOUT_STATISTICS_SCREEN) {
                             AppScreen(
                                 modifier = Modifier,
-                                appBarTitle = { HomeScreenTitle() },
+                                snackBarHostState = snackState,
                                 mainScreen = { mainScreenModifier ->
-                                    HomeScreen(
-                                        modifier = mainScreenModifier
+//                                    HomeScreen(
+//                                        modifier = mainScreenModifier,
+//                                        homeScreenState = homeViewModel.homeScreenState,
+//                                        homeScreenEvents = ::homeScreenEvents,
+//                                        snackBarHostState = snackState
+//                                        )
+                                },
+                                topAppBar = {
+                                    TopAppBar(
+                                        appBarTitle = { HomeScreenTitle() },
+                                        modifier = Modifier.fillMaxWidth(),
                                     )
                                 },
                                 navigateToDestination = { navigation ->
@@ -130,6 +169,17 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private fun homeScreenEvents(events: HomeScreenEvents) {
+        when (events) {
+            HomeScreenEvents.DismissDatePicker -> homeViewModel.dismissDatePickerDialog()
+            is HomeScreenEvents.SelectDateFromDatePicker -> {
+                homeViewModel.getSelectedDate(events.userSelectedDate)
+                homeViewModel.dismissDatePickerDialog()
+                homeViewModel.showSnackBar(snackBarHostState = events.snackBarHostState)
+            }
+        }
+    }
 }
 
 @Composable
@@ -140,6 +190,7 @@ fun HomeScreenTitle() {
         color = MaterialTheme.colorScheme.onPrimary
     )
 }
+
 
 private fun navigateToDestination(
     navigationInterface: NavigationInterface,

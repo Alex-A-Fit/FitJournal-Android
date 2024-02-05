@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.fitjournal.R
 import com.example.fitjournal.navigation.NavigationInterface
-import com.example.fitjournal.ui.theme.Spacing
+import com.example.fitjournal.theme.Spacing
 
 @Composable
 fun BottomAppBar(

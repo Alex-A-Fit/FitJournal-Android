@@ -1,4 +1,4 @@
-package com.example.fitjournal.ui.theme
+package com.example.fitjournal.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
