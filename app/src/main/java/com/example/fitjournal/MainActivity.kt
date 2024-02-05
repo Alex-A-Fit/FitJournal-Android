@@ -118,7 +118,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 mainScreen = { mainScreenModifier ->
                                     HomeScreen(
-                                        modifier = mainScreenModifier,
+                                        modifier = mainScreenModifier.fillMaxSize(),
                                         homeScreenState = homeViewModel.homeScreenState,
                                         homeScreenEvents = ::homeScreenEvents,
                                         snackBarHostState = snackState

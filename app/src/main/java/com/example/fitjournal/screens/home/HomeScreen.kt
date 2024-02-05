@@ -1,6 +1,6 @@
 package com.example.fitjournal.screens.home
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -25,7 +25,9 @@ fun HomeScreen(
         mutableStateOf(homeScreenState.isDatePickerDialogShowing)
     }
     isDatePickerDialogShowing = homeScreenState.isDatePickerDialogShowing
-    Column {
+    Box(
+        modifier = modifier
+    ) {
         if (isDatePickerDialogShowing) {
             FitJournalDatePickerDialog(
                 currentDate = homeScreenState.currentDateInMillis,
