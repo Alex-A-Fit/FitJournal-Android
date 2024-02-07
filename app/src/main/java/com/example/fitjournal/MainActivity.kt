@@ -6,10 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -17,13 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.fitjournal.components.datepicker.FitJournalDatePicker
-import com.example.fitjournal.components.navigation.TopAppBar
+import com.example.fitjournal.components.appbars.HomeTopAppBar
+import com.example.fitjournal.components.appbars.TopAppBar
 import com.example.fitjournal.model.events.HomeScreenEvents
 import com.example.fitjournal.navigation.NavigationInterface
 import com.example.fitjournal.navigation.Route
@@ -34,7 +30,6 @@ import com.example.fitjournal.screens.home.HomeScreen
 import com.example.fitjournal.screens.home.HomeScreenViewModel
 import com.example.fitjournal.screens.lottie.LottieHomeScreenAnimation
 import com.example.fitjournal.theme.FitJournalTheme
-import com.example.fitjournal.theme.Spacing
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,7 +47,6 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val snackState = remember { SnackbarHostState() }
 
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.primary
@@ -93,27 +87,11 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 snackBarHostState = snackState,
                                 topAppBar = {
-                                    TopAppBar(
-                                        appBarTitle = {
-                                            FitJournalDatePicker(modifier = Modifier,
-                                                getPreviousDate = { homeViewModel.getPreviousDate() },
-                                                getNextDate = { homeViewModel.getNextDate() },
-                                                currentDate = homeViewModel.homeScreenState.currentDate,
-                                                showDatePickerDialog = {
-                                                    homeViewModel.showDatePickerDialog()
-                                                }
-                                            )
-                                        },
-                                        modifier = Modifier.fillMaxWidth(),
-                                        endAlignedActionIcon = {
-                                            IconButton(onClick = { /*TODO*/ }) {
-                                                Icon(
-                                                    painter = painterResource(id = R.drawable.ic_icon_filter),
-                                                    contentDescription = "Icon to filter workout cards",
-                                                    modifier = Modifier.size(Spacing.spacing32)
-                                                )
-                                            }
-                                        }
+                                    HomeTopAppBar(
+                                        getPreviousDate = { homeViewModel.getPreviousDate() },
+                                        getNextDate = { homeViewModel.getNextDate() },
+                                        showDatePickerDialog = { homeViewModel.showDatePickerDialog() },
+                                        currentDate = homeViewModel.homeScreenState.currentDate
                                     )
                                 },
                                 mainScreen = { mainScreenModifier ->

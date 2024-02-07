@@ -7,7 +7,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.fitjournal.components.navigation.BottomAppBar
+import com.example.fitjournal.components.appbars.BottomAppBar
 import com.example.fitjournal.navigation.NavigationInterface
 
 @Composable
