@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fitjournal.components.appbars.HomeTopAppBar
 import com.example.fitjournal.components.appbars.TopAppBar
+import com.example.fitjournal.model.events.HomeAppBarEvents
 import com.example.fitjournal.model.events.HomeScreenEvents
 import com.example.fitjournal.navigation.NavigationInterface
 import com.example.fitjournal.navigation.Route
@@ -88,10 +89,8 @@ class MainActivity : ComponentActivity() {
                                 snackBarHostState = snackState,
                                 topAppBar = {
                                     HomeTopAppBar(
-                                        getPreviousDate = { homeViewModel.getPreviousDate() },
-                                        getNextDate = { homeViewModel.getNextDate() },
-                                        showDatePickerDialog = { homeViewModel.showDatePickerDialog() },
-                                        currentDate = homeViewModel.homeScreenState.currentDate
+                                        currentDate = homeViewModel.homeScreenState.currentDate,
+                                        homeAppBarEvents = ::homeAppBarEvents
                                     )
                                 },
                                 mainScreen = { mainScreenModifier ->
@@ -150,12 +149,26 @@ class MainActivity : ComponentActivity() {
 
     private fun homeScreenEvents(events: HomeScreenEvents) {
         when (events) {
-            HomeScreenEvents.DismissDatePicker -> homeViewModel.dismissDatePickerDialog()
+            HomeScreenEvents.DismissDatePicker -> homeViewModel.updateDatePickerDialog(isDatePickerShowing = false)
             is HomeScreenEvents.SelectDateFromDatePicker -> {
                 homeViewModel.getSelectedDate(events.userSelectedDate)
-                homeViewModel.dismissDatePickerDialog()
+                //dismissing dialog on date selection
+                homeViewModel.updateDatePickerDialog(isDatePickerShowing = false)
                 homeViewModel.showSnackBar(snackBarHostState = events.snackBarHostState)
             }
+
+            is HomeScreenEvents.UpdateFilterDialog -> homeViewModel.updateFilterDialog(isFilterDialogShowing = events.isDialogShowing)
+            HomeScreenEvents.DismissFilterExercisesDialog -> homeViewModel.updateFilterDialog(isFilterDialogShowing = false)
+            is HomeScreenEvents.OnConfirmFilterExercisesDialog -> homeViewModel.filterWorkouts(events.filterList)
+        }
+    }
+
+    private fun homeAppBarEvents(events: HomeAppBarEvents) {
+        when (events){
+            HomeAppBarEvents.GetNextDate -> homeViewModel.getNextDate()
+            HomeAppBarEvents.GetPreviousDate -> homeViewModel.getPreviousDate()
+            is HomeAppBarEvents.ShowDatePickerDialog -> homeViewModel.updateDatePickerDialog(isDatePickerShowing = events.showDialog)
+            is HomeAppBarEvents.ShowFilterDialog -> homeViewModel.updateFilterDialog(isFilterDialogShowing = events.showDialog)
         }
     }
 }

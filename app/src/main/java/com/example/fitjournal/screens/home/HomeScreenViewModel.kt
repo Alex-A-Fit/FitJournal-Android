@@ -1,5 +1,6 @@
 package com.example.fitjournal.screens.home
 
+import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
@@ -8,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.managers.DateManager
+import com.example.fitjournal.model.enum.WorkoutTypeEnum
 import com.example.fitjournal.model.uistate.HomeScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -70,15 +72,30 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    fun showDatePickerDialog() {
-        updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isDatePickerDialogShowing = true))
+    fun updateDatePickerDialog(isDatePickerShowing: Boolean){
+        updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isDatePickerDialogShowing = isDatePickerShowing))
     }
 
-    fun dismissDatePickerDialog() {
-        updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isDatePickerDialogShowing = false))
+    fun updateFilterDialog(isFilterDialogShowing: Boolean){
+        updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isFilterDialogShowing = isFilterDialogShowing))
     }
 
     private fun updateHomeScreenState(newHomeScreenState: HomeScreenUiState) {
         homeScreenState = newHomeScreenState
+    }
+
+    fun filterWorkouts(filteredWorkoutList: List<WorkoutTypeEnum>){
+        val newFilteredList = homeScreenState.filterDialogList
+        // Allows us to monitor which items are being filtered
+        filteredWorkoutList.forEach { workoutsToFilterBy ->
+            newFilteredList.forEach { filterListItem ->
+                if (filterListItem.exerciseType == workoutsToFilterBy) {
+                    filterListItem.isWorkoutSelected = true
+                }
+            }
+        }
+        updateHomeScreenState(newHomeScreenState = homeScreenState.copy(filterDialogList = newFilteredList))
+        //TODO("WE would want to now filter out the visible cards ")
+        Log.d("filter", "Filter works. List of cards should now show exercises based on filter enum types: $filteredWorkoutList")
     }
 }
