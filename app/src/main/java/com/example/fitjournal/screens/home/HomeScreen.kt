@@ -36,6 +36,7 @@ fun HomeScreen(
     var isFilterDialogShowing by remember {
         mutableStateOf(homeScreenState.isFilterDialogShowing)
     }
+
     isFilterDialogShowing = homeScreenState.isFilterDialogShowing
     isDatePickerDialogShowing = homeScreenState.isDatePickerDialogShowing
     Box(

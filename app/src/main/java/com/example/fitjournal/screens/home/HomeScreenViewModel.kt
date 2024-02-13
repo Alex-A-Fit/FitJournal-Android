@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.managers.DateManager
 import com.example.fitjournal.model.enum.WorkoutTypeEnum
+import com.example.fitjournal.model.ui.FilterWorkoutModel
 import com.example.fitjournal.model.uistate.HomeScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -85,14 +86,13 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
     }
 
     fun filterWorkouts(filteredWorkoutList: List<WorkoutTypeEnum>){
-        val newFilteredList = homeScreenState.filterDialogList
-        // Allows us to monitor which items are being filtered
-        filteredWorkoutList.forEach { workoutsToFilterBy ->
-            newFilteredList.forEach { filterListItem ->
-                if (filterListItem.exerciseType == workoutsToFilterBy) {
-                    filterListItem.isWorkoutSelected = true
-                }
-            }
+        val currentFilterList = homeScreenState.filterDialogList
+        // Adjust the filter list with the passed in parameter values
+        val newFilteredList = currentFilterList.map {
+            FilterWorkoutModel(
+                isWorkoutSelected = filteredWorkoutList.contains(it.exerciseType),
+                exerciseType = it.exerciseType
+            )
         }
         updateHomeScreenState(newHomeScreenState = homeScreenState.copy(filterDialogList = newFilteredList))
         //TODO("WE would want to now filter out the visible cards ")

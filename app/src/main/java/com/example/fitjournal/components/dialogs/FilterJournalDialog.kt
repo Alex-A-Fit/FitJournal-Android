@@ -45,13 +45,6 @@ fun FilterJournalDialog(
     BasicAlertDialog(
         onDismissRequest = {
             homeScreenEvents(HomeScreenEvents.DismissFilterExercisesDialog)
-            homeScreenEvents(
-                HomeScreenEvents.OnConfirmFilterExercisesDialog(
-                    workoutList.mapNotNull {
-                        if (it.isWorkoutSelected) it.exerciseType else null
-                    }
-                )
-            )
         },
         modifier = modifier,
         properties = properties,
@@ -61,13 +54,6 @@ fun FilterJournalDialog(
                 workoutList = workoutList,
                 onDismissDialog = {
                     homeScreenEvents(HomeScreenEvents.DismissFilterExercisesDialog)
-                    homeScreenEvents(
-                        HomeScreenEvents.OnConfirmFilterExercisesDialog(
-                            workoutList.mapNotNull {
-                                if (it.isWorkoutSelected) it.exerciseType else null
-                            }
-                        )
-                    )
                 },
                 onConfirmDialog = {
                     homeScreenEvents(HomeScreenEvents.OnConfirmFilterExercisesDialog(it))
@@ -84,8 +70,10 @@ fun FilterJournalSection(
     onDismissDialog: () -> Unit,
     onConfirmDialog: (List<WorkoutTypeEnum>) -> Unit,
 ) {
-    var mutableWorkoutList = workoutList.toMutableList()
-    val finalList = mutableListOf<WorkoutTypeEnum>()
+    val mutableWorkoutList: MutableList<WorkoutTypeEnum> = workoutList.mapNotNull {
+        if (it.isWorkoutSelected) it.exerciseType
+        else null
+    }.toMutableList()
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -97,8 +85,17 @@ fun FilterJournalSection(
         Spacer(modifier = Modifier.height(Spacing.spacing12))
         FilterJournalDialogCheckboxes(
             workoutList = workoutList,
-            onFilterSelected = { listIndex, filterValue ->
-                mutableWorkoutList[listIndex].isWorkoutSelected = filterValue
+            onFilterCheckboxChanged = { workoutTypeEnum, checkboxValue ->
+                if (checkboxValue){
+                    if (!mutableWorkoutList.contains(workoutTypeEnum)) {
+                        mutableWorkoutList.add(workoutTypeEnum)
+                    }
+                }
+                if (!checkboxValue){
+                    if (mutableWorkoutList.contains(workoutTypeEnum)) {
+                        mutableWorkoutList.remove(workoutTypeEnum)
+                    }
+                }
             }
         )
         FilterJournalDialogButtons(
@@ -106,14 +103,11 @@ fun FilterJournalSection(
                 .fillMaxWidth()
                 .padding(horizontal = Spacing.spacing12),
             onDismissDialog = {
-                mutableWorkoutList = workoutList.toMutableList()
+                mutableWorkoutList.clear()
                 onDismissDialog()
             },
             onConfirmDialog = {
-                mutableWorkoutList.forEach {
-                    if (it.isWorkoutSelected) finalList.add(element = it.exerciseType)
-                }
-                onConfirmDialog(finalList)
+                onConfirmDialog(mutableWorkoutList.toList())
                 onDismissDialog()
             }
         )
@@ -143,19 +137,19 @@ fun FilterJournalDialogSubtitle() {
 @Composable
 fun FilterJournalDialogCheckboxes(
     workoutList: List<FilterWorkoutModel>,
-    onFilterSelected: (Int, Boolean) -> Unit
+    onFilterCheckboxChanged: (WorkoutTypeEnum, Boolean) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
-        workoutList.forEachIndexed { index, workout ->
+        workoutList.forEach { workout ->
             FilterCheckboxItem(
                 workout = workout,
-                onFilterSelected = { filterValue ->
-                    onFilterSelected(index, filterValue)
-                },
+                onFilterCheckboxChanged = { workoutTypeEnum, checkboxValue ->
+                    onFilterCheckboxChanged(workoutTypeEnum, checkboxValue)
+                }
             )
             Spacer(modifier = Modifier.height(Spacing.spacing12))
         }
@@ -165,7 +159,7 @@ fun FilterJournalDialogCheckboxes(
 @Composable
 fun FilterCheckboxItem(
     workout: FilterWorkoutModel,
-    onFilterSelected: (Boolean) -> Unit,
+    onFilterCheckboxChanged: (WorkoutTypeEnum, Boolean) -> Unit
 ) {
     val workoutName = stringResource(id = workout.exerciseType.stringValue)
     var isFilterSelected by remember {
@@ -180,7 +174,8 @@ fun FilterCheckboxItem(
             checked = isFilterSelected,
             onCheckedChange = {
                 isFilterSelected = it
-                onFilterSelected(it)
+                // passing in the specific exercise toggled and the value of toggle
+                onFilterCheckboxChanged(workout.exerciseType, it)
             }
         )
         Spacer(modifier = Modifier.height(Spacing.spacing8))
