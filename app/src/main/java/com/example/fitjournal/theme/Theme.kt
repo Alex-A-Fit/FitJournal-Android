@@ -20,7 +20,7 @@ private val LightColorPalette = lightColorScheme(
     secondary = BlueVariant,
     tertiary = BlueLight,
     onPrimary = DarkGray2,
-    onSecondary = MediumGray,
+    onSecondary = LightGray,
     onTertiary = DarkGray
 )
     /* Other default colors to override
