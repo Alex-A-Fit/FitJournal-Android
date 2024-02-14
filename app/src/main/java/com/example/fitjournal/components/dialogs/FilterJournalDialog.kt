@@ -90,8 +90,7 @@ fun FilterJournalSection(
                     if (!mutableWorkoutList.contains(workoutTypeEnum)) {
                         mutableWorkoutList.add(workoutTypeEnum)
                     }
-                }
-                if (!checkboxValue){
+                } else {
                     if (mutableWorkoutList.contains(workoutTypeEnum)) {
                         mutableWorkoutList.remove(workoutTypeEnum)
                     }
