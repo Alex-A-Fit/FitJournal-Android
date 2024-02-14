@@ -33,7 +33,7 @@ val typography = Typography(
         fontFamily = Inter.bold
     ),
     headlineSmall = TextStyle(
-        fontSize = 26.sp,
+        fontSize = 22.sp,
         lineHeight = 12.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.regular

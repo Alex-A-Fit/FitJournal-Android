@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Fit Journal</string>
+
+    // Content Descriptors
+    <string name="content_desc_home_screen_filter_icon">Icon to filter through your fitness journal</string>
+
+    // Title Strings
+    <string name="title_filter_workouts">Filter Your Workouts</string>
+    <string name="title_weight_training">Weight Training</string>
+    <string name="title_calisthenics">Calisthenics</string>
+    <string name="title_cardio">Cardio</string>
+
+    // SubTitle Strings
+    <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>
+
+    // General Strings
+    <string name="text_dismiss">Dismiss</string>
+    <string name="text_confirm">Confirm</string>
+
 </resources>

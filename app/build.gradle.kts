@@ -96,7 +96,6 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
     implementation("androidx.compose.material3:material3-adaptive:1.0.0-alpha05")
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.0.0-alpha02")
-    implementation("androidx.compose.material:material:1.6.0")
 
     /* Lottie Animation */
     implementation("com.airbnb.android:lottie-compose:6.1.0")

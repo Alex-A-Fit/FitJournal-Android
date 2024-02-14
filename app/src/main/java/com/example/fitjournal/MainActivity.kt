@@ -6,10 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -17,13 +14,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.fitjournal.components.datepicker.FitJournalDatePicker
-import com.example.fitjournal.components.navigation.TopAppBar
+import com.example.fitjournal.components.appbars.HomeTopAppBar
+import com.example.fitjournal.components.appbars.TopAppBar
+import com.example.fitjournal.model.events.HomeAppBarEvents
 import com.example.fitjournal.model.events.HomeScreenEvents
 import com.example.fitjournal.navigation.NavigationInterface
 import com.example.fitjournal.navigation.Route
@@ -34,7 +31,6 @@ import com.example.fitjournal.screens.home.HomeScreen
 import com.example.fitjournal.screens.home.HomeScreenViewModel
 import com.example.fitjournal.screens.lottie.LottieHomeScreenAnimation
 import com.example.fitjournal.theme.FitJournalTheme
-import com.example.fitjournal.theme.Spacing
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,7 +48,6 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val snackState = remember { SnackbarHostState() }
 
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.primary
@@ -93,27 +88,9 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 snackBarHostState = snackState,
                                 topAppBar = {
-                                    TopAppBar(
-                                        appBarTitle = {
-                                            FitJournalDatePicker(modifier = Modifier,
-                                                getPreviousDate = { homeViewModel.getPreviousDate() },
-                                                getNextDate = { homeViewModel.getNextDate() },
-                                                currentDate = homeViewModel.homeScreenState.currentDate,
-                                                showDatePickerDialog = {
-                                                    homeViewModel.showDatePickerDialog()
-                                                }
-                                            )
-                                        },
-                                        modifier = Modifier.fillMaxWidth(),
-                                        endAlignedActionIcon = {
-                                            IconButton(onClick = { /*TODO*/ }) {
-                                                Icon(
-                                                    painter = painterResource(id = R.drawable.ic_icon_filter),
-                                                    contentDescription = "Icon to filter workout cards",
-                                                    modifier = Modifier.size(Spacing.spacing32)
-                                                )
-                                            }
-                                        }
+                                    HomeTopAppBar(
+                                        currentDate = homeViewModel.homeScreenState.currentDate,
+                                        homeAppBarEvents = ::homeAppBarEvents
                                     )
                                 },
                                 mainScreen = { mainScreenModifier ->
@@ -172,12 +149,26 @@ class MainActivity : ComponentActivity() {
 
     private fun homeScreenEvents(events: HomeScreenEvents) {
         when (events) {
-            HomeScreenEvents.DismissDatePicker -> homeViewModel.dismissDatePickerDialog()
+            HomeScreenEvents.DismissDatePicker -> homeViewModel.updateDatePickerDialog(isDatePickerShowing = false)
             is HomeScreenEvents.SelectDateFromDatePicker -> {
                 homeViewModel.getSelectedDate(events.userSelectedDate)
-                homeViewModel.dismissDatePickerDialog()
+                //dismissing dialog on date selection
+                homeViewModel.updateDatePickerDialog(isDatePickerShowing = false)
                 homeViewModel.showSnackBar(snackBarHostState = events.snackBarHostState)
             }
+
+            is HomeScreenEvents.UpdateFilterDialog -> homeViewModel.updateFilterDialog(isFilterDialogShowing = events.isDialogShowing)
+            HomeScreenEvents.DismissFilterExercisesDialog -> homeViewModel.updateFilterDialog(isFilterDialogShowing = false)
+            is HomeScreenEvents.OnConfirmFilterExercisesDialog -> homeViewModel.filterWorkouts(events.filterList)
+        }
+    }
+
+    private fun homeAppBarEvents(events: HomeAppBarEvents) {
+        when (events){
+            HomeAppBarEvents.GetNextDate -> homeViewModel.getNextDate()
+            HomeAppBarEvents.GetPreviousDate -> homeViewModel.getPreviousDate()
+            is HomeAppBarEvents.ShowDatePickerDialog -> homeViewModel.updateDatePickerDialog(isDatePickerShowing = events.showDialog)
+            is HomeAppBarEvents.ShowFilterDialog -> homeViewModel.updateFilterDialog(isFilterDialogShowing = events.showDialog)
         }
     }
 }
