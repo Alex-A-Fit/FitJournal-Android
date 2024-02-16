@@ -2,8 +2,12 @@ package com.example.fitjournal.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -16,10 +20,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
+import com.example.fitjournal.R
+import com.example.fitjournal.components.cards.CalisthenicsCard
 import com.example.fitjournal.components.datepicker.FitJournalDatePickerDialog
 import com.example.fitjournal.components.dialogs.FilterJournalDialog
+import com.example.fitjournal.model.domain.CalisthenicsModel
 import com.example.fitjournal.model.events.HomeScreenEvents
-import com.example.fitjournal.model.uistate.HomeScreenUiState
+import com.example.fitjournal.model.state.HomeScreenUiState
 import com.example.fitjournal.theme.Spacing
 
 @ExperimentalMaterial3Api
@@ -73,8 +80,29 @@ fun HomeScreen(
                     ),
                 properties = DialogProperties(),
                 workoutList = homeScreenState.filterDialogList,
-              homeScreenEvents = homeScreenEvents
+                homeScreenEvents = homeScreenEvents
             )
+        }
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(all = Spacing.spacing16),
+        ) {
+            item {
+                repeat(7) {
+                    CalisthenicsCard(
+                        calisthenicsModel = listOf(
+                            CalisthenicsModel(
+                                reps = 20,
+                                time = "3:50"
+                            )
+                        ),
+                        name = "Push-Ups",
+                        icon = R.drawable.icon_person
+                    )
+                    Spacer(modifier = Modifier.height(Spacing.spacing16))
+                }
+            }
+
         }
     }
 }
