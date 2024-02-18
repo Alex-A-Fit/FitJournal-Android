@@ -23,5 +23,6 @@
     <string name="text_total_time_elapsed">Total Time Elapsed: %1$s</string>
     <string name="text_total_reps">Total Reps: %1$s</string>
     <string name="text_total_weight">Total Weight: %1$s</string>
+    <string name="text_view_workout_details">Click to view/edit workout</string>
 
 </resources>
