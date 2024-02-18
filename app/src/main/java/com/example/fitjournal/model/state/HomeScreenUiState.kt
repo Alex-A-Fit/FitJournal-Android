@@ -1,4 +1,4 @@
-package com.example.fitjournal.model.uistate
+package com.example.fitjournal.model.state
 
 import com.example.fitjournal.model.enum.WorkoutTypeEnum
 import com.example.fitjournal.model.ui.FilterWorkoutModel
