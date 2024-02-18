@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -20,16 +21,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
-import com.example.fitjournal.R
 import com.example.fitjournal.components.cards.CalisthenicsCard
 import com.example.fitjournal.components.cards.CardioCard
 import com.example.fitjournal.components.cards.WeightLiftingCard
 import com.example.fitjournal.components.datepicker.FitJournalDatePickerDialog
 import com.example.fitjournal.components.dialogs.FilterJournalDialog
-import com.example.fitjournal.model.domain.CalisthenicsModel
-import com.example.fitjournal.model.domain.CardioModel
-import com.example.fitjournal.model.domain.WeightLiftingModel
-import com.example.fitjournal.model.enum.CardioDistanceType
+import com.example.fitjournal.model.enum.WorkoutTypeEnum
 import com.example.fitjournal.model.events.HomeScreenEvents
 import com.example.fitjournal.model.state.HomeScreenUiState
 import com.example.fitjournal.theme.Spacing
@@ -88,58 +85,40 @@ fun HomeScreen(
                 homeScreenEvents = homeScreenEvents
             )
         }
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(all = Spacing.spacing16)
-        ) {
-            item {
-                repeat(1) {
-                    CalisthenicsCard(
-                        calisthenicsModel = listOf(
-                            CalisthenicsModel(
-                                reps = 20,
-                                time = "3:50"
+        homeScreenState.listOfVisibleWorkouts?.let { workoutList ->
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(all = Spacing.spacing16)
+            ) {
+                items(items = workoutList) { workout ->
+                    when (workout.workoutType) {
+                        WorkoutTypeEnum.WEIGHT_TRAINING -> {
+                            WeightLiftingCard(
+                                reps = workout.exerciseCardModel.reps,
+                                weight = workout.exerciseCardModel.weight,
+                                name = workout.exerciseCardModel.name,
+                                icon = workout.exerciseCardModel.icon
                             )
-                        ),
-                        name = "Push-Ups",
-                        icon = R.drawable.icon_person
-                    )
-                    Spacer(modifier = Modifier.height(Spacing.spacing16))
-                }
-            }
-
-            item {
-                repeat(1) {
-                    WeightLiftingCard(
-                        weightLiftingModel = listOf(
-                            WeightLiftingModel(
-                                reps = 10,
-                                weight = 135.0,
-                                time = null
+                        }
+                        WorkoutTypeEnum.CALISTHENICS -> {
+                            CalisthenicsCard(
+                                reps = workout.exerciseCardModel.reps,
+                                time = workout.exerciseCardModel.time,
+                                name = workout.exerciseCardModel.name,
+                                icon = workout.exerciseCardModel.icon
                             )
-                        ),
-                        name = "Bench Press",
-                        icon = R.drawable.icon_dumbell
-                    )
-                    Spacer(modifier = Modifier.height(Spacing.spacing16))
-                }
-            }
-
-            item {
-                repeat(1) {
-                    CardioCard(
-                        cardioModel = listOf(
-                            CardioModel(
-                                distance = 2.0,
-                                distanceType = CardioDistanceType.KILOMETERS,
-                                time = "3:40",
-                                laps = 2.0
+                        }
+                        WorkoutTypeEnum.CARDIO -> {
+                            CardioCard(
+                                name = workout.exerciseCardModel.name,
+                                icon = workout.exerciseCardModel.icon,
+                                distance = workout.exerciseCardModel.distance,
+                                distanceType = workout.exerciseCardModel.distanceType,
+                                time = workout.exerciseCardModel.time
                             )
-                        ),
-                        name = "Biking",
-                        icon = R.drawable.icon_sprinting_person
-                    )
-                    Spacer(modifier = Modifier.height(Spacing.spacing16))
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(Spacing.spacing12))
                 }
             }
         }

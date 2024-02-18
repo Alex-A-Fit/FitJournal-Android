@@ -16,7 +16,7 @@ fun FitJournalCard(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.elevatedCardElevation(
-            defaultElevation = Spacing.spacing16
+            defaultElevation = Spacing.spacing12
         )
     ) {
         workoutContent()
