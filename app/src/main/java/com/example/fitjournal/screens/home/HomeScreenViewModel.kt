@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.managers.DateManager
 import com.example.fitjournal.model.enum.WorkoutTypeEnum
-import com.example.fitjournal.model.ui.FilterWorkoutModel
 import com.example.fitjournal.model.state.HomeScreenUiState
+import com.example.fitjournal.model.ui.FilterWorkoutModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         val todayDate = DateManager.formatDate(homeScreenState.currentDate)
         updateHomeScreenState(
             newHomeScreenState = homeScreenState.copy(
-                currentDate = todayDate,
+                currentDate = todayDate
             )
         )
     }
@@ -36,7 +36,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         updateHomeScreenState(
             newHomeScreenState = homeScreenState.copy(
                 currentDate = nextDay.localDateString,
-                currentDateTime =nextDay.localDateTime,
+                currentDateTime = nextDay.localDateTime,
                 currentDateInMillis = nextDayInMilliseconds
             )
         )
@@ -48,7 +48,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         updateHomeScreenState(
             newHomeScreenState = homeScreenState.copy(
                 currentDate = previousDay.localDateString,
-                currentDateTime =previousDay.localDateTime,
+                currentDateTime = previousDay.localDateTime,
                 currentDateInMillis = previousDayInMilliseconds
             )
         )
@@ -73,11 +73,11 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    fun updateDatePickerDialog(isDatePickerShowing: Boolean){
+    fun updateDatePickerDialog(isDatePickerShowing: Boolean) {
         updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isDatePickerDialogShowing = isDatePickerShowing))
     }
 
-    fun updateFilterDialog(isFilterDialogShowing: Boolean){
+    fun updateFilterDialog(isFilterDialogShowing: Boolean) {
         updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isFilterDialogShowing = isFilterDialogShowing))
     }
 
@@ -85,7 +85,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         homeScreenState = newHomeScreenState
     }
 
-    fun filterWorkouts(filteredWorkoutList: List<WorkoutTypeEnum>){
+    fun filterWorkouts(filteredWorkoutList: List<WorkoutTypeEnum>) {
         val currentFilterList = homeScreenState.filterDialogList
         // Adjust the filter list with the passed in parameter values
         val newFilteredList = currentFilterList.map {
@@ -95,7 +95,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
             )
         }
         updateHomeScreenState(newHomeScreenState = homeScreenState.copy(filterDialogList = newFilteredList))
-        //TODO("WE would want to now filter out the visible cards ")
+        // TODO("WE would want to now filter out the visible cards ")
         Log.d("filter", "Filter works. List of cards should now show exercises based on filter enum types: $filteredWorkoutList")
     }
 }

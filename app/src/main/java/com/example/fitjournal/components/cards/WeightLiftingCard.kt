@@ -27,7 +27,7 @@ import com.example.fitjournal.theme.Spacing
 fun WeightLiftingCard(
     weightLiftingModel: List<WeightLiftingModel>,
     name: String,
-    icon: Int,
+    icon: Int
 ) {
     val topSet by remember {
         mutableStateOf(
@@ -72,13 +72,14 @@ fun WeightLiftingCard(
 }
 
 @Composable
-private fun TopSetTitle(){
+private fun TopSetTitle() {
     Text(
         text = stringResource(id = R.string.title_top_set),
         style = MaterialTheme.typography.titleMedium,
         modifier = Modifier.padding(horizontal = Spacing.spacing16)
     )
 }
+
 @Composable
 private fun TopSetSummary(
     reps: String,

@@ -10,7 +10,7 @@ import com.example.fitjournal.R
 import com.example.fitjournal.theme.Spacing
 
 @Composable
-fun MostRecentWorkoutSession(){
+fun MostRecentWorkoutSession() {
     Text(
         text = stringResource(id = R.string.title_most_recent_workout_session),
         style = MaterialTheme.typography.titleMedium,

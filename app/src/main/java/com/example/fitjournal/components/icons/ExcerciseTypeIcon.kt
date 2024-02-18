@@ -21,8 +21,10 @@ fun ExerciseTypeIcon(workoutIcon: Int) {
         modifier = Modifier
             .size(Spacing.spacing32)
             .clip(RoundedCornerShape(Spacing.spacing16))
-            .background(color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(Spacing.spacing16)),
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(Spacing.spacing16)
+            ),
         tint = MaterialTheme.colorScheme.onPrimary
     )
 }

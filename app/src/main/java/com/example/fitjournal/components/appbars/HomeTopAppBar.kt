@@ -14,7 +14,7 @@ import com.example.fitjournal.theme.Spacing
 @Composable
 fun HomeTopAppBar(
     homeAppBarEvents: (HomeAppBarEvents) -> Unit,
-    currentDate: String,
+    currentDate: String
 ) {
     TopAppBar(
         appBarTitle = {
@@ -35,6 +35,4 @@ fun HomeTopAppBar(
             )
         }
     )
-
-
 }

@@ -7,7 +7,6 @@ fun navigationEvent(
     navController: NavController
 ) {
     when (navigationInterface) {
-
         NavigationInterface.NavigateToHome -> {
             navController.navigate(Route.HOME_SCREEN)
         }

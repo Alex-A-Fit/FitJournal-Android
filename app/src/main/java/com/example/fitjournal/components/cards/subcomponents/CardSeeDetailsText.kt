@@ -10,7 +10,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.R
 
 @Composable
-fun CardSeeDetailsText(modifier: Modifier = Modifier){
+fun CardSeeDetailsText(modifier: Modifier = Modifier) {
     Text(
         text = stringResource(id = R.string.text_view_workout_details),
         style = MaterialTheme.typography.bodySmall,

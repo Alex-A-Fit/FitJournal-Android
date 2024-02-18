@@ -10,14 +10,14 @@ data class WorkoutModel(
     val date: String,
     val weightLiftingModel: List<WeightLiftingModel>? = null,
     val cardioModel: List<CardioModel>? = null,
-    val calisthenicsModel: List<CalisthenicsModel>? = null,
+    val calisthenicsModel: List<CalisthenicsModel>? = null
 
 )
 
 data class WeightLiftingModel(
     val reps: Int,
     val weight: Double,
-    //adding time for now in case we want to allow user to input time
+    // adding time for now in case we want to allow user to input time
     val time: String? = null
 )
 data class CardioModel(
@@ -29,5 +29,5 @@ data class CardioModel(
 
 data class CalisthenicsModel(
     val reps: Int,
-    val time: String,
+    val time: String
 )
