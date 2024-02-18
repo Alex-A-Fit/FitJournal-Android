@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,6 +14,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.R
 import com.example.fitjournal.components.cards.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.components.cards.subcomponents.CardTitle
 import com.example.fitjournal.components.cards.subcomponents.FitJournalCard
@@ -26,7 +29,7 @@ fun CalisthenicsCard(
     name: String,
     icon: Int,
 ) {
-    val topSet by remember {
+    val mostRecentSet by remember {
         mutableStateOf(
             calisthenicsModel.last()
         )
@@ -48,9 +51,9 @@ fun CalisthenicsCard(
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             MostRecentWorkoutSession()
-            LastKnownCalisthenicsSession(
-                reps = topSet.reps.toString(),
-                time = topSet.time,
+            MostRecentSet(
+                reps = mostRecentSet.reps.toString(),
+                time = mostRecentSet.time,
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.spacing16)
@@ -67,7 +70,7 @@ fun CalisthenicsCard(
 }
 
 @Composable
-private fun LastKnownCalisthenicsSession(
+private fun MostRecentSet(
     reps: String,
     time: String,
     modifier: Modifier = Modifier
@@ -77,7 +80,21 @@ private fun LastKnownCalisthenicsSession(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
-        Text(text = "Total Reps: $reps")
-        Text(text = "Total Time Elapsed: $time")
+        Text(
+            text = stringResource(
+                id = R.string.text_total_reps,
+                reps
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        Text(
+            text = stringResource(
+                id = R.string.text_total_time_elapsed,
+                time
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
 }

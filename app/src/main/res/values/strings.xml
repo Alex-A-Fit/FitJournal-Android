@@ -19,5 +19,9 @@
     // General Strings
     <string name="text_dismiss">Dismiss</string>
     <string name="text_confirm">Confirm</string>
+    <string name="text_total_distance_traveled">Total Distance traveled: %1$s %2$s</string>
+    <string name="text_total_time_elapsed">Total Time Elapsed: %1$s</string>
+    <string name="text_total_reps">Total Reps: %1$s</string>
+    <string name="text_total_weight">Total Weight: %1$s</string>
 
 </resources>

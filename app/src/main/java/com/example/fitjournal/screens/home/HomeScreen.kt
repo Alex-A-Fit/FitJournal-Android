@@ -22,9 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
 import com.example.fitjournal.R
 import com.example.fitjournal.components.cards.CalisthenicsCard
+import com.example.fitjournal.components.cards.CardioCard
+import com.example.fitjournal.components.cards.WeightLiftingCard
 import com.example.fitjournal.components.datepicker.FitJournalDatePickerDialog
 import com.example.fitjournal.components.dialogs.FilterJournalDialog
 import com.example.fitjournal.model.domain.CalisthenicsModel
+import com.example.fitjournal.model.domain.CardioModel
+import com.example.fitjournal.model.domain.WeightLiftingModel
+import com.example.fitjournal.model.enum.CardioDistanceType
 import com.example.fitjournal.model.events.HomeScreenEvents
 import com.example.fitjournal.model.state.HomeScreenUiState
 import com.example.fitjournal.theme.Spacing
@@ -88,7 +93,7 @@ fun HomeScreen(
             contentPadding = PaddingValues(all = Spacing.spacing16),
         ) {
             item {
-                repeat(7) {
+                repeat(1) {
                     CalisthenicsCard(
                         calisthenicsModel = listOf(
                             CalisthenicsModel(
@@ -98,6 +103,41 @@ fun HomeScreen(
                         ),
                         name = "Push-Ups",
                         icon = R.drawable.icon_person
+                    )
+                    Spacer(modifier = Modifier.height(Spacing.spacing16))
+                }
+            }
+
+            item {
+                repeat(1) {
+                    WeightLiftingCard(
+                        weightLiftingModel = listOf(
+                            WeightLiftingModel(
+                                reps = 10,
+                                weight = 135.0,
+                                time = null
+                            )
+                        ),
+                        name = "Bench Press",
+                        icon = R.drawable.icon_dumbell
+                    )
+                    Spacer(modifier = Modifier.height(Spacing.spacing16))
+                }
+            }
+
+            item {
+                repeat(1) {
+                    CardioCard(
+                        cardioModel = listOf(
+                            CardioModel(
+                                distance = 2.0,
+                                distanceType = CardioDistanceType.KILOMETERS,
+                                time = "3:40",
+                                laps = 2.0
+                            )
+                        ),
+                        name = "Biking",
+                        icon = R.drawable.icon_sprinting_person
                     )
                     Spacer(modifier = Modifier.height(Spacing.spacing16))
                 }

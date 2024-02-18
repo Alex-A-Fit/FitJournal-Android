@@ -53,7 +53,7 @@ fun WeightLiftingCard(
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             TopSetTitle()
-            LastKnownCardioSession(
+            TopSetSummary(
                 reps = topSet.reps.toString(),
                 weight = topSet.weight.toString(),
                 Modifier
@@ -80,7 +80,7 @@ private fun TopSetTitle(){
     )
 }
 @Composable
-private fun LastKnownCardioSession(
+private fun TopSetSummary(
     reps: String,
     weight: String,
     modifier: Modifier = Modifier
@@ -90,7 +90,15 @@ private fun LastKnownCardioSession(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "Reps Performed: $reps")
-        Text(text = "Total Weight: $weight")
+        Text(
+            text = stringResource(id = R.string.text_total_reps, reps),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        Text(
+            text = stringResource(id = R.string.text_total_weight, weight),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
 }
