@@ -73,7 +73,7 @@ fun HomeScreen(
                     ),
                 properties = DialogProperties(),
                 workoutList = homeScreenState.filterDialogList,
-              homeScreenEvents = homeScreenEvents
+                homeScreenEvents = homeScreenEvents
             )
         }
     }

@@ -79,40 +79,40 @@ fun FitJournalDatePickerDialog(
     selectDate: (Long) -> Unit,
     dismissDialog: () -> Unit
 ) {
-        val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = currentDate,
-            initialDisplayedMonthMillis = currentDate
-        )
-        val confirmEnabled = remember {
-            derivedStateOf { datePickerState.selectedDateMillis != null }
-        }
-        DatePickerDialog(
-            onDismissRequest = {
-                dismissDialog()
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        val dateSelected = datePickerState.selectedDateMillis
-                        if (dateSelected != null) {
-                            selectDate(dateSelected)
-                        }
-                    },
-                    enabled = confirmEnabled.value
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        dismissDialog()
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = currentDate,
+        initialDisplayedMonthMillis = currentDate
+    )
+    val confirmEnabled = remember {
+        derivedStateOf { datePickerState.selectedDateMillis != null }
+    }
+    DatePickerDialog(
+        onDismissRequest = {
+            dismissDialog()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    val dateSelected = datePickerState.selectedDateMillis
+                    if (dateSelected != null) {
+                        selectDate(dateSelected)
                     }
-                ) {
-                    Text("Cancel")
-                }
+                },
+                enabled = confirmEnabled.value
+            ) {
+                Text("OK")
             }
-        ) {
-            DatePicker(state = datePickerState)
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    dismissDialog()
+                }
+            ) {
+                Text("Cancel")
+            }
         }
+    ) {
+        DatePicker(state = datePickerState)
+    }
 }

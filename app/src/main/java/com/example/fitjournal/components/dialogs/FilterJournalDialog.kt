@@ -68,11 +68,14 @@ fun FilterJournalSection(
     modifier: Modifier = Modifier,
     workoutList: List<FilterWorkoutModel>,
     onDismissDialog: () -> Unit,
-    onConfirmDialog: (List<WorkoutTypeEnum>) -> Unit,
+    onConfirmDialog: (List<WorkoutTypeEnum>) -> Unit
 ) {
     val mutableWorkoutList: MutableList<WorkoutTypeEnum> = workoutList.mapNotNull {
-        if (it.isWorkoutSelected) it.exerciseType
-        else null
+        if (it.isWorkoutSelected) {
+            it.exerciseType
+        } else {
+            null
+        }
     }.toMutableList()
     Column(
         modifier = modifier,
@@ -86,7 +89,7 @@ fun FilterJournalSection(
         FilterJournalDialogCheckboxes(
             workoutList = workoutList,
             onFilterCheckboxChanged = { workoutTypeEnum, checkboxValue ->
-                if (checkboxValue){
+                if (checkboxValue) {
                     if (!mutableWorkoutList.contains(workoutTypeEnum)) {
                         mutableWorkoutList.add(workoutTypeEnum)
                     }
@@ -194,7 +197,7 @@ fun WorkoutName(
     Text(
         text = workoutName,
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-        modifier = modifier,
+        modifier = modifier
     )
 }
 

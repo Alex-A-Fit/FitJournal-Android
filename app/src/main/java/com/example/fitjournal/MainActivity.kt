@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                                 topAppBar = {
                                     TopAppBar(
                                         appBarTitle = { HomeScreenTitle() },
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier.fillMaxWidth()
                                     )
                                 },
                                 mainScreen = { mainScreenModifier ->
@@ -124,7 +124,7 @@ class MainActivity : ComponentActivity() {
                                 topAppBar = {
                                     TopAppBar(
                                         appBarTitle = { HomeScreenTitle() },
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier.fillMaxWidth()
                                     )
                                 },
                                 navigateToDestination = { navigation ->
@@ -152,7 +152,7 @@ class MainActivity : ComponentActivity() {
             HomeScreenEvents.DismissDatePicker -> homeViewModel.updateDatePickerDialog(isDatePickerShowing = false)
             is HomeScreenEvents.SelectDateFromDatePicker -> {
                 homeViewModel.getSelectedDate(events.userSelectedDate)
-                //dismissing dialog on date selection
+                // dismissing dialog on date selection
                 homeViewModel.updateDatePickerDialog(isDatePickerShowing = false)
                 homeViewModel.showSnackBar(snackBarHostState = events.snackBarHostState)
             }
@@ -164,7 +164,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun homeAppBarEvents(events: HomeAppBarEvents) {
-        when (events){
+        when (events) {
             HomeAppBarEvents.GetNextDate -> homeViewModel.getNextDate()
             HomeAppBarEvents.GetPreviousDate -> homeViewModel.getPreviousDate()
             is HomeAppBarEvents.ShowDatePickerDialog -> homeViewModel.updateDatePickerDialog(isDatePickerShowing = events.showDialog)
@@ -181,7 +181,6 @@ fun HomeScreenTitle() {
         color = MaterialTheme.colorScheme.onPrimary
     )
 }
-
 
 private fun navigateToDestination(
     navigationInterface: NavigationInterface,
