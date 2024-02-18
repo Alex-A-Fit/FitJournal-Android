@@ -29,6 +29,7 @@ import com.example.fitjournal.navigation.navigationEvent
 import com.example.fitjournal.screens.AppScreen
 import com.example.fitjournal.screens.home.HomeScreen
 import com.example.fitjournal.screens.home.HomeScreenViewModel
+import com.example.fitjournal.screens.library.LibraryScreen
 import com.example.fitjournal.screens.lottie.LottieHomeScreenAnimation
 import com.example.fitjournal.theme.FitJournalTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,12 +69,9 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 mainScreen = { mainScreenModifier ->
-//                                    HomeScreen(
-//                                        modifier = mainScreenModifier,
-//                                        homeScreenState = homeViewModel.homeScreenState,
-//                                        homeScreenEvents = ::homeScreenEvents,
-//                                        snackBarHostState = snackState
-//                                        )
+                                    LibraryScreen(
+                                        modifier = mainScreenModifier
+                                    )
                                 },
                                 navigateToDestination = { navigation ->
                                     navigateToDestination(
