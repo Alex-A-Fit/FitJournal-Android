@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,20 +17,17 @@ import com.example.fitjournal.components.cards.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.components.cards.subcomponents.CardTitle
 import com.example.fitjournal.components.cards.subcomponents.FitJournalCard
 import com.example.fitjournal.components.cards.subcomponents.MostRecentWorkoutSession
-import com.example.fitjournal.model.domain.CardioModel
+import com.example.fitjournal.model.enum.CardioDistanceType
 import com.example.fitjournal.theme.Spacing
 
 @Composable
 fun CardioCard(
-    cardioModel: List<CardioModel>,
     name: String,
-    icon: Int
+    icon: Int,
+    distance: Double?,
+    distanceType: CardioDistanceType,
+    time: String?,
 ) {
-    val cardioSession by remember {
-        mutableStateOf(
-            cardioModel.last()
-        )
-    }
     FitJournalCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,10 +46,12 @@ fun CardioCard(
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             MostRecentWorkoutSession()
             CardioSummary(
-                cardioModel = cardioSession,
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = Spacing.spacing16)
+                    .padding(horizontal = Spacing.spacing16),
+                distanceType = distanceType,
+                time = time,
+                distance = distance
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             CardSeeDetailsText(
@@ -70,7 +66,9 @@ fun CardioCard(
 
 @Composable
 private fun CardioSummary(
-    cardioModel: CardioModel,
+    distance: Double?,
+    distanceType: CardioDistanceType,
+    time: String?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -78,22 +76,26 @@ private fun CardioSummary(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
-        Text(
-            text = stringResource(
-                id = R.string.text_total_distance_traveled,
-                cardioModel.distance,
-                cardioModel.distanceType.stringValue
-            ),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-        Text(
-            text = stringResource(
-                id = R.string.text_total_time_elapsed,
-                cardioModel.time
-            ),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
+        distance?.let {
+                Text(
+                    text = stringResource(
+                        id = R.string.text_total_distance_traveled,
+                        distance.toString(),
+                        distanceType.stringValue
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+        }
+        time?.let {
+            Text(
+                text = stringResource(
+                    id = R.string.text_total_time_elapsed,
+                    time
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }

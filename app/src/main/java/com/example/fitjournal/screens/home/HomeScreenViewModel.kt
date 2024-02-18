@@ -9,9 +9,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.managers.DateManager
+import com.example.fitjournal.mockdata.MockData
+import com.example.fitjournal.model.domain.WorkoutModel
+import com.example.fitjournal.model.enum.CardioDistanceType
 import com.example.fitjournal.model.enum.WorkoutTypeEnum
 import com.example.fitjournal.model.state.HomeScreenUiState
-import com.example.fitjournal.model.ui.FilterWorkoutModel
+import com.example.fitjournal.model.ui.CardUiModel
+import com.example.fitjournal.model.ui.FilterWorkoutUiModel
+import com.example.fitjournal.model.ui.WorkoutUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +30,9 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         val todayDate = DateManager.formatDate(homeScreenState.currentDate)
         updateHomeScreenState(
             newHomeScreenState = homeScreenState.copy(
-                currentDate = todayDate
+                currentDate = todayDate,
+                listOfWorkouts = MockData.ListOfWorkouts,
+                listOfVisibleWorkouts = determineWorkout(MockData.ListOfWorkouts)
             )
         )
     }
@@ -89,13 +96,66 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         val currentFilterList = homeScreenState.filterDialogList
         // Adjust the filter list with the passed in parameter values
         val newFilteredList = currentFilterList.map {
-            FilterWorkoutModel(
+            FilterWorkoutUiModel(
                 isWorkoutSelected = filteredWorkoutList.contains(it.exerciseType),
                 exerciseType = it.exerciseType
             )
         }
         updateHomeScreenState(newHomeScreenState = homeScreenState.copy(filterDialogList = newFilteredList))
         // TODO("WE would want to now filter out the visible cards ")
-        Log.d("filter", "Filter works. List of cards should now show exercises based on filter enum types: $filteredWorkoutList")
+        Log.d(
+            "filter",
+            "Filter works. List of cards should now show exercises based on filter enum types: $filteredWorkoutList"
+        )
+    }
+
+    private fun determineWorkout(listOfWorkouts: List<WorkoutModel>): List<WorkoutUiModel> {
+        return listOfWorkouts.map {
+            when (it.workoutTypeEnum) {
+                WorkoutTypeEnum.WEIGHT_TRAINING -> {
+                    val topSet = it.weightLiftingModel?.maxBy { set ->
+                        set.weight
+                    }
+                    WorkoutUiModel(
+                        workoutType = WorkoutTypeEnum.WEIGHT_TRAINING,
+                        exerciseCardModel = CardUiModel(
+                            name = it.name,
+                            icon = it.icon,
+                            reps = topSet?.reps,
+                            weight = topSet?.weight,
+                        )
+                    )
+                }
+
+                WorkoutTypeEnum.CALISTHENICS -> {
+                    val mostRecentSession = it.calisthenicsModel?.last()
+                    WorkoutUiModel(
+                        workoutType = WorkoutTypeEnum.CALISTHENICS,
+                        exerciseCardModel = CardUiModel(
+                            name = it.name,
+                            icon = it.icon,
+                            reps = mostRecentSession?.reps,
+                            time = mostRecentSession?.time,
+                        )
+                    )
+                }
+
+                WorkoutTypeEnum.CARDIO -> {
+                    val mostRecentSession = it.cardioModel?.last()
+                    WorkoutUiModel(
+                        workoutType = WorkoutTypeEnum.CARDIO,
+                        exerciseCardModel = CardUiModel(
+                            name = it.name,
+                            icon = it.icon,
+                            time = mostRecentSession?.time,
+                            laps = mostRecentSession?.laps,
+                            distance = mostRecentSession?.distance,
+                            distanceType = mostRecentSession?.distanceType ?: CardioDistanceType.MILES,
+                        )
+                    )
+
+                }
+            }
+        }
     }
 }

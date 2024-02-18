@@ -2,12 +2,14 @@ package com.example.fitjournal.model.domain
 
 import com.example.fitjournal.model.enum.CardioDistanceType
 import com.example.fitjournal.model.enum.WorkoutTypeEnum
+import java.time.LocalDateTime
 
 data class WorkoutModel(
     val name: String,
     val icon: Int,
     val workoutTypeEnum: WorkoutTypeEnum,
     val date: String,
+    val timestamp: LocalDateTime,
     val weightLiftingModel: List<WeightLiftingModel>? = null,
     val cardioModel: List<CardioModel>? = null,
     val calisthenicsModel: List<CalisthenicsModel>? = null
@@ -22,7 +24,7 @@ data class WeightLiftingModel(
 )
 data class CardioModel(
     val distance: Double,
-    val distanceType: CardioDistanceType,
+    val distanceType: CardioDistanceType = CardioDistanceType.MILES,
     val time: String,
     val laps: Double
 )

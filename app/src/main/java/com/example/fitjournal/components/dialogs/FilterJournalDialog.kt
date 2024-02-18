@@ -31,7 +31,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.fitjournal.R
 import com.example.fitjournal.model.enum.WorkoutTypeEnum
 import com.example.fitjournal.model.events.HomeScreenEvents
-import com.example.fitjournal.model.ui.FilterWorkoutModel
+import com.example.fitjournal.model.ui.FilterWorkoutUiModel
 import com.example.fitjournal.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +39,7 @@ import com.example.fitjournal.theme.Spacing
 fun FilterJournalDialog(
     modifier: Modifier = Modifier,
     properties: DialogProperties = DialogProperties(),
-    workoutList: List<FilterWorkoutModel>,
+    workoutList: List<FilterWorkoutUiModel>,
     homeScreenEvents: (HomeScreenEvents) -> Unit
 ) {
     BasicAlertDialog(
@@ -66,7 +66,7 @@ fun FilterJournalDialog(
 @Composable
 fun FilterJournalSection(
     modifier: Modifier = Modifier,
-    workoutList: List<FilterWorkoutModel>,
+    workoutList: List<FilterWorkoutUiModel>,
     onDismissDialog: () -> Unit,
     onConfirmDialog: (List<WorkoutTypeEnum>) -> Unit
 ) {
@@ -138,7 +138,7 @@ fun FilterJournalDialogSubtitle() {
 
 @Composable
 fun FilterJournalDialogCheckboxes(
-    workoutList: List<FilterWorkoutModel>,
+    workoutList: List<FilterWorkoutUiModel>,
     onFilterCheckboxChanged: (WorkoutTypeEnum, Boolean) -> Unit
 ) {
     Column(
@@ -160,7 +160,7 @@ fun FilterJournalDialogCheckboxes(
 
 @Composable
 fun FilterCheckboxItem(
-    workout: FilterWorkoutModel,
+    workout: FilterWorkoutUiModel,
     onFilterCheckboxChanged: (WorkoutTypeEnum, Boolean) -> Unit
 ) {
     val workoutName = stringResource(id = workout.exerciseType.stringValue)
