@@ -90,8 +90,8 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(all = Spacing.spacing16)
             ) {
-                items(items = workoutList){ workout ->
-                    when(workout.workoutType){
+                items(items = workoutList) { workout ->
+                    when (workout.workoutType) {
                         WorkoutTypeEnum.WEIGHT_TRAINING -> {
                             WeightLiftingCard(
                                 reps = workout.exerciseCardModel.reps,
@@ -113,7 +113,7 @@ fun HomeScreen(
                                 name = workout.exerciseCardModel.name,
                                 icon = workout.exerciseCardModel.icon,
                                 distance = workout.exerciseCardModel.distance,
-                                distanceType =workout.exerciseCardModel.distanceType,
+                                distanceType = workout.exerciseCardModel.distanceType,
                                 time = workout.exerciseCardModel.time
                             )
                         }

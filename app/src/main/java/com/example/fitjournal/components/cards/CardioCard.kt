@@ -26,7 +26,7 @@ fun CardioCard(
     icon: Int,
     distance: Double?,
     distanceType: CardioDistanceType,
-    time: String?,
+    time: String?
 ) {
     FitJournalCard(
         modifier = Modifier
@@ -77,15 +77,15 @@ private fun CardioSummary(
         horizontalAlignment = Alignment.Start
     ) {
         distance?.let {
-                Text(
-                    text = stringResource(
-                        id = R.string.text_total_distance_traveled,
-                        distance.toString(),
-                        distanceType.stringValue
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+            Text(
+                text = stringResource(
+                    id = R.string.text_total_distance_traveled,
+                    distance.toString(),
+                    distanceType.stringValue
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         }
         time?.let {
             Text(

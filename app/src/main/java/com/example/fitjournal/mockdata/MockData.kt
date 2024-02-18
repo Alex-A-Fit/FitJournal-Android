@@ -18,7 +18,6 @@ object MockData {
         .format(DateTimeFormatter.ISO_LOCAL_DATE.withLocale(Locale.US))
     private val todayDate = DateManager.formatDate(currentDate)
 
-
     val ListOfWorkouts = listOf(
         WorkoutModel(
             name = "Push Ups",

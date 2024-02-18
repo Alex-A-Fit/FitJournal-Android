@@ -122,7 +122,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
                             name = it.name,
                             icon = it.icon,
                             reps = topSet?.reps,
-                            weight = topSet?.weight,
+                            weight = topSet?.weight
                         )
                     )
                 }
@@ -135,7 +135,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
                             name = it.name,
                             icon = it.icon,
                             reps = mostRecentSession?.reps,
-                            time = mostRecentSession?.time,
+                            time = mostRecentSession?.time
                         )
                     )
                 }
@@ -150,10 +150,9 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
                             time = mostRecentSession?.time,
                             laps = mostRecentSession?.laps,
                             distance = mostRecentSession?.distance,
-                            distanceType = mostRecentSession?.distanceType ?: CardioDistanceType.MILES,
+                            distanceType = mostRecentSession?.distanceType ?: CardioDistanceType.MILES
                         )
                     )
-
                 }
             }
         }
