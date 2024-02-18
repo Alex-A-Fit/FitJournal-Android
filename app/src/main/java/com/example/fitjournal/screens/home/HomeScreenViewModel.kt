@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.managers.DateManager
 import com.example.fitjournal.model.enum.WorkoutTypeEnum
-import com.example.fitjournal.model.ui.FilterWorkoutModel
 import com.example.fitjournal.model.state.HomeScreenUiState
+import com.example.fitjournal.model.ui.FilterWorkoutModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

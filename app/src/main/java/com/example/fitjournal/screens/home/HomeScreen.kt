@@ -90,7 +90,7 @@ fun HomeScreen(
         }
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(all = Spacing.spacing16),
+            contentPadding = PaddingValues(all = Spacing.spacing16)
         ) {
             item {
                 repeat(1) {
@@ -142,7 +142,6 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(Spacing.spacing16))
                 }
             }
-
         }
     }
 }

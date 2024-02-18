@@ -27,7 +27,7 @@ import com.example.fitjournal.theme.Spacing
 fun CardioCard(
     cardioModel: List<CardioModel>,
     name: String,
-    icon: Int,
+    icon: Int
 ) {
     val cardioSession by remember {
         mutableStateOf(

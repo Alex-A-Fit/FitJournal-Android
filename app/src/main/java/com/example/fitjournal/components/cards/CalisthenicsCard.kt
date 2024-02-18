@@ -27,7 +27,7 @@ import com.example.fitjournal.theme.Spacing
 fun CalisthenicsCard(
     calisthenicsModel: List<CalisthenicsModel>,
     name: String,
-    icon: Int,
+    icon: Int
 ) {
     val mostRecentSet by remember {
         mutableStateOf(

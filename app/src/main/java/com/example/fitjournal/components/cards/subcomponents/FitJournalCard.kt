@@ -10,13 +10,13 @@ import com.example.fitjournal.theme.Spacing
 @Composable
 fun FitJournalCard(
     modifier: Modifier = Modifier,
-    workoutContent: @Composable ()-> Unit
+    workoutContent: @Composable () -> Unit
 ) {
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.elevatedCardElevation(
-            defaultElevation =Spacing.spacing16
+            defaultElevation = Spacing.spacing16
         )
     ) {
         workoutContent()

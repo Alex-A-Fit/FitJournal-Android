@@ -17,5 +17,4 @@ object Spacing {
     val spacing64 = 64.dp
     val spacing96 = 96.dp
     val spacing128 = 128.dp
-
 }
