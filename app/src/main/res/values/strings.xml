@@ -3,12 +3,15 @@
 
     // Content Descriptors
     <string name="content_desc_home_screen_filter_icon">Icon to filter through your fitness journal</string>
+    <string name="content_desc_exercise_icon">Icon to determine what type of exercise this workout is</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
     <string name="title_weight_training">Weight Training</string>
     <string name="title_calisthenics">Calisthenics</string>
     <string name="title_cardio">Cardio</string>
+    <string name="title_top_set">Current Top Set</string>
+    <string name="title_most_recent_workout_session">Most Recent Workout Session</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>
@@ -16,5 +19,10 @@
     // General Strings
     <string name="text_dismiss">Dismiss</string>
     <string name="text_confirm">Confirm</string>
+    <string name="text_total_distance_traveled">Total Distance traveled: %1$s %2$s</string>
+    <string name="text_total_time_elapsed">Total Time Elapsed: %1$s</string>
+    <string name="text_total_reps">Total Reps: %1$s</string>
+    <string name="text_total_weight">Total Weight: %1$s</string>
+    <string name="text_view_workout_details">Click to view/edit workout</string>
 
 </resources>
