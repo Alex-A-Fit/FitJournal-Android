@@ -61,16 +61,16 @@ class MainActivity : ComponentActivity() {
                         composable(Route.WORKOUT_LIBRARY_SCREEN) {
                             AppScreen(
                                 modifier = Modifier,
+                                mainScreen = { mainScreenModifier ->
+                                    LibraryScreen(
+                                        modifier = mainScreenModifier
+                                    )
+                                },
                                 snackBarHostState = snackState,
                                 topAppBar = {
                                     TopAppBar(
                                         appBarTitle = { HomeScreenTitle() },
                                         modifier = Modifier.fillMaxWidth()
-                                    )
-                                },
-                                mainScreen = { mainScreenModifier ->
-                                    LibraryScreen(
-                                        modifier = mainScreenModifier
                                     )
                                 },
                                 navigateToDestination = { navigation ->

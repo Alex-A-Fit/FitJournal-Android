@@ -1,7 +1,9 @@
 package com.example.fitjournal.model.state
 
+import com.example.fitjournal.model.domain.WorkoutModel
 import com.example.fitjournal.model.enum.WorkoutTypeEnum
-import com.example.fitjournal.model.ui.FilterWorkoutModel
+import com.example.fitjournal.model.ui.FilterWorkoutUiModel
+import com.example.fitjournal.model.ui.WorkoutUiModel
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -14,18 +16,20 @@ data class HomeScreenUiState(
     val currentDateInMillis: Long = (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000),
     val isDatePickerDialogShowing: Boolean = false,
     val isFilterDialogShowing: Boolean = false,
-    val filterDialogList: List<FilterWorkoutModel> = listOf(
-        FilterWorkoutModel(
+    val filterDialogList: List<FilterWorkoutUiModel> = listOf(
+        FilterWorkoutUiModel(
             isWorkoutSelected = false,
             exerciseType = WorkoutTypeEnum.CALISTHENICS
         ),
-        FilterWorkoutModel(
+        FilterWorkoutUiModel(
             isWorkoutSelected = false,
             exerciseType = WorkoutTypeEnum.WEIGHT_TRAINING
         ),
-        FilterWorkoutModel(
+        FilterWorkoutUiModel(
             isWorkoutSelected = false,
             exerciseType = WorkoutTypeEnum.CARDIO
         )
-    )
+    ),
+    val listOfWorkouts: List<WorkoutModel>? = null,
+    val listOfVisibleWorkouts: List<WorkoutUiModel>? = null
 )
