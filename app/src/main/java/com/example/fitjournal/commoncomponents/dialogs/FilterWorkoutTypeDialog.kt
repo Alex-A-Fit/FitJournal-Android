@@ -33,7 +33,6 @@ import com.example.fitjournal.theme.Spacing
 
 @Composable
 fun FilterWorkoutTypeDialog(
-    modifier: Modifier = Modifier,
     properties: DialogProperties = DialogProperties(),
     workoutList: List<FilterWorkoutUiModel>,
     onDismissDialog: () -> Unit,
@@ -41,7 +40,6 @@ fun FilterWorkoutTypeDialog(
 ) {
     FilterJournalDialog(
         dismissEvent = { onDismissDialog() },
-        modifier = modifier,
         properties = properties
     ) {
         FilterJournalSection(
@@ -49,15 +47,13 @@ fun FilterWorkoutTypeDialog(
             onDismissDialog = { onDismissDialog() },
             onConfirmDialog = { listOfWorkoutTypes ->
                 onConfirmDialog(listOfWorkoutTypes)
-            },
-            modifier = modifier
+            }
         )
     }
 }
 
 @Composable
 private fun FilterJournalSection(
-    modifier: Modifier = Modifier,
     workoutList: List<FilterWorkoutUiModel>,
     onDismissDialog: () -> Unit,
     onConfirmDialog: (List<WorkoutTypeEnum>) -> Unit
@@ -70,7 +66,16 @@ private fun FilterJournalSection(
         }
     }.toMutableList()
     Column(
-        modifier = modifier,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = Spacing.spacing12,
+                vertical = Spacing.spacing24
+            )
+            .background(
+                color = MaterialTheme.colorScheme.background,
+                shape = RoundedCornerShape(Spacing.spacing16)
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

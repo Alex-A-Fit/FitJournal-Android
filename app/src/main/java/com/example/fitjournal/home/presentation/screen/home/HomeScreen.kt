@@ -1,17 +1,13 @@
 package com.example.fitjournal.home.presentation.screen.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -70,16 +66,6 @@ fun HomeScreen(
 
         if (isFilterDialogShowing) {
             FilterWorkoutTypeDialog(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = Spacing.spacing12,
-                        vertical = Spacing.spacing24
-                    )
-                    .background(
-                        color = MaterialTheme.colorScheme.background,
-                        shape = RoundedCornerShape(Spacing.spacing16)
-                    ),
                 properties = DialogProperties(),
                 workoutList = homeScreenState.filterDialogList,
                 onDismissDialog = {
