@@ -100,6 +100,7 @@ fun HomeScreen(
                                 icon = workout.exerciseCardModel.icon
                             )
                         }
+
                         WorkoutTypeEnum.CALISTHENICS -> {
                             CalisthenicsCard(
                                 reps = workout.exerciseCardModel.reps,
@@ -108,6 +109,7 @@ fun HomeScreen(
                                 icon = workout.exerciseCardModel.icon
                             )
                         }
+
                         WorkoutTypeEnum.CARDIO -> {
                             CardioCard(
                                 name = workout.exerciseCardModel.name,
