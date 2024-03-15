@@ -1,4 +1,4 @@
-package com.example.fitjournal.components.appbars
+package com.example.fitjournal.commoncomponents.appbars
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

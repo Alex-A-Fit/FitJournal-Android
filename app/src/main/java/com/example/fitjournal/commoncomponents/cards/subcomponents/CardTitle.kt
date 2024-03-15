@@ -1,4 +1,4 @@
-package com.example.fitjournal.components.cards.subcomponents
+package com.example.fitjournal.commoncomponents.cards.subcomponents
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import com.example.fitjournal.components.icons.ExerciseTypeIcon
+import com.example.fitjournal.commoncomponents.icons.ExerciseTypeIcon
 import com.example.fitjournal.theme.Spacing
 
 @Composable

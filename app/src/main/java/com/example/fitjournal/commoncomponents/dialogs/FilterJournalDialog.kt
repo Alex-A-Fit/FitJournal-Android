@@ -1,4 +1,4 @@
-package com.example.fitjournal.components.dialogs
+package com.example.fitjournal.commoncomponents.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -21,11 +21,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
-import com.example.fitjournal.components.cards.CalisthenicsCard
-import com.example.fitjournal.components.cards.CardioCard
-import com.example.fitjournal.components.cards.WeightLiftingCard
-import com.example.fitjournal.components.datepicker.FitJournalDatePickerDialog
-import com.example.fitjournal.components.dialogs.FilterJournalDialog
+import com.example.fitjournal.commoncomponents.cards.CalisthenicsCard
+import com.example.fitjournal.commoncomponents.cards.CardioCard
+import com.example.fitjournal.commoncomponents.cards.WeightLiftingCard
+import com.example.fitjournal.commoncomponents.datepicker.FitJournalDatePickerDialog
+import com.example.fitjournal.commoncomponents.dialogs.FilterJournalDialog
 import com.example.fitjournal.model.enum.WorkoutTypeEnum
 import com.example.fitjournal.model.events.HomeScreenEvents
 import com.example.fitjournal.model.state.HomeScreenUiState

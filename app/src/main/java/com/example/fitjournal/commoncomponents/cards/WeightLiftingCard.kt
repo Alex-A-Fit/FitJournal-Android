@@ -1,4 +1,4 @@
-package com.example.fitjournal.components.cards
+package com.example.fitjournal.commoncomponents.cards
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,9 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
-import com.example.fitjournal.components.cards.subcomponents.CardSeeDetailsText
-import com.example.fitjournal.components.cards.subcomponents.CardTitle
-import com.example.fitjournal.components.cards.subcomponents.FitJournalCard
+import com.example.fitjournal.commoncomponents.cards.subcomponents.CardSeeDetailsText
+import com.example.fitjournal.commoncomponents.cards.subcomponents.CardTitle
+import com.example.fitjournal.commoncomponents.cards.subcomponents.FitJournalCard
 import com.example.fitjournal.theme.Spacing
 
 @Composable

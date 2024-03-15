@@ -1,4 +1,4 @@
-package com.example.fitjournal.components.appbars
+package com.example.fitjournal.commoncomponents.appbars
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
-import com.example.fitjournal.components.datepicker.FitJournalDatePicker
-import com.example.fitjournal.components.icons.FilterIcon
+import com.example.fitjournal.commoncomponents.datepicker.FitJournalDatePicker
+import com.example.fitjournal.commoncomponents.icons.FilterIcon
 import com.example.fitjournal.model.events.HomeAppBarEvents
 import com.example.fitjournal.theme.Spacing
 

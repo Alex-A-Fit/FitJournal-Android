@@ -10,16 +10,16 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.fitjournal.commoncomponents.appbars.BottomAppBar
 import com.example.fitjournal.commoncomponents.floatingactionbutton.AddWorkoutFab
 import com.example.fitjournal.commoncomponents.floatingactionbutton.AnimatedFabColumn
-import com.example.fitjournal.components.appbars.BottomAppBar
 import com.example.fitjournal.navigation.NavigationInterface
 
 @Composable
 fun AppScreen(
-    showChildrenFabs: Boolean? = null,
-    showMainFabIcon: Boolean = true,
     modifier: Modifier = Modifier,
+    showChildrenFabIcons: Boolean? = null,
+    showMainFabIcon: Boolean = true,
     snackBarModifier: Modifier = Modifier,
     snackBarHostState: SnackbarHostState,
     topAppBar: @Composable () -> Unit,
@@ -60,9 +60,9 @@ fun AppScreen(
                         .align(Alignment.BottomEnd),
                     contentAlignment = Alignment.BottomEnd
                 ) {
-                    AnimatedFabColumn(showChildrenFabs == true)
+                    AnimatedFabColumn(showChildrenFabIcons == true)
                     AddWorkoutFab(
-                        showFloatingActionButtonValue = showChildrenFabs == true,
+                        showFloatingActionButtonValue = showChildrenFabIcons == true,
                         showFloatingActionButtons = { updateChildFabDisplay?.invoke(it) }
                     )
                 }

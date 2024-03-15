@@ -1,4 +1,4 @@
-package com.example.fitjournal.components.icons
+package com.example.fitjournal.commoncomponents.icons
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton

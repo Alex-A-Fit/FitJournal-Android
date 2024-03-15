@@ -1,4 +1,4 @@
-package com.example.fitjournal.components.datepicker
+package com.example.fitjournal.commoncomponents.datepicker
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package com.example.fitjournal.components.appbars
+package com.example.fitjournal.commoncomponents.appbars
 
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api

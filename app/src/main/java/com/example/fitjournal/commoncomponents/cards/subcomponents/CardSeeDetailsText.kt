@@ -1,4 +1,4 @@
-package com.example.fitjournal.components.cards.subcomponents
+package com.example.fitjournal.commoncomponents.cards.subcomponents
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

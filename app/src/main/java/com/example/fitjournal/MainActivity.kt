@@ -21,8 +21,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.fitjournal.components.appbars.HomeTopAppBar
-import com.example.fitjournal.components.appbars.TopAppBar
+import com.example.fitjournal.commoncomponents.appbars.HomeTopAppBar
+import com.example.fitjournal.commoncomponents.appbars.TopAppBar
 import com.example.fitjournal.model.events.HomeAppBarEvents
 import com.example.fitjournal.model.events.HomeScreenEvents
 import com.example.fitjournal.navigation.NavigationInterface
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(Route.WORKOUT_LIBRARY_SCREEN) {
                             AppScreen(
-                                showChildrenFabs = showChildFabs,
+                                showChildrenFabIcons = showChildFabs,
                                 modifier = Modifier,
                                 mainScreen = { mainScreenModifier ->
                                     LibraryScreen(
@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Route.HOME_SCREEN) {
                             AppScreen(
-                                showChildrenFabs = showChildFabs,
+                                showChildrenFabIcons = showChildFabs,
                                 modifier = Modifier,
                                 snackBarHostState = snackState,
                                 topAppBar = {

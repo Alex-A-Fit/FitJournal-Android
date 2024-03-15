@@ -1,4 +1,4 @@
-package com.example.fitjournal.components.icons
+package com.example.fitjournal.commoncomponents.icons
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
