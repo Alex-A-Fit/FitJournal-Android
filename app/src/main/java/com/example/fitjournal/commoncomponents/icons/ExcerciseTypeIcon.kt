@@ -8,13 +8,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.theme.Spacing
 
 @Composable
-fun ExerciseTypeIcon(workoutIcon: Int) {
+fun ExerciseTypeIcon(
+    isWeightTrainingIcon: Boolean = false,
+    workoutIcon: Int
+) {
+    val rotateValue = if (isWeightTrainingIcon) -45F else 0F
     Icon(
         painter = painterResource(id = workoutIcon),
         contentDescription = stringResource(id = R.string.content_desc_exercise_icon),
@@ -24,7 +29,8 @@ fun ExerciseTypeIcon(workoutIcon: Int) {
             .background(
                 color = MaterialTheme.colorScheme.primary,
                 shape = RoundedCornerShape(Spacing.spacing16)
-            ),
+            )
+            .rotate(rotateValue),
         tint = MaterialTheme.colorScheme.onPrimary
     )
 }

@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.commoncomponents.floatingactionbutton.components.BasicFloatingActionButton
 import com.example.fitjournal.theme.Spacing
@@ -19,9 +20,11 @@ fun AddWorkoutFab(
     showFloatingActionButtonValue: Boolean,
     showFloatingActionButtons: (Boolean) -> Unit
 ) {
+    val threeEightsRotation = 135F
+    val revertRotation = 0F
     val animateFabIcon by animateFloatAsState(
-        targetValue = if (showFloatingActionButtonValue) 135F else 0f,
-        label = "Rotate Icon",
+        targetValue = if (showFloatingActionButtonValue) threeEightsRotation else revertRotation,
+        label = stringResource(id = R.string.label_rotate_Icon),
         animationSpec = tween(
             durationMillis = 500,
             delayMillis = 0
@@ -40,7 +43,7 @@ fun AddWorkoutFab(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.icon_add_circle),
-            contentDescription = "A circular, clickable plus sign",
+            contentDescription = stringResource(id = R.string.content_desc_add_workout_fab),
             modifier = Modifier
                 .size(Spacing.spacing64)
                 .padding(Spacing.spacing2)

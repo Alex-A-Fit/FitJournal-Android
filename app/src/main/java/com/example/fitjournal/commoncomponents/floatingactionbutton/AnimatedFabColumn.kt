@@ -16,6 +16,8 @@ import com.example.fitjournal.commoncomponents.floatingactionbutton.components.A
 fun AnimatedFabColumn(
     showFabs: Boolean
 ) {
+    // These pivots set a point of reference to
+    // where the animation originates from and exits to
     Column(horizontalAlignment = Alignment.End) {
         AnimatedVisibility(
             visible = showFabs,

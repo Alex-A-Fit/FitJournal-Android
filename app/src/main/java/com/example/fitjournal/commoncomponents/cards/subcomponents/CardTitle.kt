@@ -17,14 +17,18 @@ import com.example.fitjournal.theme.Spacing
 fun CardTitle(
     modifier: Modifier = Modifier,
     title: String,
-    workoutIcon: Int
+    workoutIcon: Int,
+    isWeightTrainingIcon: Boolean = false
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        ExerciseTypeIcon(workoutIcon = workoutIcon)
+        ExerciseTypeIcon(
+            isWeightTrainingIcon = isWeightTrainingIcon,
+            workoutIcon = workoutIcon
+        )
         Spacer(modifier = Modifier.width(Spacing.spacing12))
         Text(
             text = title,

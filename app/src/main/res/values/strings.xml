@@ -6,6 +6,7 @@
     <string name="content_desc_exercise_icon">Icon to determine what type of exercise this workout is</string>
     <string name="content_desc_journal_fab">A floating action icon that will allow you to add a new workout to your Fit Journal</string>
     <string name="content_desc_library_search_fab">A floating action icon that will allow you to add a new workout to your Library</string>
+    <string name="content_desc_add_workout_fab">A circular, clickable plus sign for adding workouts</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
@@ -26,5 +27,8 @@
     <string name="text_total_reps">Total Reps: %1$s</string>
     <string name="text_total_weight">Total Weight: %1$s</string>
     <string name="text_view_workout_details">Click to view/edit workout</string>
+
+    // labels
+    <string name="label_rotate_Icon">Rotate main fab icon</string>
 
 </resources>

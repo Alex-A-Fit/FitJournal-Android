@@ -38,7 +38,8 @@ fun WeightLiftingCard(
                     .padding(
                         horizontal = Spacing.spacing16,
                         vertical = Spacing.spacing8
-                    )
+                    ),
+                isWeightTrainingIcon = true
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             TopSetTitle()
