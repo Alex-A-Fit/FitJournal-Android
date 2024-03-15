@@ -27,6 +27,8 @@
     <string name="text_total_reps">Total Reps: %1$s</string>
     <string name="text_total_weight">Total Weight: %1$s</string>
     <string name="text_view_workout_details">Click to view/edit workout</string>
+    <string name="text_add_to_journal">Add to Journal</string>
+    <string name="text_add_to_library">Add to Library</string>
 
     // labels
     <string name="label_rotate_Icon">Rotate main fab icon</string>
