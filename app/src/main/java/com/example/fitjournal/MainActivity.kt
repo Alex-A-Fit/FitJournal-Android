@@ -12,7 +12,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -48,6 +51,9 @@ class MainActivity : ComponentActivity() {
             FitJournalTheme {
                 val navController = rememberNavController()
                 val snackState = remember { SnackbarHostState() }
+                var showChildFabs by remember {
+                    mutableStateOf(false)
+                }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -60,6 +66,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(Route.WORKOUT_LIBRARY_SCREEN) {
                             AppScreen(
+                                showChildrenFabs = showChildFabs,
                                 modifier = Modifier,
                                 mainScreen = { mainScreenModifier ->
                                     LibraryScreen(
@@ -78,11 +85,15 @@ class MainActivity : ComponentActivity() {
                                         navigationInterface = navigation,
                                         navController = navController
                                     )
+                                },
+                                updateChildFabDisplay = {
+                                    showChildFabs = it
                                 }
                             )
                         }
                         composable(Route.HOME_SCREEN) {
                             AppScreen(
+                                showChildrenFabs = showChildFabs,
                                 modifier = Modifier,
                                 snackBarHostState = snackState,
                                 topAppBar = {
@@ -104,11 +115,15 @@ class MainActivity : ComponentActivity() {
                                         navigationInterface = navigation,
                                         navController = navController
                                     )
+                                },
+                                updateChildFabDisplay = {
+                                    showChildFabs = it
                                 }
                             )
                         }
                         composable(Route.WORKOUT_STATISTICS_SCREEN) {
                             AppScreen(
+                                showMainFabIcon = false,
                                 modifier = Modifier,
                                 snackBarHostState = snackState,
                                 mainScreen = { mainScreenModifier ->

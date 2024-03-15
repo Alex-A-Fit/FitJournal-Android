@@ -34,7 +34,7 @@ fun BottomAppBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.icon_book),
+                painter = painterResource(id = R.drawable.icon_search_primary_alt),
                 contentDescription = "Library for choosing workouts",
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
@@ -44,7 +44,7 @@ fun BottomAppBar(
                     }
             )
             Icon(
-                painter = painterResource(id = R.drawable.icon_house),
+                painter = painterResource(id = R.drawable.icon_journal_primary_alt),
                 contentDescription = "Home tab to view workouts for the day",
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier

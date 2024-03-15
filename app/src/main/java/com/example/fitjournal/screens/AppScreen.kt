@@ -2,6 +2,7 @@ package com.example.fitjournal.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -9,19 +10,22 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.fitjournal.commoncomponents.floatingactionbutton.AddWorkoutFab
+import com.example.fitjournal.commoncomponents.floatingactionbutton.AnimatedFabColumn
 import com.example.fitjournal.components.appbars.BottomAppBar
-import com.example.fitjournal.components.floatingactionbutton.AddCardFab
 import com.example.fitjournal.navigation.NavigationInterface
-import com.example.fitjournal.theme.Spacing
 
 @Composable
 fun AppScreen(
+    showChildrenFabs: Boolean? = null,
+    showMainFabIcon: Boolean = true,
     modifier: Modifier = Modifier,
     snackBarModifier: Modifier = Modifier,
-    topAppBar: @Composable () -> Unit,
     snackBarHostState: SnackbarHostState,
+    topAppBar: @Composable () -> Unit,
     mainScreen: @Composable (Modifier) -> Unit,
-    navigateToDestination: (NavigationInterface) -> Unit
+    navigateToDestination: (NavigationInterface) -> Unit,
+    updateChildFabDisplay: ((Boolean) -> Unit)? = null
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -48,16 +52,21 @@ fun AppScreen(
                     .padding(padding)
                     .fillMaxSize()
             )
-            AddCardFab(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(padding)
-                    .padding(
-                        bottom = Spacing.spacing16,
-                        end = Spacing.spacing16
-                    ),
-                navigateToAddWorkoutScreen = {}
-            )
+            if (showMainFabIcon) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(padding)
+                        .align(Alignment.BottomEnd),
+                    contentAlignment = Alignment.BottomEnd
+                ) {
+                    AnimatedFabColumn(showChildrenFabs == true)
+                    AddWorkoutFab(
+                        showFloatingActionButtonValue = showChildrenFabs == true,
+                        showFloatingActionButtons = { updateChildFabDisplay?.invoke(it) }
+                    )
+                }
+            }
         }
     }
 }

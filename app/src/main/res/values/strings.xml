@@ -4,6 +4,8 @@
     // Content Descriptors
     <string name="content_desc_home_screen_filter_icon">Icon to filter through your fitness journal</string>
     <string name="content_desc_exercise_icon">Icon to determine what type of exercise this workout is</string>
+    <string name="content_desc_journal_fab">A floating action icon that will allow you to add a new workout to your Fit Journal</string>
+    <string name="content_desc_library_search_fab">A floating action icon that will allow you to add a new workout to your Library</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
