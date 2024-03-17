@@ -21,16 +21,36 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.R
+import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
+import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
 import com.example.fitjournal.theme.Spacing
 
 @Composable
-fun LibrarySearchBar() {
+fun LibrarySearchBar(
+    libraryWorkoutState: LibraryWorkoutUiModel,
+    keyboardController: SoftwareKeyboardController?,
+    focusManager: FocusManager
+) {
     var isTextFieldFocused by remember { mutableStateOf(false) }
     Box() {
         TextField(
-            value = "",
-            onValueChange = {},
+            value = libraryWorkoutState.searchedTerm,
+            onValueChange = { searchBarText ->
+                if (searchBarText.lastOrNull() == '\n') {
+                    isTextFieldFocused = false
+                    keyboardController?.hide()
+                    focusManager.clearFocus(true)
+                } else {
+                    libraryWorkoutState.handleLibraryWorkoutClickEvents(
+                        LibraryWorkoutClickEvents.UpdateSearchBarText(searchBarText)
+                    )
+                }
+            },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -43,13 +63,19 @@ fun LibrarySearchBar() {
                 unfocusedContainerColor = MaterialTheme.colorScheme.onSecondary
             ),
             placeholder = {
-                Text("Search for workout")
+                Text(stringResource(id = R.string.text_library_searchbar_placeholder))
             },
             modifier = Modifier
                 .padding(vertical = Spacing.spacing8)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(Spacing.spacing8))
-                .border(shape = RoundedCornerShape(Spacing.spacing8), border = BorderStroke(color = MaterialTheme.colorScheme.primary, width = Spacing.spacing1))
+                .border(
+                    shape = RoundedCornerShape(Spacing.spacing8),
+                    border = BorderStroke(
+                        color = MaterialTheme.colorScheme.primary,
+                        width = Spacing.spacing1
+                    )
+                )
                 .onFocusChanged {
                     isTextFieldFocused = it.isFocused
                 },

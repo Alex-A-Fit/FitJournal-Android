@@ -27,6 +27,7 @@ import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
+import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
 import com.example.fitjournal.navigation.NavigationInterface
 import com.example.fitjournal.navigation.Route
 import com.example.fitjournal.navigation.Route.LOTTIE_INTRO
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
     private val homeViewModel: HomeScreenViewModel by viewModels()
+    private val libraryScreenViewModel: LibraryScreenViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +71,8 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 mainScreen = { mainScreenModifier ->
                                     LibraryScreen(
-                                        modifier = mainScreenModifier
+                                        modifier = mainScreenModifier,
+                                        libraryWorkoutState = libraryScreenViewModel.libraryWorkoutState
                                     )
                                 },
                                 snackBarHostState = snackState,

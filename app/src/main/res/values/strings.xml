@@ -36,4 +36,7 @@
     // labels
     <string name="label_rotate_Icon">Rotate main fab icon</string>
 
+    // Placeholder strings
+    <string name="text_library_searchbar_placeholder">Search for workout</string>
+
 </resources>
