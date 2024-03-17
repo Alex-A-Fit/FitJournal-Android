@@ -1,5 +1,4 @@
 package com.example.fitjournal.home.presentation.components.appbar
-
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable

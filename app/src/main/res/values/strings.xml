@@ -4,6 +4,12 @@
     // Content Descriptors
     <string name="content_desc_home_screen_filter_icon">Icon to filter through your fitness journal</string>
     <string name="content_desc_exercise_icon">Icon to determine what type of exercise this workout is</string>
+    <string name="content_desc_journal_fab">A floating action icon that will allow you to add a new workout to your Fit Journal</string>
+    <string name="content_desc_library_search_fab">A floating action icon that will allow you to add a new workout to your Library</string>
+    <string name="content_desc_add_workout_fab">A circular, clickable plus sign for adding workouts</string>
+    <string name="content_desc_bottom_app_bar_stats_icon">Icon to signify view workout statistics</string>
+    <string name="content_desc_bottom_app_bar_home_icon">Home tab to view workouts for the day</string>
+    <string name="content_desc_bottom_app_bar_library_icon">Library for choosing workouts</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
@@ -24,5 +30,10 @@
     <string name="text_total_reps">Total Reps: %1$s</string>
     <string name="text_total_weight">Total Weight: %1$s</string>
     <string name="text_view_workout_details">Click to view/edit workout</string>
+    <string name="text_add_to_journal">Add to Journal</string>
+    <string name="text_add_to_library">Add to Library</string>
+
+    // labels
+    <string name="label_rotate_Icon">Rotate main fab icon</string>
 
 </resources>
