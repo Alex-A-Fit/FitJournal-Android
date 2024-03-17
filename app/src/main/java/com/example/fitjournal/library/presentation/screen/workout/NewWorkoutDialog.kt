@@ -37,7 +37,6 @@ import com.example.fitjournal.theme.Spacing
 fun NewWorkoutDialog(
     onDismiss: () -> Unit
 ) {
-
     // TODO Continue working on cleaning up dialog
     var workoutFieldValue by rememberSaveable {
         mutableStateOf("")
