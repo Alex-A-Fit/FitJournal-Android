@@ -10,6 +10,7 @@
     <string name="content_desc_bottom_app_bar_stats_icon">Icon to signify view workout statistics</string>
     <string name="content_desc_bottom_app_bar_home_icon">Home tab to view workouts for the day</string>
     <string name="content_desc_bottom_app_bar_library_icon">Library for choosing workouts</string>
+    <string name="content_desc_cancel_icon_clear_text">An x to clear text in searchbar</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
@@ -18,9 +19,12 @@
     <string name="title_cardio">Cardio</string>
     <string name="title_top_set">Current Top Set</string>
     <string name="title_most_recent_workout_session">Most Recent Workout Session</string>
+    <string name="title_choose_workout_type">Choose a workout type</string>
+    <string name="title_create_new_workout">Add New Workout</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>
+    <string name="subtitle_create_new_workout">Create a new workout to add to your library</string>
 
     // General Strings
     <string name="text_dismiss">Dismiss</string>
@@ -32,8 +36,15 @@
     <string name="text_view_workout_details">Click to view/edit workout</string>
     <string name="text_add_to_journal">Add to Journal</string>
     <string name="text_add_to_library">Add to Library</string>
+    <string name="text_workout_name_placeholder">Ex: Jumping Jacks</string>
 
     // labels
     <string name="label_rotate_Icon">Rotate main fab icon</string>
+    <string name="label_workout_name">Workout Name</string>
+
+    // Button Strings
+    <string name="button_cancel">Cancel</string>
+    <string name="button_create_workout">Create Workout</string>
+
 
 </resources>

@@ -8,11 +8,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.commoncomponents.appbars.BottomAppBar
 import com.example.fitjournal.commoncomponents.floatingactionbutton.AddWorkoutFab
 import com.example.fitjournal.commoncomponents.floatingactionbutton.AnimatedFabColumn
+import com.example.fitjournal.library.presentation.screen.workout.NewWorkoutDialog
 import com.example.fitjournal.navigation.NavigationInterface
 
 @Composable
@@ -27,6 +32,16 @@ fun AppScreen(
     navigateToDestination: (NavigationInterface) -> Unit,
     updateChildFabDisplay: ((Boolean) -> Unit)? = null
 ) {
+    var showWorkoutDialog by remember {
+        mutableStateOf(false)
+    }
+    if (showWorkoutDialog) {
+        NewWorkoutDialog(
+            onDismiss = {
+                showWorkoutDialog = false
+            }
+        )
+    }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -60,10 +75,17 @@ fun AppScreen(
                         .align(Alignment.BottomEnd),
                     contentAlignment = Alignment.BottomEnd
                 ) {
-                    AnimatedFabColumn(showChildrenFabIcons == true)
+                    AnimatedFabColumn(
+                        showChildrenFabIcons == true,
+                        navigateToAddToLibraryScreen = {
+                            showWorkoutDialog = true
+                        }
+                    )
                     AddWorkoutFab(
                         showFloatingActionButtonValue = showChildrenFabIcons == true,
-                        showFloatingActionButtons = { updateChildFabDisplay?.invoke(it) }
+                        showFloatingActionButtons = {
+                            updateChildFabDisplay?.invoke(it)
+                        }
                     )
                 }
             }
