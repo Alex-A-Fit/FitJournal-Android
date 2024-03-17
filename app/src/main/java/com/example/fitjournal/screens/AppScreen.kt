@@ -9,8 +9,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.fitjournal.components.appbars.BottomAppBar
-import com.example.fitjournal.components.floatingactionbutton.AddCardFab
+import com.example.fitjournal.commoncomponents.appbars.BottomAppBar
+import com.example.fitjournal.commoncomponents.floatingactionbutton.AddCardFab
 import com.example.fitjournal.navigation.NavigationInterface
 import com.example.fitjournal.theme.Spacing
 

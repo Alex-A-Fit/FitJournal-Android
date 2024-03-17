@@ -11,25 +11,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.fitjournal.components.appbars.HomeTopAppBar
-import com.example.fitjournal.components.appbars.TopAppBar
-import com.example.fitjournal.model.events.HomeAppBarEvents
-import com.example.fitjournal.model.events.HomeScreenEvents
+import com.example.fitjournal.commoncomponents.appbars.TopAppBar
+import com.example.fitjournal.home.presentation.components.appbar.HomeTopAppBar
+import com.example.fitjournal.home.presentation.model.events.HomeAppBarEvents
+import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
+import com.example.fitjournal.home.presentation.screen.home.HomeScreen
+import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
+import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.navigation.NavigationInterface
 import com.example.fitjournal.navigation.Route
 import com.example.fitjournal.navigation.Route.LOTTIE_INTRO
 import com.example.fitjournal.navigation.navigationEvent
 import com.example.fitjournal.screens.AppScreen
-import com.example.fitjournal.screens.home.HomeScreen
-import com.example.fitjournal.screens.home.HomeScreenViewModel
-import com.example.fitjournal.screens.library.LibraryScreen
 import com.example.fitjournal.screens.lottie.LottieHomeScreenAnimation
 import com.example.fitjournal.theme.FitJournalTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,7 +68,13 @@ class MainActivity : ComponentActivity() {
                                 snackBarHostState = snackState,
                                 topAppBar = {
                                     TopAppBar(
-                                        appBarTitle = { HomeScreenTitle() },
+                                        appBarTitle = {
+                                            Text(
+                                                text = "Journal",
+                                                style = MaterialTheme.typography.titleLarge,
+                                                color = MaterialTheme.colorScheme.onPrimary
+                                            )
+                                        },
                                         modifier = Modifier.fillMaxWidth()
                                     )
                                 },
@@ -121,7 +126,13 @@ class MainActivity : ComponentActivity() {
                                 },
                                 topAppBar = {
                                     TopAppBar(
-                                        appBarTitle = { HomeScreenTitle() },
+                                        appBarTitle = {
+                                            Text(
+                                                text = "Journal",
+                                                style = MaterialTheme.typography.titleLarge,
+                                                color = MaterialTheme.colorScheme.onPrimary
+                                            )
+                                        },
                                         modifier = Modifier.fillMaxWidth()
                                     )
                                 },
@@ -147,7 +158,10 @@ class MainActivity : ComponentActivity() {
 
     private fun homeScreenEvents(events: HomeScreenEvents) {
         when (events) {
-            HomeScreenEvents.DismissDatePicker -> homeViewModel.updateDatePickerDialog(isDatePickerShowing = false)
+            HomeScreenEvents.DismissDatePicker -> homeViewModel.updateDatePickerDialog(
+                isDatePickerShowing = false
+            )
+
             is HomeScreenEvents.SelectDateFromDatePicker -> {
                 homeViewModel.getSelectedDate(events.userSelectedDate)
                 // dismissing dialog on date selection
@@ -155,9 +169,17 @@ class MainActivity : ComponentActivity() {
                 homeViewModel.showSnackBar(snackBarHostState = events.snackBarHostState)
             }
 
-            is HomeScreenEvents.UpdateFilterDialog -> homeViewModel.updateFilterDialog(isFilterDialogShowing = events.isDialogShowing)
-            HomeScreenEvents.DismissFilterExercisesDialog -> homeViewModel.updateFilterDialog(isFilterDialogShowing = false)
-            is HomeScreenEvents.OnConfirmFilterExercisesDialog -> homeViewModel.filterWorkouts(events.filterList)
+            is HomeScreenEvents.UpdateFilterDialog -> homeViewModel.updateFilterDialog(
+                isFilterDialogShowing = events.isDialogShowing
+            )
+
+            HomeScreenEvents.DismissFilterExercisesDialog -> homeViewModel.updateFilterDialog(
+                isFilterDialogShowing = false
+            )
+
+            is HomeScreenEvents.OnConfirmFilterExercisesDialog -> homeViewModel.filterWorkouts(
+                events.filterList
+            )
         }
     }
 
@@ -165,19 +187,15 @@ class MainActivity : ComponentActivity() {
         when (events) {
             HomeAppBarEvents.GetNextDate -> homeViewModel.getNextDate()
             HomeAppBarEvents.GetPreviousDate -> homeViewModel.getPreviousDate()
-            is HomeAppBarEvents.ShowDatePickerDialog -> homeViewModel.updateDatePickerDialog(isDatePickerShowing = events.showDialog)
-            is HomeAppBarEvents.ShowFilterDialog -> homeViewModel.updateFilterDialog(isFilterDialogShowing = events.showDialog)
+            is HomeAppBarEvents.ShowDatePickerDialog -> homeViewModel.updateDatePickerDialog(
+                isDatePickerShowing = events.showDialog
+            )
+
+            is HomeAppBarEvents.ShowFilterDialog -> homeViewModel.updateFilterDialog(
+                isFilterDialogShowing = events.showDialog
+            )
         }
     }
-}
-
-@Composable
-fun HomeScreenTitle() {
-    Text(
-        text = "Journal",
-        style = MaterialTheme.typography.titleLarge,
-        color = MaterialTheme.colorScheme.onPrimary
-    )
 }
 
 private fun navigateToDestination(
