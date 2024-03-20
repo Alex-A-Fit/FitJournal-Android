@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.DialogProperties
 import com.example.fitjournal.R
+import com.example.fitjournal.commoncomponents.dialogs.components.BasicDialog
 import com.example.fitjournal.home.presentation.model.enum.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.ui.FilterWorkoutUiModel
 import com.example.fitjournal.theme.Spacing
@@ -38,7 +39,7 @@ fun FilterWorkoutTypeDialog(
     onDismissDialog: () -> Unit,
     onConfirmDialog: (List<WorkoutTypeEnum>) -> Unit
 ) {
-    FilterJournalDialog(
+    BasicDialog(
         dismissEvent = { onDismissDialog() },
         properties = properties
     ) {

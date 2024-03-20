@@ -18,10 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.example.fitjournal.R
 import com.example.fitjournal.commoncomponents.appbars.BottomAppBar
+import com.example.fitjournal.commoncomponents.dialogs.AddWorkoutToLibraryDialog
 import com.example.fitjournal.commoncomponents.floatingactionbutton.AddWorkoutFab
 import com.example.fitjournal.commoncomponents.floatingactionbutton.AnimatedFabColumn
 import com.example.fitjournal.library.domain.model.AddWorkoutToLibraryModel
-import com.example.fitjournal.library.presentation.screen.workout.NewWorkoutDialog
 import com.example.fitjournal.navigation.NavigationInterface
 import com.example.fitjournal.theme.Spacing
 
@@ -42,7 +42,7 @@ fun AppScreen(
         mutableStateOf(false)
     }
     if (showWorkoutDialog) {
-        NewWorkoutDialog(
+        AddWorkoutToLibraryDialog(
             dismissDialog = {
                 showWorkoutDialog = false
             },
@@ -93,8 +93,9 @@ fun AppScreen(
                     contentAlignment = Alignment.BottomEnd
                 ) {
                     AnimatedFabColumn(
-                        showChildrenFabIcons == true,
+                        showFabs = showChildrenFabIcons == true,
                         navigateToAddToLibraryScreen = {
+                            updateChildFabDisplay?.invoke(false)
                             showWorkoutDialog = true
                         }
                     )
