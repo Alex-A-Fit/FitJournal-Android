@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FitJournalTheme {
                 val navController = rememberNavController()
-                val snackState = remember { SnackbarHostState() }
+                val snackBarState = remember { SnackbarHostState() }
                 var showChildFabs by remember {
                     mutableStateOf(false)
                 }
@@ -72,7 +73,7 @@ class MainActivity : ComponentActivity() {
                                         modifier = mainScreenModifier
                                     )
                                 },
-                                snackBarHostState = snackState,
+                                snackBarHostState = snackBarState,
                                 topAppBar = {
                                     TopAppBar(
                                         appBarTitle = {
@@ -93,6 +94,21 @@ class MainActivity : ComponentActivity() {
                                 },
                                 updateChildFabDisplay = {
                                     showChildFabs = it
+                                },
+                                addWorkoutToDatabase = { addWorkoutToDbModel ->
+                                    mainViewModel.addWorkoutToDatabase(
+                                        workoutName = addWorkoutToDbModel.workoutName,
+                                        workoutTypeEnum = addWorkoutToDbModel.workoutType,
+                                        successCallback = {
+                                            showSnackBar(
+                                                snackBarHostState = snackBarState,
+                                                message = getString(
+                                                    addWorkoutToDbModel.snackBarMessageId,
+                                                    addWorkoutToDbModel.workoutName
+                                                )
+                                            )
+                                        }
+                                    )
                                 }
                             )
                         }
@@ -100,7 +116,7 @@ class MainActivity : ComponentActivity() {
                             AppScreen(
                                 showChildrenFabIcons = showChildFabs,
                                 modifier = Modifier,
-                                snackBarHostState = snackState,
+                                snackBarHostState = snackBarState,
                                 topAppBar = {
                                     HomeTopAppBar(
                                         currentDate = homeViewModel.homeScreenState.currentDate,
@@ -112,7 +128,7 @@ class MainActivity : ComponentActivity() {
                                         modifier = mainScreenModifier.fillMaxSize(),
                                         homeScreenState = homeViewModel.homeScreenState,
                                         homeScreenEvents = ::homeScreenEvents,
-                                        snackBarHostState = snackState
+                                        snackBarHostState = snackBarState
                                     )
                                 },
                                 navigateToDestination = { navigation ->
@@ -123,6 +139,21 @@ class MainActivity : ComponentActivity() {
                                 },
                                 updateChildFabDisplay = {
                                     showChildFabs = it
+                                },
+                                addWorkoutToDatabase = { addWorkoutToDbModel ->
+                                    mainViewModel.addWorkoutToDatabase(
+                                        workoutName = addWorkoutToDbModel.workoutName,
+                                        workoutTypeEnum = addWorkoutToDbModel.workoutType,
+                                        successCallback = {
+                                            showSnackBar(
+                                                snackBarHostState = snackBarState,
+                                                message = getString(
+                                                    addWorkoutToDbModel.snackBarMessageId,
+                                                    addWorkoutToDbModel.workoutName
+                                                )
+                                            )
+                                        }
+                                    )
                                 }
                             )
                         }
@@ -130,7 +161,7 @@ class MainActivity : ComponentActivity() {
                             AppScreen(
                                 showMainFabIcon = false,
                                 modifier = Modifier,
-                                snackBarHostState = snackState,
+                                snackBarHostState = snackBarState,
                                 mainScreen = { mainScreenModifier ->
 //                                    HomeScreen(
 //                                        modifier = mainScreenModifier,
@@ -210,6 +241,18 @@ class MainActivity : ComponentActivity() {
                 isFilterDialogShowing = events.showDialog
             )
         }
+    }
+    private suspend fun showSnackBar(
+        snackBarHostState: SnackbarHostState,
+        message: String,
+        actionLabelId: Int? = null
+    ) {
+        snackBarHostState.showSnackbar(
+            message = message,
+            actionLabel = if (actionLabelId != null) getString(actionLabelId) else null,
+            withDismissAction = true,
+            duration = SnackbarDuration.Short
+        )
     }
 }
 

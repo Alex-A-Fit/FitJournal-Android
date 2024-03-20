@@ -35,10 +35,10 @@ import com.example.fitjournal.theme.Spacing
 
 @Composable
 fun NewWorkoutDialog(
-    onDismiss: () -> Unit
+    dismissDialog: () -> Unit,
+    addNewWorkoutToLibrary: (String, WorkoutTypeEnum) -> Unit
 ) {
-    // TODO Continue working on cleaning up dialog
-    var workoutFieldValue by rememberSaveable {
+    var workoutName by rememberSaveable {
         mutableStateOf("")
     }
 
@@ -47,7 +47,7 @@ fun NewWorkoutDialog(
     }
 
     AlertDialog(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = { dismissDialog() },
         modifier = Modifier
             .border(
                 width = Spacing.spacing2,
@@ -61,8 +61,10 @@ fun NewWorkoutDialog(
         title = { AddNewWorkoutTitle() },
         text = {
             AddNewWorkoutSubTitle(
-                workoutNameValue = workoutFieldValue,
-                updateWorkoutName = { workoutFieldValue = it },
+                workoutNameValue = workoutName,
+                updateWorkoutName = {
+                    workoutName = it
+                },
                 workoutTypeChosen = workoutTypeChosen,
                 updateWorkoutTypeChosen = {
                     workoutTypeChosen = it
@@ -71,8 +73,15 @@ fun NewWorkoutDialog(
         },
         confirmButton = {
             Button(
-                onClick = { /*TODO*/ },
-                enabled = workoutTypeChosen != null
+                onClick = {
+                    workoutTypeChosen?.let { workoutType ->
+                        addNewWorkoutToLibrary(
+                            workoutName,
+                            workoutType
+                        )
+                    }
+                },
+                enabled = (workoutTypeChosen != null && workoutName.isNotEmpty())
             ) {
                 Text(
                     text = stringResource(id = R.string.button_create_workout),
@@ -82,14 +91,17 @@ fun NewWorkoutDialog(
         },
         dismissButton = {
             Button(
-                onClick = { onDismiss() },
+                onClick = { dismissDialog() },
                 colors = ButtonColors(
                     containerColor = MaterialTheme.colorScheme.background,
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                     disabledContainerColor = MaterialTheme.colorScheme.onTertiary,
                     disabledContentColor = MaterialTheme.colorScheme.background
                 ),
-                border = BorderStroke(width = Spacing.spacing1, color = MaterialTheme.colorScheme.onPrimary)
+                border = BorderStroke(
+                    width = Spacing.spacing1,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             ) {
                 Text(
                     text = stringResource(id = R.string.button_cancel),

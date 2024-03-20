@@ -41,10 +41,13 @@
     // labels
     <string name="label_rotate_Icon">Rotate main fab icon</string>
     <string name="label_workout_name">Workout Name</string>
+    <string name="label_dismiss_snackBar">Dismiss</string>
 
     // Button Strings
     <string name="button_cancel">Cancel</string>
     <string name="button_create_workout">Create Workout</string>
 
+    // Success Strings
+    <string name="text_workout_successfully_added_to_library">\"%1$s\" was added to your Library!</string>
 
 </resources>
