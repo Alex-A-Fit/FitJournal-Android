@@ -50,4 +50,7 @@
     // Success Strings
     <string name="text_workout_successfully_added_to_library">\"%1$s\" was added to your Library!</string>
 
+    // Placeholder strings
+    <string name="text_library_searchbar_placeholder">Search for workout</string>
+
 </resources>
