@@ -11,7 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import com.example.fitjournal.library.presentation.screen.library.components.LibrarySearchBar
+import com.example.fitjournal.commoncomponents.textField.SearchBar
+import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
 import com.example.fitjournal.theme.Spacing
 
@@ -36,7 +37,16 @@ fun LibraryScreen(
                 focusManager.clearFocus(true)
             }
     ) {
-        LibrarySearchBar(libraryWorkoutState, keyboardController, focusManager)
+        SearchBar(
+            searchedTerm = libraryWorkoutState.searchedTerm,
+            updateSearchBarText = { searchedText ->
+                libraryWorkoutState.handleLibraryWorkoutClickEvents(
+                    LibraryWorkoutClickEvents.UpdateSearchBarText(searchedText)
+                )
+            },
+            keyboardController = keyboardController,
+            focusManager = focusManager
+        )
         LibraryListSection(libraryWorkoutState.listOfSearchedWorkouts)
     }
 }
