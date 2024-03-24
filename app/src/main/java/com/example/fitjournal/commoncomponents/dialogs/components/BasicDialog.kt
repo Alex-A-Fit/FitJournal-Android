@@ -1,6 +1,7 @@
-package com.example.fitjournal.commoncomponents.dialogs
+package com.example.fitjournal.commoncomponents.dialogs.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +15,7 @@ import com.example.fitjournal.theme.Spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterJournalDialog(
+fun BasicDialog(
     properties: DialogProperties = DialogProperties(),
     dismissEvent: () -> Unit,
     dialogContent: @Composable () -> Unit
@@ -31,7 +32,12 @@ fun FilterJournalDialog(
             )
             .background(
                 color = MaterialTheme.colorScheme.background,
-                shape = RoundedCornerShape(Spacing.spacing16)
+                shape = RoundedCornerShape(Spacing.spacing32)
+            )
+            .border(
+                width = Spacing.spacing2,
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(Spacing.spacing32)
             ),
         properties = properties,
         content = {
