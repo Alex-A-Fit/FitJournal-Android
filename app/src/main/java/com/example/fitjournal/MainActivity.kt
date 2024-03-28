@@ -77,7 +77,8 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainScreenModifier ->
                                     LibraryScreen(
                                         modifier = mainScreenModifier,
-                                        libraryWorkoutState = libraryScreenViewModel.libraryWorkoutState
+                                        libraryWorkoutState = libraryScreenViewModel.libraryWorkoutState,
+                                        displayBlur =  { showChildFabs = it }
                                     )
                                 },
                                 snackBarHostState = snackBarState,
@@ -116,7 +117,8 @@ class MainActivity : ComponentActivity() {
                                             )
                                         }
                                     )
-                                }
+                                },
+                                navController = navController
                             )
                         }
                         composable(Route.HOME_SCREEN) {
@@ -161,7 +163,11 @@ class MainActivity : ComponentActivity() {
                                             )
                                         }
                                     )
-                                }
+                                },
+                                displayBlur = {
+                                    showChildFabs = it
+                                },
+                                navController = navController
                             )
                         }
                         composable(Route.WORKOUT_STATISTICS_SCREEN) {
@@ -192,7 +198,8 @@ class MainActivity : ComponentActivity() {
                                         navigationInterface = navigation,
                                         navController = navController
                                     )
-                                }
+                                },
+                                navController = navController
                             )
                         }
                         composable(LOTTIE_INTRO) {
