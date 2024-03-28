@@ -33,7 +33,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     homeScreenState: HomeScreenUiState,
     snackBarHostState: SnackbarHostState,
-    homeScreenEvents: (HomeScreenEvents) -> Unit
+    homeScreenEvents: (HomeScreenEvents) -> Unit,
 ) {
     var isDatePickerDialogShowing by rememberSaveable {
         mutableStateOf(homeScreenState.isDatePickerDialogShowing)

@@ -74,7 +74,9 @@ class MainActivity : ComponentActivity() {
                                     LibraryScreen(
                                         modifier = mainScreenModifier,
                                         libraryWorkoutState = libraryScreenViewModel.libraryWorkoutState
-                                    )
+                                    ) {
+                                        showChildFabs = it
+                                    }
                                 },
                                 snackBarHostState = snackBarState,
                                 topAppBar = {
@@ -112,7 +114,8 @@ class MainActivity : ComponentActivity() {
                                             )
                                         }
                                     )
-                                }
+                                },
+                                navController = navController
                             )
                         }
                         composable(Route.HOME_SCREEN) {
@@ -157,7 +160,11 @@ class MainActivity : ComponentActivity() {
                                             )
                                         }
                                     )
-                                }
+                                },
+                                displayBlur = {
+                                    showChildFabs = it
+                                },
+                                navController = navController
                             )
                         }
                         composable(Route.WORKOUT_STATISTICS_SCREEN) {
@@ -190,7 +197,8 @@ class MainActivity : ComponentActivity() {
                                         navigationInterface = navigation,
                                         navController = navController
                                     )
-                                }
+                                },
+                                navController = navController
                             )
                         }
                         composable(LOTTIE_INTRO) {
