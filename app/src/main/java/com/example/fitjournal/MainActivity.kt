@@ -73,10 +73,9 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainScreenModifier ->
                                     LibraryScreen(
                                         modifier = mainScreenModifier,
-                                        libraryWorkoutState = libraryScreenViewModel.libraryWorkoutState
-                                    ) {
-                                        showChildFabs = it
-                                    }
+                                        libraryWorkoutState = libraryScreenViewModel.libraryWorkoutState,
+                                        displayBlur =  { showChildFabs = it }
+                                    )
                                 },
                                 snackBarHostState = snackBarState,
                                 topAppBar = {
