@@ -1,5 +1,7 @@
 package com.example.fitjournal.screens
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.navigation.NavController
 import com.example.fitjournal.R
 import com.example.fitjournal.commoncomponents.appbars.BottomAppBar
 import com.example.fitjournal.commoncomponents.dialogs.AddWorkoutToLibraryDialog
@@ -32,15 +36,19 @@ fun AppScreen(
     showMainFabIcon: Boolean = true,
     snackBarModifier: Modifier = Modifier,
     snackBarHostState: SnackbarHostState,
+    navController: NavController,
     topAppBar: @Composable () -> Unit,
     mainScreen: @Composable (Modifier) -> Unit,
     navigateToDestination: (NavigationInterface) -> Unit,
     addWorkoutToDatabase: ((AddWorkoutToLibraryModel) -> Unit)? = null,
-    updateChildFabDisplay: ((Boolean) -> Unit)? = null
+    updateChildFabDisplay: ((Boolean) -> Unit)? = null,
+    displayBlur: ((Boolean) -> Unit)? = null
 ) {
     var showWorkoutDialog by remember {
         mutableStateOf(false)
     }
+    val interactionSource = remember { MutableInteractionSource() }
+
     if (showWorkoutDialog) {
         AddWorkoutToLibraryDialog(
             dismissDialog = {
@@ -66,6 +74,7 @@ fun AppScreen(
         },
         bottomBar = {
             BottomAppBar(
+                navController = navController,
                 navigate = { navRoute ->
                     navigateToDestination(navRoute)
                 }
@@ -79,11 +88,25 @@ fun AppScreen(
         }
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize()) {
-            mainScreen(
-                Modifier
-                    .padding(padding)
-                    .fillMaxSize()
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center)
+                    .blur(if (showChildrenFabIcons == true) Spacing.blurDensity10 else Spacing.blurDensity0)
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        displayBlur?.invoke(false)
+                        updateChildFabDisplay?.invoke(false)
+                    }
+            ) {
+                mainScreen(
+                    Modifier
+                        .padding(padding)
+                        .fillMaxSize()
+                )
+            }
             if (showMainFabIcon) {
                 Box(
                     modifier = Modifier
@@ -97,12 +120,14 @@ fun AppScreen(
                         navigateToAddToLibraryScreen = {
                             updateChildFabDisplay?.invoke(false)
                             showWorkoutDialog = true
+                            displayBlur?.invoke(false)
                         }
                     )
                     AddWorkoutFab(
                         showFloatingActionButtonValue = showChildrenFabIcons == true,
                         showFloatingActionButtons = {
                             updateChildFabDisplay?.invoke(it)
+                            displayBlur?.invoke(it)
                         }
                     )
                 }

@@ -19,7 +19,8 @@ import com.example.fitjournal.theme.Spacing
 @Composable
 fun LibraryScreen(
     modifier: Modifier,
-    libraryWorkoutState: LibraryWorkoutUiModel
+    libraryWorkoutState: LibraryWorkoutUiModel,
+    displayBlur: (Boolean) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -35,6 +36,7 @@ fun LibraryScreen(
             ) {
                 keyboardController?.hide()
                 focusManager.clearFocus(true)
+                displayBlur(false)
             }
     ) {
         SearchBar(
