@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,6 +36,8 @@ import com.example.fitjournal.navigation.Route.LOTTIE_INTRO
 import com.example.fitjournal.navigation.navigationEvent
 import com.example.fitjournal.screens.AppScreen
 import com.example.fitjournal.screens.lottie.LottieHomeScreenAnimation
+import com.example.fitjournal.statistics.presentation.screen.stats.StatisticsScreen
+import com.example.fitjournal.statistics.presentation.screen.stats.StatisticsViewModel
 import com.example.fitjournal.theme.FitJournalTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,8 +45,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
-    private val homeViewModel: HomeScreenViewModel by viewModels()
+    private val homeScreenViewModel: HomeScreenViewModel by viewModels()
     private val libraryScreenViewModel: LibraryScreenViewModel by viewModels()
+    private val statisticsScreenViewModel: StatisticsViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,14 +126,14 @@ class MainActivity : ComponentActivity() {
                                 snackBarHostState = snackBarState,
                                 topAppBar = {
                                     HomeTopAppBar(
-                                        currentDate = homeViewModel.homeScreenState.currentDate,
+                                        currentDate = homeScreenViewModel.homeScreenState.currentDate,
                                         homeAppBarEvents = ::homeAppBarEvents
                                     )
                                 },
                                 mainScreen = { mainScreenModifier ->
                                     HomeScreen(
                                         modifier = mainScreenModifier.fillMaxSize(),
-                                        homeScreenState = homeViewModel.homeScreenState,
+                                        homeScreenState = homeScreenViewModel.homeScreenState,
                                         homeScreenEvents = ::homeScreenEvents,
                                         snackBarHostState = snackBarState
                                     )
@@ -166,18 +170,16 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 snackBarHostState = snackBarState,
                                 mainScreen = { mainScreenModifier ->
-//                                    HomeScreen(
-//                                        modifier = mainScreenModifier,
-//                                        homeScreenState = homeViewModel.homeScreenState,
-//                                        homeScreenEvents = ::homeScreenEvents,
-//                                        snackBarHostState = snackState
-//                                        )
+                                    StatisticsScreen(
+                                        modifier = mainScreenModifier,
+                                        statisticsWorkoutState = statisticsScreenViewModel.statisticsWorkoutState
+                                    )
                                 },
                                 topAppBar = {
                                     TopAppBar(
                                         appBarTitle = {
                                             Text(
-                                                text = "Journal",
+                                                text = stringResource(id = R.string.title_statistics),
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
@@ -207,26 +209,26 @@ class MainActivity : ComponentActivity() {
 
     private fun homeScreenEvents(events: HomeScreenEvents) {
         when (events) {
-            HomeScreenEvents.DismissDatePicker -> homeViewModel.updateDatePickerDialog(
+            HomeScreenEvents.DismissDatePicker -> homeScreenViewModel.updateDatePickerDialog(
                 isDatePickerShowing = false
             )
 
             is HomeScreenEvents.SelectDateFromDatePicker -> {
-                homeViewModel.getSelectedDate(events.userSelectedDate)
+                homeScreenViewModel.getSelectedDate(events.userSelectedDate)
                 // dismissing dialog on date selection
-                homeViewModel.updateDatePickerDialog(isDatePickerShowing = false)
-                homeViewModel.showSnackBar(snackBarHostState = events.snackBarHostState)
+                homeScreenViewModel.updateDatePickerDialog(isDatePickerShowing = false)
+                homeScreenViewModel.showSnackBar(snackBarHostState = events.snackBarHostState)
             }
 
-            is HomeScreenEvents.UpdateFilterDialog -> homeViewModel.updateFilterDialog(
+            is HomeScreenEvents.UpdateFilterDialog -> homeScreenViewModel.updateFilterDialog(
                 isFilterDialogShowing = events.isDialogShowing
             )
 
-            HomeScreenEvents.DismissFilterExercisesDialog -> homeViewModel.updateFilterDialog(
+            HomeScreenEvents.DismissFilterExercisesDialog -> homeScreenViewModel.updateFilterDialog(
                 isFilterDialogShowing = false
             )
 
-            is HomeScreenEvents.OnConfirmFilterExercisesDialog -> homeViewModel.filterWorkouts(
+            is HomeScreenEvents.OnConfirmFilterExercisesDialog -> homeScreenViewModel.filterWorkouts(
                 events.filterList
             )
         }
@@ -234,13 +236,13 @@ class MainActivity : ComponentActivity() {
 
     private fun homeAppBarEvents(events: HomeAppBarEvents) {
         when (events) {
-            HomeAppBarEvents.GetNextDate -> homeViewModel.getNextDate()
-            HomeAppBarEvents.GetPreviousDate -> homeViewModel.getPreviousDate()
-            is HomeAppBarEvents.ShowDatePickerDialog -> homeViewModel.updateDatePickerDialog(
+            HomeAppBarEvents.GetNextDate -> homeScreenViewModel.getNextDate()
+            HomeAppBarEvents.GetPreviousDate -> homeScreenViewModel.getPreviousDate()
+            is HomeAppBarEvents.ShowDatePickerDialog -> homeScreenViewModel.updateDatePickerDialog(
                 isDatePickerShowing = events.showDialog
             )
 
-            is HomeAppBarEvents.ShowFilterDialog -> homeViewModel.updateFilterDialog(
+            is HomeAppBarEvents.ShowFilterDialog -> homeScreenViewModel.updateFilterDialog(
                 isFilterDialogShowing = events.showDialog
             )
         }

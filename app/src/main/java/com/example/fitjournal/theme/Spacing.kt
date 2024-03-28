@@ -16,6 +16,7 @@ object Spacing {
     val spacing32 = 32.dp
     val spacing48 = 48.dp
     val spacing64 = 64.dp
+    //used to offset Fab icon
     val spacing75 = 75.dp
     val spacing96 = 96.dp
     val spacing128 = 128.dp

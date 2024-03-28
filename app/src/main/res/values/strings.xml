@@ -21,6 +21,7 @@
     <string name="title_most_recent_workout_session">Most Recent Workout Session</string>
     <string name="title_choose_workout_type">Choose a workout type</string>
     <string name="title_create_new_workout">Add New Workout</string>
+    <string name="title_statistics">Statistics</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>

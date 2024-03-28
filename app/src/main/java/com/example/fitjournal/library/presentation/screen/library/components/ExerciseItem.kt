@@ -9,16 +9,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import com.example.fitjournal.R
 import com.example.fitjournal.theme.Spacing
 
 @Composable
-fun ExerciseItem(exercise: String) {
+fun ExerciseItem(
+    exercise: String,
+    iconId: Int? = null
+) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.spacing8),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = Spacing.spacing8),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = exercise)
-        Image(painter = painterResource(id = R.drawable.ic_right_chevron), contentDescription = "Navigate to exercise details")
+        iconId?.let {
+            Image(
+                painter = painterResource(id = it),
+                contentDescription = "Navigate to exercise details"
+            )
+        }
     }
 }
