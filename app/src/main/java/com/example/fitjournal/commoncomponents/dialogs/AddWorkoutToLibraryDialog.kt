@@ -157,7 +157,6 @@ private fun AddNewWorkoutSubTitle(
     updateWorkoutTypeChosen: (WorkoutTypeEnum) -> Unit,
     updateWorkoutName: (String) -> Unit
 ) {
-
     Column {
         CreateWorkoutSubtitle()
 

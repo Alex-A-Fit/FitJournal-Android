@@ -36,7 +36,7 @@ fun LibraryScreen(
             ) {
                 keyboardController?.hide()
                 focusManager.clearFocus(true)
-                displayBlur.invoke(false)
+                displayBlur(false)
             }
     ) {
         SearchBar(

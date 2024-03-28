@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.fitjournal.R
 import com.example.fitjournal.commoncomponents.appbars.BottomAppBar
@@ -89,17 +88,18 @@ fun AppScreen(
         }
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize()) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center)
-                .blur(if (showChildrenFabIcons == true) 10.dp else 0.dp)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) {
-                    displayBlur?.invoke(false)
-                    updateChildFabDisplay?.invoke(false)
-                }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center)
+                    .blur(if (showChildrenFabIcons == true) Spacing.blurDensity10 else Spacing.blurDensity0)
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        displayBlur?.invoke(false)
+                        updateChildFabDisplay?.invoke(false)
+                    }
             ) {
                 mainScreen(
                     Modifier

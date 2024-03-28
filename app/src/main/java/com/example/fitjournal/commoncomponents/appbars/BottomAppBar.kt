@@ -31,7 +31,6 @@ fun BottomAppBar(
         contentColor = MaterialTheme.colorScheme.onPrimary,
         contentPadding = PaddingValues(Spacing.spacing16)
     ) {
-
         val navBackStackEntry = navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry.value?.destination
 
@@ -44,7 +43,7 @@ fun BottomAppBar(
             Icon(
                 painter = painterResource(id = R.drawable.icon_search_primary_alt),
                 contentDescription = stringResource(id = R.string.content_desc_bottom_app_bar_library_icon),
-                tint = if (currentDestination?.route == Route.WORKOUT_LIBRARY_SCREEN)  MaterialTheme.colorScheme.onSecondary else  MaterialTheme.colorScheme.onPrimary,
+                tint = if (currentDestination?.route == Route.WORKOUT_LIBRARY_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .size(Spacing.spacing48)
                     .clickable {
@@ -54,7 +53,7 @@ fun BottomAppBar(
             Icon(
                 painter = painterResource(id = R.drawable.icon_journal_primary_alt),
                 contentDescription = stringResource(id = R.string.content_desc_bottom_app_bar_home_icon),
-                tint = if (currentDestination?.route == Route.HOME_SCREEN)  MaterialTheme.colorScheme.onSecondary else  MaterialTheme.colorScheme.onPrimary,
+                tint = if (currentDestination?.route == Route.HOME_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .size(Spacing.spacing48)
                     .clickable {
@@ -64,7 +63,7 @@ fun BottomAppBar(
             Icon(
                 painter = painterResource(id = R.drawable.icon_bar_chart),
                 contentDescription = stringResource(id = R.string.content_desc_bottom_app_bar_stats_icon),
-                tint = if (currentDestination?.route == Route.WORKOUT_STATISTICS_SCREEN)  MaterialTheme.colorScheme.onSecondary else  MaterialTheme.colorScheme.onPrimary,
+                tint = if (currentDestination?.route == Route.WORKOUT_STATISTICS_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .size(Spacing.spacing48)
                     .clickable {
