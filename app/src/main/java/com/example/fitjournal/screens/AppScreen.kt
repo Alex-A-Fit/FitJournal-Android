@@ -1,5 +1,8 @@
 package com.example.fitjournal.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -42,7 +45,8 @@ fun AppScreen(
     navigateToDestination: (NavigationInterface) -> Unit,
     addWorkoutToDatabase: ((AddWorkoutToLibraryModel) -> Unit)? = null,
     updateChildFabDisplay: ((Boolean) -> Unit)? = null,
-    displayBlur: ((Boolean) -> Unit)? = null
+    displayBlur: ((Boolean) -> Unit)? = null,
+    bottomBarVisibility: Boolean = true
 ) {
     var showWorkoutDialog by remember {
         mutableStateOf(false)
@@ -73,12 +77,18 @@ fun AppScreen(
             topAppBar()
         },
         bottomBar = {
-            BottomAppBar(
-                navController = navController,
-                navigate = { navRoute ->
-                    navigateToDestination(navRoute)
-                }
-            )
+            AnimatedVisibility(
+                visible = bottomBarVisibility,
+                enter = slideInVertically(initialOffsetY = { it }),
+                exit = slideOutVertically(targetOffsetY = { it }),
+            ) {
+                BottomAppBar(
+                    navController = navController,
+                    navigate = { navRoute ->
+                        navigateToDestination(navRoute)
+                    }
+                )
+            }
         },
         snackbarHost = {
             SnackbarHost(
@@ -121,6 +131,11 @@ fun AppScreen(
                             updateChildFabDisplay?.invoke(false)
                             showWorkoutDialog = true
                             displayBlur?.invoke(false)
+                        },
+                        navigateToJourneyEntry = {
+                            updateChildFabDisplay?.invoke(false)
+                            displayBlur?.invoke(false)
+                            navigateToDestination(NavigationInterface.NavigateToJournalEntry)
                         }
                     )
                     AddWorkoutFab(

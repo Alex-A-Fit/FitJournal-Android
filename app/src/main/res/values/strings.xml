@@ -37,6 +37,10 @@
     <string name="text_add_to_journal">Add to Journal</string>
     <string name="text_add_to_library">Add to Library</string>
     <string name="text_workout_name_placeholder">Ex: Jumping Jacks</string>
+    <string name="text_library_tab_bar_icon">"Library</string>
+    <string name="text_journal_tab_bar_icon">"Journal</string>
+    <string name="text_statistics_tab_bar_icon">"Statistics</string>
+
 
     // labels
     <string name="label_rotate_Icon">Rotate main fab icon</string>
