@@ -21,7 +21,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.fitjournal.commoncomponents.appbars.TopAppBar
+import com.example.fitjournal.core.presentation.commoncomponents.appbars.TopAppBar
+import com.example.fitjournal.core.presentation.navigation.NavigationInterface
+import com.example.fitjournal.core.presentation.navigation.Route
+import com.example.fitjournal.core.presentation.navigation.Route.LOTTIE_INTRO
+import com.example.fitjournal.core.presentation.navigation.navigationEvent
+import com.example.fitjournal.core.presentation.screens.AppScreen
+import com.example.fitjournal.core.presentation.screens.lottie.LottieHomeScreenAnimation
+import com.example.fitjournal.core.presentation.theme.FitJournalTheme
 import com.example.fitjournal.home.presentation.components.appbar.HomeTopAppBar
 import com.example.fitjournal.home.presentation.model.events.HomeAppBarEvents
 import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
@@ -29,13 +36,6 @@ import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
-import com.example.fitjournal.navigation.NavigationInterface
-import com.example.fitjournal.navigation.Route
-import com.example.fitjournal.navigation.Route.LOTTIE_INTRO
-import com.example.fitjournal.navigation.navigationEvent
-import com.example.fitjournal.screens.AppScreen
-import com.example.fitjournal.screens.lottie.LottieHomeScreenAnimation
-import com.example.fitjournal.theme.FitJournalTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
                                     LibraryScreen(
                                         modifier = mainScreenModifier,
                                         libraryWorkoutState = libraryScreenViewModel.libraryWorkoutState,
-                                        displayBlur =  { showChildFabs = it }
+                                        displayBlur = { showChildFabs = it }
                                     )
                                 },
                                 snackBarHostState = snackBarState,

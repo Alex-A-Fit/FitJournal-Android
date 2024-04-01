@@ -1,7 +1,7 @@
 package com.example.fitjournal.home.presentation.model.events
 
 import androidx.compose.material3.SnackbarHostState
-import com.example.fitjournal.home.presentation.model.enum.WorkoutTypeEnum
+import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 
 sealed class HomeScreenEvents {
     data object DismissDatePicker : HomeScreenEvents()

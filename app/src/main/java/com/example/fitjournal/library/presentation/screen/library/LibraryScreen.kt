@@ -11,10 +11,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import com.example.fitjournal.commoncomponents.textField.SearchBar
+import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
+import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
-import com.example.fitjournal.theme.Spacing
 
 @Composable
 fun LibraryScreen(

@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
-import com.example.fitjournal.theme.Spacing
+import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
 fun MostRecentWorkoutSession() {

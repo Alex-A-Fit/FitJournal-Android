@@ -1,7 +1,7 @@
 package com.example.fitjournal.home.presentation.model.state
 
-import com.example.fitjournal.home.domain.model.WorkoutModel
-import com.example.fitjournal.home.presentation.model.enum.WorkoutTypeEnum
+import com.example.fitjournal.core.domain.model.WorkoutModel
+import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.ui.FilterWorkoutUiModel
 import com.example.fitjournal.home.presentation.model.ui.WorkoutUiModel
 import java.time.LocalDateTime

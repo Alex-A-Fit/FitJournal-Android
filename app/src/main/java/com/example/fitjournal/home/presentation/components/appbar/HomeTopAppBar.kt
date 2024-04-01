@@ -5,11 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
-import com.example.fitjournal.commoncomponents.appbars.TopAppBar
-import com.example.fitjournal.commoncomponents.icons.FilterIcon
+import com.example.fitjournal.core.presentation.commoncomponents.appbars.TopAppBar
+import com.example.fitjournal.core.presentation.commoncomponents.icons.FilterIcon
+import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.datepicker.FitJournalDatePicker
 import com.example.fitjournal.home.presentation.model.events.HomeAppBarEvents
-import com.example.fitjournal.theme.Spacing
 
 @Composable
 fun HomeTopAppBar(

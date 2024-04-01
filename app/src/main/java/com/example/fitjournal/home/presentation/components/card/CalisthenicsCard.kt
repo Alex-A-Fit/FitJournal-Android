@@ -13,11 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
-import com.example.fitjournal.commoncomponents.cards.FitJournalCard
+import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJournalCard
+import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
 import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentWorkoutSession
-import com.example.fitjournal.theme.Spacing
 
 @Composable
 fun CalisthenicsCard(
