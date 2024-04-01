@@ -16,7 +16,7 @@ import com.example.fitjournal.commoncomponents.floatingactionbutton.components.A
 fun AnimatedFabColumn(
     showFabs: Boolean,
     navigateToAddToLibraryScreen: () -> Unit,
-    navigateToJourneyEntry:() -> Unit
+    navigateToJournalEntry:() -> Unit
 ) {
     // These pivots set a point of reference to
     // where the animation originates from and exits to
@@ -37,7 +37,7 @@ fun AnimatedFabColumn(
             )
         ) {
             AddToJournalFab(navigateToAddWorkoutToJournalScreen = {
-                navigateToJourneyEntry()
+                navigateToJournalEntry()
             })
             AddToLibraryFab(navigateToAddWorkoutToLibraryScreen = {
                 navigateToAddToLibraryScreen()

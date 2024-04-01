@@ -132,7 +132,7 @@ fun AppScreen(
                             showWorkoutDialog = true
                             displayBlur?.invoke(false)
                         },
-                        navigateToJourneyEntry = {
+                        navigateToJournalEntry = {
                             updateChildFabDisplay?.invoke(false)
                             displayBlur?.invoke(false)
                             navigateToDestination(NavigationInterface.NavigateToJournalEntry)

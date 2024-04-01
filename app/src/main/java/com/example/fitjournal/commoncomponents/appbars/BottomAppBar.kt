@@ -50,7 +50,7 @@ fun BottomAppBar(
                     )},
                 label = {
                     Text(
-                        text = "${R.string.text_library_tab_bar_icon}",
+                        text = stringResource(id = R.string.text_library_tab_bar_icon),
                         color = if (currentDestination?.route == Route.WORKOUT_LIBRARY_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
                     )
                 }
@@ -67,7 +67,7 @@ fun BottomAppBar(
                     ) },
                 label = {
                     Text(
-                        text = "${R.string.text_journal_tab_bar_icon}",
+                        text = stringResource(id = R.string.text_journal_tab_bar_icon),
                         color = if (currentDestination?.route == Route.HOME_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
                     )
                 }
@@ -84,7 +84,7 @@ fun BottomAppBar(
                     ) },
                 label = {
                     Text(
-                        text = "${R.string.text_statistics_tab_bar_icon}",
+                        text = stringResource(id = R.string.text_statistics_tab_bar_icon),
                         color = if (currentDestination?.route == Route.WORKOUT_STATISTICS_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
                     )
                 }
