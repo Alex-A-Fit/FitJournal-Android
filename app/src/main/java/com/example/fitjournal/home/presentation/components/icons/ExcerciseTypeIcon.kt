@@ -12,7 +12,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
-import com.example.fitjournal.theme.Spacing
+import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
 fun ExerciseTypeIcon(

@@ -17,15 +17,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
-import com.example.fitjournal.commoncomponents.dialogs.FilterWorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.FilterWorkoutTypeDialog
+import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.card.CalisthenicsCard
 import com.example.fitjournal.home.presentation.components.card.CardioCard
 import com.example.fitjournal.home.presentation.components.card.WeightLiftingCard
 import com.example.fitjournal.home.presentation.components.datepicker.FitJournalDatePickerDialog
-import com.example.fitjournal.home.presentation.model.enum.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.model.state.HomeScreenUiState
-import com.example.fitjournal.theme.Spacing
 
 @ExperimentalMaterial3Api
 @Composable

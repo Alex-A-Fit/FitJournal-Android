@@ -1,6 +1,6 @@
 package com.example.fitjournal.library.domain.model
 
-import com.example.fitjournal.home.presentation.model.enum.WorkoutTypeEnum
+import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 
 data class AddWorkoutToLibraryModel(
     val workoutName: String,
