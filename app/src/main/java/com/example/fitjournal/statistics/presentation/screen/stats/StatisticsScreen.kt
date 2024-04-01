@@ -50,8 +50,11 @@ fun StatisticsScreen(
             focusManager = focusManager
         )
 
-        if (!statisticsWorkoutState.didUserSelectWorkout){
-            WorkoutListSection(modifier = Modifier.padding(horizontal = Spacing.spacing16), listOfSearchedWorkouts = listOf())
+        if (!statisticsWorkoutState.didUserSelectWorkout) {
+            WorkoutListSection(
+                modifier = Modifier.padding(horizontal = Spacing.spacing16),
+                listOfSearchedWorkouts = listOf()
+            )
         }
     }
 }

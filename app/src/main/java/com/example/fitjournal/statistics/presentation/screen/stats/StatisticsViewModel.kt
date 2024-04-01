@@ -31,6 +31,12 @@ class StatisticsViewModel @Inject constructor() : ViewModel() {
         setMasterListOfWorkouts(masterWorkoutList)
     }
 
+    private fun setMasterListOfWorkouts(masterWorkoutList: List<LibraryWorkoutItem>) {
+        updateStatisticsWorkoutState(
+            statisticsWorkoutState.copy()
+        )
+    }
+
     private fun handleStatisticsWorkoutEvents(event: StatisticsWorkoutEvents) {
         when (event) {
             is StatisticsWorkoutEvents.UpdateSearchBar -> {
