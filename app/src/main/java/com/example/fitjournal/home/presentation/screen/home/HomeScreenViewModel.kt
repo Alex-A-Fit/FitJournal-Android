@@ -9,9 +9,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.data.mockdata.MockData
+import com.example.fitjournal.core.domain.managers.DateManager
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
-import com.example.fitjournal.home.domain.managers.DateManager
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import com.example.fitjournal.home.presentation.model.state.HomeScreenUiState
 import com.example.fitjournal.home.presentation.model.ui.CardUiModel

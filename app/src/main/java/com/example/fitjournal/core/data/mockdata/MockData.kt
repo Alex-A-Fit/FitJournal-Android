@@ -1,12 +1,12 @@
 package com.example.fitjournal.core.data.mockdata
 
 import com.example.fitjournal.R
+import com.example.fitjournal.core.domain.managers.DateManager
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
-import com.example.fitjournal.home.domain.managers.DateManager
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
