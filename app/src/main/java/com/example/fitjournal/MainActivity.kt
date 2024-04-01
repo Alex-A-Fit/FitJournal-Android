@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,10 +13,12 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -56,6 +59,7 @@ class MainActivity : ComponentActivity() {
                 var showChildFabs by remember {
                     mutableStateOf(false)
                 }
+                val bottomBarVisibility = remember { (mutableStateOf(true)) }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -67,6 +71,9 @@ class MainActivity : ComponentActivity() {
                         startDestination = LOTTIE_INTRO
                     ) {
                         composable(Route.WORKOUT_LIBRARY_SCREEN) {
+                            LaunchedEffect(Unit) {
+                                bottomBarVisibility.value = true
+                            }
                             AppScreen(
                                 showChildrenFabIcons = showChildFabs,
                                 modifier = Modifier,
@@ -91,6 +98,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 navigateToDestination = { navigation ->
+                                    showChildFabs = false
                                     navigateToDestination(
                                         navigationInterface = navigation,
                                         navController = navController
@@ -114,10 +122,14 @@ class MainActivity : ComponentActivity() {
                                         }
                                     )
                                 },
-                                navController = navController
+                                navController = navController,
+                                bottomBarVisibility = bottomBarVisibility.value
                             )
                         }
                         composable(Route.HOME_SCREEN) {
+                            LaunchedEffect(Unit) {
+                                bottomBarVisibility.value = true
+                            }
                             AppScreen(
                                 showChildrenFabIcons = showChildFabs,
                                 modifier = Modifier,
@@ -137,6 +149,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 navigateToDestination = { navigation ->
+                                    showChildFabs = false
                                     navigateToDestination(
                                         navigationInterface = navigation,
                                         navController = navController
@@ -163,7 +176,8 @@ class MainActivity : ComponentActivity() {
                                 displayBlur = {
                                     showChildFabs = it
                                 },
-                                navController = navController
+                                navController = navController,
+                                bottomBarVisibility = bottomBarVisibility.value
                             )
                         }
                         composable(Route.WORKOUT_STATISTICS_SCREEN) {
@@ -192,12 +206,46 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 navigateToDestination = { navigation ->
+                                    showChildFabs = false
                                     navigateToDestination(
                                         navigationInterface = navigation,
                                         navController = navController
                                     )
                                 },
                                 navController = navController
+                            )
+                        }
+                        composable(Route.JOURNAL_ENTRY_SCREEN) {
+                            LaunchedEffect(Unit) {
+                                bottomBarVisibility.value = false
+                            }
+                            AppScreen(
+                                showMainFabIcon = false,
+                                modifier = Modifier,
+                                snackBarHostState = snackBarState,
+                                mainScreen = {
+                                    Box(
+                                        contentAlignment = Alignment.Center,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Text(text = "welcome to Journey entry")
+                                    }
+                                },
+                                topAppBar = {
+                                    TopAppBar(
+                                        appBarTitle = {
+                                            Text(
+                                                text = "Journal Entry",
+                                                style = MaterialTheme.typography.titleLarge,
+                                                color = MaterialTheme.colorScheme.onPrimary
+                                            )
+                                        },
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                },
+                                navigateToDestination = { },
+                                navController = navController,
+                                bottomBarVisibility = bottomBarVisibility.value
                             )
                         }
                         composable(LOTTIE_INTRO) {
@@ -286,6 +334,13 @@ private fun navigateToDestination(
         }
 
         NavigationInterface.NavigateToWorkoutStatistics -> {
+            navigationEvent(
+                navigationInterface,
+                navController = navController
+            )
+        }
+
+        NavigationInterface.NavigateToJournalEntry -> {
             navigationEvent(
                 navigationInterface,
                 navController = navController
