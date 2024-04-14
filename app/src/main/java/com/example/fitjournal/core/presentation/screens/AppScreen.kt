@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.navigation.NavController
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.appbars.BottomAppBar
@@ -31,6 +32,7 @@ import com.example.fitjournal.core.presentation.commoncomponents.floatingactionb
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.library.domain.model.AddWorkoutToLibraryModel
+import com.skydoves.cloudy.Cloudy
 
 @Composable
 fun AppScreen(
@@ -52,6 +54,7 @@ fun AppScreen(
         mutableStateOf(false)
     }
     val interactionSource = remember { MutableInteractionSource() }
+    val focusManager = LocalFocusManager.current
 
     if (showWorkoutDialog) {
         AddWorkoutToLibraryDialog(
@@ -80,7 +83,7 @@ fun AppScreen(
             AnimatedVisibility(
                 visible = bottomBarVisibility,
                 enter = slideInVertically(initialOffsetY = { it }),
-                exit = slideOutVertically(targetOffsetY = { it }),
+                exit = slideOutVertically(targetOffsetY = { it })
             ) {
                 BottomAppBar(
                     navController = navController,
@@ -102,7 +105,6 @@ fun AppScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center)
-                    .blur(if (showChildrenFabIcons == true) Spacing.blurDensity10 else Spacing.blurDensity0)
                     .clickable(
                         interactionSource = interactionSource,
                         indication = null
@@ -110,12 +112,49 @@ fun AppScreen(
                         displayBlur?.invoke(false)
                         updateChildFabDisplay?.invoke(false)
                     }
+                    .then(
+                        if (android.os.Build.VERSION.SDK_INT > 30) {
+                            Modifier
+                                .blur(if (showChildrenFabIcons == true) Spacing.blurDensity10 else Spacing.blurDensity0)
+                        } else {
+                            Modifier
+                        }
+                    )
             ) {
-                mainScreen(
-                    Modifier
-                        .padding(padding)
-                        .fillMaxSize()
-                )
+                if (android.os.Build.VERSION.SDK_INT < 30) {
+                    if (showChildrenFabIcons == true) {
+                        Cloudy(
+                            radius = 25,
+                            modifier = Modifier.clickable(
+                                interactionSource = interactionSource,
+                                indication = null
+                            ) {
+                                if (displayBlur != null) {
+                                    displayBlur(false)
+                                }
+                                focusManager.clearFocus(force = true)
+                            }
+                        ) {
+                            mainScreen(
+                                Modifier
+                                    .padding(padding)
+                                    .fillMaxSize()
+                            )
+                        }
+                    } else {
+                        mainScreen(
+                            Modifier
+                                .padding(padding)
+                                .fillMaxSize()
+                        )
+                    }
+                } else {
+                    mainScreen(
+                        Modifier
+                            .padding(padding)
+                            .fillMaxSize()
+                    )
+                }
             }
             if (showMainFabIcon) {
                 Box(

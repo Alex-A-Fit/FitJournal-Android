@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
@@ -60,6 +61,7 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf(false)
                 }
                 val bottomBarVisibility = remember { (mutableStateOf(true)) }
+                val homeScreenListState = rememberLazyListState()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -145,7 +147,8 @@ class MainActivity : ComponentActivity() {
                                         modifier = mainScreenModifier.fillMaxSize(),
                                         homeScreenState = homeViewModel.homeScreenState,
                                         homeScreenEvents = ::homeScreenEvents,
-                                        snackBarHostState = snackBarState
+                                        snackBarHostState = snackBarState,
+                                        lazyListState = homeScreenListState
                                     )
                                 },
                                 navigateToDestination = { navigation ->

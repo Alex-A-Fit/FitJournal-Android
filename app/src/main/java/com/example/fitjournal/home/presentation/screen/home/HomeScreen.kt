@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
@@ -33,6 +34,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     homeScreenState: HomeScreenUiState,
     snackBarHostState: SnackbarHostState,
+    lazyListState: LazyListState,
     homeScreenEvents: (HomeScreenEvents) -> Unit
 ) {
     var isDatePickerDialogShowing by rememberSaveable {
@@ -83,6 +85,7 @@ fun HomeScreen(
         homeScreenState.listOfVisibleWorkouts?.let { workoutList ->
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
+                state = lazyListState,
                 contentPadding = PaddingValues(all = Spacing.spacing16)
             ) {
                 items(items = workoutList) { workout ->
@@ -92,7 +95,8 @@ fun HomeScreen(
                                 reps = workout.exerciseCardModel.reps,
                                 weight = workout.exerciseCardModel.weight,
                                 name = workout.exerciseCardModel.name,
-                                icon = workout.exerciseCardModel.icon
+                                icon = workout.exerciseCardModel.icon,
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
 
@@ -101,7 +105,8 @@ fun HomeScreen(
                                 reps = workout.exerciseCardModel.reps,
                                 time = workout.exerciseCardModel.time,
                                 name = workout.exerciseCardModel.name,
-                                icon = workout.exerciseCardModel.icon
+                                icon = workout.exerciseCardModel.icon,
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
 
@@ -111,7 +116,8 @@ fun HomeScreen(
                                 icon = workout.exerciseCardModel.icon,
                                 distance = workout.exerciseCardModel.distance,
                                 distanceType = workout.exerciseCardModel.distanceType,
-                                time = workout.exerciseCardModel.time
+                                time = workout.exerciseCardModel.time,
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
                     }
