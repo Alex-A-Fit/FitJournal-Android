@@ -49,6 +49,6 @@ fun LibraryScreen(
             keyboardController = keyboardController,
             focusManager = focusManager
         )
-        LibraryListSection(libraryWorkoutState.listOfSearchedWorkouts)
+        LibraryListSection(categories = libraryWorkoutState.listOfSearchedWorkouts)
     }
 }
