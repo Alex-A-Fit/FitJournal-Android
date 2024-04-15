@@ -21,14 +21,19 @@ fun ExerciseItem(exercise: String) {
             .padding(vertical = Spacing.spacing12),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = exercise,
-            color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.bodyLarge
-        )
+        ExerciseName(exercise = exercise)
         Image(
             painter = painterResource(id = R.drawable.ic_right_chevron),
             contentDescription = "Navigate to exercise details"
         )
     }
+}
+
+@Composable
+private fun ExerciseName(exercise: String){
+    Text(
+        text = exercise,
+        color = MaterialTheme.colorScheme.onPrimary,
+        style = MaterialTheme.typography.bodyLarge
+    )
 }
