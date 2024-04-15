@@ -35,6 +35,7 @@ fun HomeScreen(
     homeScreenState: HomeScreenUiState,
     snackBarHostState: SnackbarHostState,
     lazyListState: LazyListState,
+    isBlurActive: Boolean,
     homeScreenEvents: (HomeScreenEvents) -> Unit
 ) {
     var isDatePickerDialogShowing by rememberSaveable {
@@ -86,6 +87,7 @@ fun HomeScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
                 state = lazyListState,
+                userScrollEnabled = !isBlurActive,
                 contentPadding = PaddingValues(all = Spacing.spacing16)
             ) {
                 items(items = workoutList) { workout ->

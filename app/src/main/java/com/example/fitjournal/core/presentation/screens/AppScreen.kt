@@ -129,9 +129,7 @@ fun AppScreen(
                                 interactionSource = interactionSource,
                                 indication = null
                             ) {
-                                if (displayBlur != null) {
-                                    displayBlur(false)
-                                }
+                                displayBlur?.invoke(false)
                                 focusManager.clearFocus(force = true)
                             }
                         ) {

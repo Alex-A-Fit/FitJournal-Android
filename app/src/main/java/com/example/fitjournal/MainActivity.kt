@@ -62,6 +62,7 @@ class MainActivity : ComponentActivity() {
                 }
                 val bottomBarVisibility = remember { (mutableStateOf(true)) }
                 val homeScreenListState = rememberLazyListState()
+                val libraryScreenListState = rememberLazyListState()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -83,7 +84,9 @@ class MainActivity : ComponentActivity() {
                                     LibraryScreen(
                                         modifier = mainScreenModifier,
                                         libraryWorkoutState = libraryScreenViewModel.libraryWorkoutState,
-                                        displayBlur = { showChildFabs = it }
+                                        displayBlur = { showChildFabs = it },
+                                        isBlurActive = showChildFabs,
+                                        libraryScreenListState = libraryScreenListState
                                     )
                                 },
                                 snackBarHostState = snackBarState,
@@ -91,7 +94,7 @@ class MainActivity : ComponentActivity() {
                                     TopAppBar(
                                         appBarTitle = {
                                             Text(
-                                                text = "Journal",
+                                                text = "Workout Library",
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
@@ -148,6 +151,7 @@ class MainActivity : ComponentActivity() {
                                         homeScreenState = homeViewModel.homeScreenState,
                                         homeScreenEvents = ::homeScreenEvents,
                                         snackBarHostState = snackBarState,
+                                        isBlurActive = showChildFabs,
                                         lazyListState = homeScreenListState
                                     )
                                 },

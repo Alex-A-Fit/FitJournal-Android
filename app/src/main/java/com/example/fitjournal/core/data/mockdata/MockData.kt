@@ -116,4 +116,27 @@ object MockData {
             calisthenicsModel = null
         )
     )
+
+    val libraryWorkoutList = listOf(
+        "Bench",
+        "Squats",
+        "Lateral Raises",
+        "Elevated Goblet Squats",
+        "Burpees",
+        "Bicep Curls",
+        "Box Jumps",
+        "Mountain Climbers",
+        "Medicine Ball Slams",
+        "Mountain Pose",
+        "Modified Push-Ups",
+        "Mason Twist",
+        "Monkey Bars",
+        "Modified Burpees",
+        "Lunges",
+        "Leg Press",
+        "Lat Pulldowns",
+        "Lying leg curls",
+        "L-sit",
+        "LandMine Twists"
+    )
 }
