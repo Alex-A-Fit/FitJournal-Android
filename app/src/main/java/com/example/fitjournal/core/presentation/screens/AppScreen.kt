@@ -80,7 +80,7 @@ fun AppScreen(
             AnimatedVisibility(
                 visible = bottomBarVisibility,
                 enter = slideInVertically(initialOffsetY = { it }),
-                exit = slideOutVertically(targetOffsetY = { it }),
+                exit = slideOutVertically(targetOffsetY = { it })
             ) {
                 BottomAppBar(
                     navController = navController,

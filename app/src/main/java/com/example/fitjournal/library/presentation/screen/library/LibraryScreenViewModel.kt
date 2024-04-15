@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutItem
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
+import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -21,11 +22,16 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
 
     init {
         // Dummy Data for now
-        val workoutList = listOf("Bench", "Squats", "Lateral Raises", "Elevated Goblet Squats")
-        val masterWorkoutList = workoutList.map { workout ->
-            LibraryWorkoutItem(
-                workoutName = workout,
-                workoutDetails = "Details for $workout go here"
+        val workoutMap = listOf("Bench", "Squats", "Lateral Raises", "Elevated Goblet Squats", "Burpees", "Bicep Curls", "Box Jumps", "Mountain Climbers", "Medicine Ball Slams", "Mountain Pose", "Modified Push-Ups", "Mason Twist", "Monkey Bars", "Modified Burpees", "Lunges", "Leg Press", "Lat Pulldowns", "Lying leg curls", "L-sit", "LandMine Twists").groupBy { it.first() }.toSortedMap()
+        val masterWorkoutList = workoutMap.map { workouts ->
+            WorkoutCategory(
+                name = workouts.key.toString(),
+                items = workouts.value.map { workout ->
+                    LibraryWorkoutItem(
+                        workoutName = workout,
+                        workoutDetails = "Details for $workout go here"
+                    )
+                }
             )
         }
         setMasterListOfWorkouts(masterWorkoutList)
@@ -37,7 +43,7 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
             is LibraryWorkoutClickEvents.UpdateSearchBarText -> updateSearchBarText(event.text)
         }
     }
-    private fun setMasterListOfWorkouts(workoutList: List<LibraryWorkoutItem>) {
+    private fun setMasterListOfWorkouts(workoutList: List<WorkoutCategory>) {
         libraryWorkoutState = libraryWorkoutState.copy(
             masterWorkoutList = workoutList,
             listOfSearchedWorkouts = workoutList
@@ -50,7 +56,7 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    fun clearSearchBarText() {
+    private fun clearSearchBarText() {
         libraryWorkoutState = libraryWorkoutState.copy(
             searchedTerm = ""
         )

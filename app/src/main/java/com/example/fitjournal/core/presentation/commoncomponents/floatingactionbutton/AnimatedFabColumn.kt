@@ -16,7 +16,7 @@ import com.example.fitjournal.core.presentation.commoncomponents.floatingactionb
 fun AnimatedFabColumn(
     showFabs: Boolean,
     navigateToAddToLibraryScreen: () -> Unit,
-    navigateToJournalEntry:() -> Unit
+    navigateToJournalEntry: () -> Unit
 ) {
     // These pivots set a point of reference to
     // where the animation originates from and exits to

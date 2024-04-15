@@ -47,7 +47,8 @@ fun BottomAppBar(
                         painter = painterResource(id = R.drawable.icon_search_primary_alt),
                         contentDescription = stringResource(id = R.string.content_desc_bottom_app_bar_library_icon),
                         tint = if (currentDestination?.route == Route.WORKOUT_LIBRARY_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
-                    )},
+                    )
+                },
                 label = {
                     Text(
                         text = stringResource(id = R.string.text_library_tab_bar_icon),
@@ -58,13 +59,14 @@ fun BottomAppBar(
 
             NavigationBarItem(
                 selected = false,
-                onClick = { navigate(NavigationInterface.NavigateToHome)  },
+                onClick = { navigate(NavigationInterface.NavigateToHome) },
                 icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.icon_journal_primary_alt),
                         contentDescription = stringResource(id = R.string.content_desc_bottom_app_bar_home_icon),
                         tint = if (currentDestination?.route == Route.HOME_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
-                    ) },
+                    )
+                },
                 label = {
                     Text(
                         text = stringResource(id = R.string.text_journal_tab_bar_icon),
@@ -75,13 +77,14 @@ fun BottomAppBar(
 
             NavigationBarItem(
                 selected = false,
-                onClick = { navigate(NavigationInterface.NavigateToWorkoutStatistics)  },
+                onClick = { navigate(NavigationInterface.NavigateToWorkoutStatistics) },
                 icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.icon_bar_chart),
                         contentDescription = stringResource(id = R.string.content_desc_bottom_app_bar_stats_icon),
                         tint = if (currentDestination?.route == Route.WORKOUT_STATISTICS_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
-                    ) },
+                    )
+                },
                 label = {
                     Text(
                         text = stringResource(id = R.string.text_statistics_tab_bar_icon),
