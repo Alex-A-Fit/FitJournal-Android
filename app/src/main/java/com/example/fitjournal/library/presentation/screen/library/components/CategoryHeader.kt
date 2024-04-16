@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.text.font.FontWeight
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
@@ -32,7 +31,6 @@ fun CategoryHeader(
     ) {
         Text(
             text = text,
-            fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.headlineLarge,
             modifier = modifier
                 .fillMaxWidth()

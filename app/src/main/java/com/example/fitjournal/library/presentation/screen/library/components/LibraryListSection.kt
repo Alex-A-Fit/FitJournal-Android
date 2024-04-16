@@ -1,8 +1,11 @@
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -15,8 +18,17 @@ import com.example.fitjournal.library.presentation.screen.library.model.WorkoutC
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LibraryListSection(categories: List<WorkoutCategory>, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier) {
+fun LibraryListSection(
+    categories: List<WorkoutCategory>,
+    isBlurActive: Boolean,
+    modifier: Modifier = Modifier,
+    libraryScreenListState: LazyListState
+) {
+    LazyColumn(
+        modifier = modifier,
+        userScrollEnabled = !isBlurActive,
+        state = libraryScreenListState
+    ) {
         categories.forEach { category ->
             stickyHeader {
                 CategoryHeader(text = category.name)
@@ -33,5 +45,6 @@ fun LibraryListSection(categories: List<WorkoutCategory>, modifier: Modifier = M
                 }
             }
         }
+        item { Spacer(modifier = Modifier.height(Spacing.spacing64)) }
     }
 }

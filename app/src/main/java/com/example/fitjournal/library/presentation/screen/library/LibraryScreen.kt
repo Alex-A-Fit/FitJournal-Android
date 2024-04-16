@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,7 +21,9 @@ import com.example.fitjournal.library.presentation.screen.library.model.LibraryW
 fun LibraryScreen(
     modifier: Modifier,
     libraryWorkoutState: LibraryWorkoutUiModel,
-    displayBlur: (Boolean) -> Unit
+    isBlurActive: Boolean,
+    removeBlur: (Boolean) -> Unit,
+    libraryScreenListState: LazyListState
 ) {
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -36,7 +39,7 @@ fun LibraryScreen(
             ) {
                 keyboardController?.hide()
                 focusManager.clearFocus(true)
-                displayBlur(false)
+                removeBlur(false)
             }
     ) {
         SearchBar(
@@ -49,6 +52,10 @@ fun LibraryScreen(
             keyboardController = keyboardController,
             focusManager = focusManager
         )
-        LibraryListSection(categories = libraryWorkoutState.listOfSearchedWorkouts)
+        LibraryListSection(
+            categories = libraryWorkoutState.listOfSearchedWorkouts,
+            isBlurActive = isBlurActive,
+            libraryScreenListState = libraryScreenListState
+        )
     }
 }

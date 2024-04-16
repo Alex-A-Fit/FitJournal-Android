@@ -24,12 +24,10 @@ fun CalisthenicsCard(
     reps: Int?,
     time: String?,
     name: String,
-    icon: Int
+    icon: Int,
+    modifier: Modifier = Modifier
 ) {
-    FitJournalCard(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
+    FitJournalCard(modifier = modifier) {
         Column {
             CardTitle(
                 title = name,
