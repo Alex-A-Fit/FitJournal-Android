@@ -5,6 +5,7 @@ import com.example.fitjournal.core.domain.managers.DateManager
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
+import com.example.fitjournal.core.domain.model.WorkoutDetail
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
@@ -20,9 +21,8 @@ object MockData {
 
     val ListOfWorkouts = listOf(
         WorkoutModel(
-            name = "Push Ups",
+            workoutDetail = WorkoutDetail("Push Ups", WorkoutTypeEnum.CALISTHENICS),
             icon = R.drawable.icon_person,
-            workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
             date = todayDate,
             weightLiftingModel = null,
             cardioModel = null,
@@ -35,9 +35,8 @@ object MockData {
             )
         ),
         WorkoutModel(
-            name = "Bench Press",
+            workoutDetail = WorkoutDetail("Bench Press", WorkoutTypeEnum.WEIGHT_TRAINING),
             icon = R.drawable.icon_dumbell,
-            workoutTypeEnum = WorkoutTypeEnum.WEIGHT_TRAINING,
             timestamp = LocalDateTime.now(),
             date = todayDate,
             weightLiftingModel = listOf(
@@ -51,9 +50,8 @@ object MockData {
             calisthenicsModel = null
         ),
         WorkoutModel(
-            name = "Biking",
+            workoutDetail = WorkoutDetail("Biking", WorkoutTypeEnum.CARDIO),
             icon = R.drawable.icon_sprinting_person,
-            workoutTypeEnum = WorkoutTypeEnum.CARDIO,
             timestamp = LocalDateTime.now(),
             date = todayDate,
             weightLiftingModel = null,

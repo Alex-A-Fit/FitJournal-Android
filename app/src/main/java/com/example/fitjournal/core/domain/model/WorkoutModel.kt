@@ -5,9 +5,8 @@ import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import java.time.LocalDateTime
 
 data class WorkoutModel(
-    val name: String,
+    val workoutDetail: WorkoutDetail,
     val icon: Int,
-    val workoutTypeEnum: WorkoutTypeEnum,
     val date: String,
     val timestamp: LocalDateTime,
     val weightLiftingModel: List<WeightLiftingModel>? = null,
@@ -15,7 +14,11 @@ data class WorkoutModel(
     val calisthenicsModel: List<CalisthenicsModel>? = null
 
 )
-
+data class WorkoutDetail(
+    val workoutName: String,
+    val workoutType: WorkoutTypeEnum,
+    val snackBarMessageId: Int = 0
+)
 data class WeightLiftingModel(
     val reps: Int,
     val weight: Double,

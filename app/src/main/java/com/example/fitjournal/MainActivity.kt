@@ -4,10 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -18,12 +21,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.fitjournal.core.domain.model.WorkoutDetail
 import com.example.fitjournal.core.presentation.commoncomponents.appbars.TopAppBar
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.navigation.Route
@@ -37,6 +40,7 @@ import com.example.fitjournal.home.presentation.model.events.HomeAppBarEvents
 import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
+import com.example.fitjournal.jouranlEntry.JournalEntryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,9 +60,8 @@ class MainActivity : ComponentActivity() {
             FitJournalTheme {
                 val navController = rememberNavController()
                 val snackBarState = remember { SnackbarHostState() }
-                var showChildFabs by remember {
-                    mutableStateOf(false)
-                }
+                var showChildFabs by remember { mutableStateOf(false) }
+                var selectedWorkoutDetail: WorkoutDetail? by remember { mutableStateOf(null) }
                 val bottomBarVisibility = remember { (mutableStateOf(true)) }
 
                 Surface(
@@ -223,13 +226,11 @@ class MainActivity : ComponentActivity() {
                                 showMainFabIcon = false,
                                 modifier = Modifier,
                                 snackBarHostState = snackBarState,
-                                mainScreen = {
-                                    Box(
-                                        contentAlignment = Alignment.Center,
-                                        modifier = Modifier.fillMaxWidth()
-                                    ) {
-                                        Text(text = "welcome to Journey entry")
-                                    }
+                                mainScreen = { mainModifier ->
+                                    JournalEntryScreen(
+                                        modifier = mainModifier,
+                                        navController = navController,
+                                        selectedJournalEntry = { selectedWorkoutDetail = it })
                                 },
                                 topAppBar = {
                                     TopAppBar(
@@ -239,6 +240,14 @@ class MainActivity : ComponentActivity() {
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
+                                        },
+                                        navigationIcon = {
+                                              IconButton(onClick = { navController.navigateUp() }) {
+                                                  Icon(
+                                                      imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                      contentDescription = "Back"
+                                                  )
+                                              }
                                         },
                                         modifier = Modifier.fillMaxWidth()
                                     )

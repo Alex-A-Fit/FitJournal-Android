@@ -111,7 +111,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
 
     private fun determineWorkout(listOfWorkouts: List<WorkoutModel>): List<WorkoutUiModel> {
         return listOfWorkouts.map {
-            when (it.workoutTypeEnum) {
+            when (it.workoutDetail.workoutType) {
                 WorkoutTypeEnum.WEIGHT_TRAINING -> {
                     val topSet = it.weightLiftingModel?.maxBy { set ->
                         set.weight
@@ -119,7 +119,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
                     WorkoutUiModel(
                         workoutType = WorkoutTypeEnum.WEIGHT_TRAINING,
                         exerciseCardModel = CardUiModel(
-                            name = it.name,
+                            name = it.workoutDetail.workoutName,
                             icon = it.icon,
                             reps = topSet?.reps,
                             weight = topSet?.weight
@@ -132,7 +132,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
                     WorkoutUiModel(
                         workoutType = WorkoutTypeEnum.CALISTHENICS,
                         exerciseCardModel = CardUiModel(
-                            name = it.name,
+                            name = it.workoutDetail.workoutName,
                             icon = it.icon,
                             reps = mostRecentSession?.reps,
                             time = mostRecentSession?.time
@@ -145,7 +145,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
                     WorkoutUiModel(
                         workoutType = WorkoutTypeEnum.CARDIO,
                         exerciseCardModel = CardUiModel(
-                            name = it.name,
+                            name = it.workoutDetail.workoutName,
                             icon = it.icon,
                             time = mostRecentSession?.time,
                             laps = mostRecentSession?.laps,

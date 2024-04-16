@@ -35,13 +35,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.R
+import com.example.fitjournal.core.domain.model.WorkoutDetail
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
 fun AddWorkoutToLibraryDialog(
     dismissDialog: () -> Unit,
-    addNewWorkoutToLibrary: (String, WorkoutTypeEnum) -> Unit
+    addNewWorkoutToLibrary: (WorkoutDetail) -> Unit
 ) {
     var workoutName by rememberSaveable {
         mutableStateOf("")
@@ -120,14 +121,13 @@ private fun DismissDialogBtn(
 private fun AddWorkoutToLibraryBtn(
     workoutTypeChosen: WorkoutTypeEnum?,
     workoutName: String,
-    addNewWorkoutToLibrary: (String, WorkoutTypeEnum) -> Unit
+    addNewWorkoutToLibrary: (WorkoutDetail) -> Unit
 ) {
     Button(
         onClick = {
             workoutTypeChosen?.let { workoutType ->
                 addNewWorkoutToLibrary(
-                    workoutName,
-                    workoutType
+                    WorkoutDetail(workoutName, workoutType)
                 )
             }
         },

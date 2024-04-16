@@ -23,14 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.navigation.NavController
-import com.example.fitjournal.R
+import com.example.fitjournal.core.domain.model.WorkoutDetail
 import com.example.fitjournal.core.presentation.commoncomponents.appbars.BottomAppBar
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.AddWorkoutToLibraryDialog
 import com.example.fitjournal.core.presentation.commoncomponents.floatingactionbutton.AddWorkoutFab
 import com.example.fitjournal.core.presentation.commoncomponents.floatingactionbutton.AnimatedFabColumn
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.library.domain.model.AddWorkoutToLibraryModel
 
 @Composable
 fun AppScreen(
@@ -43,7 +42,7 @@ fun AppScreen(
     topAppBar: @Composable () -> Unit,
     mainScreen: @Composable (Modifier) -> Unit,
     navigateToDestination: (NavigationInterface) -> Unit,
-    addWorkoutToDatabase: ((AddWorkoutToLibraryModel) -> Unit)? = null,
+    addWorkoutToDatabase: ((WorkoutDetail) -> Unit)? = null,
     updateChildFabDisplay: ((Boolean) -> Unit)? = null,
     displayBlur: ((Boolean) -> Unit)? = null,
     bottomBarVisibility: Boolean = true
@@ -58,14 +57,8 @@ fun AppScreen(
             dismissDialog = {
                 showWorkoutDialog = false
             },
-            addNewWorkoutToLibrary = { workoutName, workoutType ->
-                addWorkoutToDatabase?.invoke(
-                    AddWorkoutToLibraryModel(
-                        workoutName = workoutName,
-                        workoutType = workoutType,
-                        snackBarMessageId = R.string.text_workout_successfully_added_to_library
-                    )
-                )
+            addNewWorkoutToLibrary = { workoutDetail ->
+                addWorkoutToDatabase?.invoke(workoutDetail)
                 showWorkoutDialog = false
             }
 
