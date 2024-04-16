@@ -23,12 +23,10 @@ fun WeightLiftingCard(
     reps: Int?,
     weight: Double?,
     name: String,
-    icon: Int
+    icon: Int,
+    modifier: Modifier = Modifier
 ) {
-    FitJournalCard(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
+    FitJournalCard(modifier = modifier) {
         Column {
             CardTitle(
                 title = name,

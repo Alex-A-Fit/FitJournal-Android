@@ -26,12 +26,10 @@ fun CardioCard(
     icon: Int,
     distance: Double?,
     distanceType: CardioDistanceType,
-    time: String?
+    time: String?,
+    modifier: Modifier = Modifier
 ) {
-    FitJournalCard(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
+    FitJournalCard(modifier = modifier) {
         Column {
             CardTitle(
                 title = name,

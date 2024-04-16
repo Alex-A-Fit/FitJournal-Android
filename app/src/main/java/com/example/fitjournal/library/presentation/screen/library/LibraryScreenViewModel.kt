@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.fitjournal.core.data.mockdata.MockData.libraryWorkoutList
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutItem
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
@@ -22,7 +23,7 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
 
     init {
         // Dummy Data for now
-        val workoutMap = listOf("Bench", "Squats", "Lateral Raises", "Elevated Goblet Squats", "Burpees", "Bicep Curls", "Box Jumps", "Mountain Climbers", "Medicine Ball Slams", "Mountain Pose", "Modified Push-Ups", "Mason Twist", "Monkey Bars", "Modified Burpees", "Lunges", "Leg Press", "Lat Pulldowns", "Lying leg curls", "L-sit", "LandMine Twists").groupBy { it.first() }.toSortedMap()
+        val workoutMap = libraryWorkoutList.groupBy { it.first() }.toSortedMap()
         val masterWorkoutList = workoutMap.map { workouts ->
             WorkoutCategory(
                 name = workouts.key.toString(),

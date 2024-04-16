@@ -66,6 +66,77 @@ object MockData {
                 )
             ),
             calisthenicsModel = null
+        ),
+        WorkoutModel(
+            name = "Push Ups",
+            icon = R.drawable.icon_person,
+            workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
+            date = todayDate,
+            weightLiftingModel = null,
+            cardioModel = null,
+            timestamp = LocalDateTime.now(),
+            calisthenicsModel = listOf(
+                CalisthenicsModel(
+                    reps = 20,
+                    time = "3:50"
+                )
+            )
+        ),
+        WorkoutModel(
+            name = "Bench Press",
+            icon = R.drawable.icon_dumbell,
+            workoutTypeEnum = WorkoutTypeEnum.WEIGHT_TRAINING,
+            timestamp = LocalDateTime.now(),
+            date = todayDate,
+            weightLiftingModel = listOf(
+                WeightLiftingModel(
+                    reps = 10,
+                    weight = 135.0,
+                    time = null
+                )
+            ),
+            cardioModel = null,
+            calisthenicsModel = null
+        ),
+        WorkoutModel(
+            name = "Biking",
+            icon = R.drawable.icon_sprinting_person,
+            workoutTypeEnum = WorkoutTypeEnum.CARDIO,
+            timestamp = LocalDateTime.now(),
+            date = todayDate,
+            weightLiftingModel = null,
+            cardioModel = listOf(
+                CardioModel(
+                    distance = 2.0,
+                    distanceType = CardioDistanceType.KILOMETERS,
+                    time = "3:40",
+                    laps = 2.0
+                )
+            ),
+            calisthenicsModel = null
         )
+    )
+
+    val libraryWorkoutList = listOf(
+        "Bench",
+        "Squats",
+        "Lateral Raises",
+        "Elevated Goblet Squats",
+        "Burpees",
+        "Bicep Curls",
+        "Box Jumps",
+        "Mountain Climbers",
+        "Medicine Ball Slams",
+        "Mountain Pose",
+        "Modified Push-Ups",
+        "Mason Twist",
+        "Monkey Bars",
+        "Modified Burpees",
+        "Lunges",
+        "Leg Press",
+        "Lat Pulldowns",
+        "Lying leg curls",
+        "L-sit",
+        "LandMine Twists"
     )
 }
