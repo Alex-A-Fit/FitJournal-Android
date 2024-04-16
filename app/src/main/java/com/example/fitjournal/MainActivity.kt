@@ -111,7 +111,7 @@ class MainActivity : ComponentActivity() {
                                         navController = navController
                                     )
                                 },
-                                showChildFabs = {
+                                displayChildFabs = {
                                     showChildFabs = it
                                 },
                                 addWorkoutToDatabase = { addWorkoutToDbModel ->
@@ -164,7 +164,7 @@ class MainActivity : ComponentActivity() {
                                         navController = navController
                                     )
                                 },
-                                showChildFabs = {
+                                displayChildFabs = {
                                     showChildFabs = it
                                 },
                                 addWorkoutToDatabase = { addWorkoutToDbModel ->
