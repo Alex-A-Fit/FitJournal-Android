@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -63,6 +64,8 @@ class MainActivity : ComponentActivity() {
                 var showChildFabs by remember { mutableStateOf(false) }
                 var selectedWorkoutDetail: WorkoutDetail? by remember { mutableStateOf(null) }
                 val bottomBarVisibility = remember { (mutableStateOf(true)) }
+                val homeScreenListState = rememberLazyListState()
+                val libraryScreenListState = rememberLazyListState()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -84,7 +87,11 @@ class MainActivity : ComponentActivity() {
                                     LibraryScreen(
                                         modifier = mainScreenModifier,
                                         libraryWorkoutState = libraryScreenViewModel.libraryWorkoutState,
-                                        displayBlur = { showChildFabs = it }
+                                        isBlurActive = showChildFabs,
+                                        libraryScreenListState = libraryScreenListState,
+                                        removeBlur = {
+                                            showChildFabs = it
+                                        }
                                     )
                                 },
                                 snackBarHostState = snackBarState,
@@ -92,7 +99,7 @@ class MainActivity : ComponentActivity() {
                                     TopAppBar(
                                         appBarTitle = {
                                             Text(
-                                                text = "Journal",
+                                                text = "Workout Library",
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
@@ -107,7 +114,7 @@ class MainActivity : ComponentActivity() {
                                         navController = navController
                                     )
                                 },
-                                updateChildFabDisplay = {
+                                displayChildFabs = {
                                     showChildFabs = it
                                 },
                                 addWorkoutToDatabase = { addWorkoutToDbModel ->
@@ -148,7 +155,9 @@ class MainActivity : ComponentActivity() {
                                         modifier = mainScreenModifier.fillMaxSize(),
                                         homeScreenState = homeViewModel.homeScreenState,
                                         homeScreenEvents = ::homeScreenEvents,
-                                        snackBarHostState = snackBarState
+                                        snackBarHostState = snackBarState,
+                                        isBlurActive = showChildFabs,
+                                        lazyListState = homeScreenListState
                                     )
                                 },
                                 navigateToDestination = { navigation ->
@@ -158,7 +167,7 @@ class MainActivity : ComponentActivity() {
                                         navController = navController
                                     )
                                 },
-                                updateChildFabDisplay = {
+                                displayChildFabs = {
                                     showChildFabs = it
                                 },
                                 addWorkoutToDatabase = { addWorkoutToDbModel ->
@@ -175,9 +184,6 @@ class MainActivity : ComponentActivity() {
                                             )
                                         }
                                     )
-                                },
-                                displayBlur = {
-                                    showChildFabs = it
                                 },
                                 navController = navController,
                                 bottomBarVisibility = bottomBarVisibility.value

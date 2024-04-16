@@ -52,7 +52,7 @@ val typography = Typography(
     ),
     bodyLarge = TextStyle(
         fontSize = 16.sp,
-        lineHeight = 30.sp,
+        lineHeight = 24.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.regular
     ),

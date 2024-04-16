@@ -26,7 +26,7 @@ fun TextAndFab(
 ) {
     Text(
         text = stringResource(id = textId),
-        style = MaterialTheme.typography.bodyMedium,
+        style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.ExtraBold,
         modifier = Modifier.padding(bottom = Spacing.spacing16)
     )
