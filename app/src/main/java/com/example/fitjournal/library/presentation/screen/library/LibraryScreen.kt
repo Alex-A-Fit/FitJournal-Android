@@ -22,7 +22,7 @@ fun LibraryScreen(
     modifier: Modifier,
     libraryWorkoutState: LibraryWorkoutUiModel,
     isBlurActive: Boolean,
-    displayBlur: (Boolean) -> Unit,
+    removeBlur: (Boolean) -> Unit,
     libraryScreenListState: LazyListState
 ) {
     val focusManager = LocalFocusManager.current
@@ -39,7 +39,7 @@ fun LibraryScreen(
             ) {
                 keyboardController?.hide()
                 focusManager.clearFocus(true)
-                displayBlur(false)
+                removeBlur(false)
             }
     ) {
         SearchBar(

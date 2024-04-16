@@ -46,8 +46,7 @@ fun AppScreen(
     mainScreen: @Composable (Modifier) -> Unit,
     navigateToDestination: (NavigationInterface) -> Unit,
     addWorkoutToDatabase: ((AddWorkoutToLibraryModel) -> Unit)? = null,
-    updateChildFabDisplay: ((Boolean) -> Unit)? = null,
-    displayBlur: ((Boolean) -> Unit)? = null,
+    showChildFabs: ((Boolean) -> Unit)? = null,
     bottomBarVisibility: Boolean = true
 ) {
     var showWorkoutDialog by remember {
@@ -109,8 +108,7 @@ fun AppScreen(
                         interactionSource = interactionSource,
                         indication = null
                     ) {
-                        displayBlur?.invoke(false)
-                        updateChildFabDisplay?.invoke(false)
+                        showChildFabs?.invoke(false)
                     }
                     .then(
                         if (android.os.Build.VERSION.SDK_INT > 30) {
@@ -129,7 +127,7 @@ fun AppScreen(
                                 interactionSource = interactionSource,
                                 indication = null
                             ) {
-                                displayBlur?.invoke(false)
+                                showChildFabs?.invoke(false)
                                 focusManager.clearFocus(force = true)
                             }
                         ) {
@@ -151,6 +149,12 @@ fun AppScreen(
                         Modifier
                             .padding(padding)
                             .fillMaxSize()
+                            .clickable(
+                                interactionSource = interactionSource,
+                                indication = null
+                            ) {
+                                showChildFabs?.invoke(false)
+                            }
                     )
                 }
             }
@@ -165,21 +169,18 @@ fun AppScreen(
                     AnimatedFabColumn(
                         showFabs = showChildrenFabIcons == true,
                         navigateToAddToLibraryScreen = {
-                            updateChildFabDisplay?.invoke(false)
+                            showChildFabs?.invoke(false)
                             showWorkoutDialog = true
-                            displayBlur?.invoke(false)
                         },
                         navigateToJournalEntry = {
-                            updateChildFabDisplay?.invoke(false)
-                            displayBlur?.invoke(false)
+                            showChildFabs?.invoke(false)
                             navigateToDestination(NavigationInterface.NavigateToJournalEntry)
                         }
                     )
                     AddWorkoutFab(
                         showFloatingActionButtonValue = showChildrenFabIcons == true,
                         showFloatingActionButtons = {
-                            updateChildFabDisplay?.invoke(it)
-                            displayBlur?.invoke(it)
+                            showChildFabs?.invoke(it)
                         }
                     )
                 }

@@ -84,9 +84,11 @@ class MainActivity : ComponentActivity() {
                                     LibraryScreen(
                                         modifier = mainScreenModifier,
                                         libraryWorkoutState = libraryScreenViewModel.libraryWorkoutState,
-                                        displayBlur = { showChildFabs = it },
                                         isBlurActive = showChildFabs,
-                                        libraryScreenListState = libraryScreenListState
+                                        libraryScreenListState = libraryScreenListState,
+                                        removeBlur = {
+                                            showChildFabs = it
+                                        }
                                     )
                                 },
                                 snackBarHostState = snackBarState,
@@ -109,7 +111,7 @@ class MainActivity : ComponentActivity() {
                                         navController = navController
                                     )
                                 },
-                                updateChildFabDisplay = {
+                                showChildFabs = {
                                     showChildFabs = it
                                 },
                                 addWorkoutToDatabase = { addWorkoutToDbModel ->
@@ -162,7 +164,7 @@ class MainActivity : ComponentActivity() {
                                         navController = navController
                                     )
                                 },
-                                updateChildFabDisplay = {
+                                showChildFabs = {
                                     showChildFabs = it
                                 },
                                 addWorkoutToDatabase = { addWorkoutToDbModel ->
@@ -179,9 +181,6 @@ class MainActivity : ComponentActivity() {
                                             )
                                         }
                                     )
-                                },
-                                displayBlur = {
-                                    showChildFabs = it
                                 },
                                 navController = navController,
                                 bottomBarVisibility = bottomBarVisibility.value
