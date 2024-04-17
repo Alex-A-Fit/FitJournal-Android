@@ -35,7 +35,7 @@ fun CategoryHeader(
             modifier = modifier
                 .fillMaxWidth()
                 .background(gradient)
-                .padding(start = Spacing.spacing16)
+                .padding(start = Spacing.spacing16, top = Spacing.spacing2, bottom = Spacing.spacing2)
         )
     }
 }
