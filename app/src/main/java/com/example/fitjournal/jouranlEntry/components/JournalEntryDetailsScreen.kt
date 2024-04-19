@@ -1,6 +1,7 @@
 package com.example.fitjournal.jouranlEntry.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +16,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -147,9 +148,10 @@ fun JournalEntryDetailsScreen(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(text = "Set", modifier = Modifier.fillMaxWidth(0.3f), textAlign = TextAlign.Center)
-                                    Text(text = "Reps", modifier = Modifier.fillMaxWidth(0.3f), textAlign = TextAlign.Center)
-                                    Text(text = "Weight", modifier = Modifier.fillMaxWidth(0.3f), textAlign = TextAlign.Center)
+                                    Text(text = "Set", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
+                                    Text(text = "Reps", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
+                                    Text(text = "Weight", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
+                                    Text(text = " ", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
                                 }
                             }
                             itemsIndexed(viewModel.weightLiftingSets.value) {index, item ->
@@ -158,9 +160,20 @@ fun JournalEntryDetailsScreen(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(text = "${index+1}", modifier = Modifier.fillMaxWidth(0.3f), textAlign = TextAlign.Center)
-                                    Text(text = "${item.reps.toString()}", modifier = Modifier.fillMaxWidth(0.3f), textAlign = TextAlign.Center)
-                                    Text(text = "${item.weight.toString()}", modifier = Modifier.fillMaxWidth(0.3f), textAlign = TextAlign.Center)
+                                    //ALEX: WHAT IS THE BEST WAY TO MAKE THIS THREE OBJECTS SELECTABLE AT THE SAME TIME, WHILE KEEPING THE 0.25F PROPORSION IN THE SCREEN
+                                    Text(text = "${index+1}", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
+                                    Text(text = "${item.reps.toString()}", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
+                                    Text(text = "${item.weight.toString()}", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
+                                    Icon(
+                                        modifier = Modifier.fillMaxWidth(0.25f)
+                                            .clickable {
+                                                //ALEX: WHY IS THIS NOT UPDATING THE VIEW, IT DOES REMOVE THE OBJECT FROM THE ARRAY CORRECTLY
+                                                viewModel.deleteWeightLiftSet(index)
+                                            },
+                                        imageVector = Icons.Filled.Delete,
+                                        contentDescription = null,
+                                        tint = Color.Red
+                                    )
                                 }
                             }
                         }

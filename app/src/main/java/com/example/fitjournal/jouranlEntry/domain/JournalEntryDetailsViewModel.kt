@@ -85,4 +85,8 @@ class JournalEntryDetailsViewModel(val selectedWorkoutDetail: WorkoutDetail?): V
             null -> { }
         }
     }
+
+    fun deleteWeightLiftSet(index: Int) {
+        weightLiftingSets.value.removeAt(index)
+    }
 }
