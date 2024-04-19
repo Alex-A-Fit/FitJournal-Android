@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -42,6 +43,9 @@ import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
 import com.example.fitjournal.jouranlEntry.JournalEntryScreen
+import com.example.fitjournal.jouranlEntry.components.JournalEntryDetailsScreen
+import com.example.fitjournal.jouranlEntry.domain.JournalEntryDetailsViewModel
+import com.example.fitjournal.jouranlEntry.domain.JournalEntryDetailsViewModelFactory
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -235,8 +239,14 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainModifier ->
                                     JournalEntryScreen(
                                         modifier = mainModifier,
-                                        navController = navController,
-                                        selectedJournalEntry = { selectedWorkoutDetail = it })
+                                        selectedJournalEntry = { selectedWorkoutDetail = it },
+                                        navigateToDestination = { navigation ->
+                                            navigateToDestination(
+                                                navigationInterface = navigation,
+                                                navController = navController
+                                            )
+                                        }
+                                    )
                                 },
                                 topAppBar = {
                                     TopAppBar(
@@ -254,6 +264,55 @@ class MainActivity : ComponentActivity() {
                                                       contentDescription = "Back"
                                                   )
                                               }
+                                        },
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                },
+                                navigateToDestination = { },
+                                navController = navController,
+                                bottomBarVisibility = bottomBarVisibility.value
+                            )
+                        }
+                        composable(Route.JOURNAL_ENTRY_DETAILS) {
+                            val viewModel: JournalEntryDetailsViewModel = viewModel(factory = JournalEntryDetailsViewModelFactory(selectedWorkoutDetail))
+                            LaunchedEffect(Unit) {
+                                bottomBarVisibility.value = false
+                            }
+                            AppScreen(
+                                showMainFabIcon = false,
+                                modifier = Modifier,
+                                snackBarHostState = snackBarState,
+                                mainScreen = { mainModifier ->
+                                    JournalEntryDetailsScreen(
+                                        modifier = mainModifier,
+                                        viewModel = viewModel
+                                    )
+                                },
+                                topAppBar = {
+                                    TopAppBar(
+                                        appBarTitle = {
+                                            Text(
+                                                text = "Journal Entry",
+                                                style = MaterialTheme.typography.titleLarge,
+                                                color = MaterialTheme.colorScheme.onPrimary
+                                            )
+                                        },
+                                        endAlignedActionIcon = {
+                                            IconButton(onClick = { 
+                                                navController.navigateUp()
+                                                navController.navigateUp()
+                                                viewModel.save()
+                                            }) {
+                                                Text(text = "Save", style = MaterialTheme.typography.titleMedium)
+                                            }
+                                        },
+                                        navigationIcon = {
+                                            IconButton(onClick = { navController.navigateUp() }) {
+                                                Icon(
+                                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                    contentDescription = "Back"
+                                                )
+                                            }
                                         },
                                         modifier = Modifier.fillMaxWidth()
                                     )
@@ -356,6 +415,13 @@ private fun navigateToDestination(
         }
 
         NavigationInterface.NavigateToJournalEntry -> {
+            navigationEvent(
+                navigationInterface,
+                navController = navController
+            )
+        }
+
+        NavigationInterface.NavigateToJournalEntryDetails -> {
             navigationEvent(
                 navigationInterface,
                 navController = navController

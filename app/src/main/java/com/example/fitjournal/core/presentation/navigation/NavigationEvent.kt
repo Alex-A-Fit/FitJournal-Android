@@ -22,5 +22,9 @@ fun navigationEvent(
         NavigationInterface.NavigateToJournalEntry -> {
             navController.navigate(Route.JOURNAL_ENTRY_SCREEN)
         }
+
+        NavigationInterface.NavigateToJournalEntryDetails -> {
+            navController.navigate(Route.JOURNAL_ENTRY_DETAILS)
+        }
     }
 }

@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fitjournal.core.domain.model.WorkoutDetail
 import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
+import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.jouranlEntry.components.JournalEntryList
 import com.example.fitjournal.jouranlEntry.domain.JournalEntryViewModel
@@ -22,8 +23,8 @@ import com.example.fitjournal.jouranlEntry.domain.JournalEntryViewModel
 @Composable
 fun JournalEntryScreen(
     modifier: Modifier,
-    navController: NavController,
-    selectedJournalEntry: (WorkoutDetail) -> Unit
+    selectedJournalEntry: (WorkoutDetail) -> Unit,
+    navigateToDestination: (NavigationInterface) -> Unit
 ) {
 
     val viewModel: JournalEntryViewModel = viewModel()
@@ -54,7 +55,7 @@ fun JournalEntryScreen(
         )
         JournalEntryList(viewModel.searchWorkout(searchText.value)) {
             selectedJournalEntry.invoke(it)
-            //JHODA show dialogs here to eneter data
+            navigateToDestination.invoke(NavigationInterface.NavigateToJournalEntryDetails)
         }
     }
 }
