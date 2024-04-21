@@ -35,7 +35,7 @@ import com.example.fitjournal.core.presentation.utils.determineFocusColor
 @Composable
 fun SearchBar(
     searchedTerm: String,
-    updateSearchBarText: (String) -> Unit,
+    updateSearch: (String) -> Unit,
     clearSearch: () -> Unit,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager
@@ -44,7 +44,7 @@ fun SearchBar(
     TextField(
         value = searchedTerm,
         onValueChange = { searchBarText ->
-            updateSearchBarText(
+            updateSearch(
                 searchBarText
             )
         },

@@ -1,6 +1,6 @@
 package com.example.fitjournal.library.presentation.screen.library.model
 
 sealed class LibraryWorkoutClickEvents {
-    data class UpdateSearchBarText(val text: String) : LibraryWorkoutClickEvents()
+    data class UpdateSearch(val text: String) : LibraryWorkoutClickEvents()
     data object ClearSearch : LibraryWorkoutClickEvents()
 }

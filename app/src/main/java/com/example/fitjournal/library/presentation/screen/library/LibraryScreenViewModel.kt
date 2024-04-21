@@ -5,11 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.fitjournal.core.data.mockdata.MockData.libraryWorkoutList
+import com.example.fitjournal.core.domain.utils.filtering.searchForText
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
 import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory
 import com.example.fitjournal.library.presentation.screen.library.utils.mapToLibraryUiList
-import com.example.fitjournal.library.presentation.screen.library.utils.searchForText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -32,7 +32,7 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
     private fun handleLibraryWorkoutEvents(event: LibraryWorkoutClickEvents) {
         when (event) {
             LibraryWorkoutClickEvents.ClearSearch -> clearSearch()
-            is LibraryWorkoutClickEvents.UpdateSearchBarText -> {
+            is LibraryWorkoutClickEvents.UpdateSearch -> {
                 updateSearchBarText(event.text)
                 updateSearchedWorkouts(event.text)
             }
@@ -40,7 +40,7 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun updateSearchedWorkouts(text: String) {
-        val filteredList = searchForText(text)
+        val filteredList = searchForText(text, libraryWorkoutList)
         val uiList = mapToLibraryUiList(filteredList)
         setListOfSearchedWorkouts(uiList)
     }
