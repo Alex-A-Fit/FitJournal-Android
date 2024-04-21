@@ -2,12 +2,14 @@ package com.example.fitjournal.core.presentation.commoncomponents.textField
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,7 +35,8 @@ import com.example.fitjournal.core.presentation.utils.determineFocusColor
 @Composable
 fun SearchBar(
     searchedTerm: String,
-    updateSearchBarText: (String) -> Unit,
+    updateSearch: (String) -> Unit,
+    clearSearch: () -> Unit,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager
 ) {
@@ -41,7 +44,7 @@ fun SearchBar(
     TextField(
         value = searchedTerm,
         onValueChange = { searchBarText ->
-            updateSearchBarText(
+            updateSearch(
                 searchBarText
             )
         },
@@ -56,9 +59,21 @@ fun SearchBar(
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.content_desc_search_icon),
                 tint = determineFocusColor(isFocused = isTextFieldFocused)
             )
+        },
+        trailingIcon = {
+            if (searchedTerm.isNotEmpty()) {
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = stringResource(id = R.string.content_desc_cancel_icon_clear_text),
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable {
+                        clearSearch()
+                    }
+                )
+            }
         },
         colors = TextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.surface,
