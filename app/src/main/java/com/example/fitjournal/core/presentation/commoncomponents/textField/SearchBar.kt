@@ -2,12 +2,14 @@ package com.example.fitjournal.core.presentation.commoncomponents.textField
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +36,7 @@ import com.example.fitjournal.core.presentation.utils.determineFocusColor
 fun SearchBar(
     searchedTerm: String,
     updateSearchBarText: (String) -> Unit,
+    clearSearch: () -> Unit,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager
 ) {
@@ -59,6 +62,18 @@ fun SearchBar(
                 contentDescription = null,
                 tint = determineFocusColor(isFocused = isTextFieldFocused)
             )
+        },
+        trailingIcon = {
+            if (searchedTerm.isNotEmpty()) {
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = null,
+                    tint = determineFocusColor(isFocused = isTextFieldFocused),
+                    modifier = Modifier.clickable {
+                        clearSearch()
+                    }
+                )
+            }
         },
         colors = TextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.surface,

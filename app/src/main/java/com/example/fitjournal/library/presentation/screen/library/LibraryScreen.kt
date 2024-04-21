@@ -49,6 +49,11 @@ fun LibraryScreen(
                     LibraryWorkoutClickEvents.UpdateSearchBarText(searchedText)
                 )
             },
+            clearSearch = {
+                libraryWorkoutState.handleLibraryWorkoutClickEvents(
+                    LibraryWorkoutClickEvents.ClearSearchBarText
+                )
+            },
             keyboardController = keyboardController,
             focusManager = focusManager
         )

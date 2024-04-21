@@ -66,7 +66,8 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
 
     private fun clearSearchBarText() {
         libraryWorkoutState = libraryWorkoutState.copy(
-            searchedTerm = ""
+            searchedTerm = "",
+            listOfSearchedWorkouts = libraryWorkoutState.masterWorkoutList
         )
     }
 }
