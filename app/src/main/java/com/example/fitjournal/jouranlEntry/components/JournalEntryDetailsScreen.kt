@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -58,11 +59,12 @@ fun JournalEntryDetailsScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        if(isDatePickerShowing.value) {
+        if (isDatePickerShowing.value) {
             FitJournalDatePickerDialog(
                 currentDate = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000,
                 selectDate = { selectedDate ->
-                    viewModel.pickerDate.value = DateManager.getSelectedDate(selectedDate).localDateString
+                    viewModel.pickerDate.value =
+                        DateManager.getSelectedDate(selectedDate).localDateString
                     isDatePickerShowing.value = false
                 },
                 dismissDialog = {
@@ -71,39 +73,56 @@ fun JournalEntryDetailsScreen(
             )
         }
 
-        viewModel.selectedWorkoutDetail?.let {  selectedWorkoutDetail ->
+        viewModel.selectedWorkoutDetail?.let { selectedWorkoutDetail ->
             TextButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     isDatePickerShowing.value = true
                 }) {
                 Text(
-                    text = "Date: ${viewModel.pickerDate.value}",
+                    text = "Current Date Chosen: ${viewModel.pickerDate.value}",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Left
                 )
+                Spacer(modifier = Modifier.width(Spacing.spacing4))
+                Icon(
+                    imageVector = Icons.Filled.Create,
+                    contentDescription = "Icon to Edit Date",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
             Spacer(modifier = Modifier.height(Spacing.spacing4))
 
-            Text(
-                text = stringResource(id = selectedWorkoutDetail.workoutType.workoutTitle()),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = Spacing.spacing16),
-                style = MaterialTheme.typography.titleLarge,
-                color = Color.Blue,
-                textAlign = TextAlign.Left
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = selectedWorkoutDetail.workoutName,
+                    modifier = Modifier.padding(end = Spacing.spacing8),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Text(
+                    text = "(${stringResource(id = selectedWorkoutDetail.workoutType.workoutTitle())})",
+                    modifier = Modifier,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.Blue
+                )
+            }
             Spacer(modifier = Modifier.height(Spacing.spacing4))
 
-            when(selectedWorkoutDetail.workoutType) {
+            when (selectedWorkoutDetail.workoutType) {
                 WorkoutTypeEnum.WEIGHT_TRAINING -> {
                     WeighLiftDataInput(
                         reps = viewModel.reps,
-                        weight = viewModel.weight
+                        weight = viewModel.weight,
+                        sets = viewModel.sets
                     )
                 }
+
                 WorkoutTypeEnum.CALISTHENICS -> {
                     CalisthenicsDataInput(
                         reps = viewModel.reps,
@@ -112,6 +131,7 @@ fun JournalEntryDetailsScreen(
                         duration = viewModel.duration
                     )
                 }
+
                 WorkoutTypeEnum.CARDIO -> {
                     CardioDataInput(
                         distance = viewModel.distance,
@@ -137,9 +157,9 @@ fun JournalEntryDetailsScreen(
                 modifier = modifier.fillMaxWidth()
             ) {
 
-                when(selectedWorkoutDetail.workoutType) {
+                when (selectedWorkoutDetail.workoutType) {
                     WorkoutTypeEnum.WEIGHT_TRAINING -> {
-                        if(viewModel.weightLiftingSets.value.isNotEmpty()) {
+                        if (viewModel.weightLiftingSets.isNotEmpty()) {
                             item {
                                 Row(
                                     modifier = Modifier
@@ -148,41 +168,78 @@ fun JournalEntryDetailsScreen(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(text = "Set", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
-                                    Text(text = "Reps", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
-                                    Text(text = "Weight", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
-                                    Text(text = " ", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
+                                    Text(
+                                        text = "# of Sets",
+                                        modifier = Modifier.weight(2f, fill = false).fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                    Text(
+                                        text = "Reps per Set",
+                                        modifier = Modifier.weight(2f, fill = false).fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                    Text(
+                                        text = "Weight",
+                                        modifier = Modifier.weight(1f, fill = false).fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                    Text(
+                                        text = " ",
+                                        modifier = Modifier.weight(0.5f, fill = true),
+                                        textAlign = TextAlign.Center
+                                    )
                                 }
                             }
-                            itemsIndexed(viewModel.weightLiftingSets.value) {index, item ->
+                            itemsIndexed(viewModel.weightLiftingSets) { index, item ->
                                 Row(
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                                   // click to edit workout row
+                                        },
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     //ALEX: WHAT IS THE BEST WAY TO MAKE THIS THREE OBJECTS SELECTABLE AT THE SAME TIME, WHILE KEEPING THE 0.25F PROPORSION IN THE SCREEN
-                                    Text(text = "${index+1}", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
-                                    Text(text = "${item.reps.toString()}", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
-                                    Text(text = "${item.weight.toString()}", modifier = Modifier.fillMaxWidth(0.25f), textAlign = TextAlign.Center)
+                                    Text(
+                                        text = item.sets.toString(),
+                                        modifier = Modifier.weight(2f, fill = false).fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                    Text(
+                                        text = item.reps.toString(),
+                                        modifier = Modifier.weight(2f, fill = false).fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                    Text(
+                                        text = item.weight.toString(),
+                                        modifier = Modifier.weight(1f, fill = false).fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
                                     Icon(
-                                        modifier = Modifier.fillMaxWidth(0.25f)
+                                        modifier = Modifier
                                             .clickable {
-                                                //ALEX: WHY IS THIS NOT UPDATING THE VIEW, IT DOES REMOVE THE OBJECT FROM THE ARRAY CORRECTLY
                                                 viewModel.deleteWeightLiftSet(index)
-                                            },
+                                            }
+                                            .weight(0.5f, fill = true),
                                         imageVector = Icons.Filled.Delete,
-                                        contentDescription = null,
+                                        contentDescription = "Trash icon to delete the individual workout row",
                                         tint = Color.Red
                                     )
+                                }
+                                if (index != viewModel.weightLiftingSets.lastIndex){
+                                    Spacer(modifier = Modifier.height(Spacing.spacing8))
                                 }
                             }
                         }
                     }
+
                     WorkoutTypeEnum.CALISTHENICS -> {
                         items(viewModel.calisthenicsSets.value) {
 
                         }
                     }
+
                     WorkoutTypeEnum.CARDIO -> {
                         items(viewModel.cardioSets.value) {
 
@@ -197,30 +254,46 @@ fun JournalEntryDetailsScreen(
 
 @Composable
 fun WeighLiftDataInput(
+    sets: MutableState<String>,
     reps: MutableState<String>,
     weight: MutableState<String>
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Spacing.spacing16)
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier.weight(0.5f)
-        ) {
-            FitJournalTextField(header = "Reps", textValue = reps.value, placeholder = "0") {
+        FitJournalTextField(
+            header = "Sets",
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = Spacing.spacing12),
+            textValue = sets.value,
+            placeholder = "0",
+            updatedValue = {
+                sets.value = it
+            }
+        )
+        FitJournalTextField(
+            header = "Reps",
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = Spacing.spacing12),
+            textValue = reps.value,
+            placeholder = "0",
+            updatedValue = {
                 reps.value = it
             }
-        }
-        Spacer(modifier = Modifier.width(Spacing.spacing32))
-        Column(
-            modifier = Modifier.weight(0.5f)
-        ) {
-            FitJournalTextField(header = "Weight", textValue = weight.value, placeholder = "0") {
+        )
+        FitJournalTextField(
+            header = "Weight",
+            textValue = weight.value,
+            modifier = Modifier.weight(1f),
+            placeholder = "0",
+            updatedValue = {
                 weight.value = it
             }
-        }
+        )
     }
 }
 
@@ -278,7 +351,11 @@ fun CalisthenicsDataInput(
             Column(
                 modifier = Modifier.weight(0.5f)
             ) {
-                FitJournalTextField(header = "Weight", textValue = weight.value, placeholder = "0") {
+                FitJournalTextField(
+                    header = "Weight",
+                    textValue = weight.value,
+                    placeholder = "0"
+                ) {
                     weight.value = it
                 }
             }
@@ -292,7 +369,11 @@ fun CalisthenicsDataInput(
             Column(
                 modifier = Modifier.weight(0.5f)
             ) {
-                FitJournalTextField(header = "Reps", textValue = distance.value, placeholder = "0") {
+                FitJournalTextField(
+                    header = "Reps",
+                    textValue = distance.value,
+                    placeholder = "0"
+                ) {
                     distance.value = it
                 }
             }
@@ -300,7 +381,11 @@ fun CalisthenicsDataInput(
             Column(
                 modifier = Modifier.weight(0.5f)
             ) {
-                FitJournalTextField(header = "Weight", textValue = duration.value, placeholder = "0") {
+                FitJournalTextField(
+                    header = "Weight",
+                    textValue = duration.value,
+                    placeholder = "0"
+                ) {
                     duration.value = it
                 }
             }
@@ -310,6 +395,7 @@ fun CalisthenicsDataInput(
 
 @Composable
 fun FitJournalTextField(
+    modifier: Modifier = Modifier,
     textValue: String,
     header: String,
     placeholder: String,
@@ -322,6 +408,7 @@ fun FitJournalTextField(
         onValueChange = { value ->
             updatedValue(value)
         },
+        modifier = modifier,
         label = {
             Text(
                 text = header,

@@ -43,7 +43,8 @@ object MockData {
                 WeightLiftingModel(
                     reps = 10,
                     weight = 135.0,
-                    time = null
+                    time = null,
+                    sets = 1
                 )
             ),
             cardioModel = null,
@@ -88,7 +89,8 @@ object MockData {
                 WeightLiftingModel(
                     reps = 10,
                     weight = 135.0,
-                    time = null
+                    time = null,
+                    sets = 12
                 )
             ),
             cardioModel = null,

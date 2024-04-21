@@ -21,6 +21,7 @@ data class WorkoutDetail(
 )
 data class WeightLiftingModel(
     val reps: Int,
+    val sets: Int,
     val weight: Double,
     // adding time for now in case we want to allow user to input time
     val time: String? = null
