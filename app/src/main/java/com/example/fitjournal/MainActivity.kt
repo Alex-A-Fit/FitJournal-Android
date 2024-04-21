@@ -308,6 +308,7 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
+
     private suspend fun showSnackBar(
         snackBarHostState: SnackbarHostState,
         message: String,
