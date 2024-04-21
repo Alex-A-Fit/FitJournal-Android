@@ -68,7 +68,7 @@ fun SearchBar(
                 Icon(
                     imageVector = Icons.Default.Clear,
                     contentDescription = null,
-                    tint = determineFocusColor(isFocused = isTextFieldFocused),
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable {
                         clearSearch()
                     }
