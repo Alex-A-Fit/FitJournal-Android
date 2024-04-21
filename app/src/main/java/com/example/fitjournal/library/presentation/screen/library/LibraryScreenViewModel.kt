@@ -31,7 +31,7 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
 
     private fun handleLibraryWorkoutEvents(event: LibraryWorkoutClickEvents) {
         when (event) {
-            LibraryWorkoutClickEvents.ClearSearchBarText -> clearSearchBarText()
+            LibraryWorkoutClickEvents.ClearSearch -> clearSearch()
             is LibraryWorkoutClickEvents.UpdateSearchBarText -> {
                 updateSearchBarText(event.text)
                 updateSearchedWorkouts(event.text)
@@ -64,7 +64,7 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
         )
     }
 
-    private fun clearSearchBarText() {
+    private fun clearSearch() {
         libraryWorkoutState = libraryWorkoutState.copy(
             searchedTerm = "",
             listOfSearchedWorkouts = libraryWorkoutState.masterWorkoutList

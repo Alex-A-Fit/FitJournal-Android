@@ -51,7 +51,7 @@ fun LibraryScreen(
             },
             clearSearch = {
                 libraryWorkoutState.handleLibraryWorkoutClickEvents(
-                    LibraryWorkoutClickEvents.ClearSearchBarText
+                    LibraryWorkoutClickEvents.ClearSearch
                 )
             },
             keyboardController = keyboardController,
