@@ -59,7 +59,7 @@ fun SearchBar(
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.content_desc_search_icon),
                 tint = determineFocusColor(isFocused = isTextFieldFocused)
             )
         },
@@ -67,7 +67,7 @@ fun SearchBar(
             if (searchedTerm.isNotEmpty()) {
                 Icon(
                     imageVector = Icons.Default.Clear,
-                    contentDescription = null,
+                    contentDescription = stringResource(id = R.string.content_desc_cancel_icon_clear_text),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable {
                         clearSearch()

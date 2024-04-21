@@ -11,6 +11,7 @@
     <string name="content_desc_bottom_app_bar_home_icon">Home tab to view workouts for the day</string>
     <string name="content_desc_bottom_app_bar_library_icon">Library for choosing workouts</string>
     <string name="content_desc_cancel_icon_clear_text">An x to clear text in searchbar</string>
+    <string name="content_desc_search_icon">A magnifying glass that signifies a user\'s ability to search workouts within this search bar</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
