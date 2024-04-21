@@ -60,7 +60,6 @@ class JournalEntryDetailsViewModel(val selectedWorkoutDetail: WorkoutDetail?) : 
         }
 
     fun save() {
-
     }
 
     fun addSet() {

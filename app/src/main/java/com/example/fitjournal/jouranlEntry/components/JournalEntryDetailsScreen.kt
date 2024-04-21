@@ -49,7 +49,6 @@ fun JournalEntryDetailsScreen(
     modifier: Modifier,
     viewModel: JournalEntryDetailsViewModel
 ) {
-
     var isDatePickerShowing = remember { mutableStateOf(false) }
 
     Column(
@@ -58,7 +57,6 @@ fun JournalEntryDetailsScreen(
             .padding(horizontal = Spacing.spacing16),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         if (isDatePickerShowing.value) {
             FitJournalDatePickerDialog(
                 currentDate = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000,
@@ -78,7 +76,8 @@ fun JournalEntryDetailsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     isDatePickerShowing.value = true
-                }) {
+                }
+            ) {
                 Text(
                     text = "Current Date Chosen: ${viewModel.pickerDate.value}",
                     style = MaterialTheme.typography.titleMedium,
@@ -156,7 +155,6 @@ fun JournalEntryDetailsScreen(
             LazyColumn(
                 modifier = modifier.fillMaxWidth()
             ) {
-
                 when (selectedWorkoutDetail.workoutType) {
                     WorkoutTypeEnum.WEIGHT_TRAINING -> {
                         if (viewModel.weightLiftingSets.isNotEmpty()) {
@@ -195,12 +193,12 @@ fun JournalEntryDetailsScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
-                                                   // click to edit workout row
+                                            // click to edit workout row
                                         },
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    //ALEX: WHAT IS THE BEST WAY TO MAKE THIS THREE OBJECTS SELECTABLE AT THE SAME TIME, WHILE KEEPING THE 0.25F PROPORSION IN THE SCREEN
+                                    // ALEX: WHAT IS THE BEST WAY TO MAKE THIS THREE OBJECTS SELECTABLE AT THE SAME TIME, WHILE KEEPING THE 0.25F PROPORSION IN THE SCREEN
                                     Text(
                                         text = item.sets.toString(),
                                         modifier = Modifier.weight(2f, fill = false).fillMaxWidth(),
@@ -227,7 +225,7 @@ fun JournalEntryDetailsScreen(
                                         tint = Color.Red
                                     )
                                 }
-                                if (index != viewModel.weightLiftingSets.lastIndex){
+                                if (index != viewModel.weightLiftingSets.lastIndex) {
                                     Spacer(modifier = Modifier.height(Spacing.spacing8))
                                 }
                             }
@@ -236,18 +234,15 @@ fun JournalEntryDetailsScreen(
 
                     WorkoutTypeEnum.CALISTHENICS -> {
                         items(viewModel.calisthenicsSets.value) {
-
                         }
                     }
 
                     WorkoutTypeEnum.CARDIO -> {
                         items(viewModel.cardioSets.value) {
-
                         }
                     }
                 }
             }
-
         }
     }
 }

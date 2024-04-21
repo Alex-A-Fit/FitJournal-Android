@@ -20,18 +20,15 @@ import com.example.fitjournal.library.presentation.screen.library.components.Exe
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun JournalEntryList(workoutList: List<WorkoutDetail>, selectedWorkout: (WorkoutDetail) -> Unit) {
-
     val listOfWeightLiftingWorkouts = workoutList.filter { it.workoutType == WorkoutTypeEnum.WEIGHT_TRAINING }
     val listOfCardioWorkouts = workoutList.filter { it.workoutType == WorkoutTypeEnum.CARDIO }
     val listOfCalisthenicsWorkouts = workoutList.filter { it.workoutType == WorkoutTypeEnum.CALISTHENICS }
 
-
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = Spacing.spacing8),
+            .padding(bottom = Spacing.spacing8)
     ) {
-
         if (listOfWeightLiftingWorkouts.isNotEmpty()) {
             stickyHeader {
                 CategoryHeader(text = stringResource(id = WorkoutTypeEnum.WEIGHT_TRAINING.workoutTitle()))

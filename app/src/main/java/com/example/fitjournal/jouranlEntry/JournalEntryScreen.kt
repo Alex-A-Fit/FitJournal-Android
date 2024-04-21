@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.fitjournal.core.domain.model.WorkoutDetail
 import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
@@ -26,7 +25,6 @@ fun JournalEntryScreen(
     selectedJournalEntry: (WorkoutDetail) -> Unit,
     navigateToDestination: (NavigationInterface) -> Unit
 ) {
-
     val viewModel: JournalEntryViewModel = viewModel()
     val searchText = remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current

@@ -5,8 +5,8 @@ import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 
 object Workouts {
 
-    //Source: https://www.fitstream.com/exercises/weight-training-exercises/
-    //https://calisthenicsskills.com/exercises/
+    // Source: https://www.fitstream.com/exercises/weight-training-exercises/
+    // https://calisthenicsskills.com/exercises/
     var availableWorkouts = mutableListOf(
         WorkoutDetail("Barbell Squat", WorkoutTypeEnum.WEIGHT_TRAINING),
         WorkoutDetail("Bench Press", WorkoutTypeEnum.WEIGHT_TRAINING),
@@ -43,6 +43,5 @@ object Workouts {
         WorkoutDetail("Front Lever", WorkoutTypeEnum.CALISTHENICS),
         WorkoutDetail("Crow Pose", WorkoutTypeEnum.CALISTHENICS),
         WorkoutDetail("Planche", WorkoutTypeEnum.CALISTHENICS)
-        )
-
+    )
 }

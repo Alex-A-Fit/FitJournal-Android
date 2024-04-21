@@ -6,9 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -258,12 +258,12 @@ class MainActivity : ComponentActivity() {
                                             )
                                         },
                                         navigationIcon = {
-                                              IconButton(onClick = { navController.navigateUp() }) {
-                                                  Icon(
-                                                      imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                                      contentDescription = "Back"
-                                                  )
-                                              }
+                                            IconButton(onClick = { navController.navigateUp() }) {
+                                                Icon(
+                                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                    contentDescription = "Back"
+                                                )
+                                            }
                                         },
                                         modifier = Modifier.fillMaxWidth()
                                     )
@@ -298,7 +298,7 @@ class MainActivity : ComponentActivity() {
                                             )
                                         },
                                         endAlignedActionIcon = {
-                                            IconButton(onClick = { 
+                                            IconButton(onClick = {
                                                 navController.navigateUp()
                                                 navController.navigateUp()
                                                 viewModel.save()

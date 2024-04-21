@@ -30,7 +30,7 @@ fun ExerciseItem(exercise: String) {
 }
 
 @Composable
-private fun ExerciseName(exercise: String){
+private fun ExerciseName(exercise: String) {
     Text(
         text = exercise,
         color = MaterialTheme.colorScheme.onPrimary,
