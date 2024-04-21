@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +22,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.FilterWorkoutTypeDialog
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.components.card.CalisthenicsCard
 import com.example.fitjournal.home.presentation.components.card.CardioCard
 import com.example.fitjournal.home.presentation.components.card.WeightLiftingCard
@@ -38,6 +40,15 @@ fun HomeScreen(
     isBlurActive: Boolean,
     homeScreenEvents: (HomeScreenEvents) -> Unit
 ) {
+    LaunchedEffect(key1 = homeScreenState.listOfVisibleWorkouts) {
+        when (homeScreenState.listOfVisibleWorkouts) {
+            UiState.None -> {
+                homeScreenEvents(HomeScreenEvents.CollectRealmWorkoutEntryFromDb)
+            }
+            else -> Unit
+        }
+    }
+
     var isDatePickerDialogShowing by rememberSaveable {
         mutableStateOf(homeScreenState.isDatePickerDialogShowing)
     }
@@ -83,47 +94,60 @@ fun HomeScreen(
                 }
             )
         }
-        homeScreenState.listOfVisibleWorkouts?.let { workoutList ->
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                state = lazyListState,
-                userScrollEnabled = !isBlurActive,
-                contentPadding = PaddingValues(all = Spacing.spacing16)
-            ) {
-                items(items = workoutList) { workout ->
-                    when (workout.workoutType) {
-                        WorkoutTypeEnum.WEIGHT_TRAINING -> {
-                            WeightLiftingCard(
-                                reps = workout.exerciseCardModel.reps,
-                                weight = workout.exerciseCardModel.weight,
-                                name = workout.exerciseCardModel.name,
-                                icon = workout.exerciseCardModel.icon,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
+        when (val workoutList = homeScreenState.listOfVisibleWorkouts) {
+            UiState.Loading -> {
+                // need to provide loading animation of some sorts
+                Unit
+            }
+            UiState.Empty, is UiState.Error -> {
+                // need to provide empty state of some sorts for empty and error
+                Unit
+            }
+            UiState.None -> {
+                // none should be defaulted to loading
+            }
+            is UiState.Success -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = lazyListState,
+                    userScrollEnabled = !isBlurActive,
+                    contentPadding = PaddingValues(all = Spacing.spacing16)
+                ) {
+                    items(items = workoutList.data) { workout ->
+                        when (workout.workoutType) {
+                            WorkoutTypeEnum.WEIGHT_TRAINING -> {
+                                WeightLiftingCard(
+                                    reps = workout.exerciseCardModel.reps,
+                                    weight = workout.exerciseCardModel.weight,
+                                    name = workout.exerciseCardModel.name,
+                                    icon = workout.exerciseCardModel.icon,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
 
-                        WorkoutTypeEnum.CALISTHENICS -> {
-                            CalisthenicsCard(
-                                reps = workout.exerciseCardModel.reps,
-                                time = workout.exerciseCardModel.time,
-                                name = workout.exerciseCardModel.name,
-                                icon = workout.exerciseCardModel.icon,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
+                            WorkoutTypeEnum.CALISTHENICS -> {
+                                CalisthenicsCard(
+                                    reps = workout.exerciseCardModel.reps,
+                                    time = workout.exerciseCardModel.time,
+                                    name = workout.exerciseCardModel.name,
+                                    icon = workout.exerciseCardModel.icon,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
 
-                        WorkoutTypeEnum.CARDIO -> {
-                            CardioCard(
-                                name = workout.exerciseCardModel.name,
-                                icon = workout.exerciseCardModel.icon,
-                                distance = workout.exerciseCardModel.distance,
-                                distanceType = workout.exerciseCardModel.distanceType,
-                                time = workout.exerciseCardModel.time,
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                            WorkoutTypeEnum.CARDIO -> {
+                                CardioCard(
+                                    name = workout.exerciseCardModel.name,
+                                    icon = workout.exerciseCardModel.icon,
+                                    distance = workout.exerciseCardModel.distance,
+                                    distanceType = workout.exerciseCardModel.distanceType,
+                                    time = workout.exerciseCardModel.time,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
                         }
+                        Spacer(modifier = Modifier.height(Spacing.spacing12))
                     }
-                    Spacer(modifier = Modifier.height(Spacing.spacing12))
                 }
             }
         }

@@ -290,6 +290,8 @@ class MainActivity : ComponentActivity() {
             is HomeScreenEvents.OnConfirmFilterExercisesDialog -> homeViewModel.filterWorkouts(
                 events.filterList
             )
+
+            HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> homeViewModel.collectRealmWorkoutEntryFromDb()
         }
     }
 
