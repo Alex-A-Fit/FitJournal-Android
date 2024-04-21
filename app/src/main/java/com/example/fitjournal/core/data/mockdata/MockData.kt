@@ -6,6 +6,7 @@ import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
+import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import java.time.LocalDateTime
@@ -24,96 +25,96 @@ object MockData {
             icon = R.drawable.icon_person,
             workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
             date = todayDate,
-            weightLiftingModel = null,
-            cardioModel = null,
-            timestamp = LocalDateTime.now(),
-            calisthenicsModel = listOf(
-                CalisthenicsModel(
-                    reps = 20,
-                    time = "3:50"
+            workoutPropertiesModel = WorkoutPropertiesModel.CalisthenicsProps(
+                listOf(
+                    CalisthenicsModel(
+                        reps = 20,
+                        time = "3:50",
+                        sets = 1,
+                        weight = null
+                    )
                 )
             )
+
         ),
         WorkoutModel(
             name = "Bench Press",
             icon = R.drawable.icon_dumbell,
             workoutTypeEnum = WorkoutTypeEnum.WEIGHT_TRAINING,
-            timestamp = LocalDateTime.now(),
             date = todayDate,
-            weightLiftingModel = listOf(
-                WeightLiftingModel(
-                    reps = 10,
-                    weight = 135.0,
-                    time = null
+            workoutPropertiesModel = WorkoutPropertiesModel.WeightLiftingProps(
+                listOf(
+                    WeightLiftingModel(
+                        reps = 10,
+                        weight = 135.0,
+                        sets = 1
+                    )
                 )
-            ),
-            cardioModel = null,
-            calisthenicsModel = null
+            )
         ),
         WorkoutModel(
             name = "Biking",
             icon = R.drawable.icon_sprinting_person,
             workoutTypeEnum = WorkoutTypeEnum.CARDIO,
-            timestamp = LocalDateTime.now(),
             date = todayDate,
-            weightLiftingModel = null,
-            cardioModel = listOf(
-                CardioModel(
-                    distance = 2.0,
-                    distanceType = CardioDistanceType.KILOMETERS,
-                    time = "3:40",
-                    laps = 2.0
+            workoutPropertiesModel = WorkoutPropertiesModel.CardioProps(
+                listOf(
+                    CardioModel(
+                        distance = 2.0,
+                        distanceType = CardioDistanceType.KILOMETERS,
+                        time = "3:40",
+                        laps = 2.0
+                    )
                 )
-            ),
-            calisthenicsModel = null
+            )
         ),
         WorkoutModel(
             name = "Push Ups",
             icon = R.drawable.icon_person,
             workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
             date = todayDate,
-            weightLiftingModel = null,
-            cardioModel = null,
-            timestamp = LocalDateTime.now(),
-            calisthenicsModel = listOf(
-                CalisthenicsModel(
-                    reps = 20,
-                    time = "3:50"
+            workoutPropertiesModel = WorkoutPropertiesModel.CalisthenicsProps(
+                listOf(
+                    CalisthenicsModel(
+                        reps = 20,
+                        time = "3:50",
+                        sets = 1,
+                        weight = null
+                    )
                 )
             )
+
         ),
         WorkoutModel(
             name = "Bench Press",
             icon = R.drawable.icon_dumbell,
             workoutTypeEnum = WorkoutTypeEnum.WEIGHT_TRAINING,
-            timestamp = LocalDateTime.now(),
             date = todayDate,
-            weightLiftingModel = listOf(
-                WeightLiftingModel(
-                    reps = 10,
-                    weight = 135.0,
-                    time = null
+            workoutPropertiesModel = WorkoutPropertiesModel.WeightLiftingProps(
+                listOf(
+                    WeightLiftingModel(
+                        reps = 10,
+                        weight = 135.0,
+                        sets = 1
+                    )
                 )
-            ),
-            cardioModel = null,
-            calisthenicsModel = null
+            )
         ),
         WorkoutModel(
             name = "Biking",
             icon = R.drawable.icon_sprinting_person,
             workoutTypeEnum = WorkoutTypeEnum.CARDIO,
-            timestamp = LocalDateTime.now(),
             date = todayDate,
-            weightLiftingModel = null,
-            cardioModel = listOf(
-                CardioModel(
-                    distance = 2.0,
-                    distanceType = CardioDistanceType.KILOMETERS,
-                    time = "3:40",
-                    laps = 2.0
+            workoutPropertiesModel = WorkoutPropertiesModel.CardioProps(
+                listOf(
+                    CardioModel(
+                        distance = 2.0,
+                        distanceType = CardioDistanceType.KILOMETERS,
+                        time = "3:40",
+                        laps = 2.0
+                    )
                 )
-            ),
-            calisthenicsModel = null
+            )
         )
     )
 

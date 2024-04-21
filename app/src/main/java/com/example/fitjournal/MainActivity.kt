@@ -290,6 +290,8 @@ class MainActivity : ComponentActivity() {
             is HomeScreenEvents.OnConfirmFilterExercisesDialog -> homeViewModel.filterWorkouts(
                 events.filterList
             )
+
+            HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> homeViewModel.collectRealmWorkoutEntryFromDb()
         }
     }
 
@@ -306,6 +308,7 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
+
     private suspend fun showSnackBar(
         snackBarHostState: SnackbarHostState,
         message: String,

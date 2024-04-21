@@ -1,7 +1,9 @@
 package com.example.fitjournal.home.presentation.model.state
 
+import com.example.fitjournal.core.domain.managers.DateManager
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.model.ui.FilterWorkoutUiModel
 import com.example.fitjournal.home.presentation.model.ui.WorkoutUiModel
 import java.time.LocalDateTime
@@ -11,8 +13,13 @@ import java.util.Locale
 
 data class HomeScreenUiState(
     val currentDateTime: LocalDateTime = LocalDateTime.now(),
-    val currentDate: String = currentDateTime.toLocalDate()
-        .format(DateTimeFormatter.ISO_LOCAL_DATE.withLocale(Locale.US)),
+    val currentDate: String = DateManager.formatDate(
+        currentDateTime.format(
+            DateTimeFormatter.ISO_LOCAL_DATE.withLocale(
+                Locale.US
+            )
+        )
+    ),
     val currentDateInMillis: Long = (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000),
     val isDatePickerDialogShowing: Boolean = false,
     val isFilterDialogShowing: Boolean = false,
@@ -31,5 +38,5 @@ data class HomeScreenUiState(
         )
     ),
     val listOfWorkouts: List<WorkoutModel>? = null,
-    val listOfVisibleWorkouts: List<WorkoutUiModel>? = null
+    val listOfVisibleWorkouts: UiState<List<WorkoutUiModel>> = UiState.None
 )

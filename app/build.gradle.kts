@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
+    id("io.realm.kotlin")
 }
 
 android {
@@ -49,7 +50,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
 
     /* Coil */
@@ -64,7 +65,7 @@ dependencies {
     ksp("com.google.dagger:hilt-compiler:2.48")
 
     /* DataStore */
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.0")
 
     /* Moshi */
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
@@ -83,22 +84,26 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("androidx.compose.runtime:runtime:1.6.5")
-    implementation("androidx.compose.compiler:compiler:1.5.11")
-    implementation("androidx.compose.ui:ui:1.6.5")
-    implementation("androidx.compose.ui:ui-graphics:1.6.5")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.6.5")
+    implementation("androidx.activity:activity-compose:1.9.0")
+    implementation("androidx.compose.runtime:runtime:1.6.6")
+    implementation("androidx.compose.compiler:compiler:1.5.12")
+    implementation("androidx.compose.ui:ui:1.6.6")
+    implementation("androidx.compose.ui:ui-graphics:1.6.6")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.6.6")
 
     /* Material */
-    implementation("androidx.compose.animation:animation:1.6.5")
+    implementation("androidx.compose.animation:animation:1.6.6")
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
-    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.0.0-alpha05")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.0.0-alpha06")
 
     /* Lottie Animation */
     implementation("com.airbnb.android:lottie-compose:6.1.0")
 
     /* Cloudy Blur library */
     implementation("com.github.skydoves:cloudy:0.1.2")
+
+    /* Realm Db */
+    implementation("io.realm.kotlin:library-base:1.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3") // If using coroutines with the SDK
 }
