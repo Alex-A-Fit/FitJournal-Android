@@ -68,7 +68,7 @@ class RealmRepositoryImpl @Inject constructor() : RealmRepository {
     ): Boolean {
         return realm.write {
             return@write try {
-                var wasUpdateSuccessful = false
+                val wasUpdateSuccessful: Boolean
                 val originalRealmWorkoutEntry = this.getLatestResultViaQuery(
                     searchableClass = RealmWorkoutEntry::class,
                     query = "workoutId == $0",
@@ -95,7 +95,7 @@ class RealmRepositoryImpl @Inject constructor() : RealmRepository {
     override suspend fun deleteWorkoutEntryFromRealmDb(realmWorkoutEntry: RealmWorkoutEntry): Boolean {
         return realm.write {
             return@write try {
-                var wasWorkoutDeleted: Boolean = false
+                val wasWorkoutDeleted: Boolean
                 this.getLatestResultViaQuery(
                     searchableClass = RealmWorkoutEntry::class,
                     query = "workoutId == $0",
