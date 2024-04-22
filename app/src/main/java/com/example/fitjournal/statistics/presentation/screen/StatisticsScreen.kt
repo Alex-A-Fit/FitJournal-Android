@@ -21,6 +21,7 @@ import com.example.fitjournal.statistics.domain.model.StatisticsScreenState
 fun StatisticsScreen(
     addSingleRealmObj: () -> Unit,
     updateSingleRealmObj: () -> Unit,
+    deleteWorkoutEntry: () -> Unit,
     getWorkoutEntryList: () -> Unit,
     statisticsScreenState: StatisticsScreenState
 ) {
@@ -51,6 +52,16 @@ fun StatisticsScreen(
                 .background(Color.Blue, RoundedCornerShape(Spacing.spacing8))
         ) {
             Text(text = "Update Single Realm Obj")
+        }
+        Spacer(modifier = Modifier.height(Spacing.spacing16))
+        Button(
+            onClick = { deleteWorkoutEntry() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = Spacing.spacing16)
+                .background(Color.Blue, RoundedCornerShape(Spacing.spacing8))
+        ) {
+            Text(text = "Delete First Workout Entry")
         }
     }
 }

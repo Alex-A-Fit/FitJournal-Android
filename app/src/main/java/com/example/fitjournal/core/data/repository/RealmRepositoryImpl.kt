@@ -91,4 +91,31 @@ class RealmRepositoryImpl @Inject constructor() : RealmRepository {
             }
         }
     }
+
+    override suspend fun deleteWorkoutEntryFromRealmDb(realmWorkoutEntry: RealmWorkoutEntry): Boolean {
+        return realm.write {
+            return@write try {
+                var wasWorkoutDeleted: Boolean = false
+                this.GetLatestQueryViaId(
+                    searchableClass = RealmWorkoutEntry::class,
+                    query = "workoutId == $0",
+                    objectId = realmWorkoutEntry.workoutId
+                ).also {
+                    wasWorkoutDeleted = if (it != null) {
+                        delete(it)
+                        true
+                    } else {
+                        false
+                    }
+                }
+                wasWorkoutDeleted
+            } catch (e: IllegalArgumentException) {
+                // catch for copyToRealm() in case it throws error
+                false
+            } catch (e: Exception) {
+                // general error catch
+                false
+            }
+        }
+    }
 }

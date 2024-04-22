@@ -105,4 +105,26 @@ class StatisticsViewModel @Inject constructor(
             Log.d("Realm Updates", "Realm did NOT update index $updatedItemIndex")
         }
     }
+
+    fun deleteWorkoutEntry(
+        getString: (Int) -> String
+    ){
+        if (statisticsScreenState.workoutModelList.isNotEmpty()) {
+            val workoutEntryToBeDeleted = statisticsScreenState.workoutModelList[0]
+                val realmEntryToDelete = workoutEntryToBeDeleted.toRealmWorkoutEntry(
+                    workoutType = getString(workoutEntryToBeDeleted.workoutTypeEnum.stringId)
+                )
+            viewModelScope.launch {
+                val wasDeleteSuccessful = realmUseCase.deleteWorkoutEntryFromRealmDbUseCase(
+                    realmWorkoutEntry = realmEntryToDelete
+                )
+                if (wasDeleteSuccessful) {
+                    getDataFromRealmDb()
+                }
+                Log.d("Realm Updates", "Realm entry $realmEntryToDelete was deleted" )
+            }
+        } else {
+            Log.d("Realm Updates", "Realm did NOT delete realm entry" )
+        }
+    }
 }

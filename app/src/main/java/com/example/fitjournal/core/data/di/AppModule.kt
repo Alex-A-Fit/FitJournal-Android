@@ -5,6 +5,7 @@ import com.example.fitjournal.core.domain.repository.RealmRepository
 import com.example.fitjournal.core.domain.usecase.realm.AddSingleWorkoutEntryToRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.ConvertRealmWorkoutEntryToWorkoutModelUseCase
 import com.example.fitjournal.core.domain.usecase.realm.CreateMockDataInRealmUseCase
+import com.example.fitjournal.core.domain.usecase.realm.DeleteWorkoutEntryFromRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.GetRealmWorkoutEntryList
 import com.example.fitjournal.core.domain.usecase.realm.RealmUseCase
 import com.example.fitjournal.core.domain.usecase.realm.UpdateSingleWorkoutEntryToRealmDbUseCase
@@ -40,6 +41,9 @@ object AppModule {
                 realmRepository = realmRepository
             ),
             updateSingleWorkoutEntryToRealmDbUseCase = UpdateSingleWorkoutEntryToRealmDbUseCase(
+                realmRepository = realmRepository
+            ),
+            deleteWorkoutEntryFromRealmDbUseCase = DeleteWorkoutEntryFromRealmDbUseCase(
                 realmRepository = realmRepository
             ),
             convertRealmWorkoutEntryToWorkoutModelUseCase = ConvertRealmWorkoutEntryToWorkoutModelUseCase()

@@ -5,5 +5,6 @@ data class RealmUseCase(
     val getRealmWorkoutEntryList: GetRealmWorkoutEntryList,
     val convertRealmWorkoutEntryToWorkoutModelUseCase: ConvertRealmWorkoutEntryToWorkoutModelUseCase,
     val addSingleWorkoutEntryToRealmDbUseCase: AddSingleWorkoutEntryToRealmDbUseCase,
-    val updateSingleWorkoutEntryToRealmDbUseCase: UpdateSingleWorkoutEntryToRealmDbUseCase
+    val updateSingleWorkoutEntryToRealmDbUseCase: UpdateSingleWorkoutEntryToRealmDbUseCase,
+    val deleteWorkoutEntryFromRealmDbUseCase: DeleteWorkoutEntryFromRealmDbUseCase
 )

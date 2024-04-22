@@ -12,4 +12,8 @@ interface RealmRepository {
     suspend fun updateSingleWorkoutEntryToRealmDb(
         updatedRealmWorkoutEntry: RealmWorkoutEntry
     ): Boolean
+
+    suspend fun deleteWorkoutEntryFromRealmDb(
+        realmWorkoutEntry: RealmWorkoutEntry
+    ): Boolean
 }

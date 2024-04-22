@@ -209,7 +209,14 @@ class MainActivity : ComponentActivity() {
                                             )
                                         },
                                         statisticsScreenState = statisticsViewModel.statisticsScreenState,
-                                        getWorkoutEntryList = { statisticsViewModel.getDataFromRealmDb() }
+                                        getWorkoutEntryList = { statisticsViewModel.getDataFromRealmDb() },
+                                        deleteWorkoutEntry = {
+                                            statisticsViewModel.deleteWorkoutEntry(
+                                                getString = { stringId ->
+                                                    getString(stringId)
+                                                }
+                                            )
+                                        }
                                     )
                                 },
                                 topAppBar = {
