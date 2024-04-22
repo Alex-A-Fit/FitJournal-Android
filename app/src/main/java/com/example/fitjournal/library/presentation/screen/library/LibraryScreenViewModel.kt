@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.fitjournal.core.data.mockdata.MockData.libraryWorkoutList
-import com.example.fitjournal.core.domain.utils.filtering.searchForText
+import com.example.fitjournal.core.domain.util.filtering.searchForText
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
 import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory

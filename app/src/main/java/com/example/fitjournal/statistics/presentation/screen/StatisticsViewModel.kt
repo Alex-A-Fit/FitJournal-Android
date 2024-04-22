@@ -1,0 +1,108 @@
+package com.example.fitjournal.statistics.presentation.screen
+
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
+import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutModel
+import com.example.fitjournal.core.domain.mapper.MapToWorkoutUiModel
+import com.example.fitjournal.core.domain.model.WorkoutModel
+import com.example.fitjournal.core.domain.usecase.realm.RealmUseCase
+import com.example.fitjournal.core.util.state.UiState
+import com.example.fitjournal.home.presentation.model.ui.WorkoutUiModel
+import com.example.fitjournal.statistics.domain.mapper.toRealmWorkoutEntry
+import com.example.fitjournal.statistics.domain.model.StatisticsScreenState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+// note: Using statistics screen to manual test crud functions
+// until i can create junit tests for them in actual impl
+
+@HiltViewModel
+class StatisticsViewModel @Inject constructor(
+    private val realmUseCase: RealmUseCase
+) : ViewModel() {
+    var statisticsScreenState: StatisticsScreenState by mutableStateOf(StatisticsScreenState())
+        private set
+
+    fun addSingleObjectToDb() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val didUpdateWork = realmUseCase.addSingleWorkoutEntryToRealmDbUseCase(
+                realmWorkoutEntry = RealmWorkoutEntry().apply {
+                    workout = RealmWorkoutModel().apply {
+                        name = "NEW WORKOUT"
+                        type = "Cardio"
+                    }
+                }
+            )
+            Log.d("Realm Updates", "Realm Added new entry $didUpdateWork")
+        }
+    }
+
+    fun getDataFromRealmDb() {
+        viewModelScope.launch {
+            val workoutList = realmUseCase.getRealmWorkoutEntryList()
+            if (workoutList.isNotEmpty()) {
+                val workouts =
+                    realmUseCase.convertRealmWorkoutEntryToWorkoutModelUseCase(
+                        workoutList
+                    )
+                updateStatisticsScreenState(
+                    newStatisticsScreenState = statisticsScreenState.copy(
+                        workoutModelList = workouts,
+                        workoutList = createWorkoutUiModel(listOfWorkouts = workouts)
+                    )
+                )
+            }
+        }
+    }
+
+    private fun createWorkoutUiModel(listOfWorkouts: List<WorkoutModel>): UiState<List<WorkoutUiModel>> {
+        if (listOfWorkouts.isEmpty()) return UiState.Empty
+        val workoutsMapped = listOfWorkouts.map {
+            it.MapToWorkoutUiModel()
+        }
+        return UiState.Success(workoutsMapped)
+    }
+
+    private fun updateStatisticsScreenState(newStatisticsScreenState: StatisticsScreenState) {
+        statisticsScreenState = newStatisticsScreenState
+    }
+
+    fun clearUiState() {
+        updateStatisticsScreenState(
+            newStatisticsScreenState = statisticsScreenState.copy(
+                workoutList = UiState.None
+            )
+        )
+    }
+
+    fun updateSingleObjectToDb(
+        updatedItemIndex: Int,
+        workoutType: String
+    ) {
+        if (statisticsScreenState.workoutModelList.isNotEmpty()) {
+            val updatedRealmEntry =
+                statisticsScreenState.workoutModelList[updatedItemIndex].toRealmWorkoutEntry(
+                    workoutType
+                )
+            updatedRealmEntry.workout?.name = "Alex Is Awesome"
+            viewModelScope.launch {
+                val didUpdateWork = realmUseCase.updateSingleWorkoutEntryToRealmDbUseCase(
+                    updatedRealmWorkoutEntry = updatedRealmEntry
+                )
+                if (didUpdateWork) {
+                    getDataFromRealmDb()
+                }
+                Log.d("Realm Updates", "Realm Added new entry $didUpdateWork")
+            }
+        } else {
+            Log.d("Realm Updates", "Realm did NOT update index $updatedItemIndex")
+        }
+    }
+}

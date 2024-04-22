@@ -2,10 +2,12 @@ package com.example.fitjournal.core.data.di
 
 import com.example.fitjournal.core.data.repository.RealmRepositoryImpl
 import com.example.fitjournal.core.domain.repository.RealmRepository
-import com.example.fitjournal.core.domain.usecase.realm.ConvertDatabaseRealmWorkoutEntryToUiUseCase
+import com.example.fitjournal.core.domain.usecase.realm.AddSingleWorkoutEntryToRealmDbUseCase
+import com.example.fitjournal.core.domain.usecase.realm.ConvertRealmWorkoutEntryToWorkoutModelUseCase
 import com.example.fitjournal.core.domain.usecase.realm.CreateMockDataInRealmUseCase
-import com.example.fitjournal.core.domain.usecase.realm.GetMockDataUseCase
+import com.example.fitjournal.core.domain.usecase.realm.GetRealmWorkoutEntryList
 import com.example.fitjournal.core.domain.usecase.realm.RealmUseCase
+import com.example.fitjournal.core.domain.usecase.realm.UpdateSingleWorkoutEntryToRealmDbUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,10 +33,16 @@ object AppModule {
             createMockDataInRealmUseCase = CreateMockDataInRealmUseCase(
                 realmRepository = realmRepository
             ),
-            getMockDataUseCase = GetMockDataUseCase(
+            getRealmWorkoutEntryList = GetRealmWorkoutEntryList(
                 realmRepository = realmRepository
             ),
-            convertDatabaseRealmWorkoutEntryToUiUseCase = ConvertDatabaseRealmWorkoutEntryToUiUseCase()
+            addSingleWorkoutEntryToRealmDbUseCase = AddSingleWorkoutEntryToRealmDbUseCase(
+                realmRepository = realmRepository
+            ),
+            updateSingleWorkoutEntryToRealmDbUseCase = UpdateSingleWorkoutEntryToRealmDbUseCase(
+                realmRepository = realmRepository
+            ),
+            convertRealmWorkoutEntryToWorkoutModelUseCase = ConvertRealmWorkoutEntryToWorkoutModelUseCase()
         )
     }
 }

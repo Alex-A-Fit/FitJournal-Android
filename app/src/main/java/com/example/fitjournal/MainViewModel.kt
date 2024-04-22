@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.domain.usecase.realm.RealmUseCase
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,12 +23,16 @@ class MainViewModel @Inject constructor(
         private set
 
     // For now until we create check for fetching realm,
-    // un comment this to inject mock data to realmDb
-//    init {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            realmUseCase.createMockDataInRealmUseCase()
-//        }
-//    }
+    // flip boolean to true to create mock data and fetch from realm
+    // flip boolean to false to ONLY fetch mock data from realm
+    init {
+        val createMockData = true
+        viewModelScope.launch(Dispatchers.IO) {
+            if (createMockData) {
+                realmUseCase.createMockDataInRealmUseCase()
+            }
+        }
+    }
 
     fun runSplashScreen() {
         viewModelScope.launch {

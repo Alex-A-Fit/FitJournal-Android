@@ -1,9 +1,15 @@
 package com.example.fitjournal.core.domain.repository
 
 import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
-import io.realm.kotlin.query.RealmQuery
 
 interface RealmRepository {
     suspend fun addMockDataToRealm()
-    suspend fun getWorkoutsFromRealmDb(): RealmQuery<RealmWorkoutEntry>
+    suspend fun getRealmWorkoutEntryList(): List<RealmWorkoutEntry>
+    suspend fun addSingleWorkoutEntryToRealmDb(
+        realmWorkoutEntry: RealmWorkoutEntry
+    ): Boolean
+
+    suspend fun updateSingleWorkoutEntryToRealmDb(
+        updatedRealmWorkoutEntry: RealmWorkoutEntry
+    ): Boolean
 }

@@ -5,5 +5,5 @@ import io.realm.kotlin.types.EmbeddedRealmObject
 class RealmWorkoutModel : EmbeddedRealmObject {
     var name: String = ""
     var type: String = ""
-    var workoutProperties: WorkoutProperties? = null
+    var realmWorkoutProperties: RealmWorkoutProperties? = null
 }

@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.domain.utils.filtering
+package com.example.fitjournal.core.domain.util.filtering
 
 import java.util.SortedMap
 

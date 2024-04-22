@@ -1,120 +1,101 @@
 package com.example.fitjournal.core.data.mockdata
 
-import com.example.fitjournal.R
-import com.example.fitjournal.core.domain.managers.DateManager
-import com.example.fitjournal.core.domain.model.CalisthenicsModel
-import com.example.fitjournal.core.domain.model.CardioModel
-import com.example.fitjournal.core.domain.model.WeightLiftingModel
-import com.example.fitjournal.core.domain.model.WorkoutModel
-import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
-import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.core.data.mockdata.helper.CreateMockDataSample
+import com.example.fitjournal.core.data.model.realmdb.CalisthenicsSet
+import com.example.fitjournal.core.data.model.realmdb.CardioSet
+import com.example.fitjournal.core.data.model.realmdb.StrengthTrainingSet
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 object MockData {
-    private val currentDateTime: LocalDateTime = LocalDateTime.now()
-    private val currentDate: String = currentDateTime.toLocalDate()
-        .format(DateTimeFormatter.ISO_LOCAL_DATE.withLocale(Locale.US))
-    private val todayDate = DateManager.formatDate(currentDate)
+    val weightTraining1 = CreateMockDataSample.weightTrainingSample(
+        workoutName = "Bench Press",
+        workoutType = "Weight Training",
+        workoutSet = arrayOf(
+            StrengthTrainingSet().apply {
+                reps = 10
+                sets = 2
+                weight = 365.0
+            }
+        )
+    )
 
-    val ListOfWorkouts = listOf(
-        WorkoutModel(
-            name = "Push Ups",
-            icon = R.drawable.icon_person,
-            workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
-            date = todayDate,
-            workoutPropertiesModel = WorkoutPropertiesModel.CalisthenicsProps(
-                listOf(
-                    CalisthenicsModel(
-                        reps = 20,
-                        time = "3:50",
-                        sets = 1,
-                        weight = null
-                    )
-                )
-            )
+    val weightTraining2 = CreateMockDataSample.weightTrainingSample(
+        workoutName = "Squats",
+        workoutType = "Weight Training",
+        workoutSet = arrayOf(
+            StrengthTrainingSet().apply {
+                reps = 8
+                sets = 3
+                weight = 220.0
+            },
+            StrengthTrainingSet().apply {
+                reps = 5
+                sets = 1
+                weight = 110.0
+            }
+        )
+    )
 
-        ),
-        WorkoutModel(
-            name = "Bench Press",
-            icon = R.drawable.icon_dumbell,
-            workoutTypeEnum = WorkoutTypeEnum.WEIGHT_TRAINING,
-            date = todayDate,
-            workoutPropertiesModel = WorkoutPropertiesModel.WeightLiftingProps(
-                listOf(
-                    WeightLiftingModel(
-                        reps = 10,
-                        weight = 135.0,
-                        sets = 1
-                    )
-                )
-            )
-        ),
-        WorkoutModel(
-            name = "Biking",
-            icon = R.drawable.icon_sprinting_person,
-            workoutTypeEnum = WorkoutTypeEnum.CARDIO,
-            date = todayDate,
-            workoutPropertiesModel = WorkoutPropertiesModel.CardioProps(
-                listOf(
-                    CardioModel(
-                        distance = 2.0,
-                        distanceType = CardioDistanceType.KILOMETERS,
-                        time = "3:40",
-                        laps = 2.0
-                    )
-                )
-            )
-        ),
-        WorkoutModel(
-            name = "Push Ups",
-            icon = R.drawable.icon_person,
-            workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
-            date = todayDate,
-            workoutPropertiesModel = WorkoutPropertiesModel.CalisthenicsProps(
-                listOf(
-                    CalisthenicsModel(
-                        reps = 20,
-                        time = "3:50",
-                        sets = 1,
-                        weight = null
-                    )
-                )
-            )
+    val calisthenics1 = CreateMockDataSample.calisthenicsSample(
+        workoutName = "Push Ups",
+        workoutType = "Calisthenics",
+        workoutSet = arrayOf(
+            CalisthenicsSet().apply {
+                reps = 25
+                sets = 2
+                weight = 10.0
+                time = "00:03:00"
+            }
+        )
+    )
 
-        ),
-        WorkoutModel(
-            name = "Bench Press",
-            icon = R.drawable.icon_dumbell,
-            workoutTypeEnum = WorkoutTypeEnum.WEIGHT_TRAINING,
-            date = todayDate,
-            workoutPropertiesModel = WorkoutPropertiesModel.WeightLiftingProps(
-                listOf(
-                    WeightLiftingModel(
-                        reps = 10,
-                        weight = 135.0,
-                        sets = 1
-                    )
-                )
-            )
-        ),
-        WorkoutModel(
-            name = "Biking",
-            icon = R.drawable.icon_sprinting_person,
-            workoutTypeEnum = WorkoutTypeEnum.CARDIO,
-            date = todayDate,
-            workoutPropertiesModel = WorkoutPropertiesModel.CardioProps(
-                listOf(
-                    CardioModel(
-                        distance = 2.0,
-                        distanceType = CardioDistanceType.KILOMETERS,
-                        time = "3:40",
-                        laps = 2.0
-                    )
-                )
-            )
+    val calisthenics2 = CreateMockDataSample.calisthenicsSample(
+        workoutName = "Mountain Climbers",
+        workoutType = "Calisthenics",
+        workoutSet = arrayOf(
+            CalisthenicsSet().apply {
+                reps = 12
+                sets = 2
+            },
+            CalisthenicsSet().apply {
+                reps = 6
+                sets = 2
+            }
+        )
+    )
+
+    val calisthenics3 = CreateMockDataSample.calisthenicsSample(
+        workoutName = "Medicine Ball Slams",
+        workoutType = "Calisthenics",
+        workoutSet = arrayOf(
+            CalisthenicsSet().apply {
+                reps = 10
+                sets = 4
+            }
+        )
+    )
+
+    val cardio1 = CreateMockDataSample.cardioSample(
+        workoutName = "Running",
+        workoutType = "Cardio",
+        workoutSet = arrayOf(
+            CardioSet().apply {
+                distance = 3.2
+                time = "00:30:00"
+            }
+        )
+    )
+
+    val cardio2 = CreateMockDataSample.cardioSample(
+        workoutName = "Biking",
+        workoutType = "Cardio",
+        workoutSet = arrayOf(
+            CardioSet().apply {
+                distance = 3.2
+                distanceType = CardioDistanceType.KILOMETERS.stringValue
+                time = "00:30:00"
+                laps = 13.0
+            }
         )
     )
 
