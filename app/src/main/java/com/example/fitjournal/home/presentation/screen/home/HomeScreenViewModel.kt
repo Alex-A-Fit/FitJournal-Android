@@ -112,14 +112,10 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             val workoutList = realmUseCase.getRealmWorkoutEntryList()
             if (workoutList.isNotEmpty()) {
-                val workouts =
-                    realmUseCase.convertRealmWorkoutEntryToWorkoutModelUseCase(
-                        workoutList
-                    )
                 updateHomeScreenState(
                     newHomeScreenState = homeScreenState.copy(
-                        listOfWorkouts = workouts,
-                        listOfVisibleWorkouts = createWorkoutUiModel(listOfWorkouts = workouts)
+                        listOfWorkouts = workoutList,
+                        listOfVisibleWorkouts = createWorkoutUiModel(listOfWorkouts = workoutList)
                     )
                 )
             }

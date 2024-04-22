@@ -3,7 +3,7 @@ package com.example.fitjournal.core.data.repository
 import com.example.fitjournal.FitJournal
 import com.example.fitjournal.core.data.mockdata.MockData
 import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
-import com.example.fitjournal.core.data.util.GetLatestQueryViaId
+import com.example.fitjournal.core.data.util.getLatestResultViaQuery
 import com.example.fitjournal.core.domain.repository.RealmRepository
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
@@ -21,13 +21,13 @@ class RealmRepositoryImpl @Inject constructor() : RealmRepository {
             val workouts: RealmList<RealmWorkoutEntry> = realmListOf()
             workouts.addAll(
                 listOf(
-                    MockData.weightTraining1,
-                    MockData.weightTraining2,
-                    MockData.calisthenics1,
-                    MockData.calisthenics2,
-                    MockData.calisthenics3,
-                    MockData.cardio1,
-                    MockData.cardio2
+                    MockData.weightTraining1(org.mongodb.kbson.ObjectId()),
+                    MockData.weightTraining2(org.mongodb.kbson.ObjectId()),
+                    MockData.calisthenics1(org.mongodb.kbson.ObjectId()),
+                    MockData.calisthenics2(org.mongodb.kbson.ObjectId()),
+                    MockData.calisthenics3(org.mongodb.kbson.ObjectId()),
+                    MockData.cardio1(org.mongodb.kbson.ObjectId()),
+                    MockData.cardio2(org.mongodb.kbson.ObjectId())
                 )
             )
             // running for each to simplify adding each individual workout entry
@@ -69,10 +69,10 @@ class RealmRepositoryImpl @Inject constructor() : RealmRepository {
         return realm.write {
             return@write try {
                 var wasUpdateSuccessful = false
-                val originalRealmWorkoutEntry = this.GetLatestQueryViaId(
+                val originalRealmWorkoutEntry = this.getLatestResultViaQuery(
                     searchableClass = RealmWorkoutEntry::class,
                     query = "workoutId == $0",
-                    objectId = updatedRealmWorkoutEntry.workoutId
+                    queryValue = updatedRealmWorkoutEntry.workoutId
                 )
                 if (originalRealmWorkoutEntry != null) {
                     originalRealmWorkoutEntry.workout = updatedRealmWorkoutEntry.workout
@@ -96,10 +96,10 @@ class RealmRepositoryImpl @Inject constructor() : RealmRepository {
         return realm.write {
             return@write try {
                 var wasWorkoutDeleted: Boolean = false
-                this.GetLatestQueryViaId(
+                this.getLatestResultViaQuery(
                     searchableClass = RealmWorkoutEntry::class,
                     query = "workoutId == $0",
-                    objectId = realmWorkoutEntry.workoutId
+                    queryValue = realmWorkoutEntry.workoutId
                 ).also {
                     wasWorkoutDeleted = if (it != null) {
                         delete(it)

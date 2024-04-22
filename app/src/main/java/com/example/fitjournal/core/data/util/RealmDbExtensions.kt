@@ -4,7 +4,6 @@ import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import io.realm.kotlin.MutableRealm
 import io.realm.kotlin.types.TypedRealmObject
-import org.mongodb.kbson.ObjectId
 import kotlin.reflect.KClass
 
 fun getWorkoutType(workoutType: String?): WorkoutTypeEnum {
@@ -29,26 +28,27 @@ fun <T : TypedRealmObject> MutableRealm.getLatestResult(
     searchableClass: KClass<T>
 ): T? {
     // queries realm db to find a 'frozen' result
-    // frozen meaning: not a live result
-    // next we find the latest version of the result
-    // getting the live result
+    // frozen means: not a live result
+    // next we find the latest version of the result via findLatest
+    // this creates a live result
     // must be called within a realm.write {} or other MutableRealm fn
     val frozenResults = this.query(searchableClass).find().firstOrNull() ?: return null
     return this.findLatest(frozenResults)
 }
 
-fun <T : TypedRealmObject> MutableRealm.GetLatestQueryViaId(
+fun <T : TypedRealmObject> MutableRealm.getLatestResultViaQuery(
     searchableClass: KClass<T>,
     query: String,
-    objectId: ObjectId
+    queryValue: Any
 ): T? {
-    // queries realm db to find a 'frozen' result
-    // frozen meaning: not a live result
+    // queries realm db to find a 'frozen' result via query inputted
+    // queryValue is value used when comparing query
+    // frozen means: not a live result
     // next we find the latest version of the result
-    // getting the live result
+    // this creates a live result
     // must be called within a realm.write {} or other MutableRealm fn
     val frozenResults = this
-        .query(searchableClass, query, objectId)
+        .query(searchableClass, query, queryValue)
         .find()
         .firstOrNull() ?: return null
     return this.findLatest(frozenResults)

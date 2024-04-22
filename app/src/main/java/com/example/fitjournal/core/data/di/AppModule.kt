@@ -3,7 +3,6 @@ package com.example.fitjournal.core.data.di
 import com.example.fitjournal.core.data.repository.RealmRepositoryImpl
 import com.example.fitjournal.core.domain.repository.RealmRepository
 import com.example.fitjournal.core.domain.usecase.realm.AddSingleWorkoutEntryToRealmDbUseCase
-import com.example.fitjournal.core.domain.usecase.realm.ConvertRealmWorkoutEntryToWorkoutModelUseCase
 import com.example.fitjournal.core.domain.usecase.realm.CreateMockDataInRealmUseCase
 import com.example.fitjournal.core.domain.usecase.realm.DeleteWorkoutEntryFromRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.GetRealmWorkoutEntryList
@@ -45,8 +44,7 @@ object AppModule {
             ),
             deleteWorkoutEntryFromRealmDbUseCase = DeleteWorkoutEntryFromRealmDbUseCase(
                 realmRepository = realmRepository
-            ),
-            convertRealmWorkoutEntryToWorkoutModelUseCase = ConvertRealmWorkoutEntryToWorkoutModelUseCase()
+            )
         )
     }
 }

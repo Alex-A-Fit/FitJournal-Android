@@ -6,8 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutModel
+import com.example.fitjournal.core.data.mockdata.MockData
 import com.example.fitjournal.core.domain.mapper.MapToWorkoutUiModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.domain.usecase.realm.RealmUseCase
@@ -33,12 +32,7 @@ class StatisticsViewModel @Inject constructor(
     fun addSingleObjectToDb() {
         viewModelScope.launch(Dispatchers.IO) {
             val didUpdateWork = realmUseCase.addSingleWorkoutEntryToRealmDbUseCase(
-                realmWorkoutEntry = RealmWorkoutEntry().apply {
-                    workout = RealmWorkoutModel().apply {
-                        name = "NEW WORKOUT"
-                        type = "Cardio"
-                    }
-                }
+                realmWorkoutEntry = MockData.weightTraining1(org.mongodb.kbson.ObjectId())
             )
             Log.d("Realm Updates", "Realm Added new entry $didUpdateWork")
         }
@@ -48,14 +42,10 @@ class StatisticsViewModel @Inject constructor(
         viewModelScope.launch {
             val workoutList = realmUseCase.getRealmWorkoutEntryList()
             if (workoutList.isNotEmpty()) {
-                val workouts =
-                    realmUseCase.convertRealmWorkoutEntryToWorkoutModelUseCase(
-                        workoutList
-                    )
                 updateStatisticsScreenState(
                     newStatisticsScreenState = statisticsScreenState.copy(
-                        workoutModelList = workouts,
-                        workoutList = createWorkoutUiModel(listOfWorkouts = workouts)
+                        workoutModelList = workoutList,
+                        workoutList = createWorkoutUiModel(listOfWorkouts = workoutList)
                     )
                 )
             }
@@ -108,12 +98,12 @@ class StatisticsViewModel @Inject constructor(
 
     fun deleteWorkoutEntry(
         getString: (Int) -> String
-    ){
+    ) {
         if (statisticsScreenState.workoutModelList.isNotEmpty()) {
             val workoutEntryToBeDeleted = statisticsScreenState.workoutModelList[0]
-                val realmEntryToDelete = workoutEntryToBeDeleted.toRealmWorkoutEntry(
-                    workoutType = getString(workoutEntryToBeDeleted.workoutTypeEnum.stringId)
-                )
+            val realmEntryToDelete = workoutEntryToBeDeleted.toRealmWorkoutEntry(
+                workoutType = getString(workoutEntryToBeDeleted.workoutTypeEnum.stringId)
+            )
             viewModelScope.launch {
                 val wasDeleteSuccessful = realmUseCase.deleteWorkoutEntryFromRealmDbUseCase(
                     realmWorkoutEntry = realmEntryToDelete
@@ -121,10 +111,10 @@ class StatisticsViewModel @Inject constructor(
                 if (wasDeleteSuccessful) {
                     getDataFromRealmDb()
                 }
-                Log.d("Realm Updates", "Realm entry $realmEntryToDelete was deleted" )
+                Log.d("Realm Updates", "Realm entry $realmEntryToDelete was deleted")
             }
         } else {
-            Log.d("Realm Updates", "Realm did NOT delete realm entry" )
+            Log.d("Realm Updates", "Realm did NOT delete realm entry")
         }
     }
 }

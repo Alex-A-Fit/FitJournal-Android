@@ -6,7 +6,6 @@ import com.example.fitjournal.core.data.model.realmdb.CardioSet
 import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
 import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutModel
 import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutProperties
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkouts
 import com.example.fitjournal.core.data.model.realmdb.StrengthTrainingSet
 import dagger.hilt.android.HiltAndroidApp
 import io.realm.kotlin.Realm
@@ -26,7 +25,6 @@ class FitJournal : Application() {
                     RealmWorkoutProperties::class,
                     RealmWorkoutModel::class,
                     RealmWorkoutEntry::class,
-                    RealmWorkouts::class,
                     StrengthTrainingSet::class,
                     CalisthenicsSet::class,
                     CardioSet::class
