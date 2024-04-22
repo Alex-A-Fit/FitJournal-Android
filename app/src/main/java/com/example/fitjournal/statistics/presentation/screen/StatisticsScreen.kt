@@ -41,7 +41,7 @@ fun StatisticsScreen(
                 .padding(all = Spacing.spacing16)
                 .background(Color.Blue, RoundedCornerShape(Spacing.spacing8))
         ) {
-            Text(text = "ADD Single Realm Obj")
+            Text(text = "Add new entry to bottom of list")
         }
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         Button(
@@ -51,7 +51,7 @@ fun StatisticsScreen(
                 .padding(all = Spacing.spacing16)
                 .background(Color.Blue, RoundedCornerShape(Spacing.spacing8))
         ) {
-            Text(text = "Update Single Realm Obj")
+            Text(text = "Update First Workout Entry")
         }
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         Button(
