@@ -161,7 +161,7 @@ private fun FilterCheckboxItem(
     workout: FilterWorkoutUiModel,
     onFilterCheckboxChanged: (WorkoutTypeEnum, Boolean) -> Unit
 ) {
-    val workoutName = stringResource(id = workout.exerciseType.stringValue)
+    val workoutName = stringResource(id = workout.exerciseType.stringId)
     var isFilterSelected by remember {
         mutableStateOf(workout.isWorkoutSelected)
     }

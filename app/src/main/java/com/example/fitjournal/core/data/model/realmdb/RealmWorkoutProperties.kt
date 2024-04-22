@@ -5,7 +5,7 @@ import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.EmbeddedRealmObject
 import io.realm.kotlin.types.RealmList
 
-class WorkoutProperties : EmbeddedRealmObject {
+class RealmWorkoutProperties : EmbeddedRealmObject {
     var listOfWeightLiftingSets: RealmList<StrengthTrainingSet> = realmListOf()
     var listOfCardioSets: RealmList<CardioSet> = realmListOf()
     var listOfCalisthenicsSet: RealmList<CalisthenicsSet> = realmListOf()

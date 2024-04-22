@@ -7,6 +7,7 @@ sealed class HomeScreenEvents {
     data object DismissDatePicker : HomeScreenEvents()
     data object DismissFilterExercisesDialog : HomeScreenEvents()
     data object CollectRealmWorkoutEntryFromDb : HomeScreenEvents()
+    data object SyncRealmWorkoutEntryFromDb : HomeScreenEvents()
     data class OnConfirmFilterExercisesDialog(val filterList: List<WorkoutTypeEnum>) : HomeScreenEvents()
     data class SelectDateFromDatePicker(
         val userSelectedDate: Long,

@@ -2,8 +2,8 @@ package com.example.fitjournal.core.presentation.model.enums
 
 import com.example.fitjournal.R
 
-enum class WorkoutTypeEnum(val stringValue: Int) {
-    WEIGHT_TRAINING(stringValue = R.string.title_weight_training),
-    CALISTHENICS(stringValue = R.string.title_calisthenics),
-    CARDIO(stringValue = R.string.title_cardio)
+enum class WorkoutTypeEnum(val stringId: Int) {
+    WEIGHT_TRAINING(stringId = R.string.title_weight_training),
+    CALISTHENICS(stringId = R.string.title_calisthenics),
+    CARDIO(stringId = R.string.title_cardio)
 }

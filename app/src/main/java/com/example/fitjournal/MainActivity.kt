@@ -40,6 +40,8 @@ import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
+import com.example.fitjournal.statistics.presentation.screen.StatisticsScreen
+import com.example.fitjournal.statistics.presentation.screen.StatisticsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,6 +50,7 @@ class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
     private val homeViewModel: HomeScreenViewModel by viewModels()
     private val libraryScreenViewModel: LibraryScreenViewModel by viewModels()
+    private val statisticsViewModel: StatisticsViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -192,12 +195,29 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 snackBarHostState = snackBarState,
                                 mainScreen = { mainScreenModifier ->
-//                                    HomeScreen(
-//                                        modifier = mainScreenModifier,
-//                                        homeScreenState = homeViewModel.homeScreenState,
-//                                        homeScreenEvents = ::homeScreenEvents,
-//                                        snackBarHostState = snackState
-//                                        )
+                                    StatisticsScreen(
+                                        addSingleRealmObj = {
+                                            statisticsViewModel.addSingleObjectToDb()
+                                        },
+                                        updateSingleRealmObj = {
+                                            // Dummy values for now.
+                                            // Actual impl we would need to get correct index
+                                            // and associated workout type for the given workout
+                                            statisticsViewModel.updateSingleObjectToDb(
+                                                updatedItemIndex = 0,
+                                                workoutType = "Weight Training"
+                                            )
+                                        },
+                                        statisticsScreenState = statisticsViewModel.statisticsScreenState,
+                                        getWorkoutEntryList = { statisticsViewModel.getDataFromRealmDb() },
+                                        deleteWorkoutEntry = {
+                                            statisticsViewModel.deleteWorkoutEntry(
+                                                getString = { stringId ->
+                                                    getString(stringId)
+                                                }
+                                            )
+                                        }
+                                    )
                                 },
                                 topAppBar = {
                                     TopAppBar(
@@ -291,7 +311,8 @@ class MainActivity : ComponentActivity() {
                 events.filterList
             )
 
-            HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> homeViewModel.collectRealmWorkoutEntryFromDb()
+            HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> homeViewModel.getDataFromRealmDb()
+            HomeScreenEvents.SyncRealmWorkoutEntryFromDb -> homeViewModel.getDataFromRealmDb()
         }
     }
 
@@ -321,39 +342,41 @@ class MainActivity : ComponentActivity() {
             duration = SnackbarDuration.Short
         )
     }
-}
 
-private fun navigateToDestination(
-    navigationInterface: NavigationInterface,
-    navController: NavController
-) {
-    when (navigationInterface) {
-        NavigationInterface.NavigateToHome -> {
-            navigationEvent(
-                navigationInterface,
-                navController = navController
-            )
-        }
+    private fun navigateToDestination(
+        navigationInterface: NavigationInterface,
+        navController: NavController
+    ) {
+        when (navigationInterface) {
+            NavigationInterface.NavigateToHome -> {
+                homeViewModel.clearUiState()
+                navigationEvent(
+                    navigationInterface,
+                    navController = navController
+                )
+            }
 
-        NavigationInterface.NavigateToWorkoutLibrary -> {
-            navigationEvent(
-                navigationInterface,
-                navController = navController
-            )
-        }
+            NavigationInterface.NavigateToWorkoutLibrary -> {
+                navigationEvent(
+                    navigationInterface,
+                    navController = navController
+                )
+            }
 
-        NavigationInterface.NavigateToWorkoutStatistics -> {
-            navigationEvent(
-                navigationInterface,
-                navController = navController
-            )
-        }
+            NavigationInterface.NavigateToWorkoutStatistics -> {
+                statisticsViewModel.clearUiState()
+                navigationEvent(
+                    navigationInterface,
+                    navController = navController
+                )
+            }
 
-        NavigationInterface.NavigateToJournalEntry -> {
-            navigationEvent(
-                navigationInterface,
-                navController = navController
-            )
+            NavigationInterface.NavigateToJournalEntry -> {
+                navigationEvent(
+                    navigationInterface,
+                    navController = navController
+                )
+            }
         }
     }
 }
