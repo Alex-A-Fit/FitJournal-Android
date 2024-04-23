@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.data.model.realmdb
+package com.example.fitjournal.core.data.model.realmdb.workout
 
 import io.realm.kotlin.types.EmbeddedRealmObject
 

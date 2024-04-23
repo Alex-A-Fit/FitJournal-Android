@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.data.model.realmdb
+package com.example.fitjournal.core.data.model.realmdb.workout
 
 import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import io.realm.kotlin.types.RealmObject

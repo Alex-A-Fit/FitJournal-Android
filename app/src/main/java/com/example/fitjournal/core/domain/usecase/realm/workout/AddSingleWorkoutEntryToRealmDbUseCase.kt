@@ -1,6 +1,6 @@
-package com.example.fitjournal.core.domain.usecase.realm
+package com.example.fitjournal.core.domain.usecase.realm.workout
 
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
 import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
 import javax.inject.Inject
 
