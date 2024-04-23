@@ -65,7 +65,7 @@ object CreateMockDataSample {
         }
     }
 
-    fun libraryItemSample(
+    private fun libraryItemSample(
         workoutName: String,
         workoutType: String
     ): RealmWorkoutLibrary {
