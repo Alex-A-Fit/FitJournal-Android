@@ -1,11 +1,12 @@
 package com.example.fitjournal.core.data.mockdata.helper
 
-import com.example.fitjournal.core.data.model.realmdb.CalisthenicsSet
-import com.example.fitjournal.core.data.model.realmdb.CardioSet
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkout
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutProperties
-import com.example.fitjournal.core.data.model.realmdb.StrengthTrainingSet
+import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
+import com.example.fitjournal.core.data.model.realmdb.workout.CalisthenicsSet
+import com.example.fitjournal.core.data.model.realmdb.workout.CardioSet
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkout
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutProperties
+import com.example.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
 import io.realm.kotlin.ext.toRealmList
 import org.mongodb.kbson.ObjectId
 
@@ -61,6 +62,16 @@ object CreateMockDataSample {
                 }
             }
             workoutId = objectId
+        }
+    }
+
+    fun libraryItemSample(
+        workoutName: String,
+        workoutType: String
+    ): RealmWorkoutLibrary {
+        return RealmWorkoutLibrary().apply {
+            name = workoutName
+            type = workoutType
         }
     }
 }

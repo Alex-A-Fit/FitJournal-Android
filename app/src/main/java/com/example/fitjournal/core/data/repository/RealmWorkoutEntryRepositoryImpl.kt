@@ -2,7 +2,7 @@ package com.example.fitjournal.core.data.repository
 
 import com.example.fitjournal.FitJournal
 import com.example.fitjournal.core.data.mockdata.MockData
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
 import com.example.fitjournal.core.data.util.getLatestResultViaQuery
 import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
 import io.realm.kotlin.UpdatePolicy
@@ -12,7 +12,7 @@ import io.realm.kotlin.ext.toRealmList
 import io.realm.kotlin.types.RealmList
 import javax.inject.Inject
 
-class RealmWorkoutEntryWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryRepository {
+class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryRepository {
     private val realm = FitJournal.realm
 
     override suspend fun addMockDataToRealm() {

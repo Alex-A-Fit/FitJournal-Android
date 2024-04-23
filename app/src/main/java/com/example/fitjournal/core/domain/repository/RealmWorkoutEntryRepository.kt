@@ -1,6 +1,6 @@
 package com.example.fitjournal.core.domain.repository
 
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
 
 interface RealmWorkoutEntryRepository {
     suspend fun addMockDataToRealm()

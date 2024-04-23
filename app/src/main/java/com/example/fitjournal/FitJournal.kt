@@ -1,12 +1,13 @@
 package com.example.fitjournal
 
 import android.app.Application
-import com.example.fitjournal.core.data.model.realmdb.CalisthenicsSet
-import com.example.fitjournal.core.data.model.realmdb.CardioSet
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkout
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutProperties
-import com.example.fitjournal.core.data.model.realmdb.StrengthTrainingSet
+import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
+import com.example.fitjournal.core.data.model.realmdb.workout.CalisthenicsSet
+import com.example.fitjournal.core.data.model.realmdb.workout.CardioSet
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkout
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutProperties
+import com.example.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
 import dagger.hilt.android.HiltAndroidApp
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
@@ -27,7 +28,8 @@ class FitJournal : Application() {
                     RealmWorkoutEntry::class,
                     StrengthTrainingSet::class,
                     CalisthenicsSet::class,
-                    CardioSet::class
+                    CardioSet::class,
+                    RealmWorkoutLibrary::class
                 )
             )
         )

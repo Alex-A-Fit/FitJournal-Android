@@ -1,10 +1,11 @@
 package com.example.fitjournal.core.data.mockdata
 
 import com.example.fitjournal.core.data.mockdata.helper.CreateMockDataSample
-import com.example.fitjournal.core.data.model.realmdb.CalisthenicsSet
-import com.example.fitjournal.core.data.model.realmdb.CardioSet
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
-import com.example.fitjournal.core.data.model.realmdb.StrengthTrainingSet
+import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
+import com.example.fitjournal.core.data.model.realmdb.workout.CalisthenicsSet
+import com.example.fitjournal.core.data.model.realmdb.workout.CardioSet
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
+import com.example.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import org.mongodb.kbson.ObjectId
 
@@ -123,27 +124,13 @@ object MockData {
             objectId = objectId
         )
     }
-
-    val libraryWorkoutList = listOf(
-        "Bench",
-        "Squats",
-        "Lateral Raises",
-        "Elevated Goblet Squats",
-        "Burpees",
-        "Bicep Curls",
-        "Box Jumps",
-        "Mountain Climbers",
-        "Medicine Ball Slams",
-        "Mountain Pose",
-        "Modified Push-Ups",
-        "Mason Twist",
-        "Monkey Bars",
-        "Modified Burpees",
-        "Lunges",
-        "Leg Press",
-        "Lat Pulldowns",
-        "Lying leg curls",
-        "L-sit",
-        "LandMine Twists"
-    )
+    val libraryItem = fun(
+        name: String,
+        type: String
+    ): RealmWorkoutLibrary {
+        return CreateMockDataSample.libraryItemSample(
+            workoutName = name,
+            workoutType = type
+        )
+    }
 }

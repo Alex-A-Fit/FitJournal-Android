@@ -1,7 +1,7 @@
 package com.example.fitjournal.statistics.domain.mapper
 
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkout
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkout
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
 import com.example.fitjournal.core.domain.mapper.mapWorkoutPropsToRealmWorkoutProps
 import com.example.fitjournal.core.domain.model.WorkoutModel
 

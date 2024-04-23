@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.data.model.realmdb
+package com.example.fitjournal.core.data.model.realmdb.workout
 
 class RealmGroupOfWorkouts {
     // This will be used to create workout groups
