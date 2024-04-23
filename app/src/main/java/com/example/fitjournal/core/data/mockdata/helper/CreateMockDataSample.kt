@@ -79,7 +79,7 @@ object CreateMockDataSample {
         name: String,
         type: String
     ): RealmWorkoutLibrary {
-        return CreateMockDataSample.libraryItemSample(
+        return libraryItemSample(
             workoutName = name,
             workoutType = type
         )
