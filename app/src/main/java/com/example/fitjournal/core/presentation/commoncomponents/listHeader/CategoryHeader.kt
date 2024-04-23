@@ -1,4 +1,4 @@
-package com.example.fitjournal.library.presentation.screen.library.components
+package com.example.fitjournal.core.presentation.commoncomponents.listHeader
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -35,7 +35,7 @@ fun CategoryHeader(
             modifier = modifier
                 .fillMaxWidth()
                 .background(gradient)
-                .padding(start = Spacing.spacing16)
+                .padding(start = Spacing.spacing16, top = Spacing.spacing2, bottom = Spacing.spacing2)
         )
     }
 }

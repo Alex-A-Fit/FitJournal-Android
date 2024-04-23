@@ -11,8 +11,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.fitjournal.core.presentation.commoncomponents.listHeader.CategoryHeader
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.library.presentation.screen.library.components.CategoryHeader
 import com.example.fitjournal.library.presentation.screen.library.components.ExerciseItem
 import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory
 
