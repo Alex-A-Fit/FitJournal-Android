@@ -1,11 +1,11 @@
 package com.example.fitjournal.home.presentation.screen.home
 
-import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.domain.managers.DateManager
@@ -17,6 +17,7 @@ import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.model.state.HomeScreenUiState
 import com.example.fitjournal.home.presentation.model.ui.FilterWorkoutUiModel
+import com.example.fitjournal.home.presentation.util.filter.HomeScreenFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,15 +32,21 @@ class HomeScreenViewModel @Inject constructor(
     fun getNextDate() {
         val nextDay = DateManager.getNextDate(homeScreenState.currentDateTime)
         val nextDayInMilliseconds = DateManager.getTimeInMilliseconds(nextDay.localDateTime)
+
+        val filterListByDate = HomeScreenFilter.filterWorkoutByDate(
+            workoutList = homeScreenState.masterListOfWorkouts ?: emptyList(),
+            dateToFilterBy = nextDay.localDateString
+        )
         updateHomeScreenState(
             newHomeScreenState = homeScreenState.copy(
                 currentDate = nextDay.localDateString,
                 currentDateTime = nextDay.localDateTime,
                 currentDateInMillis = nextDayInMilliseconds,
-                listOfVisibleWorkouts = createWorkoutUiModel(
-                    listOfWorkouts = homeScreenState.listOfWorkouts ?: emptyList(),
-                    dateToFilterBy = nextDay.localDateString
-                )
+                listOfVisibleWorkoutsUiState = createWorkoutUiModel(
+                    workoutList = filterListByDate,
+                    filterList = homeScreenState.filterList
+                ),
+                currentDateListOfWorkouts = filterListByDate
             )
         )
     }
@@ -47,15 +54,21 @@ class HomeScreenViewModel @Inject constructor(
     fun getPreviousDate() {
         val previousDay = DateManager.getPreviousDate(homeScreenState.currentDateTime)
         val previousDayInMilliseconds = DateManager.getTimeInMilliseconds(previousDay.localDateTime)
+
+        val filterListByDate = HomeScreenFilter.filterWorkoutByDate(
+            workoutList = homeScreenState.masterListOfWorkouts ?: emptyList(),
+            dateToFilterBy = previousDay.localDateString
+        )
         updateHomeScreenState(
             newHomeScreenState = homeScreenState.copy(
                 currentDate = previousDay.localDateString,
                 currentDateTime = previousDay.localDateTime,
                 currentDateInMillis = previousDayInMilliseconds,
-                listOfVisibleWorkouts = createWorkoutUiModel(
-                    listOfWorkouts = homeScreenState.listOfWorkouts ?: emptyList(),
-                    dateToFilterBy = previousDay.localDateString
-                )
+                listOfVisibleWorkoutsUiState = createWorkoutUiModel(
+                    workoutList = filterListByDate,
+                    filterList = homeScreenState.filterList
+                ),
+                currentDateListOfWorkouts = filterListByDate
             )
         )
     }
@@ -70,15 +83,20 @@ class HomeScreenViewModel @Inject constructor(
         val selectedDate = DateManager.getSelectedDate(
             dateInMillis
         )
+        val filterListByDate = HomeScreenFilter.filterWorkoutByDate(
+            workoutList = homeScreenState.masterListOfWorkouts ?: emptyList(),
+            dateToFilterBy = selectedDate.localDateString
+        )
         updateHomeScreenState(
             newHomeScreenState = homeScreenState.copy(
                 currentDateTime = selectedDate.localDateTime,
                 currentDate = selectedDate.localDateString,
                 currentDateInMillis = dateInMillis,
-                listOfVisibleWorkouts = createWorkoutUiModel(
-                    listOfWorkouts = homeScreenState.listOfWorkouts ?: emptyList(),
-                    dateToFilterBy = selectedDate.localDateString
-                )
+                listOfVisibleWorkoutsUiState = createWorkoutUiModel(
+                    workoutList = filterListByDate,
+                    filterList = homeScreenState.filterList
+                ),
+                currentDateListOfWorkouts = filterListByDate
             )
         )
     }
@@ -95,58 +113,77 @@ class HomeScreenViewModel @Inject constructor(
         homeScreenState = newHomeScreenState
     }
 
-    fun filterWorkouts(filteredWorkoutList: List<WorkoutTypeEnum>) {
-        val currentFilterList = homeScreenState.filterDialogList
+    fun clearFilter() {
+        updateHomeScreenState(
+            newHomeScreenState = homeScreenState.copy(
+                filterList = HomeScreenFilter.filterList
+            )
+        )
+    }
+
+    fun filterWorkouts(
+        filteredWorkoutList: List<WorkoutTypeEnum>
+    ) {
+        val currentFilterList = homeScreenState.filterList
         // Adjust the filter list with the passed in parameter values
         val newFilteredList = currentFilterList.map {
             FilterWorkoutUiModel(
-                isWorkoutSelected = filteredWorkoutList.contains(it.exerciseType),
+                isWorkoutFilterSelected = filteredWorkoutList.contains(it.exerciseType),
                 exerciseType = it.exerciseType
             )
-        }
-        updateHomeScreenState(newHomeScreenState = homeScreenState.copy(filterDialogList = newFilteredList))
-        // TODO("WE would want to now filter out the visible cards ")
-        Log.d(
-            "filter",
-            "Filter works. List of cards should now show exercises based on filter enum types: $filteredWorkoutList"
+        }.toMutableStateList()
+        updateHomeScreenState(
+            newHomeScreenState = homeScreenState.copy(
+                filterList = newFilteredList,
+                listOfVisibleWorkoutsUiState = createWorkoutUiModel(
+                    workoutList = homeScreenState.currentDateListOfWorkouts,
+                    filterList = newFilteredList
+                )
+            )
         )
     }
 
     private fun createWorkoutUiModel(
-        listOfWorkouts: List<WorkoutModel>,
-        dateToFilterBy: String
+        workoutList: List<WorkoutModel>,
+        filterList: List<FilterWorkoutUiModel>
     ): UiState<List<WorkoutUiModel>> {
-        if (listOfWorkouts.isEmpty()) return UiState.Empty
-        val workoutsFilteredByDate = filterWorkoutByDate(
-            listOfWorkouts,
-            dateToFilterBy
+        if (workoutList.isEmpty()) return UiState.Empty
+        val filteredWorkoutListByWorkoutType = HomeScreenFilter.filterWorkoutByEnumType(
+            workoutList = workoutList,
+            filterList = filterList
         )
-        val workoutsMapped = workoutsFilteredByDate.map {
+        if (filteredWorkoutListByWorkoutType.isEmpty()) return UiState.Empty
+        val workoutsMapped = filteredWorkoutListByWorkoutType.map {
             it.mapToWorkoutUiModel()
         }
         return UiState.Success(workoutsMapped)
     }
 
-    private fun filterWorkoutByDate(
-        workoutList: List<WorkoutModel>,
-        dateToFilterBy: String
-    ): List<WorkoutModel> {
-        return workoutList.filter {
-            it.date == dateToFilterBy
-        }
-    }
-
+    // should be call on load or when needed for loading screen
     fun getDataFromRealmDb() {
         viewModelScope.launch {
-            val workoutList = realmWorkoutEntryUseCase.getRealmWorkoutEntryList()
-            if (workoutList.isNotEmpty()) {
+            val masterWorkoutList = realmWorkoutEntryUseCase.getRealmWorkoutEntryList()
+            if (masterWorkoutList.isNotEmpty()) {
+                val workoutListForCurrentDay = HomeScreenFilter.filterWorkoutByDate(
+                    workoutList = masterWorkoutList,
+                    dateToFilterBy = homeScreenState.currentDate
+                )
                 updateHomeScreenState(
                     newHomeScreenState = homeScreenState.copy(
-                        listOfWorkouts = workoutList,
-                        listOfVisibleWorkouts = createWorkoutUiModel(
-                            listOfWorkouts = workoutList,
-                            dateToFilterBy = homeScreenState.currentDate
-                        )
+                        masterListOfWorkouts = masterWorkoutList,
+                        listOfVisibleWorkoutsUiState = createWorkoutUiModel(
+                            workoutList = workoutListForCurrentDay,
+                            filterList = homeScreenState.filterList
+                        ),
+                        currentDateListOfWorkouts = workoutListForCurrentDay
+                    )
+                )
+            } else {
+                updateHomeScreenState(
+                    newHomeScreenState = homeScreenState.copy(
+                        masterListOfWorkouts = emptyList(),
+                        listOfVisibleWorkoutsUiState = UiState.Empty,
+                        currentDateListOfWorkouts = emptyList()
                     )
                 )
             }
@@ -157,7 +194,7 @@ class HomeScreenViewModel @Inject constructor(
         updateHomeScreenState(
             newHomeScreenState =
             homeScreenState.copy(
-                listOfVisibleWorkouts = UiState.None
+                listOfVisibleWorkoutsUiState = UiState.None
             )
         )
     }

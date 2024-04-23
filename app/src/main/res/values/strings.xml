@@ -28,8 +28,6 @@
     <string name="subtitle_create_new_workout">Create a new workout to add to your library</string>
 
     // General Strings
-    <string name="text_dismiss">Dismiss</string>
-    <string name="text_confirm">Confirm</string>
     <string name="text_total_distance_traveled">Total Distance traveled: %1$s %2$s</string>
     <string name="text_total_time_elapsed">Total Time Elapsed: %1$s</string>
     <string name="text_total_reps">Total Reps: %1$s</string>
@@ -37,6 +35,7 @@
     <string name="text_total_weight">Total Weight: %1$s</string>
     <string name="text_view_workout_details">Click to view/edit workout</string>
     <string name="text_add_to_journal">Add to Journal</string>
+    <string name="text_clear_filter">Clear Filter</string>
     <string name="text_add_to_library">Add to Library</string>
     <string name="text_workout_name_placeholder">Ex: Jumping Jacks</string>
     <string name="text_library_tab_bar_icon">"Library</string>
@@ -51,6 +50,7 @@
 
     // Button Strings
     <string name="button_cancel">Cancel</string>
+    <string name="button_confirm">Confirm</string>
     <string name="button_create_workout">Create Workout</string>
 
     // Success Strings

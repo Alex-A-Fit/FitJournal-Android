@@ -40,8 +40,8 @@ fun HomeScreen(
     isBlurActive: Boolean,
     homeScreenEvents: (HomeScreenEvents) -> Unit
 ) {
-    LaunchedEffect(key1 = homeScreenState.listOfVisibleWorkouts) {
-        when (homeScreenState.listOfVisibleWorkouts) {
+    LaunchedEffect(key1 = homeScreenState.listOfVisibleWorkoutsUiState) {
+        when (homeScreenState.listOfVisibleWorkoutsUiState) {
             UiState.None -> {
                 homeScreenEvents(HomeScreenEvents.CollectRealmWorkoutEntryFromDb)
             }
@@ -81,7 +81,7 @@ fun HomeScreen(
         if (isFilterDialogShowing) {
             FilterWorkoutTypeDialog(
                 properties = DialogProperties(),
-                workoutList = homeScreenState.filterDialogList,
+                filterList = homeScreenState.filterList,
                 onDismissDialog = {
                     homeScreenEvents(HomeScreenEvents.DismissFilterExercisesDialog)
                 },
@@ -91,10 +91,13 @@ fun HomeScreen(
                             listOfWorkoutTypes
                         )
                     )
+                },
+                clearFilterList = {
+                    homeScreenEvents(HomeScreenEvents.ClearFilterExercisesDialog)
                 }
             )
         }
-        when (val workoutList = homeScreenState.listOfVisibleWorkouts) {
+        when (val workoutList = homeScreenState.listOfVisibleWorkoutsUiState) {
             UiState.Loading -> {
                 // need to provide loading animation of some sorts
                 Unit

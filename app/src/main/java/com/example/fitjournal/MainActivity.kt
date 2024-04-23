@@ -311,6 +311,8 @@ class MainActivity : ComponentActivity() {
                 events.filterList
             )
 
+            HomeScreenEvents.ClearFilterExercisesDialog -> homeViewModel.clearFilter()
+
             HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> homeViewModel.getDataFromRealmDb()
             HomeScreenEvents.SyncRealmWorkoutEntryFromDb -> homeViewModel.getDataFromRealmDb()
         }
