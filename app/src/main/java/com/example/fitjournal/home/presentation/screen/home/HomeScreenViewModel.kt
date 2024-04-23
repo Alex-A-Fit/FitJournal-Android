@@ -35,7 +35,11 @@ class HomeScreenViewModel @Inject constructor(
             newHomeScreenState = homeScreenState.copy(
                 currentDate = nextDay.localDateString,
                 currentDateTime = nextDay.localDateTime,
-                currentDateInMillis = nextDayInMilliseconds
+                currentDateInMillis = nextDayInMilliseconds,
+                listOfVisibleWorkouts = createWorkoutUiModel(
+                    listOfWorkouts = homeScreenState.listOfWorkouts ?: emptyList(),
+                    dateToFilterBy = nextDay.localDateString
+                )
             )
         )
     }
@@ -47,7 +51,11 @@ class HomeScreenViewModel @Inject constructor(
             newHomeScreenState = homeScreenState.copy(
                 currentDate = previousDay.localDateString,
                 currentDateTime = previousDay.localDateTime,
-                currentDateInMillis = previousDayInMilliseconds
+                currentDateInMillis = previousDayInMilliseconds,
+                listOfVisibleWorkouts = createWorkoutUiModel(
+                    listOfWorkouts = homeScreenState.listOfWorkouts ?: emptyList(),
+                    dateToFilterBy = previousDay.localDateString
+                )
             )
         )
     }
@@ -66,7 +74,11 @@ class HomeScreenViewModel @Inject constructor(
             newHomeScreenState = homeScreenState.copy(
                 currentDateTime = selectedDate.localDateTime,
                 currentDate = selectedDate.localDateString,
-                currentDateInMillis = dateInMillis
+                currentDateInMillis = dateInMillis,
+                listOfVisibleWorkouts = createWorkoutUiModel(
+                    listOfWorkouts = homeScreenState.listOfWorkouts ?: emptyList(),
+                    dateToFilterBy = selectedDate.localDateString
+                )
             )
         )
     }
@@ -100,12 +112,28 @@ class HomeScreenViewModel @Inject constructor(
         )
     }
 
-    private fun createWorkoutUiModel(listOfWorkouts: List<WorkoutModel>): UiState<List<WorkoutUiModel>> {
+    private fun createWorkoutUiModel(
+        listOfWorkouts: List<WorkoutModel>,
+        dateToFilterBy: String
+    ): UiState<List<WorkoutUiModel>> {
         if (listOfWorkouts.isEmpty()) return UiState.Empty
-        val workoutsMapped = listOfWorkouts.map {
+        val workoutsFilteredByDate = filterWorkoutByDate(
+            listOfWorkouts,
+            dateToFilterBy
+        )
+        val workoutsMapped = workoutsFilteredByDate.map {
             it.mapToWorkoutUiModel()
         }
         return UiState.Success(workoutsMapped)
+    }
+
+    private fun filterWorkoutByDate(
+        workoutList: List<WorkoutModel>,
+        dateToFilterBy: String
+    ): List<WorkoutModel> {
+        return workoutList.filter {
+            it.date == dateToFilterBy
+        }
     }
 
     fun getDataFromRealmDb() {
@@ -115,7 +143,10 @@ class HomeScreenViewModel @Inject constructor(
                 updateHomeScreenState(
                     newHomeScreenState = homeScreenState.copy(
                         listOfWorkouts = workoutList,
-                        listOfVisibleWorkouts = createWorkoutUiModel(listOfWorkouts = workoutList)
+                        listOfVisibleWorkouts = createWorkoutUiModel(
+                            listOfWorkouts = workoutList,
+                            dateToFilterBy = homeScreenState.currentDate
+                        )
                     )
                 )
             }
