@@ -74,4 +74,14 @@ object CreateMockDataSample {
             type = workoutType
         }
     }
+
+    val libraryItem = fun(
+        name: String,
+        type: String
+    ): RealmWorkoutLibrary {
+        return CreateMockDataSample.libraryItemSample(
+            workoutName = name,
+            workoutType = type
+        )
+    }
 }
