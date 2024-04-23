@@ -9,7 +9,7 @@ import java.time.LocalDate
 class RealmWorkoutEntry : RealmObject {
     @PrimaryKey
     var workoutId: ObjectId = ObjectId()
-    var workout: RealmWorkoutModel? = null
+    var workout: RealmWorkout? = null
 
     // time should be in MMM dd, yyyy format
     var timeStamp: String = LocalDate.now().formatToCommonDate()

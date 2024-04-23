@@ -114,34 +114,35 @@ fun HomeScreen(
                     contentPadding = PaddingValues(all = Spacing.spacing16)
                 ) {
                     items(items = workoutList.data) { workout ->
-                        when (workout.workoutType) {
+                        when (workout.workoutDetailsUiModel.workoutType) {
                             WorkoutTypeEnum.WEIGHT_TRAINING -> {
                                 WeightLiftingCard(
-                                    reps = workout.exerciseCardModel.reps,
-                                    weight = workout.exerciseCardModel.weight,
-                                    name = workout.exerciseCardModel.name,
-                                    icon = workout.exerciseCardModel.icon,
-                                    modifier = Modifier.fillMaxWidth()
+                                    reps = workout.workoutDetailsUiModel.exerciseCardModel.reps,
+                                    weight = workout.workoutDetailsUiModel.exerciseCardModel.weight,
+                                    name = workout.workoutDetailsUiModel.name,
+                                    icon = workout.workoutDetailsUiModel.icon,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    sets = workout.workoutDetailsUiModel.exerciseCardModel.sets
                                 )
                             }
 
                             WorkoutTypeEnum.CALISTHENICS -> {
                                 CalisthenicsCard(
-                                    reps = workout.exerciseCardModel.reps,
-                                    time = workout.exerciseCardModel.time,
-                                    name = workout.exerciseCardModel.name,
-                                    icon = workout.exerciseCardModel.icon,
+                                    reps = workout.workoutDetailsUiModel.exerciseCardModel.reps,
+                                    time = workout.workoutDetailsUiModel.exerciseCardModel.time,
+                                    name = workout.workoutDetailsUiModel.name,
+                                    icon = workout.workoutDetailsUiModel.icon,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             }
 
                             WorkoutTypeEnum.CARDIO -> {
                                 CardioCard(
-                                    name = workout.exerciseCardModel.name,
-                                    icon = workout.exerciseCardModel.icon,
-                                    distance = workout.exerciseCardModel.distance,
-                                    distanceType = workout.exerciseCardModel.distanceType,
-                                    time = workout.exerciseCardModel.time,
+                                    name = workout.workoutDetailsUiModel.name,
+                                    icon = workout.workoutDetailsUiModel.icon,
+                                    distance = workout.workoutDetailsUiModel.exerciseCardModel.distance,
+                                    distanceType = workout.workoutDetailsUiModel.exerciseCardModel.distanceType,
+                                    time = workout.workoutDetailsUiModel.exerciseCardModel.time,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             }

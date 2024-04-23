@@ -1,12 +1,12 @@
 package com.example.fitjournal.core.domain.usecase.realm
 
-import com.example.fitjournal.core.domain.repository.RealmRepository
+import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
 import javax.inject.Inject
 
 class CreateMockDataInRealmUseCase @Inject constructor(
-    private val realmRepository: RealmRepository
+    private val realmWorkoutEntryRepository: RealmWorkoutEntryRepository
 ) {
     suspend operator fun invoke() {
-        realmRepository.addMockDataToRealm()
+        realmWorkoutEntryRepository.addMockDataToRealm()
     }
 }

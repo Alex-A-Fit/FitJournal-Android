@@ -4,15 +4,16 @@ import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
 import com.example.fitjournal.core.data.util.getWorkoutIcon
 import com.example.fitjournal.core.data.util.getWorkoutType
 import com.example.fitjournal.core.domain.mapper.mapRealmWorkoutPropsToWorkoutPropsModel
+import com.example.fitjournal.core.domain.model.WorkoutDetailsModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
-import com.example.fitjournal.core.domain.repository.RealmRepository
+import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
 import javax.inject.Inject
 
 class GetRealmWorkoutEntryList @Inject constructor(
-    private val realmRepository: RealmRepository
+    private val realmWorkoutEntryRepository: RealmWorkoutEntryRepository
 ) {
     suspend operator fun invoke(): List<WorkoutModel> {
-        val realmList = realmRepository.getRealmWorkoutEntryList()
+        val realmList = realmWorkoutEntryRepository.getRealmWorkoutEntryList()
         return if (realmList.isNotEmpty()) {
             return convertRealmWorkoutEntryToWorkoutModelUseCase(realmList)
         } else {
@@ -28,18 +29,20 @@ private fun convertRealmWorkoutEntryToWorkoutModelUseCase(databaseEntry: List<Re
         val workoutProps = workout?.realmWorkoutProperties
         WorkoutModel(
             id = realmWorkout.workoutId,
-            name = workout?.name.orEmpty(),
-            icon = getWorkoutIcon(workout?.type),
-            workoutTypeEnum = workoutType,
-            date = realmWorkout.timeStamp,
-            workoutPropertiesModel = if (workoutProps == null) {
-                null
-            } else {
-                mapRealmWorkoutPropsToWorkoutPropsModel(
-                    workoutProps = workoutProps,
-                    workoutType = workoutType
-                )
-            }
+            workoutDetailsModel = WorkoutDetailsModel(
+                name = workout?.name.orEmpty(),
+                icon = getWorkoutIcon(workout?.type),
+                workoutTypeEnum = workoutType,
+                workoutPropertiesModel = if (workoutProps != null) {
+                    mapRealmWorkoutPropsToWorkoutPropsModel(
+                        workoutProps = workoutProps,
+                        workoutType = workoutType
+                    )
+                } else {
+                    null
+                }
+            ),
+            date = realmWorkout.timeStamp
         )
     }
     return filterNullOrMissingInfoWorkouts(databaseWorkouts)
@@ -47,6 +50,6 @@ private fun convertRealmWorkoutEntryToWorkoutModelUseCase(databaseEntry: List<Re
 
 private fun filterNullOrMissingInfoWorkouts(workouts: List<WorkoutModel>): List<WorkoutModel> {
     return workouts.filterNot {
-        it.name.isEmpty() || it.workoutPropertiesModel == null
+        it.workoutDetailsModel.name.isEmpty() || it.workoutDetailsModel.workoutPropertiesModel == null
     }
 }

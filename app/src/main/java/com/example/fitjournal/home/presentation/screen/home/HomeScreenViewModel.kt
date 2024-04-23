@@ -9,14 +9,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.domain.managers.DateManager
-import com.example.fitjournal.core.domain.mapper.MapToWorkoutUiModel
+import com.example.fitjournal.core.domain.mapper.mapToWorkoutUiModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.domain.usecase.realm.RealmUseCase
+import com.example.fitjournal.core.presentation.model.WorkoutUiModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.model.state.HomeScreenUiState
 import com.example.fitjournal.home.presentation.model.ui.FilterWorkoutUiModel
-import com.example.fitjournal.home.presentation.model.ui.WorkoutUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -103,7 +103,7 @@ class HomeScreenViewModel @Inject constructor(
     private fun createWorkoutUiModel(listOfWorkouts: List<WorkoutModel>): UiState<List<WorkoutUiModel>> {
         if (listOfWorkouts.isEmpty()) return UiState.Empty
         val workoutsMapped = listOfWorkouts.map {
-            it.MapToWorkoutUiModel()
+            it.mapToWorkoutUiModel()
         }
         return UiState.Success(workoutsMapped)
     }

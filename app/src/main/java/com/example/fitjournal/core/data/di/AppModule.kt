@@ -1,7 +1,7 @@
 package com.example.fitjournal.core.data.di
 
-import com.example.fitjournal.core.data.repository.RealmRepositoryImpl
-import com.example.fitjournal.core.domain.repository.RealmRepository
+import com.example.fitjournal.core.data.repository.RealmWorkoutEntryWorkoutEntryRepositoryImpl
+import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
 import com.example.fitjournal.core.domain.usecase.realm.AddSingleWorkoutEntryToRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.CreateMockDataInRealmUseCase
 import com.example.fitjournal.core.domain.usecase.realm.DeleteWorkoutEntryFromRealmDbUseCase
@@ -20,30 +20,30 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRealmRepository(): RealmRepository {
-        return RealmRepositoryImpl()
+    fun provideRealmRepository(): RealmWorkoutEntryRepository {
+        return RealmWorkoutEntryWorkoutEntryRepositoryImpl()
     }
 
     @Provides
     @Singleton
     fun provideRealmUseCase(
-        realmRepository: RealmRepository
+        realmWorkoutEntryRepository: RealmWorkoutEntryRepository
     ): RealmUseCase {
         return RealmUseCase(
             createMockDataInRealmUseCase = CreateMockDataInRealmUseCase(
-                realmRepository = realmRepository
+                realmWorkoutEntryRepository = realmWorkoutEntryRepository
             ),
             getRealmWorkoutEntryList = GetRealmWorkoutEntryList(
-                realmRepository = realmRepository
+                realmWorkoutEntryRepository = realmWorkoutEntryRepository
             ),
             addSingleWorkoutEntryToRealmDbUseCase = AddSingleWorkoutEntryToRealmDbUseCase(
-                realmRepository = realmRepository
+                realmWorkoutEntryRepository = realmWorkoutEntryRepository
             ),
             updateSingleWorkoutEntryToRealmDbUseCase = UpdateSingleWorkoutEntryToRealmDbUseCase(
-                realmRepository = realmRepository
+                realmWorkoutEntryRepository = realmWorkoutEntryRepository
             ),
             deleteWorkoutEntryFromRealmDbUseCase = DeleteWorkoutEntryFromRealmDbUseCase(
-                realmRepository = realmRepository
+                realmWorkoutEntryRepository = realmWorkoutEntryRepository
             )
         )
     }
