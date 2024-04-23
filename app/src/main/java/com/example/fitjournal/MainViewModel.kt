@@ -26,7 +26,7 @@ class MainViewModel @Inject constructor(
     // flip boolean to true to create mock data and fetch from realm
     // flip boolean to false to ONLY fetch mock data from realm
     init {
-        val createMockData = true
+        val createMockData = false
         viewModelScope.launch(Dispatchers.IO) {
             if (createMockData) {
                 realmUseCase.createMockDataInRealmUseCase()
