@@ -4,16 +4,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.fitjournal.core.domain.util.filtering.searchForText
+import androidx.lifecycle.viewModelScope
+import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
 import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory
 import com.example.fitjournal.library.presentation.screen.library.utils.mapToLibraryUiList
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LibraryScreenViewModel @Inject constructor() : ViewModel() {
+class LibraryScreenViewModel @Inject constructor(
+    private val realmWorkoutLibraryUseCase: RealmWorkoutLibraryUseCase
+) : ViewModel() {
     var libraryWorkoutState by mutableStateOf(
         LibraryWorkoutUiModel(
             handleLibraryWorkoutClickEvents = ::handleLibraryWorkoutEvents
@@ -21,14 +25,9 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
     )
         private set
 
-    // will fix commented code in next PR  just creating Data and domain layer first
-
-//    init {
-//        // Dummy Data for now
-//        val workoutMap = libraryWorkoutList.groupBy { it.first() }.toSortedMap()
-//        val masterWorkoutList = mapToLibraryUiList(workoutMap)
-//        setMasterListOfWorkouts(masterWorkoutList)
-//    }
+    init {
+        getDataFromRealmDb()
+    }
 
     private fun handleLibraryWorkoutEvents(event: LibraryWorkoutClickEvents) {
         when (event) {
@@ -41,10 +40,16 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun updateSearchedWorkouts(text: String) {
-        // empty list for now until next PR that hooks up mock data
-        val filteredList = searchForText(text, emptyList())
-        val uiList = mapToLibraryUiList(filteredList)
-        setListOfSearchedWorkouts(uiList)
+        val filteredList = searchForText(text, libraryWorkoutState.masterWorkoutList)
+        setListOfSearchedWorkouts(filteredList)
+    }
+
+    private fun searchForText(text: String, list: List<WorkoutCategory>): List<WorkoutCategory> {
+        return list.filter { category ->
+            category.items.any { workout ->
+                workout.workoutName.lowercase().contains(text.lowercase())
+            }
+        }
     }
 
     private fun setMasterListOfWorkouts(workoutList: List<WorkoutCategory>) {
@@ -71,5 +76,16 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
             searchedTerm = "",
             listOfSearchedWorkouts = libraryWorkoutState.masterWorkoutList
         )
+    }
+
+    private fun getDataFromRealmDb() {
+        viewModelScope.launch {
+            val workoutList = realmWorkoutLibraryUseCase.getRealmWorkoutLibraryList()
+            if (workoutList.isNotEmpty()) {
+                val libraryList = workoutList.groupBy { it.name.first() }.toSortedMap()
+                val masterWorkoutList = mapToLibraryUiList(libraryList)
+                setMasterListOfWorkouts(masterWorkoutList)
+            }
+        }
     }
 }
