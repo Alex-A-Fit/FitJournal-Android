@@ -2,8 +2,8 @@ package com.example.fitjournal.core.data.mockdata.helper
 
 import com.example.fitjournal.core.data.model.realmdb.CalisthenicsSet
 import com.example.fitjournal.core.data.model.realmdb.CardioSet
+import com.example.fitjournal.core.data.model.realmdb.RealmWorkout
 import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutModel
 import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutProperties
 import com.example.fitjournal.core.data.model.realmdb.StrengthTrainingSet
 import io.realm.kotlin.ext.toRealmList
@@ -17,7 +17,7 @@ object CreateMockDataSample {
         vararg workoutSet: StrengthTrainingSet
     ): RealmWorkoutEntry {
         return RealmWorkoutEntry().apply {
-            workout = RealmWorkoutModel().apply {
+            workout = RealmWorkout().apply {
                 name = workoutName
                 type = workoutType
                 realmWorkoutProperties = RealmWorkoutProperties().apply {
@@ -35,7 +35,7 @@ object CreateMockDataSample {
         vararg workoutSet: CalisthenicsSet
     ): RealmWorkoutEntry {
         return RealmWorkoutEntry().apply {
-            workout = RealmWorkoutModel().apply {
+            workout = RealmWorkout().apply {
                 name = workoutName
                 type = workoutType
                 realmWorkoutProperties = RealmWorkoutProperties().apply {
@@ -53,7 +53,7 @@ object CreateMockDataSample {
         vararg workoutSet: CardioSet
     ): RealmWorkoutEntry {
         return RealmWorkoutEntry().apply {
-            workout = RealmWorkoutModel().apply {
+            workout = RealmWorkout().apply {
                 name = workoutName
                 type = workoutType
                 realmWorkoutProperties = RealmWorkoutProperties().apply {

@@ -3,8 +3,8 @@ package com.example.fitjournal
 import android.app.Application
 import com.example.fitjournal.core.data.model.realmdb.CalisthenicsSet
 import com.example.fitjournal.core.data.model.realmdb.CardioSet
+import com.example.fitjournal.core.data.model.realmdb.RealmWorkout
 import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutEntry
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutModel
 import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutProperties
 import com.example.fitjournal.core.data.model.realmdb.StrengthTrainingSet
 import dagger.hilt.android.HiltAndroidApp
@@ -23,7 +23,7 @@ class FitJournal : Application() {
             configuration = RealmConfiguration.create(
                 schema = setOf(
                     RealmWorkoutProperties::class,
-                    RealmWorkoutModel::class,
+                    RealmWorkout::class,
                     RealmWorkoutEntry::class,
                     StrengthTrainingSet::class,
                     CalisthenicsSet::class,

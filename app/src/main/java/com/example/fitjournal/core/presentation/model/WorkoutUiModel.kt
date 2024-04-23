@@ -1,20 +1,25 @@
-package com.example.fitjournal.home.presentation.model.ui
+package com.example.fitjournal.core.presentation.model
 
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import org.mongodb.kbson.ObjectId
 
 data class WorkoutUiModel(
-    val workoutType: WorkoutTypeEnum,
+    val id: ObjectId,
     val date: String,
-    val exerciseCardModel: CardUiModel
+    val workoutDetailsUiModel: WorkoutDetailsUiModel
 )
 
-data class CardUiModel(
-    val id: ObjectId,
+data class WorkoutDetailsUiModel(
     val name: String,
     val icon: Int,
+    val workoutType: WorkoutTypeEnum,
+    val exerciseCardModel: WorkoutPropertiesUiModel
+)
+
+data class WorkoutPropertiesUiModel(
     val reps: Int? = null,
+    val sets: Int? = null,
     val weight: Double? = null,
     val time: String? = null,
     val distance: Double? = null,

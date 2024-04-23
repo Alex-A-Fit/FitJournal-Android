@@ -21,6 +21,7 @@ import com.example.fitjournal.home.presentation.components.card.subcomponents.Ca
 @Composable
 fun WeightLiftingCard(
     reps: Int?,
+    sets: Int?,
     weight: Double?,
     name: String,
     icon: Int,
@@ -44,7 +45,8 @@ fun WeightLiftingCard(
             TopSetSummary(
                 reps = reps,
                 weight = weight,
-                Modifier
+                sets = sets,
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.spacing16)
             )
@@ -71,6 +73,7 @@ private fun TopSetTitle() {
 @Composable
 private fun TopSetSummary(
     reps: Int?,
+    sets: Int?,
     weight: Double?,
     modifier: Modifier = Modifier
 ) {
@@ -79,6 +82,13 @@ private fun TopSetSummary(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
+        sets?.let {
+            Text(
+                text = stringResource(id = R.string.text_total_sets, sets.toString()),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
         reps?.let {
             Text(
                 text = stringResource(id = R.string.text_total_reps, reps.toString()),

@@ -7,11 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.data.mockdata.MockData
-import com.example.fitjournal.core.domain.mapper.MapToWorkoutUiModel
+import com.example.fitjournal.core.domain.mapper.mapToWorkoutUiModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.domain.usecase.realm.RealmUseCase
+import com.example.fitjournal.core.presentation.model.WorkoutUiModel
 import com.example.fitjournal.core.util.state.UiState
-import com.example.fitjournal.home.presentation.model.ui.WorkoutUiModel
 import com.example.fitjournal.statistics.domain.mapper.toRealmWorkoutEntry
 import com.example.fitjournal.statistics.domain.model.StatisticsScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -55,7 +55,7 @@ class StatisticsViewModel @Inject constructor(
     private fun createWorkoutUiModel(listOfWorkouts: List<WorkoutModel>): UiState<List<WorkoutUiModel>> {
         if (listOfWorkouts.isEmpty()) return UiState.Empty
         val workoutsMapped = listOfWorkouts.map {
-            it.MapToWorkoutUiModel()
+            it.mapToWorkoutUiModel()
         }
         return UiState.Success(workoutsMapped)
     }
@@ -102,7 +102,7 @@ class StatisticsViewModel @Inject constructor(
         if (statisticsScreenState.workoutModelList.isNotEmpty()) {
             val workoutEntryToBeDeleted = statisticsScreenState.workoutModelList[0]
             val realmEntryToDelete = workoutEntryToBeDeleted.toRealmWorkoutEntry(
-                workoutType = getString(workoutEntryToBeDeleted.workoutTypeEnum.stringId)
+                workoutType = getString(workoutEntryToBeDeleted.workoutDetailsModel.workoutTypeEnum.stringId)
             )
             viewModelScope.launch {
                 val wasDeleteSuccessful = realmUseCase.deleteWorkoutEntryFromRealmDbUseCase(
