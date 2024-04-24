@@ -23,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -43,9 +42,7 @@ import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
 import com.example.fitjournal.journalEntry.JournalEntryScreen
 import com.example.fitjournal.journalEntry.components.JournalEntryDetailsScreen
-import com.example.fitjournal.journalEntry.domain.JournalEntryDetailsViewModel
-import com.example.fitjournal.journalEntry.domain.JournalEntryDetailsViewModelFactory
-import com.example.fitjournal.journalEntry.domain.WorkoutDetail
+import com.example.fitjournal.journalEntry.domain.JournalEntryViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
 import com.example.fitjournal.statistics.presentation.screen.StatisticsScreen
@@ -59,6 +56,7 @@ class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeScreenViewModel by viewModels()
     private val libraryScreenViewModel: LibraryScreenViewModel by viewModels()
     private val statisticsViewModel: StatisticsViewModel by viewModels()
+    private val journalEntryViewModel: JournalEntryViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +67,6 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val snackBarState = remember { SnackbarHostState() }
                 var showChildFabs by remember { mutableStateOf(false) }
-                var selectedWorkoutDetail: WorkoutDetail? by remember { mutableStateOf(null) }
                 val bottomBarVisibility = remember { (mutableStateOf(true)) }
                 val homeScreenListState = rememberLazyListState()
                 val libraryScreenListState = rememberLazyListState()
@@ -259,7 +256,7 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainModifier ->
                                     JournalEntryScreen(
                                         modifier = mainModifier,
-                                        selectedJournalEntry = { selectedWorkoutDetail = it },
+                                        selectedJournalEntry = { journalEntryViewModel.selectedWorkoutDetail.value = it },
                                         navigateToDestination = { navigation ->
                                             navigateToDestination(
                                                 navigationInterface = navigation,
@@ -294,7 +291,6 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(Route.JOURNAL_ENTRY_DETAILS) {
-                            val viewModel: JournalEntryDetailsViewModel = viewModel(factory = JournalEntryDetailsViewModelFactory(selectedWorkoutDetail))
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
                             }
@@ -305,7 +301,7 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainModifier ->
                                     JournalEntryDetailsScreen(
                                         modifier = mainModifier,
-                                        viewModel = viewModel
+                                        viewModel = journalEntryViewModel
                                     )
                                 },
                                 topAppBar = {
@@ -321,7 +317,7 @@ class MainActivity : ComponentActivity() {
                                             IconButton(onClick = {
                                                 navController.navigateUp()
                                                 navController.navigateUp()
-                                                viewModel.save()
+                                                journalEntryViewModel.save()
                                             }) {
                                                 Text(text = "Save", style = MaterialTheme.typography.titleMedium)
                                             }
