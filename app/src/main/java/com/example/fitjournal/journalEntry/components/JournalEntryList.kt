@@ -22,15 +22,13 @@ fun JournalEntryList(
     workoutList: List<Pair<WorkoutTypeEnum, List<RealmWorkoutLibrary>>>,
     selectedWorkout: (RealmWorkoutLibrary) -> Unit
 ) {
-
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = Spacing.spacing8)
     ) {
-
         workoutList.forEach { childList ->
-            val (workoutType,workouts) = childList
+            val (workoutType, workouts) = childList
             if (workouts.isNotEmpty()) {
                 stickyHeader {
                     CategoryHeader(text = workoutType.workoutTitle())

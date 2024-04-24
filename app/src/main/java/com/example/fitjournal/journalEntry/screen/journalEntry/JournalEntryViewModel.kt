@@ -16,7 +16,6 @@ class JournalEntryViewModel : ViewModel() {
 
     @Composable
     fun searchWorkout(searchValue: String): List<Pair<WorkoutTypeEnum, List<RealmWorkoutLibrary>>> {
-
         val listOfWeightLiftingWorkouts = workoutList.filter { it.type == WorkoutTypeEnum.WEIGHT_TRAINING.workoutTitle() }
         val listOfCardioWorkouts = workoutList.filter { it.type == WorkoutTypeEnum.CARDIO.workoutTitle() }
         val listOfCalisthenicsWorkouts = workoutList.filter { it.type == WorkoutTypeEnum.CALISTHENICS.workoutTitle() }
