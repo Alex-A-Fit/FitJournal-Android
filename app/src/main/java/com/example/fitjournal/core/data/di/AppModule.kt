@@ -1,6 +1,7 @@
 package com.example.fitjournal.core.data.di
 
 import com.example.fitjournal.core.data.repository.RealmWorkoutEntryRepositoryImpl
+import com.example.fitjournal.core.data.repository.RealmWorkoutLibraryRepositoryImpl
 import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
 import com.example.fitjournal.core.domain.repository.RealmWorkoutLibraryRepository
 import com.example.fitjournal.core.domain.usecase.realm.library.AddSingleLibraryItemToRealmDbUseCase
@@ -27,8 +28,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRealmRepository(): RealmWorkoutEntryRepository {
+    fun provideRealmWorkoutEntryRepository(): RealmWorkoutEntryRepository {
         return RealmWorkoutEntryRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRealmWorkoutLibraryRepository(): RealmWorkoutLibraryRepository {
+        return RealmWorkoutLibraryRepositoryImpl()
     }
 
     @Provides
