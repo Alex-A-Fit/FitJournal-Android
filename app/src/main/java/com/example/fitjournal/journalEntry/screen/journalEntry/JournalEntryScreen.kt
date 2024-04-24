@@ -12,16 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
 import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.journalEntry.components.JournalEntryList
-import com.example.fitjournal.journalEntry.domain.WorkoutDetail
 
 @Composable
 fun JournalEntryScreen(
     modifier: Modifier,
-    selectedJournalEntry: (WorkoutDetail) -> Unit,
+    selectedJournalEntry: (RealmWorkoutLibrary) -> Unit,
     navigateToDestination: (NavigationInterface) -> Unit
 ) {
     val viewModel: JournalEntryViewModel = viewModel()

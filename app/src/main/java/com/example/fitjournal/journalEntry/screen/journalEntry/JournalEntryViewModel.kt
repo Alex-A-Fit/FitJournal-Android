@@ -3,18 +3,18 @@ package com.example.fitjournal.journalEntry.screen.journalEntry
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.fitjournal.core.Workouts
-import com.example.fitjournal.journalEntry.domain.WorkoutDetail
+import com.example.fitjournal.core.data.mockdata.MockData
+import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
 
 class JournalEntryViewModel : ViewModel() {
 
-    private val workoutList = Workouts.availableWorkouts
+    private val workoutList = MockData.mockLibraryList
 
-    var selectedWorkoutDetail: MutableState<WorkoutDetail?> = mutableStateOf(null)
+    var selectedWorkoutDetail: MutableState<RealmWorkoutLibrary?> = mutableStateOf(null)
 
-    fun searchWorkout(searchValue: String): List<WorkoutDetail> {
+    fun searchWorkout(searchValue: String): List<RealmWorkoutLibrary> {
         return if (searchValue.isNotEmpty()) {
-            workoutList.filter { it.workoutName.contains(searchValue, ignoreCase = true) }
+            workoutList.filter { it.name.contains(searchValue, ignoreCase = true) }
         } else {
             workoutList
         }

@@ -10,19 +10,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
 import com.example.fitjournal.core.presentation.commoncomponents.listHeader.CategoryHeader
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.journalEntry.domain.WorkoutDetail
 import com.example.fitjournal.library.presentation.screen.library.components.ExerciseItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun JournalEntryList(workoutList: List<WorkoutDetail>, selectedWorkout: (WorkoutDetail) -> Unit) {
-    val listOfWeightLiftingWorkouts = workoutList.filter { it.workoutType == WorkoutTypeEnum.WEIGHT_TRAINING }
-    val listOfCardioWorkouts = workoutList.filter { it.workoutType == WorkoutTypeEnum.CARDIO }
-    val listOfCalisthenicsWorkouts = workoutList.filter { it.workoutType == WorkoutTypeEnum.CALISTHENICS }
+fun JournalEntryList(workoutList: List<RealmWorkoutLibrary>, selectedWorkout: (RealmWorkoutLibrary) -> Unit) {
+    val listOfWeightLiftingWorkouts = workoutList.filter { it.type == WorkoutTypeEnum.WEIGHT_TRAINING.workoutTitle() }
+    val listOfCardioWorkouts = workoutList.filter { it.type == WorkoutTypeEnum.CARDIO.workoutTitle() }
+    val listOfCalisthenicsWorkouts = workoutList.filter { it.type == WorkoutTypeEnum.CALISTHENICS.workoutTitle() }
 
     LazyColumn(
         modifier = Modifier
@@ -31,12 +30,12 @@ fun JournalEntryList(workoutList: List<WorkoutDetail>, selectedWorkout: (Workout
     ) {
         if (listOfWeightLiftingWorkouts.isNotEmpty()) {
             stickyHeader {
-                CategoryHeader(text = stringResource(id = WorkoutTypeEnum.WEIGHT_TRAINING.workoutTitle()))
+                CategoryHeader(text = WorkoutTypeEnum.WEIGHT_TRAINING.workoutTitle())
             }
 
             itemsIndexed(listOfWeightLiftingWorkouts) { index, exercise ->
                 TextButton(onClick = { selectedWorkout.invoke(exercise) }) {
-                    ExerciseItem(exercise = exercise.workoutName)
+                    ExerciseItem(exercise = exercise.name)
                 }
                 if (index != listOfWeightLiftingWorkouts.lastIndex) {
                     HorizontalDivider(
@@ -49,12 +48,12 @@ fun JournalEntryList(workoutList: List<WorkoutDetail>, selectedWorkout: (Workout
 
         if (listOfCardioWorkouts.isNotEmpty()) {
             stickyHeader {
-                CategoryHeader(text = stringResource(id = WorkoutTypeEnum.CARDIO.workoutTitle()))
+                CategoryHeader(text = WorkoutTypeEnum.CARDIO.workoutTitle())
             }
 
             itemsIndexed(listOfCardioWorkouts) { index, exercise ->
                 TextButton(onClick = { selectedWorkout.invoke(exercise) }) {
-                    ExerciseItem(exercise = exercise.workoutName)
+                    ExerciseItem(exercise = exercise.name)
                 }
                 if (index != listOfWeightLiftingWorkouts.lastIndex) {
                     HorizontalDivider(
@@ -67,12 +66,12 @@ fun JournalEntryList(workoutList: List<WorkoutDetail>, selectedWorkout: (Workout
 
         if (listOfCalisthenicsWorkouts.isNotEmpty()) {
             stickyHeader {
-                CategoryHeader(text = stringResource(id = WorkoutTypeEnum.CALISTHENICS.workoutTitle()))
+                CategoryHeader(text = WorkoutTypeEnum.CALISTHENICS.workoutTitle())
             }
 
             itemsIndexed(listOfCalisthenicsWorkouts) { index, exercise ->
                 TextButton(onClick = { selectedWorkout.invoke(exercise) }) {
-                    ExerciseItem(exercise = exercise.workoutName)
+                    ExerciseItem(exercise = exercise.name)
                 }
                 if (index != listOfWeightLiftingWorkouts.lastIndex) {
                     HorizontalDivider(
