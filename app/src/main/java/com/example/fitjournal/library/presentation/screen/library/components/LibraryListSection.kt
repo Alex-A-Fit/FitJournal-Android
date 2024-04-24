@@ -35,7 +35,7 @@ fun LibraryListSection(
         userScrollEnabled = !isBlurActive,
         state = libraryScreenListState
     ) {
-        workoutLibraryList.toList().forEach { category ->
+        workoutLibraryList.forEach { category ->
             stickyHeader {
                 CategoryHeader(text = category.name)
             }
