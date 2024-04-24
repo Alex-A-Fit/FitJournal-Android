@@ -45,7 +45,7 @@ fun AppScreen(
     topAppBar: @Composable () -> Unit,
     mainScreen: @Composable (Modifier) -> Unit,
     navigateToDestination: (NavigationInterface) -> Unit,
-    addWorkoutToDatabase: ((AddWorkoutToLibraryModel) -> Unit)? = null,
+    addWorkoutToLibraryItemDatabase: ((AddWorkoutToLibraryModel) -> Unit)? = null,
     displayChildFabs: ((Boolean) -> Unit)? = null,
     bottomBarVisibility: Boolean = true
 ) {
@@ -61,7 +61,7 @@ fun AppScreen(
                 showWorkoutDialog = false
             },
             addNewWorkoutToLibrary = { workoutName, workoutType ->
-                addWorkoutToDatabase?.invoke(
+                addWorkoutToLibraryItemDatabase?.invoke(
                     AddWorkoutToLibraryModel(
                         workoutName = workoutName,
                         workoutType = workoutType,
