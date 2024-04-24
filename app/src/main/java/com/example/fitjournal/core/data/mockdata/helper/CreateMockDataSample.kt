@@ -7,8 +7,10 @@ import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkout
 import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
 import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutProperties
 import com.example.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
+import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import io.realm.kotlin.ext.toRealmList
 import org.mongodb.kbson.ObjectId
+import java.time.LocalDate
 
 object CreateMockDataSample {
     fun weightTrainingSample(
@@ -44,6 +46,7 @@ object CreateMockDataSample {
                 }
             }
             workoutId = objectId
+            timeStamp = LocalDate.now().minusDays(2).formatToCommonDate()
         }
     }
 
@@ -62,6 +65,7 @@ object CreateMockDataSample {
                 }
             }
             workoutId = objectId
+            timeStamp = LocalDate.now().plusDays(2).formatToCommonDate()
         }
     }
 

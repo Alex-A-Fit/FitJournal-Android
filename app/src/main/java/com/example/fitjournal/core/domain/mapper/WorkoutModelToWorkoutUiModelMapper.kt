@@ -38,13 +38,14 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
         }
 
         WorkoutTypeEnum.CALISTHENICS -> {
-            val mostRecentSession = when (val workoutSets = workoutDetailsModel.workoutPropertiesModel) {
-                is WorkoutPropertiesModel.CalisthenicsProps -> {
-                    workoutSets.props.last()
-                }
+            val mostRecentSession =
+                when (val workoutSets = workoutDetailsModel.workoutPropertiesModel) {
+                    is WorkoutPropertiesModel.CalisthenicsProps -> {
+                        workoutSets.props.last()
+                    }
 
-                else -> null
-            }
+                    else -> null
+                }
             WorkoutUiModel(
 
                 date = date,
@@ -64,13 +65,14 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
         }
 
         WorkoutTypeEnum.CARDIO -> {
-            val mostRecentSession = when (val workoutSets = workoutDetailsModel.workoutPropertiesModel) {
-                is WorkoutPropertiesModel.CardioProps -> {
-                    workoutSets.props.last()
-                }
+            val mostRecentSession =
+                when (val workoutSets = workoutDetailsModel.workoutPropertiesModel) {
+                    is WorkoutPropertiesModel.CardioProps -> {
+                        workoutSets.props.last()
+                    }
 
-                else -> null
-            }
+                    else -> null
+                }
             WorkoutUiModel(
                 date = date,
                 id = id,
