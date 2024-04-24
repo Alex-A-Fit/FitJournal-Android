@@ -1,11 +1,11 @@
 package com.example.fitjournal
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fitjournal.core.domain.model.WorkoutLibraryModel
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
@@ -46,12 +46,24 @@ class MainViewModel @Inject constructor(
 
     fun addWorkoutToDatabase(
         workoutName: String,
+        workoutType: String,
         workoutTypeEnum: WorkoutTypeEnum,
-        successCallback: suspend () -> Unit
+        successCallback: suspend () -> Unit,
+        errorCallback: suspend () -> Unit
     ) {
-        Log.d("addWorkout", "Workout Name: $workoutName, WorkoutTypeEnum: $workoutTypeEnum")
         viewModelScope.launch {
-            successCallback()
+            val wasLibraryItemAdded = realmWorkoutLibraryUseCase.addSingleLibraryItemToRealmDbUseCase(
+                workoutLibraryModel = WorkoutLibraryModel(
+                    name = workoutName,
+                    workoutType = workoutType,
+                    workoutTypeEnum = workoutTypeEnum
+                )
+            )
+            if (wasLibraryItemAdded) {
+                successCallback()
+            } else {
+                errorCallback()
+            }
         }
     }
 }

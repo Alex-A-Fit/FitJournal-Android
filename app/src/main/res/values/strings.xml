@@ -61,6 +61,9 @@
     // Success Strings
     <string name="text_workout_successfully_added_to_library">\"%1$s\" was added to your Library!</string>
 
+    // Error Strings
+    <string name="text_workout_error_with_adding_to_library">\"%1$s\" could not be added. Please Try Again.</string>
+
     // Placeholder strings
     <string name="text_library_searchbar_placeholder">Search for workout</string>
 

@@ -3,6 +3,7 @@ package com.example.fitjournal.library.presentation.screen.library
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
@@ -31,17 +32,28 @@ class LibraryScreenViewModel @Inject constructor(
 
     private fun handleLibraryWorkoutEvents(event: LibraryWorkoutClickEvents) {
         when (event) {
-            LibraryWorkoutClickEvents.ClearSearch -> clearSearch()
+            LibraryWorkoutClickEvents.ClearSearch -> {
+                updateLibraryWorkoutState(
+                    newLibraryWorkoutState = libraryWorkoutState.copy(
+                        searchedTerm = "",
+                        listOfSearchedWorkouts = libraryWorkoutState.masterWorkoutList.toMutableStateList()
+                    )
+                )
+            }
+
             is LibraryWorkoutClickEvents.UpdateSearch -> {
-                updateSearchBarText(event.text)
-                updateSearchedWorkouts(event.text)
+                val filteredList = searchForText(
+                    event.text,
+                    libraryWorkoutState.masterWorkoutList
+                )
+                updateLibraryWorkoutState(
+                    newLibraryWorkoutState = libraryWorkoutState.copy(
+                        searchedTerm = event.text,
+                        listOfSearchedWorkouts = filteredList.toMutableStateList()
+                    )
+                )
             }
         }
-    }
-
-    private fun updateSearchedWorkouts(text: String) {
-        val filteredList = searchForText(text, libraryWorkoutState.masterWorkoutList)
-        setListOfSearchedWorkouts(filteredList)
     }
 
     private fun searchForText(text: String, list: List<WorkoutCategory>): List<WorkoutCategory> {
@@ -52,39 +64,29 @@ class LibraryScreenViewModel @Inject constructor(
         }
     }
 
-    private fun setMasterListOfWorkouts(workoutList: List<WorkoutCategory>) {
-        libraryWorkoutState = libraryWorkoutState.copy(
-            masterWorkoutList = workoutList,
-            listOfSearchedWorkouts = workoutList
-        )
+    private fun updateLibraryWorkoutState(newLibraryWorkoutState: LibraryWorkoutUiModel) {
+        libraryWorkoutState = newLibraryWorkoutState
     }
 
-    private fun setListOfSearchedWorkouts(workoutList: List<WorkoutCategory>) {
-        libraryWorkoutState = libraryWorkoutState.copy(
-            listOfSearchedWorkouts = workoutList
-        )
-    }
-
-    private fun updateSearchBarText(searchedText: String) {
-        libraryWorkoutState = libraryWorkoutState.copy(
-            searchedTerm = searchedText
-        )
-    }
-
-    private fun clearSearch() {
-        libraryWorkoutState = libraryWorkoutState.copy(
-            searchedTerm = "",
-            listOfSearchedWorkouts = libraryWorkoutState.masterWorkoutList
-        )
-    }
-
-    private fun getDataFromRealmDb() {
+    fun getDataFromRealmDb() {
         viewModelScope.launch {
             val workoutList = realmWorkoutLibraryUseCase.getRealmWorkoutLibraryList()
             if (workoutList.isNotEmpty()) {
-                val libraryList = workoutList.groupBy { it.name.first() }.toSortedMap()
+                val libraryList = workoutList.groupBy { it.name.first().uppercase() }.toSortedMap()
                 val masterWorkoutList = mapToLibraryUiList(libraryList)
-                setMasterListOfWorkouts(masterWorkoutList)
+                updateLibraryWorkoutState(
+                    newLibraryWorkoutState = libraryWorkoutState.copy(
+                        masterWorkoutList = masterWorkoutList,
+                        listOfSearchedWorkouts = if (libraryWorkoutState.searchedTerm.isEmpty()) {
+                            masterWorkoutList.toMutableStateList()
+                        } else {
+                            searchForText(
+                                libraryWorkoutState.searchedTerm,
+                                libraryWorkoutState.masterWorkoutList
+                            ).toMutableStateList()
+                        }
+                    )
+                )
             }
         }
     }

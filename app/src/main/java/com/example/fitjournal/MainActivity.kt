@@ -121,7 +121,7 @@ class MainActivity : ComponentActivity() {
                                 displayChildFabs = {
                                     showChildFabs = it
                                 },
-                                addWorkoutToDatabase = { addWorkoutToDbModel ->
+                                addWorkoutToLibraryItemDatabase = { addWorkoutToDbModel ->
                                     mainViewModel.addWorkoutToDatabase(
                                         workoutName = addWorkoutToDbModel.workoutName,
                                         workoutTypeEnum = addWorkoutToDbModel.workoutType,
@@ -133,7 +133,18 @@ class MainActivity : ComponentActivity() {
                                                     addWorkoutToDbModel.workoutName
                                                 )
                                             )
-                                        }
+                                            libraryScreenViewModel.getDataFromRealmDb()
+                                        },
+                                        errorCallback = {
+                                            showSnackBar(
+                                                snackBarHostState = snackBarState,
+                                                message = getString(
+                                                    R.string.text_workout_error_with_adding_to_library,
+                                                    addWorkoutToDbModel.workoutName
+                                                )
+                                            )
+                                        },
+                                        workoutType = getString(addWorkoutToDbModel.workoutType.stringId)
                                     )
                                 },
                                 navController = navController,
@@ -174,7 +185,7 @@ class MainActivity : ComponentActivity() {
                                 displayChildFabs = {
                                     showChildFabs = it
                                 },
-                                addWorkoutToDatabase = { addWorkoutToDbModel ->
+                                addWorkoutToLibraryItemDatabase = { addWorkoutToDbModel ->
                                     mainViewModel.addWorkoutToDatabase(
                                         workoutName = addWorkoutToDbModel.workoutName,
                                         workoutTypeEnum = addWorkoutToDbModel.workoutType,
@@ -186,7 +197,18 @@ class MainActivity : ComponentActivity() {
                                                     addWorkoutToDbModel.workoutName
                                                 )
                                             )
-                                        }
+                                            libraryScreenViewModel.getDataFromRealmDb()
+                                        },
+                                        errorCallback = {
+                                            showSnackBar(
+                                                snackBarHostState = snackBarState,
+                                                message = getString(
+                                                    R.string.text_workout_error_with_adding_to_library,
+                                                    addWorkoutToDbModel.workoutName
+                                                )
+                                            )
+                                        },
+                                        workoutType = getString(addWorkoutToDbModel.workoutType.stringId)
                                     )
                                 },
                                 navController = navController,
