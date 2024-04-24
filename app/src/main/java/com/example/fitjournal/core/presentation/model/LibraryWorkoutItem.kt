@@ -1,4 +1,4 @@
-package com.example.fitjournal.library.presentation.screen.library.model
+package com.example.fitjournal.core.presentation.model
 
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 

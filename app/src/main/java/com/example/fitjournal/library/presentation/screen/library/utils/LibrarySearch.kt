@@ -1,7 +1,7 @@
 package com.example.fitjournal.library.presentation.screen.library.utils
 
 import com.example.fitjournal.core.domain.model.WorkoutLibraryModel
-import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutItem
+import com.example.fitjournal.core.presentation.model.LibraryWorkoutItem
 import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory
 import java.util.SortedMap
 
