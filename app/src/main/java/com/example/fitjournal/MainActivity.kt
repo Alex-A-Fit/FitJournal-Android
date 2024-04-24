@@ -40,8 +40,8 @@ import com.example.fitjournal.home.presentation.model.events.HomeAppBarEvents
 import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
-import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryScreen
 import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryDetailsScreen
+import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryScreen
 import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel

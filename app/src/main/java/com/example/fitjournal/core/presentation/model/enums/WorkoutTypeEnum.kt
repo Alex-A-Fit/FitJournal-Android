@@ -15,7 +15,7 @@ enum class WorkoutTypeEnum(val stringId: Int) {
     },
     CARDIO(stringId = R.string.title_cardio) {
         @Composable
-        override fun workoutTitle() = stringResource(id =R.string.text_cardio_menu_title)
+        override fun workoutTitle() = stringResource(id = R.string.text_cardio_menu_title)
     };
 
     @Composable
