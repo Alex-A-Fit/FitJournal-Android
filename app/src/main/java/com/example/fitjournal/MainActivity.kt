@@ -4,11 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -19,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -38,6 +40,9 @@ import com.example.fitjournal.home.presentation.model.events.HomeAppBarEvents
 import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
+import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryDetailsScreen
+import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryScreen
+import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
 import com.example.fitjournal.statistics.presentation.screen.StatisticsScreen
@@ -51,6 +56,7 @@ class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeScreenViewModel by viewModels()
     private val libraryScreenViewModel: LibraryScreenViewModel by viewModels()
     private val statisticsViewModel: StatisticsViewModel by viewModels()
+    private val journalEntryViewModel: JournalEntryViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,9 +66,7 @@ class MainActivity : ComponentActivity() {
             FitJournalTheme {
                 val navController = rememberNavController()
                 val snackBarState = remember { SnackbarHostState() }
-                var showChildFabs by remember {
-                    mutableStateOf(false)
-                }
+                var showChildFabs by remember { mutableStateOf(false) }
                 val bottomBarVisibility = remember { (mutableStateOf(true)) }
                 val homeScreenListState = rememberLazyListState()
                 val libraryScreenListState = rememberLazyListState()
@@ -249,13 +253,17 @@ class MainActivity : ComponentActivity() {
                                 showMainFabIcon = false,
                                 modifier = Modifier,
                                 snackBarHostState = snackBarState,
-                                mainScreen = {
-                                    Box(
-                                        contentAlignment = Alignment.Center,
-                                        modifier = Modifier.fillMaxWidth()
-                                    ) {
-                                        Text(text = "welcome to Journey entry")
-                                    }
+                                mainScreen = { mainModifier ->
+                                    JournalEntryScreen(
+                                        modifier = mainModifier,
+                                        selectedJournalEntry = { journalEntryViewModel.selectedWorkoutDetail.value = it },
+                                        navigateToDestination = { navigation ->
+                                            navigateToDestination(
+                                                navigationInterface = navigation,
+                                                navController = navController
+                                            )
+                                        }
+                                    )
                                 },
                                 topAppBar = {
                                     TopAppBar(
@@ -265,6 +273,62 @@ class MainActivity : ComponentActivity() {
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
+                                        },
+                                        navigationIcon = {
+                                            IconButton(onClick = { navController.navigateUp() }) {
+                                                Icon(
+                                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                    contentDescription = "Back"
+                                                )
+                                            }
+                                        },
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                },
+                                navigateToDestination = { },
+                                navController = navController,
+                                bottomBarVisibility = bottomBarVisibility.value
+                            )
+                        }
+                        composable(Route.JOURNAL_ENTRY_DETAILS) {
+                            LaunchedEffect(Unit) {
+                                bottomBarVisibility.value = false
+                            }
+                            AppScreen(
+                                showMainFabIcon = false,
+                                modifier = Modifier,
+                                snackBarHostState = snackBarState,
+                                mainScreen = { mainModifier ->
+                                    JournalEntryDetailsScreen(
+                                        modifier = mainModifier,
+                                        viewModel = journalEntryViewModel
+                                    )
+                                },
+                                topAppBar = {
+                                    TopAppBar(
+                                        appBarTitle = {
+                                            Text(
+                                                text = "Journal Entry",
+                                                style = MaterialTheme.typography.titleLarge,
+                                                color = MaterialTheme.colorScheme.onPrimary
+                                            )
+                                        },
+                                        endAlignedActionIcon = {
+                                            IconButton(onClick = {
+                                                navController.navigateUp()
+                                                navController.navigateUp()
+                                                journalEntryViewModel.save()
+                                            }) {
+                                                Text(text = "Save", style = MaterialTheme.typography.titleMedium)
+                                            }
+                                        },
+                                        navigationIcon = {
+                                            IconButton(onClick = { navController.navigateUp() }) {
+                                                Icon(
+                                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                    contentDescription = "Back"
+                                                )
+                                            }
                                         },
                                         modifier = Modifier.fillMaxWidth()
                                     )
@@ -373,6 +437,13 @@ class MainActivity : ComponentActivity() {
             }
 
             NavigationInterface.NavigateToJournalEntry -> {
+                navigationEvent(
+                    navigationInterface,
+                    navController = navController
+                )
+            }
+
+            NavigationInterface.NavigateToJournalEntryDetails -> {
                 navigationEvent(
                     navigationInterface,
                     navController = navController
