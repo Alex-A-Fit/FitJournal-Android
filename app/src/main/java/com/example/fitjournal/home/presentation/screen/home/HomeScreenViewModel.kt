@@ -11,7 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.domain.managers.DateManager
 import com.example.fitjournal.core.domain.mapper.mapToWorkoutUiModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
-import com.example.fitjournal.core.domain.usecase.realm.RealmUseCase
+import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.presentation.model.WorkoutUiModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.state.UiState
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val realmUseCase: RealmUseCase
+    private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase
 ) : ViewModel() {
     var homeScreenState: HomeScreenUiState by mutableStateOf(HomeScreenUiState())
         private set
@@ -110,7 +110,7 @@ class HomeScreenViewModel @Inject constructor(
 
     fun getDataFromRealmDb() {
         viewModelScope.launch {
-            val workoutList = realmUseCase.getRealmWorkoutEntryList()
+            val workoutList = realmWorkoutEntryUseCase.getRealmWorkoutEntryList()
             if (workoutList.isNotEmpty()) {
                 updateHomeScreenState(
                     newHomeScreenState = homeScreenState.copy(

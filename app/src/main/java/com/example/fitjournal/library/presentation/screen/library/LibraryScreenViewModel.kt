@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.fitjournal.core.data.mockdata.MockData.libraryWorkoutList
 import com.example.fitjournal.core.domain.util.filtering.searchForText
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
@@ -22,12 +21,14 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
     )
         private set
 
-    init {
-        // Dummy Data for now
-        val workoutMap = libraryWorkoutList.groupBy { it.first() }.toSortedMap()
-        val masterWorkoutList = mapToLibraryUiList(workoutMap)
-        setMasterListOfWorkouts(masterWorkoutList)
-    }
+    // will fix commented code in next PR  just creating Data and domain layer first
+
+//    init {
+//        // Dummy Data for now
+//        val workoutMap = libraryWorkoutList.groupBy { it.first() }.toSortedMap()
+//        val masterWorkoutList = mapToLibraryUiList(workoutMap)
+//        setMasterListOfWorkouts(masterWorkoutList)
+//    }
 
     private fun handleLibraryWorkoutEvents(event: LibraryWorkoutClickEvents) {
         when (event) {
@@ -40,7 +41,8 @@ class LibraryScreenViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun updateSearchedWorkouts(text: String) {
-        val filteredList = searchForText(text, libraryWorkoutList)
+        // empty list for now until next PR that hooks up mock data
+        val filteredList = searchForText(text, emptyList())
         val uiList = mapToLibraryUiList(filteredList)
         setListOfSearchedWorkouts(uiList)
     }

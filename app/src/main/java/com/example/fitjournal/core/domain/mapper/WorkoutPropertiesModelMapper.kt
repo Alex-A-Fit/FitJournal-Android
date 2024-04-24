@@ -1,9 +1,9 @@
 package com.example.fitjournal.core.domain.mapper
 
-import com.example.fitjournal.core.data.model.realmdb.CalisthenicsSet
-import com.example.fitjournal.core.data.model.realmdb.CardioSet
-import com.example.fitjournal.core.data.model.realmdb.RealmWorkoutProperties
-import com.example.fitjournal.core.data.model.realmdb.StrengthTrainingSet
+import com.example.fitjournal.core.data.model.realmdb.workout.CalisthenicsSet
+import com.example.fitjournal.core.data.model.realmdb.workout.CardioSet
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutProperties
+import com.example.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel

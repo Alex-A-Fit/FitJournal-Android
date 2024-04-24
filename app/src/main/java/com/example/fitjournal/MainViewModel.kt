@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitjournal.core.domain.usecase.realm.RealmUseCase
+import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val realmUseCase: RealmUseCase
+    private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase
 ) : ViewModel() {
 
     var appScreenState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(
         val createMockData = false
         viewModelScope.launch(Dispatchers.IO) {
             if (createMockData) {
-                realmUseCase.createMockDataInRealmUseCase()
+                realmWorkoutEntryUseCase.createMockDataOfRealmWorkoutEntryUseCase()
             }
         }
     }

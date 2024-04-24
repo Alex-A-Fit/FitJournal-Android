@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.data.model.realmdb
+package com.example.fitjournal.core.data.model.realmdb.workout
 
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import io.realm.kotlin.ext.realmListOf
