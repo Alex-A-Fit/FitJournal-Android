@@ -18,66 +18,34 @@ import com.example.fitjournal.library.presentation.screen.library.components.Exe
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun JournalEntryList(workoutList: List<RealmWorkoutLibrary>, selectedWorkout: (RealmWorkoutLibrary) -> Unit) {
-    val listOfWeightLiftingWorkouts = workoutList.filter { it.type == WorkoutTypeEnum.WEIGHT_TRAINING.workoutTitle() }
-    val listOfCardioWorkouts = workoutList.filter { it.type == WorkoutTypeEnum.CARDIO.workoutTitle() }
-    val listOfCalisthenicsWorkouts = workoutList.filter { it.type == WorkoutTypeEnum.CALISTHENICS.workoutTitle() }
+fun JournalEntryList(
+    workoutList: List<Pair<WorkoutTypeEnum, List<RealmWorkoutLibrary>>>,
+    selectedWorkout: (RealmWorkoutLibrary) -> Unit
+) {
 
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = Spacing.spacing8)
     ) {
-        if (listOfWeightLiftingWorkouts.isNotEmpty()) {
-            stickyHeader {
-                CategoryHeader(text = WorkoutTypeEnum.WEIGHT_TRAINING.workoutTitle())
-            }
 
-            itemsIndexed(listOfWeightLiftingWorkouts) { index, exercise ->
-                TextButton(onClick = { selectedWorkout.invoke(exercise) }) {
-                    ExerciseItem(exercise = exercise.name)
+        workoutList.forEach { childList ->
+            val (workoutType,workouts) = childList
+            if (workouts.isNotEmpty()) {
+                stickyHeader {
+                    CategoryHeader(text = workoutType.workoutTitle())
                 }
-                if (index != listOfWeightLiftingWorkouts.lastIndex) {
-                    HorizontalDivider(
-                        thickness = Spacing.spacing1,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-        }
 
-        if (listOfCardioWorkouts.isNotEmpty()) {
-            stickyHeader {
-                CategoryHeader(text = WorkoutTypeEnum.CARDIO.workoutTitle())
-            }
-
-            itemsIndexed(listOfCardioWorkouts) { index, exercise ->
-                TextButton(onClick = { selectedWorkout.invoke(exercise) }) {
-                    ExerciseItem(exercise = exercise.name)
-                }
-                if (index != listOfWeightLiftingWorkouts.lastIndex) {
-                    HorizontalDivider(
-                        thickness = Spacing.spacing1,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-        }
-
-        if (listOfCalisthenicsWorkouts.isNotEmpty()) {
-            stickyHeader {
-                CategoryHeader(text = WorkoutTypeEnum.CALISTHENICS.workoutTitle())
-            }
-
-            itemsIndexed(listOfCalisthenicsWorkouts) { index, exercise ->
-                TextButton(onClick = { selectedWorkout.invoke(exercise) }) {
-                    ExerciseItem(exercise = exercise.name)
-                }
-                if (index != listOfWeightLiftingWorkouts.lastIndex) {
-                    HorizontalDivider(
-                        thickness = Spacing.spacing1,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                itemsIndexed(workouts) { index, exercise ->
+                    TextButton(onClick = { selectedWorkout.invoke(exercise) }) {
+                        ExerciseItem(exercise = exercise.name)
+                    }
+                    if (index != workouts.lastIndex) {
+                        HorizontalDivider(
+                            thickness = Spacing.spacing1,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             }
         }
