@@ -1,5 +1,6 @@
 package com.example.fitjournal.home.presentation.screen.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.FilterWorkoutTypeDialog
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.components.card.CalisthenicsCard
@@ -37,14 +39,15 @@ fun HomeScreen(
     homeScreenState: HomeScreenUiState,
     snackBarHostState: SnackbarHostState,
     lazyListState: LazyListState,
-    isBlurActive: Boolean,
-    homeScreenEvents: (HomeScreenEvents) -> Unit
+    navigateToDestination: (NavigationInterface) -> Unit,
+    isBlurActive: Boolean
 ) {
     LaunchedEffect(key1 = homeScreenState.listOfVisibleWorkoutsUiState) {
         when (homeScreenState.listOfVisibleWorkoutsUiState) {
             UiState.None -> {
-                homeScreenEvents(HomeScreenEvents.CollectRealmWorkoutEntryFromDb)
+                homeScreenState.homeScreenEvents(HomeScreenEvents.CollectRealmWorkoutEntryFromDb)
             }
+
             else -> Unit
         }
     }
@@ -65,7 +68,7 @@ fun HomeScreen(
             FitJournalDatePickerDialog(
                 currentDate = homeScreenState.currentDateInMillis,
                 selectDate = { selectedDate ->
-                    homeScreenEvents(
+                    homeScreenState.homeScreenEvents(
                         HomeScreenEvents.SelectDateFromDatePicker(
                             userSelectedDate = selectedDate,
                             snackBarHostState = snackBarHostState
@@ -73,7 +76,7 @@ fun HomeScreen(
                     )
                 },
                 dismissDialog = {
-                    homeScreenEvents(HomeScreenEvents.DismissDatePicker)
+                    homeScreenState.homeScreenEvents(HomeScreenEvents.DismissDatePicker)
                 }
             )
         }
@@ -83,17 +86,17 @@ fun HomeScreen(
                 properties = DialogProperties(),
                 filterList = homeScreenState.filterList,
                 onDismissDialog = {
-                    homeScreenEvents(HomeScreenEvents.DismissFilterExercisesDialog)
+                    homeScreenState.homeScreenEvents(HomeScreenEvents.DismissFilterExercisesDialog)
                 },
                 onConfirmDialog = { listOfWorkoutTypes ->
-                    homeScreenEvents(
+                    homeScreenState.homeScreenEvents(
                         HomeScreenEvents.OnConfirmFilterExercisesDialog(
                             listOfWorkoutTypes
                         )
                     )
                 },
                 clearFilterList = {
-                    homeScreenEvents(HomeScreenEvents.ClearFilterExercisesDialog)
+                    homeScreenState.homeScreenEvents(HomeScreenEvents.ClearFilterExercisesDialog)
                 }
             )
         }
@@ -102,13 +105,16 @@ fun HomeScreen(
                 // need to provide loading animation of some sorts
                 Unit
             }
+
             UiState.Empty, is UiState.Error -> {
                 // need to provide empty state of some sorts for empty and error
                 Unit
             }
+
             UiState.None -> {
                 // none should be defaulted to loading
             }
+
             is UiState.Success -> {
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
@@ -124,7 +130,11 @@ fun HomeScreen(
                                     weight = workout.workoutDetailsUiModel.exerciseCardModel.weight,
                                     name = workout.workoutDetailsUiModel.name,
                                     icon = workout.workoutDetailsUiModel.icon,
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout)
+                                        },
                                     sets = workout.workoutDetailsUiModel.exerciseCardModel.sets
                                 )
                             }
@@ -135,7 +145,11 @@ fun HomeScreen(
                                     time = workout.workoutDetailsUiModel.exerciseCardModel.time,
                                     name = workout.workoutDetailsUiModel.name,
                                     icon = workout.workoutDetailsUiModel.icon,
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout)
+                                        }
                                 )
                             }
 
@@ -146,7 +160,11 @@ fun HomeScreen(
                                     distance = workout.workoutDetailsUiModel.exerciseCardModel.distance,
                                     distanceType = workout.workoutDetailsUiModel.exerciseCardModel.distanceType,
                                     time = workout.workoutDetailsUiModel.exerciseCardModel.time,
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout)
+                                        }
                                 )
                             }
                         }

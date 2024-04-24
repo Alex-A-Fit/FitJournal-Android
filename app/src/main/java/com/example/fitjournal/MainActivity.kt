@@ -7,10 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
@@ -28,6 +25,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fitjournal.core.presentation.commoncomponents.appbars.TopAppBar
+import com.example.fitjournal.core.presentation.commoncomponents.buttons.iconbuttons.NavigateUpIconButton
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.navigation.Route
 import com.example.fitjournal.core.presentation.navigation.Route.LOTTIE_INTRO
@@ -35,9 +33,9 @@ import com.example.fitjournal.core.presentation.navigation.navigationEvent
 import com.example.fitjournal.core.presentation.screens.AppScreen
 import com.example.fitjournal.core.presentation.screens.lottie.LottieHomeScreenAnimation
 import com.example.fitjournal.core.presentation.theme.FitJournalTheme
+import com.example.fitjournal.home.presentation.components.appbar.EditWorkoutTopAppBar
 import com.example.fitjournal.home.presentation.components.appbar.HomeTopAppBar
-import com.example.fitjournal.home.presentation.model.events.HomeAppBarEvents
-import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
+import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
 import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryDetailsScreen
@@ -154,6 +152,7 @@ class MainActivity : ComponentActivity() {
                         composable(Route.HOME_SCREEN) {
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = true
+                                homeViewModel.clearUiState()
                             }
                             AppScreen(
                                 showChildrenFabIcons = showChildFabs,
@@ -162,17 +161,22 @@ class MainActivity : ComponentActivity() {
                                 topAppBar = {
                                     HomeTopAppBar(
                                         currentDate = homeViewModel.homeScreenState.currentDate,
-                                        homeAppBarEvents = ::homeAppBarEvents
+                                        homeAppBarEvents = homeViewModel.homeScreenState.homeAppBarEvents
                                     )
                                 },
                                 mainScreen = { mainScreenModifier ->
                                     HomeScreen(
                                         modifier = mainScreenModifier.fillMaxSize(),
                                         homeScreenState = homeViewModel.homeScreenState,
-                                        homeScreenEvents = ::homeScreenEvents,
                                         snackBarHostState = snackBarState,
                                         isBlurActive = showChildFabs,
-                                        lazyListState = homeScreenListState
+                                        lazyListState = homeScreenListState,
+                                        navigateToDestination = { navInterface ->
+                                            navigateToDestination(
+                                                navigationInterface = navInterface,
+                                                navController = navController
+                                            )
+                                        }
                                     )
                                 },
                                 navigateToDestination = { navigation ->
@@ -216,6 +220,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(Route.WORKOUT_STATISTICS_SCREEN) {
+                            LaunchedEffect(Unit) {
+                                statisticsViewModel.clearUiState()
+                                bottomBarVisibility.value = true
+                            }
                             AppScreen(
                                 showMainFabIcon = false,
                                 modifier = Modifier,
@@ -278,7 +286,9 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainModifier ->
                                     JournalEntryScreen(
                                         modifier = mainModifier,
-                                        selectedJournalEntry = { journalEntryViewModel.selectedWorkoutDetail.value = it },
+                                        selectedJournalEntry = {
+                                            journalEntryViewModel.selectedWorkoutDetail.value = it
+                                        },
                                         navigateToDestination = { navigation ->
                                             navigateToDestination(
                                                 navigationInterface = navigation,
@@ -297,12 +307,7 @@ class MainActivity : ComponentActivity() {
                                             )
                                         },
                                         navigationIcon = {
-                                            IconButton(onClick = { navController.navigateUp() }) {
-                                                Icon(
-                                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                                    contentDescription = "Back"
-                                                )
-                                            }
+                                            NavigateUpIconButton(navigateUp = { navController.navigateUp() })
                                         },
                                         modifier = Modifier.fillMaxWidth()
                                     )
@@ -341,16 +346,16 @@ class MainActivity : ComponentActivity() {
                                                 navController.navigateUp()
                                                 journalEntryViewModel.save()
                                             }) {
-                                                Text(text = "Save", style = MaterialTheme.typography.titleMedium)
+                                                Text(
+                                                    text = "Save",
+                                                    style = MaterialTheme.typography.titleMedium
+                                                )
                                             }
                                         },
                                         navigationIcon = {
-                                            IconButton(onClick = { navController.navigateUp() }) {
-                                                Icon(
-                                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                                    contentDescription = "Back"
-                                                )
-                                            }
+                                            NavigateUpIconButton(
+                                                navigateUp = { navController.navigateUp() }
+                                            )
                                         },
                                         modifier = Modifier.fillMaxWidth()
                                     )
@@ -366,54 +371,36 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
+                        composable(Route.EDIT_JOURNAL_SCREEN) {
+                            LaunchedEffect(Unit) {
+                                bottomBarVisibility.value = false
+                            }
+                            AppScreen(
+                                showChildrenFabIcons = showChildFabs,
+                                modifier = Modifier,
+                                snackBarHostState = snackBarState,
+                                topAppBar = {
+                                    EditWorkoutTopAppBar(navigateUp = { navController.navigateUp() })
+                                },
+                                mainScreen = { mainScreenModifier ->
+                                    EditWorkoutScreen(
+                                        modifier = mainScreenModifier
+                                    )
+                                },
+                                navigateToDestination = { navigation ->
+                                    showChildFabs = false
+                                    navigateToDestination(
+                                        navigationInterface = navigation,
+                                        navController = navController
+                                    )
+                                },
+                                navController = navController,
+                                bottomBarVisibility = bottomBarVisibility.value
+                            )
+                        }
                     }
                 }
             }
-        }
-    }
-
-    private fun homeScreenEvents(events: HomeScreenEvents) {
-        when (events) {
-            HomeScreenEvents.DismissDatePicker -> homeViewModel.updateDatePickerDialog(
-                isDatePickerShowing = false
-            )
-
-            is HomeScreenEvents.SelectDateFromDatePicker -> {
-                homeViewModel.getSelectedDate(events.userSelectedDate)
-                // dismissing dialog on date selection
-                homeViewModel.updateDatePickerDialog(isDatePickerShowing = false)
-                homeViewModel.showSnackBar(snackBarHostState = events.snackBarHostState)
-            }
-
-            is HomeScreenEvents.UpdateFilterDialog -> homeViewModel.updateFilterDialog(
-                isFilterDialogShowing = events.isDialogShowing
-            )
-
-            HomeScreenEvents.DismissFilterExercisesDialog -> homeViewModel.updateFilterDialog(
-                isFilterDialogShowing = false
-            )
-
-            is HomeScreenEvents.OnConfirmFilterExercisesDialog -> homeViewModel.filterWorkouts(
-                events.filterList
-            )
-
-            HomeScreenEvents.ClearFilterExercisesDialog -> homeViewModel.clearFilter()
-            HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> homeViewModel.getDataFromRealmDb()
-            HomeScreenEvents.SyncRealmWorkoutEntryFromDb -> homeViewModel.getDataFromRealmDb()
-        }
-    }
-
-    private fun homeAppBarEvents(events: HomeAppBarEvents) {
-        when (events) {
-            HomeAppBarEvents.GetNextDate -> homeViewModel.getNextDate()
-            HomeAppBarEvents.GetPreviousDate -> homeViewModel.getPreviousDate()
-            is HomeAppBarEvents.ShowDatePickerDialog -> homeViewModel.updateDatePickerDialog(
-                isDatePickerShowing = events.showDialog
-            )
-
-            is HomeAppBarEvents.ShowFilterDialog -> homeViewModel.updateFilterDialog(
-                isFilterDialogShowing = events.showDialog
-            )
         }
     }
 
@@ -429,48 +416,51 @@ class MainActivity : ComponentActivity() {
             duration = SnackbarDuration.Short
         )
     }
+}
 
-    private fun navigateToDestination(
-        navigationInterface: NavigationInterface,
-        navController: NavController
-    ) {
-        when (navigationInterface) {
-            NavigationInterface.NavigateToHome -> {
-                homeViewModel.clearUiState()
-                navigationEvent(
-                    navigationInterface,
-                    navController = navController
-                )
-            }
+fun navigateToDestination(
+    navigationInterface: NavigationInterface,
+    navController: NavController
+) = when (navigationInterface) {
+    NavigationInterface.NavigateToHome -> {
+        navigationEvent(
+            navigationInterface = navigationInterface,
+            navController = navController
+        )
+    }
 
-            NavigationInterface.NavigateToWorkoutLibrary -> {
-                navigationEvent(
-                    navigationInterface,
-                    navController = navController
-                )
-            }
+    NavigationInterface.NavigateToWorkoutLibrary -> {
+        navigationEvent(
+            navigationInterface = navigationInterface,
+            navController = navController
+        )
+    }
 
-            NavigationInterface.NavigateToWorkoutStatistics -> {
-                statisticsViewModel.clearUiState()
-                navigationEvent(
-                    navigationInterface,
-                    navController = navController
-                )
-            }
+    NavigationInterface.NavigateToWorkoutStatistics -> {
+        navigationEvent(
+            navigationInterface = navigationInterface,
+            navController = navController
+        )
+    }
 
-            NavigationInterface.NavigateToJournalEntry -> {
-                navigationEvent(
-                    navigationInterface,
-                    navController = navController
-                )
-            }
+    NavigationInterface.NavigateToJournalEntry -> {
+        navigationEvent(
+            navigationInterface = navigationInterface,
+            navController = navController
+        )
+    }
 
-            NavigationInterface.NavigateToJournalEntryDetails -> {
-                navigationEvent(
-                    navigationInterface,
-                    navController = navController
-                )
-            }
-        }
+    NavigationInterface.NavigateToJournalEntryDetails -> {
+        navigationEvent(
+            navigationInterface = navigationInterface,
+            navController = navController
+        )
+    }
+
+    NavigationInterface.NavigateToEditWorkout -> {
+        navigationEvent(
+            navigationInterface = navigationInterface,
+            navController = navController
+        )
     }
 }

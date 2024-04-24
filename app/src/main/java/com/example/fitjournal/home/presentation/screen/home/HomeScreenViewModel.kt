@@ -15,6 +15,8 @@ import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntr
 import com.example.fitjournal.core.presentation.model.WorkoutUiModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.state.UiState
+import com.example.fitjournal.home.presentation.model.events.HomeAppBarEvents
+import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.model.state.HomeScreenUiState
 import com.example.fitjournal.home.presentation.model.ui.FilterWorkoutUiModel
 import com.example.fitjournal.home.presentation.util.filter.HomeScreenFilter
@@ -26,10 +28,59 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase
 ) : ViewModel() {
-    var homeScreenState: HomeScreenUiState by mutableStateOf(HomeScreenUiState())
+    var homeScreenState: HomeScreenUiState by mutableStateOf(
+        HomeScreenUiState(
+            homeScreenEvents = ::homeScreenEvents,
+            homeAppBarEvents = ::homeAppBarEvents
+        )
+    )
         private set
 
-    fun getNextDate() {
+    private fun homeScreenEvents(events: HomeScreenEvents) {
+        when (events) {
+            is HomeScreenEvents.SelectDateFromDatePicker -> {
+                getSelectedDate(events.userSelectedDate)
+                // dismissing dialog on date selection
+                updateDatePickerDialog(isDatePickerShowing = false)
+                showSnackBar(snackBarHostState = events.snackBarHostState)
+            }
+
+            is HomeScreenEvents.UpdateFilterDialog -> updateFilterDialog(
+                isFilterDialogShowing = events.isDialogShowing
+            )
+
+            is HomeScreenEvents.OnConfirmFilterExercisesDialog -> filterWorkouts(
+                events.filterList
+            )
+
+            HomeScreenEvents.DismissFilterExercisesDialog -> updateFilterDialog(
+                isFilterDialogShowing = false
+            )
+
+            HomeScreenEvents.DismissDatePicker -> updateDatePickerDialog(
+                isDatePickerShowing = false
+            )
+            HomeScreenEvents.ClearFilterExercisesDialog -> clearFilter()
+            HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> getDataFromRealmDb()
+            HomeScreenEvents.SyncRealmWorkoutEntryFromDb -> getDataFromRealmDb()
+        }
+    }
+
+    private fun homeAppBarEvents(events: HomeAppBarEvents) {
+        when (events) {
+            HomeAppBarEvents.GetNextDate -> getNextDate()
+            HomeAppBarEvents.GetPreviousDate -> getPreviousDate()
+            is HomeAppBarEvents.ShowDatePickerDialog -> updateDatePickerDialog(
+                isDatePickerShowing = events.showDialog
+            )
+
+            is HomeAppBarEvents.ShowFilterDialog -> updateFilterDialog(
+                isFilterDialogShowing = events.showDialog
+            )
+        }
+    }
+
+    private fun getNextDate() {
         val nextDay = DateManager.getNextDate(homeScreenState.currentDateTime)
         val nextDayInMilliseconds = DateManager.getTimeInMilliseconds(nextDay.localDateTime)
 
@@ -51,7 +102,7 @@ class HomeScreenViewModel @Inject constructor(
         )
     }
 
-    fun getPreviousDate() {
+    private fun getPreviousDate() {
         val previousDay = DateManager.getPreviousDate(homeScreenState.currentDateTime)
         val previousDayInMilliseconds = DateManager.getTimeInMilliseconds(previousDay.localDateTime)
 
@@ -73,13 +124,13 @@ class HomeScreenViewModel @Inject constructor(
         )
     }
 
-    fun showSnackBar(snackBarHostState: SnackbarHostState) {
+    private fun showSnackBar(snackBarHostState: SnackbarHostState) {
         viewModelScope.launch {
             snackBarHostState.showSnackbar("Date Updated", duration = SnackbarDuration.Short)
         }
     }
 
-    fun getSelectedDate(dateInMillis: Long) {
+    private fun getSelectedDate(dateInMillis: Long) {
         val selectedDate = DateManager.getSelectedDate(
             dateInMillis
         )
@@ -101,11 +152,11 @@ class HomeScreenViewModel @Inject constructor(
         )
     }
 
-    fun updateDatePickerDialog(isDatePickerShowing: Boolean) {
+    private fun updateDatePickerDialog(isDatePickerShowing: Boolean) {
         updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isDatePickerDialogShowing = isDatePickerShowing))
     }
 
-    fun updateFilterDialog(isFilterDialogShowing: Boolean) {
+    private fun updateFilterDialog(isFilterDialogShowing: Boolean) {
         updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isFilterDialogShowing = isFilterDialogShowing))
     }
 
@@ -113,7 +164,7 @@ class HomeScreenViewModel @Inject constructor(
         homeScreenState = newHomeScreenState
     }
 
-    fun clearFilter() {
+    private fun clearFilter() {
         updateHomeScreenState(
             newHomeScreenState = homeScreenState.copy(
                 filterList = HomeScreenFilter.filterList
@@ -121,7 +172,7 @@ class HomeScreenViewModel @Inject constructor(
         )
     }
 
-    fun filterWorkouts(
+    private fun filterWorkouts(
         filteredWorkoutList: List<WorkoutTypeEnum>
     ) {
         val currentFilterList = homeScreenState.filterList
@@ -160,7 +211,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     // should be call on load or when needed for loading screen
-    fun getDataFromRealmDb() {
+    private fun getDataFromRealmDb() {
         viewModelScope.launch {
             val masterWorkoutList = realmWorkoutEntryUseCase.getRealmWorkoutEntryList()
             if (masterWorkoutList.isNotEmpty()) {

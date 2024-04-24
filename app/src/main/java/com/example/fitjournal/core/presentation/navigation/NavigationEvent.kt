@@ -26,5 +26,9 @@ fun navigationEvent(
         NavigationInterface.NavigateToJournalEntryDetails -> {
             navController.navigate(Route.JOURNAL_ENTRY_DETAILS)
         }
+
+        NavigationInterface.NavigateToEditWorkout -> {
+            navController.navigate(Route.EDIT_JOURNAL_SCREEN)
+        }
     }
 }
