@@ -1,9 +1,9 @@
-package com.example.fitjournal.journalEntry.components
+package com.example.fitjournal.journalEntry.screen.journalEntry
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.fitjournal.journalEntry.domain.JournalEntryViewModel
+import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryViewModel
 
 @Composable
 fun JournalEntryDetailsScreen(

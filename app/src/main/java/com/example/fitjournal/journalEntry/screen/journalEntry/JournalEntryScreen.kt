@@ -1,4 +1,4 @@
-package com.example.fitjournal.journalEntry
+package com.example.fitjournal.journalEntry.screen.journalEntry
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -16,7 +16,6 @@ import com.example.fitjournal.core.presentation.commoncomponents.textField.Searc
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.journalEntry.components.JournalEntryList
-import com.example.fitjournal.journalEntry.domain.JournalEntryViewModel
 import com.example.fitjournal.journalEntry.domain.WorkoutDetail
 
 @Composable

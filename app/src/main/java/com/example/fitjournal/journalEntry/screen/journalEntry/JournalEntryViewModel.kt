@@ -1,12 +1,10 @@
-package com.example.fitjournal.journalEntry.domain
+package com.example.fitjournal.journalEntry.screen.journalEntry
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.fitjournal.core.Workouts
+import com.example.fitjournal.journalEntry.domain.WorkoutDetail
 
 class JournalEntryViewModel : ViewModel() {
 
