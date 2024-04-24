@@ -1,42 +1,25 @@
 package com.example.fitjournal.home.presentation.model.state
 
-import com.example.fitjournal.core.domain.managers.DateManager
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.presentation.model.WorkoutUiModel
-import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.model.ui.FilterWorkoutUiModel
+import com.example.fitjournal.home.presentation.util.constants.GeneralConstants
+import com.example.fitjournal.home.presentation.util.filter.HomeScreenFilter
 import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 data class HomeScreenUiState(
-    val currentDateTime: LocalDateTime = LocalDateTime.now(),
-    val currentDate: String = DateManager.formatDate(
-        currentDateTime.format(
-            DateTimeFormatter.ISO_LOCAL_DATE.withLocale(
-                Locale.US
-            )
-        )
-    ),
-    val currentDateInMillis: Long = (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000),
+    val currentDateTime: LocalDateTime = GeneralConstants.todayDateTime,
+    val currentDate: String = GeneralConstants.todayDate,
+    val currentDateInMillis: Long = GeneralConstants.todayDateTimeInMilli,
     val isDatePickerDialogShowing: Boolean = false,
     val isFilterDialogShowing: Boolean = false,
-    val filterDialogList: List<FilterWorkoutUiModel> = listOf(
-        FilterWorkoutUiModel(
-            isWorkoutSelected = false,
-            exerciseType = WorkoutTypeEnum.CALISTHENICS
-        ),
-        FilterWorkoutUiModel(
-            isWorkoutSelected = false,
-            exerciseType = WorkoutTypeEnum.WEIGHT_TRAINING
-        ),
-        FilterWorkoutUiModel(
-            isWorkoutSelected = false,
-            exerciseType = WorkoutTypeEnum.CARDIO
-        )
-    ),
-    val listOfWorkouts: List<WorkoutModel>? = null,
-    val listOfVisibleWorkouts: UiState<List<WorkoutUiModel>> = UiState.None
+    val filterList: SnapshotStateList<FilterWorkoutUiModel> = HomeScreenFilter.filterList,
+    // all workouts ever inputted
+    val masterListOfWorkouts: List<WorkoutModel>? = null,
+    // current ui visible workouts
+    val listOfVisibleWorkoutsUiState: UiState<List<WorkoutUiModel>> = UiState.None,
+    // all workouts for current date
+    val currentDateListOfWorkouts: List<WorkoutModel> = emptyList()
 )
