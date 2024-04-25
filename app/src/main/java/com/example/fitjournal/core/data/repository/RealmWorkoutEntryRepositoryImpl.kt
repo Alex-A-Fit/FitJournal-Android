@@ -10,6 +10,7 @@ import io.realm.kotlin.ext.query
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.ext.toRealmList
 import io.realm.kotlin.types.RealmList
+import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
 
 class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryRepository {
@@ -21,13 +22,13 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
             val workouts: RealmList<RealmWorkoutEntry> = realmListOf()
             workouts.addAll(
                 listOf(
-                    MockData.weightTraining1(org.mongodb.kbson.ObjectId()),
-                    MockData.weightTraining2(org.mongodb.kbson.ObjectId()),
-                    MockData.calisthenics1(org.mongodb.kbson.ObjectId()),
-                    MockData.calisthenics2(org.mongodb.kbson.ObjectId()),
-                    MockData.calisthenics3(org.mongodb.kbson.ObjectId()),
-                    MockData.cardio1(org.mongodb.kbson.ObjectId()),
-                    MockData.cardio2(org.mongodb.kbson.ObjectId())
+                    MockData.weightTraining1(createWorkoutId()),
+                    MockData.weightTraining2(createWorkoutId()),
+                    MockData.calisthenics1(createWorkoutId()),
+                    MockData.calisthenics2(createWorkoutId()),
+                    MockData.calisthenics3(createWorkoutId()),
+                    MockData.cardio1(createWorkoutId()),
+                    MockData.cardio2(createWorkoutId())
                 )
             )
             // running for each to simplify adding each individual workout entry
@@ -46,6 +47,16 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
             return list
         }
         return emptyList()
+    }
+
+    override suspend fun getSingleRealmWorkoutEntry(workoutId: String): RealmWorkoutEntry? {
+        return realm.query<RealmWorkoutEntry>(
+            RealmWorkoutEntry::class,
+            query = "workoutId == $0",
+            workoutId
+        )
+            .find()
+            .firstOrNull()
     }
 
     override suspend fun addSingleWorkoutEntryToRealmDb(realmWorkoutEntry: RealmWorkoutEntry): Boolean {
@@ -117,5 +128,9 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
                 false
             }
         }
+    }
+
+    private fun createWorkoutId(): String {
+        return ObjectId().toHexString()
     }
 }

@@ -22,7 +22,7 @@ class GetRealmWorkoutEntryList @Inject constructor(
     }
 }
 
-private fun convertRealmWorkoutEntryToWorkoutModelUseCase(databaseEntry: List<RealmWorkoutEntry>): List<WorkoutModel> {
+fun convertRealmWorkoutEntryToWorkoutModelUseCase(databaseEntry: List<RealmWorkoutEntry>): List<WorkoutModel> {
     val databaseWorkouts = databaseEntry.map { realmWorkout ->
         val workout = realmWorkout.workout
         val workoutType = getWorkoutType(workout?.type)

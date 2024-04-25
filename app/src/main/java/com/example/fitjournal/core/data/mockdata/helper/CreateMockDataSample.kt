@@ -9,14 +9,13 @@ import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutProper
 import com.example.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
 import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import io.realm.kotlin.ext.toRealmList
-import org.mongodb.kbson.ObjectId
 import java.time.LocalDate
 
 object CreateMockDataSample {
     fun weightTrainingSample(
         workoutName: String,
         workoutType: String,
-        objectId: ObjectId,
+        id: String,
         vararg workoutSet: StrengthTrainingSet
     ): RealmWorkoutEntry {
         return RealmWorkoutEntry().apply {
@@ -27,14 +26,14 @@ object CreateMockDataSample {
                     listOfWeightLiftingSets = workoutSet.map { it }.toRealmList()
                 }
             }
-            workoutId = objectId
+            workoutId = id
         }
     }
 
     fun calisthenicsSample(
         workoutName: String,
         workoutType: String,
-        objectId: ObjectId,
+        id: String,
         vararg workoutSet: CalisthenicsSet
     ): RealmWorkoutEntry {
         return RealmWorkoutEntry().apply {
@@ -45,7 +44,7 @@ object CreateMockDataSample {
                     listOfCalisthenicsSet = workoutSet.map { it }.toRealmList()
                 }
             }
-            workoutId = objectId
+            workoutId = id
             timeStamp = LocalDate.now().minusDays(2).formatToCommonDate()
         }
     }
@@ -53,7 +52,7 @@ object CreateMockDataSample {
     fun cardioSample(
         workoutName: String,
         workoutType: String,
-        objectId: ObjectId,
+        id: String,
         vararg workoutSet: CardioSet
     ): RealmWorkoutEntry {
         return RealmWorkoutEntry().apply {
@@ -64,7 +63,7 @@ object CreateMockDataSample {
                     listOfCardioSets = workoutSet.map { it }.toRealmList()
                 }
             }
-            workoutId = objectId
+            workoutId = id
             timeStamp = LocalDate.now().plusDays(2).formatToCommonDate()
         }
     }

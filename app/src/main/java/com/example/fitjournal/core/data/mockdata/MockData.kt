@@ -6,12 +6,11 @@ import com.example.fitjournal.core.data.model.realmdb.workout.CardioSet
 import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
 import com.example.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
-import org.mongodb.kbson.ObjectId
 
 // mock data variables that are generic functions
 // are meant so we can create copies with different Ids
 object MockData {
-    val weightTraining1 = fun(objectId: ObjectId): RealmWorkoutEntry {
+    val weightTraining1 = fun(id: String): RealmWorkoutEntry {
         return CreateMockDataSample.weightTrainingSample(
             workoutName = "Bench Press",
             workoutType = "Weight Training",
@@ -22,11 +21,11 @@ object MockData {
                     weight = 365.0
                 }
             ),
-            objectId = objectId
+            id = id
         )
     }
 
-    val weightTraining2 = fun(objectId: ObjectId): RealmWorkoutEntry {
+    val weightTraining2 = fun(id: String): RealmWorkoutEntry {
         return CreateMockDataSample.weightTrainingSample(
             workoutName = "Squats",
             workoutType = "Weight Training",
@@ -42,11 +41,11 @@ object MockData {
                     weight = 110.0
                 }
             ),
-            objectId = objectId
+            id = id
         )
     }
 
-    val calisthenics1 = fun(objectId: ObjectId): RealmWorkoutEntry {
+    val calisthenics1 = fun(id: String): RealmWorkoutEntry {
         return CreateMockDataSample.calisthenicsSample(
             workoutName = "Push Ups",
             workoutType = "Calisthenics",
@@ -58,11 +57,11 @@ object MockData {
                     time = "00:03:00"
                 }
             ),
-            objectId = objectId
+            id = id
         )
     }
 
-    val calisthenics2 = fun(objectId: ObjectId): RealmWorkoutEntry {
+    val calisthenics2 = fun(id: String): RealmWorkoutEntry {
         return CreateMockDataSample.calisthenicsSample(
             workoutName = "Mountain Climbers",
             workoutType = "Calisthenics",
@@ -76,11 +75,11 @@ object MockData {
                     sets = 2
                 }
             ),
-            objectId = objectId
+            id = id
         )
     }
 
-    val calisthenics3 = fun(objectId: ObjectId): RealmWorkoutEntry {
+    val calisthenics3 = fun(id: String): RealmWorkoutEntry {
         return CreateMockDataSample.calisthenicsSample(
             workoutName = "Medicine Ball Slams",
             workoutType = "Calisthenics",
@@ -90,11 +89,11 @@ object MockData {
                     sets = 4
                 }
             ),
-            objectId = objectId
+            id = id
         )
     }
 
-    val cardio1 = fun(objectId: ObjectId): RealmWorkoutEntry {
+    val cardio1 = fun(id: String): RealmWorkoutEntry {
         return CreateMockDataSample.cardioSample(
             workoutName = "Running",
             workoutType = "Cardio",
@@ -104,11 +103,11 @@ object MockData {
                     time = "00:30:00"
                 }
             ),
-            objectId = objectId
+            id = id
         )
     }
 
-    val cardio2 = fun(objectId: ObjectId): RealmWorkoutEntry {
+    val cardio2 = fun(id: String): RealmWorkoutEntry {
         return CreateMockDataSample.cardioSample(
             workoutName = "Biking",
             workoutType = "Cardio",
@@ -120,7 +119,7 @@ object MockData {
                     laps = 13.0
                 }
             ),
-            objectId = objectId
+            id = id
         )
     }
 

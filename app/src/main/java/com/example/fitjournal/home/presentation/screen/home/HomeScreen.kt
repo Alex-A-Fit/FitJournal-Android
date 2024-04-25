@@ -133,7 +133,7 @@ fun HomeScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
-                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout)
+                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout(workout.id))
                                         },
                                     sets = workout.workoutDetailsUiModel.exerciseCardModel.sets
                                 )
@@ -148,7 +148,7 @@ fun HomeScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
-                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout)
+                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout(workout.id))
                                         }
                                 )
                             }
@@ -163,7 +163,7 @@ fun HomeScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
-                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout)
+                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout(workout.id))
                                         }
                                 )
                             }
