@@ -14,7 +14,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditWorkoutViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase
 ) : ViewModel() {
     var editWorkoutState: EditWorkoutUiState by mutableStateOf(

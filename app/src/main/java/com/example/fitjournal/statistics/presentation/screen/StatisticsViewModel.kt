@@ -33,7 +33,7 @@ class StatisticsViewModel @Inject constructor(
     fun addSingleObjectToDb() {
         viewModelScope.launch(Dispatchers.IO) {
             val didUpdateWork = realmWorkoutEntryUseCase.addSingleWorkoutEntryToRealmDbUseCase(
-                realmWorkoutEntry = MockData.weightTraining1(ObjectId().asString().value)
+                realmWorkoutEntry = MockData.weightTraining1(ObjectId().toHexString())
             )
             Log.d("Realm Updates", "Realm Added new entry $didUpdateWork")
         }
