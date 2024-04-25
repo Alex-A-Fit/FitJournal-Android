@@ -4,6 +4,8 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.presentation.model.WorkoutUiModel
 import com.example.fitjournal.core.util.state.UiState
+import com.example.fitjournal.home.presentation.model.events.HomeAppBarEvents
+import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.model.ui.FilterWorkoutUiModel
 import com.example.fitjournal.home.presentation.util.constants.GeneralConstants
 import com.example.fitjournal.home.presentation.util.filter.HomeScreenFilter
@@ -21,5 +23,7 @@ data class HomeScreenUiState(
     // current ui visible workouts
     val listOfVisibleWorkoutsUiState: UiState<List<WorkoutUiModel>> = UiState.None,
     // all workouts for current date
-    val currentDateListOfWorkouts: List<WorkoutModel> = emptyList()
+    val currentDateListOfWorkouts: List<WorkoutModel> = emptyList(),
+    val homeScreenEvents: (HomeScreenEvents) -> Unit,
+    val homeAppBarEvents: (HomeAppBarEvents) -> Unit
 )
