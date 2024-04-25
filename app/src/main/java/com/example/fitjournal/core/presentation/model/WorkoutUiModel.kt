@@ -2,10 +2,9 @@ package com.example.fitjournal.core.presentation.model
 
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
-import org.mongodb.kbson.ObjectId
 
 data class WorkoutUiModel(
-    val id: ObjectId,
+    val id: String,
     val date: String,
     val workoutDetailsUiModel: WorkoutDetailsUiModel
 )

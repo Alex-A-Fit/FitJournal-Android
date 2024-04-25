@@ -8,7 +8,7 @@ import com.example.fitjournal.core.domain.model.WorkoutModel
 fun WorkoutModel.toRealmWorkoutEntry(workoutType: String): RealmWorkoutEntry {
     val workoutModel = this
     return RealmWorkoutEntry().apply {
-        this.workoutId = workoutModel.id
+        this.workoutId = workoutModel.id.toString()
         this.workout = RealmWorkout().apply {
             name = workoutModel.workoutDetailsModel.name
             type = workoutType

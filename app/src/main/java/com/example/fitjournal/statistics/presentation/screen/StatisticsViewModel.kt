@@ -17,6 +17,7 @@ import com.example.fitjournal.statistics.domain.model.StatisticsScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
 
 // note: Using statistics screen to manual test crud functions
@@ -32,7 +33,7 @@ class StatisticsViewModel @Inject constructor(
     fun addSingleObjectToDb() {
         viewModelScope.launch(Dispatchers.IO) {
             val didUpdateWork = realmWorkoutEntryUseCase.addSingleWorkoutEntryToRealmDbUseCase(
-                realmWorkoutEntry = MockData.weightTraining1(org.mongodb.kbson.ObjectId())
+                realmWorkoutEntry = MockData.weightTraining1(ObjectId().asString().value)
             )
             Log.d("Realm Updates", "Realm Added new entry $didUpdateWork")
         }

@@ -5,6 +5,7 @@ import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
 interface RealmWorkoutEntryRepository {
     suspend fun addMockDataToRealm()
     suspend fun getRealmWorkoutEntryList(): List<RealmWorkoutEntry>
+    suspend fun getSingleRealmWorkoutEntry(workoutId: String): RealmWorkoutEntry?
     suspend fun addSingleWorkoutEntryToRealmDb(
         realmWorkoutEntry: RealmWorkoutEntry
     ): Boolean

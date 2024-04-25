@@ -8,7 +8,7 @@ import java.time.LocalDate
 
 class RealmWorkoutEntry : RealmObject {
     @PrimaryKey
-    var workoutId: ObjectId = ObjectId()
+    var workoutId: String = ObjectId().toHexString()
     var workout: RealmWorkout? = null
 
     // time should be in MMM dd, yyyy format

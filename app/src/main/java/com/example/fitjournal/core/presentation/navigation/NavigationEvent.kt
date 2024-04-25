@@ -27,8 +27,10 @@ fun navigationEvent(
             navController.navigate(Route.JOURNAL_ENTRY_DETAILS)
         }
 
-        NavigationInterface.NavigateToEditWorkout -> {
-            navController.navigate(Route.EDIT_JOURNAL_SCREEN)
+        is NavigationInterface.NavigateToEditWorkout -> {
+            navController.navigate(
+                route = "${Route.EDIT_JOURNAL_SCREEN}/${navigationInterface.workoutId}"
+            )
         }
     }
 }

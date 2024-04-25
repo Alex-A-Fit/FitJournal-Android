@@ -26,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fitjournal.core.presentation.commoncomponents.appbars.TopAppBar
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.iconbuttons.NavigateUpIconButton
+import com.example.fitjournal.core.presentation.navigation.Arguments
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.navigation.Route
 import com.example.fitjournal.core.presentation.navigation.Route.LOTTIE_INTRO
@@ -36,6 +37,7 @@ import com.example.fitjournal.core.presentation.theme.FitJournalTheme
 import com.example.fitjournal.home.presentation.components.appbar.EditWorkoutTopAppBar
 import com.example.fitjournal.home.presentation.components.appbar.HomeTopAppBar
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutScreen
+import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutViewModel
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
 import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryDetailsScreen
@@ -55,6 +57,7 @@ class MainActivity : ComponentActivity() {
     private val libraryScreenViewModel: LibraryScreenViewModel by viewModels()
     private val statisticsViewModel: StatisticsViewModel by viewModels()
     private val journalEntryViewModel: JournalEntryViewModel by viewModels()
+    private val editWorkoutViewModel: EditWorkoutViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -371,9 +374,12 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
-                        composable(Route.EDIT_JOURNAL_SCREEN) {
+                        composable("${Route.EDIT_JOURNAL_SCREEN}${Arguments.WORKOUT_ID}") { backStackEntry ->
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
+                                editWorkoutViewModel.getSingleWorkout(
+                                    backStackEntry.arguments?.getString("workoutId")
+                                )
                             }
                             AppScreen(
                                 showChildrenFabIcons = showChildFabs,
@@ -457,7 +463,7 @@ fun navigateToDestination(
         )
     }
 
-    NavigationInterface.NavigateToEditWorkout -> {
+    is NavigationInterface.NavigateToEditWorkout -> {
         navigationEvent(
             navigationInterface = navigationInterface,
             navController = navController

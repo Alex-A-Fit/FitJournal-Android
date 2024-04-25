@@ -9,3 +9,7 @@ object Route {
     const val JOURNAL_ENTRY_SCREEN = "journalEntryScreen"
     const val JOURNAL_ENTRY_DETAILS = "journalEntryDetails"
 }
+
+object Arguments {
+    const val WORKOUT_ID = "/{workoutId}"
+}
