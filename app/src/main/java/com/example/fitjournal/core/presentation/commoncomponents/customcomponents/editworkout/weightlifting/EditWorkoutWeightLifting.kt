@@ -1,8 +1,6 @@
 package com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -101,13 +99,13 @@ fun EditWorkoutWeightLifting(
             doesTextFieldHaveError = isRepsErrorVisible
         )
     }
-            ErrorText(
-                text = stringResource(id = R.string.error_with_adding_reps),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = Spacing.spacing8),
-                color = if (isRepsErrorVisible) Red else Color.Transparent
-            )
+    ErrorText(
+        text = stringResource(id = R.string.error_with_adding_reps),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = Spacing.spacing8),
+        color = if (isRepsErrorVisible) Red else Color.Transparent
+    )
     EditWorkoutPropertySection(
         workoutProperty = stringResource(id = R.string.label_weight).uppercase()
     ) {
@@ -138,7 +136,6 @@ fun EditWorkoutWeightLifting(
             },
             doesTextFieldHaveError = isWeightErrorVisible
         )
-
     }
     ErrorText(
         text = stringResource(id = R.string.error_with_adding_weight),
