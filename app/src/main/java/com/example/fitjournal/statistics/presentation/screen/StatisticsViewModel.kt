@@ -107,7 +107,7 @@ class StatisticsViewModel @Inject constructor(
             )
             viewModelScope.launch {
                 val wasDeleteSuccessful = realmWorkoutEntryUseCase.deleteWorkoutEntryFromRealmDbUseCase(
-                    realmWorkoutEntry = realmEntryToDelete
+                    workoutId = realmEntryToDelete.workoutId
                 )
                 if (wasDeleteSuccessful) {
                     getDataFromRealmDb()

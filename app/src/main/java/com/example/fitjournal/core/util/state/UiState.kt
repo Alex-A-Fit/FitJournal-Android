@@ -18,5 +18,5 @@ sealed class UiState<out T> {
     data object None : UiState<Nothing>()
 
     // error is to provide Error Handling on Ui side
-    data class Error<out T>(val reasonForError: T) : UiState<T>()
+    data object Error : UiState<Nothing>()
 }

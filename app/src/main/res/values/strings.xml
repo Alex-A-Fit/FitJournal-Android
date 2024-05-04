@@ -11,7 +11,11 @@
     <string name="content_desc_bottom_app_bar_home_icon">Home tab to view workouts for the day</string>
     <string name="content_desc_bottom_app_bar_library_icon">Library for choosing workouts</string>
     <string name="content_desc_cancel_icon_clear_text">An x to clear text in searchbar</string>
+    <string name="content_desc_subtract_value_icon">A hyphen icon to signify subtraction for the specific value</string>
+    <string name="content_desc_add_value_icon">A plus icon to signify addition for the specific value</string>
     <string name="content_desc_search_icon">A magnifying glass that signifies a user\'s ability to search workouts within this search bar</string>
+    <string name="content_desc_edit_workout_trash_icon">Trash icon to delete the individual workout row</string>
+    <string name="content_desc_edit_workout_pencil_icon">Pencil icon to edit workout entry</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
@@ -23,10 +27,12 @@
     <string name="title_most_recent_workout_session">Most Recent Workout Session</string>
     <string name="title_choose_workout_type">Choose a workout type</string>
     <string name="title_create_new_workout">Add New Workout</string>
+    <string name="text_edit_workout_title">%1$s (%2$s)</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>
     <string name="subtitle_create_new_workout">Create a new workout to add to your library</string>
+    <string name="subtitle_workout_type">Current Workout Type:</string>
 
     // General Strings
     <string name="text_total_distance_traveled">Total Distance traveled: %1$s %2$s</string>
@@ -45,25 +51,34 @@
     <string name="text_weightlifting_menu_title">Weight Training</string>
     <string name="text_cardio_menu_title">Cardio</string>
     <string name="text_calisthenics_menu_title">Calisthenics</string>
-    <string name="text_save_button">Save</string>
-    <string name="text_cancel_button">Cancel</string>
-
+    <string name="text_edit_your_workout">Edit Your Workout Below</string>
+    <string name="text_date_and_date_value">Created on: %1$s</string>
 
     // labels
-    <string name="label_rotate_Icon">Rotate main fab icon</string>
+    <string name="label_rotate_icon">Rotate main fab icon</string>
     <string name="label_workout_name">Workout Name</string>
-    <string name="label_dismiss_snackBar">Dismiss</string>
+    <string name="label_dismiss_snackbar">Dismiss</string>
+    <string name="label_reps">Reps</string>
+    <string name="label_sets">Sets</string>
+    <string name="label_weight">Weight</string>
 
     // Button Strings
     <string name="button_cancel">Cancel</string>
     <string name="button_confirm">Confirm</string>
     <string name="button_create_workout">Create Workout</string>
+    <string name="button_clear">Clear</string>
+    <string name="button_save">Save</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_delete_workout">Delete Workout</string>
 
     // Success Strings
     <string name="text_workout_successfully_added_to_library">\"%1$s\" was added to your Library!</string>
 
     // Error Strings
-    <string name="text_workout_error_with_adding_to_library">\"%1$s\" could not be added. Please Try Again.</string>
+    <string name="error_with_workout_being_added_to_library">\"%1$s\" could not be added. Please Try Again.</string>
+    <string name="error_with_adding_sets">Please enter a valid number of sets (1&#8211;999)</string>
+    <string name="error_with_adding_reps">Please enter a valid number of reps (1&#8211;999)</string>
+    <string name="error_with_adding_weight">Please enter a valid weight (1&#8211;99999)</string>
 
     // Placeholder strings
     <string name="text_library_searchbar_placeholder">Search for workout</string>
