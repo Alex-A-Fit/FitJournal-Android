@@ -103,14 +103,14 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
         }
     }
 
-    override suspend fun deleteWorkoutEntryFromRealmDb(realmWorkoutEntry: RealmWorkoutEntry): Boolean {
+    override suspend fun deleteWorkoutEntryFromRealmDb(realmWorkoutId: String): Boolean {
         return realm.write {
             return@write try {
                 val wasWorkoutDeleted: Boolean
                 this.getLatestResultViaQuery(
                     searchableClass = RealmWorkoutEntry::class,
                     query = "workoutId == $0",
-                    queryValue = realmWorkoutEntry.workoutId
+                    queryValue = realmWorkoutId
                 ).also {
                     wasWorkoutDeleted = if (it != null) {
                         delete(it)

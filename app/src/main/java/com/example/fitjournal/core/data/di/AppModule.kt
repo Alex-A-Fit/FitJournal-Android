@@ -17,6 +17,11 @@ import com.example.fitjournal.core.domain.usecase.realm.workout.GetRealmWorkoutE
 import com.example.fitjournal.core.domain.usecase.realm.workout.GetSingleRealmWorkoutEntry
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.UpdateSingleWorkoutEntryToRealmDbUseCase
+import com.example.fitjournal.core.domain.usecase.workout.AddOrSubtractDoublesUseCase
+import com.example.fitjournal.core.domain.usecase.workout.AddOrSubtractIntegersUseCase
+import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
+import com.example.fitjournal.core.domain.usecase.workout.IsDoubleValidUseCase
+import com.example.fitjournal.core.domain.usecase.workout.IsIntegerValidUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -87,6 +92,17 @@ object AppModule {
             deleteLibraryItemFromRealmDbUseCase = DeleteLibraryItemFromRealmDbUseCase(
                 realmWorkoutLibraryRepository = realmWorkoutLibraryRepository
             )
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideEditWorkoutUseCase(): EditWorkoutUseCase {
+        return EditWorkoutUseCase(
+            addOrSubtractDoublesUseCase = AddOrSubtractDoublesUseCase(),
+            addOrSubtractIntegersUseCase = AddOrSubtractIntegersUseCase(),
+            isIntegerValidUseCase = IsIntegerValidUseCase(),
+            isDoubleValidUseCase = IsDoubleValidUseCase()
         )
     }
 }

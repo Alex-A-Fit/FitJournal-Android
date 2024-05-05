@@ -140,7 +140,7 @@ class MainActivity : ComponentActivity() {
                                             showSnackBar(
                                                 snackBarHostState = snackBarState,
                                                 message = getString(
-                                                    R.string.text_workout_error_with_adding_to_library,
+                                                    R.string.error_with_workout_being_added_to_library,
                                                     addWorkoutToDbModel.workoutName
                                                 )
                                             )
@@ -210,7 +210,7 @@ class MainActivity : ComponentActivity() {
                                             showSnackBar(
                                                 snackBarHostState = snackBarState,
                                                 message = getString(
-                                                    R.string.text_workout_error_with_adding_to_library,
+                                                    R.string.error_with_workout_being_added_to_library,
                                                     addWorkoutToDbModel.workoutName
                                                 )
                                             )
@@ -390,7 +390,8 @@ class MainActivity : ComponentActivity() {
                                 },
                                 mainScreen = { mainScreenModifier ->
                                     EditWorkoutScreen(
-                                        modifier = mainScreenModifier
+                                        modifier = mainScreenModifier,
+                                        editWorkoutViewModel.editWorkoutState
                                     )
                                 },
                                 navigateToDestination = { navigation ->
@@ -401,7 +402,8 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 navController = navController,
-                                bottomBarVisibility = bottomBarVisibility.value
+                                bottomBarVisibility = bottomBarVisibility.value,
+                                showMainFabIcon = false
                             )
                         }
                     }

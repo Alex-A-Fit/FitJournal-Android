@@ -12,5 +12,5 @@ data class WorkoutDetailsModel(
     val name: String,
     val icon: Int?,
     val workoutTypeEnum: WorkoutTypeEnum,
-    val workoutPropertiesModel: WorkoutPropertiesModel? = null
+    var workoutPropertiesModel: WorkoutPropertiesModel
 )

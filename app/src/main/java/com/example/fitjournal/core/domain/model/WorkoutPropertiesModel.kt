@@ -13,23 +13,43 @@ sealed class WorkoutPropertiesModel {
     data class CalisthenicsProps(
         val props: List<CalisthenicsModel>
     ) : WorkoutPropertiesModel()
+
+    fun getWeightLiftingProps(): List<WeightLiftingModel> {
+        return when (this) {
+            is WeightLiftingProps -> props
+            else -> emptyList()
+        }
+    }
+
+    fun getCardioProps(): List<CardioModel> {
+        return when (this) {
+            is CardioProps -> props
+            else -> emptyList()
+        }
+    }
+    fun getCalisthenicsProps(): List<CalisthenicsModel> {
+        return when (this) {
+            is CalisthenicsProps -> props
+            else -> emptyList()
+        }
+    }
 }
 
 data class WeightLiftingModel(
     val reps: Int,
     val sets: Int,
     val weight: Double
-) : WorkoutPropertiesModel()
+)
 data class CardioModel(
     val distance: Double,
     val distanceType: CardioDistanceType = CardioDistanceType.MILES,
     val time: String,
     val laps: Double?
-) : WorkoutPropertiesModel()
+)
 
 data class CalisthenicsModel(
     val reps: Int,
     val sets: Int,
     val time: String?,
     val weight: Double? = null
-) : WorkoutPropertiesModel()
+)

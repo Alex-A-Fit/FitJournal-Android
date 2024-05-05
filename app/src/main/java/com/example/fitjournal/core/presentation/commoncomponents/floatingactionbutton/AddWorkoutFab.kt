@@ -24,7 +24,7 @@ fun AddWorkoutFab(
     val revertRotation = 0F
     val animateFabIcon by animateFloatAsState(
         targetValue = if (showFloatingActionButtonValue) threeEightsRotation else revertRotation,
-        label = stringResource(id = R.string.label_rotate_Icon),
+        label = stringResource(id = R.string.label_rotate_icon),
         animationSpec = tween(
             durationMillis = 500,
             delayMillis = 0

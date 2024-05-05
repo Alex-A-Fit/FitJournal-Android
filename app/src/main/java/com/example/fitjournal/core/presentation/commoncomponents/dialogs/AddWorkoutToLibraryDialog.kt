@@ -35,6 +35,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.R
+import com.example.fitjournal.core.presentation.commoncomponents.text.CommonSubtitleText
+import com.example.fitjournal.core.presentation.commoncomponents.text.CommonTitleText
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
 
@@ -142,11 +144,9 @@ private fun AddWorkoutToLibraryBtn(
 
 @Composable
 private fun AddNewWorkoutTitle() {
-    Text(
-        text = stringResource(id = R.string.title_create_new_workout),
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center
+    CommonTitleText(
+        titleText = stringResource(id = R.string.title_create_new_workout),
+        modifier = Modifier.fillMaxWidth()
     )
 }
 
@@ -182,11 +182,9 @@ private fun AddNewWorkoutSubTitle(
 
 @Composable
 fun CreateWorkoutSubtitle() {
-    Text(
-        text = stringResource(id = R.string.subtitle_create_new_workout),
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Start
+    CommonSubtitleText(
+        stringResource(id = R.string.subtitle_create_new_workout),
+        modifier = Modifier.fillMaxWidth()
     )
 }
 

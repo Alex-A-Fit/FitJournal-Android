@@ -93,6 +93,7 @@ dependencies {
 
     /* Material */
     implementation("androidx.compose.animation:animation:1.6.6")
+    implementation("androidx.compose.foundation:foundation:1.6.6")
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.0.0-alpha06")

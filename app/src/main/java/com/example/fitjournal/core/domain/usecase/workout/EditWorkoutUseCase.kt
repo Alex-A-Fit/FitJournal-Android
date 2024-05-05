@@ -1,0 +1,8 @@
+package com.example.fitjournal.core.domain.usecase.workout
+
+data class EditWorkoutUseCase(
+    val addOrSubtractDoublesUseCase: AddOrSubtractDoublesUseCase,
+    val addOrSubtractIntegersUseCase: AddOrSubtractIntegersUseCase,
+    val isIntegerValidUseCase: IsIntegerValidUseCase,
+    val isDoubleValidUseCase: IsDoubleValidUseCase
+)

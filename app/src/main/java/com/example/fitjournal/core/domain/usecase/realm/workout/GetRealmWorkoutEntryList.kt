@@ -6,7 +6,9 @@ import com.example.fitjournal.core.data.util.getWorkoutType
 import com.example.fitjournal.core.domain.mapper.mapRealmWorkoutPropsToWorkoutPropsModel
 import com.example.fitjournal.core.domain.model.WorkoutDetailsModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
+import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
+import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import javax.inject.Inject
 
 class GetRealmWorkoutEntryList @Inject constructor(
@@ -39,7 +41,25 @@ fun convertRealmWorkoutEntryToWorkoutModelUseCase(databaseEntry: List<RealmWorko
                         workoutType = workoutType
                     )
                 } else {
-                    null
+                    when (workoutType) {
+                        WorkoutTypeEnum.WEIGHT_TRAINING -> {
+                            WorkoutPropertiesModel.WeightLiftingProps(
+                                props = emptyList()
+                            )
+                        }
+
+                        WorkoutTypeEnum.CALISTHENICS -> {
+                            WorkoutPropertiesModel.CalisthenicsProps(
+                                props = emptyList()
+                            )
+                        }
+
+                        WorkoutTypeEnum.CARDIO -> {
+                            WorkoutPropertiesModel.CardioProps(
+                                props = emptyList()
+                            )
+                        }
+                    }
                 }
             ),
             date = realmWorkout.timeStamp
@@ -50,6 +70,6 @@ fun convertRealmWorkoutEntryToWorkoutModelUseCase(databaseEntry: List<RealmWorko
 
 private fun filterNullOrMissingInfoWorkouts(workouts: List<WorkoutModel>): List<WorkoutModel> {
     return workouts.filterNot {
-        it.workoutDetailsModel.name.isEmpty() || it.workoutDetailsModel.workoutPropertiesModel == null
+        it.workoutDetailsModel.name.isEmpty()
     }
 }
