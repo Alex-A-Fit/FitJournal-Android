@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
@@ -24,7 +25,8 @@ fun LibraryListSection(
     categories: SnapshotStateList<WorkoutCategory>,
     isBlurActive: Boolean,
     modifier: Modifier = Modifier,
-    libraryScreenListState: LazyListState
+    libraryScreenListState: LazyListState,
+    showDialog: MutableState<Boolean>
 ) {
     val workoutLibraryList = remember(categories) {
         categories
@@ -41,7 +43,7 @@ fun LibraryListSection(
             }
             itemsIndexed(category.items) { index, workout ->
                 Column(modifier = modifier.padding(start = Spacing.spacing16)) {
-                    ExerciseItem(exercise = workout.workoutName)
+                    ExerciseItem(exercise = workout.workoutName, showDialog = showDialog)
                     if (index != category.items.lastIndex) {
                         HorizontalDivider(
                             thickness = Spacing.spacing1,
