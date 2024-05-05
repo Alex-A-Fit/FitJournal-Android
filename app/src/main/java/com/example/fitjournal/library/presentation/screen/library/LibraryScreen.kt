@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.library.presentation.screen.library.components.DialogExamples
 import com.example.fitjournal.library.presentation.screen.library.components.LibraryListSection
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
@@ -28,7 +30,9 @@ fun LibraryScreen(
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val openAlertDialog = remember { mutableStateOf(false) }
 
+    DialogExamples(showDialog = openAlertDialog)
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -60,7 +64,8 @@ fun LibraryScreen(
         LibraryListSection(
             categories = libraryWorkoutState.listOfSearchedWorkouts,
             isBlurActive = isBlurActive,
-            libraryScreenListState = libraryScreenListState
+            libraryScreenListState = libraryScreenListState,
+            showDialog = openAlertDialog
         )
     }
 }

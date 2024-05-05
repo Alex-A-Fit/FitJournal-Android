@@ -57,11 +57,17 @@ class LibraryScreenViewModel @Inject constructor(
     }
 
     private fun searchForText(text: String, list: List<WorkoutCategory>): List<WorkoutCategory> {
-        return list.filter { category ->
-            category.items.any { workout ->
-                workout.workoutName.lowercase().contains(text.lowercase())
-            }
+        val filteredList = list.map { category ->
+            WorkoutCategory(
+                name = category.name,
+                items =
+                category.items.filter { workout ->
+                    val lowercaseWorkout = workout.workoutName.lowercase()
+                    lowercaseWorkout.contains(text.lowercase())
+                }.toMutableStateList()
+            )
         }
+        return filteredList.filterNot { it.items.isEmpty() }
     }
 
     private fun updateLibraryWorkoutState(newLibraryWorkoutState: LibraryWorkoutUiModel) {
