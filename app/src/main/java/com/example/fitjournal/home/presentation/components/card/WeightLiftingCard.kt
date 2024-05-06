@@ -17,21 +17,19 @@ import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJourna
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
+import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
+import com.example.fitjournal.home.presentation.model.ui.WeightLiftingUi
 
 @Composable
 fun WeightLiftingCard(
-    reps: Int?,
-    sets: Int?,
-    weight: Double?,
-    name: String,
-    icon: Int,
+    weightLiftingUi: WeightLiftingUi,
     modifier: Modifier = Modifier
 ) {
     FitJournalCard(modifier = modifier) {
         Column {
             CardTitle(
-                title = name,
-                workoutIcon = icon,
+                title = weightLiftingUi.name,
+                workoutIcon = weightLiftingUi.icon,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -41,11 +39,20 @@ fun WeightLiftingCard(
                 isWeightTrainingIcon = true
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
-            TopSetTitle()
+            if (weightLiftingUi.sets != null &&
+                weightLiftingUi.reps != null &&
+                weightLiftingUi.weight != null
+            ) {
+                TopSetTitle()
+            } else {
+                NoWorkoutSetsErrorText(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Spacing.spacing16)
+                )
+            }
             TopSetSummary(
-                reps = reps,
-                weight = weight,
-                sets = sets,
+                weightLiftingUi = weightLiftingUi,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.spacing16)
@@ -66,15 +73,14 @@ private fun TopSetTitle() {
     Text(
         text = stringResource(id = R.string.title_top_set),
         style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier.padding(horizontal = Spacing.spacing16)
     )
 }
 
 @Composable
 private fun TopSetSummary(
-    reps: Int?,
-    sets: Int?,
-    weight: Double?,
+    weightLiftingUi: WeightLiftingUi?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -82,23 +88,33 @@ private fun TopSetSummary(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
-        sets?.let {
+        if (weightLiftingUi?.sets != null &&
+            weightLiftingUi.reps != null &&
+            weightLiftingUi.weight != null
+        ) {
             Text(
-                text = stringResource(id = R.string.text_total_sets, sets.toString()),
+                text = stringResource(
+                    id = R.string.text_total_sets,
+                    weightLiftingUi.sets.toString()
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )
-        }
-        reps?.let {
+
             Text(
-                text = stringResource(id = R.string.text_total_reps, reps.toString()),
+                text = stringResource(
+                    id = R.string.text_total_reps,
+                    weightLiftingUi.reps.toString()
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )
-        }
-        weight?.let {
+
             Text(
-                text = stringResource(id = R.string.text_total_weight, weight.toString()),
+                text = stringResource(
+                    id = R.string.text_total_weight,
+                    weightLiftingUi.weight.toString()
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )

@@ -16,6 +16,8 @@
     <string name="content_desc_search_icon">A magnifying glass that signifies a user\'s ability to search workouts within this search bar</string>
     <string name="content_desc_edit_workout_trash_icon">Trash icon to delete the individual workout row</string>
     <string name="content_desc_edit_workout_pencil_icon">Pencil icon to edit workout entry</string>
+    <string name="content_desc_error_icon">Error icon to signify an error has occurred</string>d
+    <string name="content_desc_journal_filled_icon">Journal Icon</string>d
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
@@ -28,17 +30,21 @@
     <string name="title_choose_workout_type">Choose a workout type</string>
     <string name="title_create_new_workout">Add New Workout</string>
     <string name="text_edit_workout_title">%1$s (%2$s)</string>
+    <string name="title_edit_workout_error">Sorry, the workout you selected could not be found</string>
+    <string name="title_delete_workout">Are You Sure you want to delete \"%1$s\"</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>
     <string name="subtitle_create_new_workout">Create a new workout to add to your library</string>
     <string name="subtitle_workout_type">Current Workout Type:</string>
+    <string name="subtitle_delete_workout">on %1$s?</string>
 
     // General Strings
     <string name="text_total_distance_traveled">Total Distance traveled: %1$s %2$s</string>
     <string name="text_total_time_elapsed">Total Time Elapsed: %1$s</string>
     <string name="text_total_reps">Total Reps: %1$s</string>
     <string name="text_total_sets">Total Sets: %1$s</string>
+    <string name="text_total_laps">Total Laps: %1$s</string>
     <string name="text_total_weight">Total Weight: %1$s</string>
     <string name="text_view_workout_details">Click to view/edit workout</string>
     <string name="text_add_to_journal">Add to Journal</string>
@@ -53,6 +59,7 @@
     <string name="text_calisthenics_menu_title">Calisthenics</string>
     <string name="text_edit_your_workout">Edit Your Workout Below</string>
     <string name="text_date_and_date_value">Created on: %1$s</string>
+    <string name="text_back_to_journal">Go back to Journal</string>
 
     // labels
     <string name="label_rotate_icon">Rotate main fab icon</string>
@@ -76,9 +83,12 @@
 
     // Error Strings
     <string name="error_with_workout_being_added_to_library">\"%1$s\" could not be added. Please Try Again.</string>
+    <string name="error_with_workout_being_deleted">\"%1$s\" could not be deleted. Please Try Again.</string>
+    <string name="error_with_sets_being_deleted">Could not delete sets. Please Try Again.</string>
     <string name="error_with_adding_sets">Please enter a valid number of sets (1&#8211;999)</string>
     <string name="error_with_adding_reps">Please enter a valid number of reps (1&#8211;999)</string>
     <string name="error_with_adding_weight">Please enter a valid weight (1&#8211;99999)</string>
+    <string name="error_no_details_found">No details found for this workout</string>
 
     // Placeholder strings
     <string name="text_library_searchbar_placeholder">Search for workout</string>

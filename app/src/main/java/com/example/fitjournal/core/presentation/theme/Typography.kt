@@ -22,31 +22,31 @@ object Inter {
 val typography = Typography(
     headlineLarge = TextStyle(
         fontSize = 28.sp,
-        lineHeight = 30.sp,
+        lineHeight = 40.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.bold
     ),
     headlineMedium = TextStyle(
         fontSize = 26.sp,
-        lineHeight = 24.sp,
+        lineHeight = 36.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.bold
     ),
     headlineSmall = TextStyle(
         fontSize = 22.sp,
-        lineHeight = 12.sp,
+        lineHeight = 22.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.regular
     ),
     titleLarge = TextStyle(
         fontSize = 20.sp,
-        lineHeight = 16.sp,
+        lineHeight = 28.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.bold
     ),
     titleMedium = TextStyle(
         fontSize = 16.sp,
-        lineHeight = 20.sp,
+        lineHeight = 24.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.bold
     ),

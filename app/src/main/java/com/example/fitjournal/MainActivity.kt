@@ -391,7 +391,16 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainScreenModifier ->
                                     EditWorkoutScreen(
                                         modifier = mainScreenModifier,
-                                        editWorkoutViewModel.editWorkoutState
+                                        editWorkoutViewModel.editWorkoutState,
+                                        navigateToJournal = {
+                                            navController.navigateUp()
+                                        },
+                                        showSnackbar = {
+                                            showSnackBar(
+                                                snackBarHostState = snackBarState,
+                                                message = it
+                                            )
+                                        }
                                     )
                                 },
                                 navigateToDestination = { navigation ->

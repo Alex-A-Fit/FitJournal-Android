@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,39 +23,89 @@ import com.example.fitjournal.core.presentation.commoncomponents.customcomponent
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingWorkoutSets
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.DeleteWorkoutDialog
 import com.example.fitjournal.core.presentation.commoncomponents.text.CommonSubtitleText
 import com.example.fitjournal.core.presentation.commoncomponents.text.CommonTitleText
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.core.presentation.screens.LoadingScreen
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.extensions.toDoubleOrZero
 import com.example.fitjournal.core.util.extensions.toIntOrZero
 import com.example.fitjournal.core.util.state.UiState
+import com.example.fitjournal.home.presentation.components.editworkout.EditWorkoutErrorScreen
 import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
 import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
 
 @Composable
 fun EditWorkoutScreen(
     modifier: Modifier = Modifier,
-    editWorkoutUiState: EditWorkoutUiState
+    editWorkoutUiState: EditWorkoutUiState,
+    showSnackbar: suspend (String) -> Unit,
+    navigateToJournal: () -> Unit
 ) {
+    var showDeleteDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+    // holds onto the id of the currently viewed workout
+    // so we can delete it if need be
+    var workoutUpForDeletion by rememberSaveable {
+        mutableStateOf("")
+    }
     when (val uiState = editWorkoutUiState.workout) {
         UiState.Empty -> {
-            Unit
+            EditWorkoutErrorScreen(
+                navigateToJournal = navigateToJournal
+            )
         }
 
         is UiState.Error -> {
-            Unit
+            EditWorkoutErrorScreen(
+                navigateToJournal = navigateToJournal
+            )
         }
 
         UiState.Loading -> {
-            Unit
+            LoadingScreen()
         }
 
         UiState.None -> {
-            Unit
+            EditWorkoutErrorScreen(
+                navigateToJournal = navigateToJournal
+            )
         }
 
         is UiState.Success -> {
+            // strings needed if we want to delete a workout or set
+            val onDeleteFailedSnackBarText = stringResource(
+                id = R.string.error_with_workout_being_deleted,
+                uiState.data.workoutDetailsModel.name
+            )
+            val errorWithSetsBeingDeleted = stringResource(id = R.string.error_with_sets_being_deleted)
+
+            workoutUpForDeletion = uiState.data.id
+
+            if (showDeleteDialog) {
+                DeleteWorkoutDialog(
+                    workoutName = uiState.data.workoutDetailsModel.name,
+                    workoutDate = uiState.data.date,
+                    onDismiss = {
+                        showDeleteDialog = false
+                    },
+                    onDelete = {
+                        editWorkoutUiState.editWorkoutEvents(
+                            EditWorkoutEvents.DeleteEntireWorkout(
+                                workoutId = workoutUpForDeletion,
+                                onDeleteErrorCallback = { showSnackbar(onDeleteFailedSnackBarText) },
+                                onSuccessfulDeleteCallback = {
+                                    navigateToJournal()
+                                }
+                            )
+                        )
+                        showDeleteDialog = false
+                    }
+
+                )
+            }
             val workoutTypeAsString =
                 stringResource(id = uiState.data.workoutDetailsModel.workoutTypeEnum.stringId)
             LazyColumn(
@@ -122,7 +176,8 @@ fun EditWorkoutScreen(
                                         EditWorkoutEvents.DeleteWorkoutSetItemInWorkoutModelList(
                                             index = index,
                                             workoutType = workoutTypeAsString,
-                                            workoutModel = uiState.data
+                                            workoutModel = uiState.data,
+                                            onDeleteErrorCallback = { showSnackbar(errorWithSetsBeingDeleted) }
                                         )
                                     )
                                 },
@@ -152,7 +207,9 @@ fun EditWorkoutScreen(
                             horizontal = Spacing.spacing32,
                             vertical = Spacing.spacing4
                         ),
-                        onClick = {},
+                        onClick = {
+                            showDeleteDialog = true
+                        },
                         text = stringResource(id = R.string.button_delete_workout)
                     )
                 }

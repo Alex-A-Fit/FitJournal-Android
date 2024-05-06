@@ -29,6 +29,9 @@ import com.example.fitjournal.home.presentation.components.card.CalisthenicsCard
 import com.example.fitjournal.home.presentation.components.card.CardioCard
 import com.example.fitjournal.home.presentation.components.card.WeightLiftingCard
 import com.example.fitjournal.home.presentation.components.datepicker.FitJournalDatePickerDialog
+import com.example.fitjournal.home.presentation.mapper.mapToCalisthenicsUi
+import com.example.fitjournal.home.presentation.mapper.mapToCardioUi
+import com.example.fitjournal.home.presentation.mapper.mapToWeightLiftingUi
 import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.model.state.HomeScreenUiState
 
@@ -126,44 +129,45 @@ fun HomeScreen(
                         when (workout.workoutDetailsUiModel.workoutType) {
                             WorkoutTypeEnum.WEIGHT_TRAINING -> {
                                 WeightLiftingCard(
-                                    reps = workout.workoutDetailsUiModel.exerciseCardModel.reps,
-                                    weight = workout.workoutDetailsUiModel.exerciseCardModel.weight,
-                                    name = workout.workoutDetailsUiModel.name,
-                                    icon = workout.workoutDetailsUiModel.icon,
+                                    weightLiftingUi = workout.workoutDetailsUiModel.mapToWeightLiftingUi(),
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
-                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout(workout.id))
-                                        },
-                                    sets = workout.workoutDetailsUiModel.exerciseCardModel.sets
+                                            navigateToDestination(
+                                                NavigationInterface.NavigateToEditWorkout(
+                                                    workout.id
+                                                )
+                                            )
+                                        }
                                 )
                             }
 
                             WorkoutTypeEnum.CALISTHENICS -> {
                                 CalisthenicsCard(
-                                    reps = workout.workoutDetailsUiModel.exerciseCardModel.reps,
-                                    time = workout.workoutDetailsUiModel.exerciseCardModel.time,
-                                    name = workout.workoutDetailsUiModel.name,
-                                    icon = workout.workoutDetailsUiModel.icon,
+                                    calisthenicsUi = workout.workoutDetailsUiModel.mapToCalisthenicsUi(),
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
-                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout(workout.id))
+                                            navigateToDestination(
+                                                NavigationInterface.NavigateToEditWorkout(
+                                                    workout.id
+                                                )
+                                            )
                                         }
                                 )
                             }
 
                             WorkoutTypeEnum.CARDIO -> {
                                 CardioCard(
-                                    name = workout.workoutDetailsUiModel.name,
-                                    icon = workout.workoutDetailsUiModel.icon,
-                                    distance = workout.workoutDetailsUiModel.exerciseCardModel.distance,
-                                    distanceType = workout.workoutDetailsUiModel.exerciseCardModel.distanceType,
-                                    time = workout.workoutDetailsUiModel.exerciseCardModel.time,
+                                    cardioUi = workout.workoutDetailsUiModel.mapToCardioUi(),
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable {
-                                            navigateToDestination(NavigationInterface.NavigateToEditWorkout(workout.id))
+                                            navigateToDestination(
+                                                NavigationInterface.NavigateToEditWorkout(
+                                                    workout.id
+                                                )
+                                            )
                                         }
                                 )
                             }

@@ -17,21 +17,20 @@ import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJourna
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
-import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentWorkoutSession
+import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentWorkoutSessionTitle
+import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
+import com.example.fitjournal.home.presentation.model.ui.CalisthenicsUi
 
 @Composable
 fun CalisthenicsCard(
-    reps: Int?,
-    time: String?,
-    name: String,
-    icon: Int,
+    calisthenicsUi: CalisthenicsUi,
     modifier: Modifier = Modifier
 ) {
     FitJournalCard(modifier = modifier) {
         Column {
             CardTitle(
-                title = name,
-                workoutIcon = icon,
+                title = calisthenicsUi.name,
+                workoutIcon = calisthenicsUi.icon,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -40,10 +39,17 @@ fun CalisthenicsCard(
                     )
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
-            MostRecentWorkoutSession()
-            MostRecentSet(
-                reps = reps,
-                time = time,
+            if (calisthenicsUi.sets != null && calisthenicsUi.reps != null) {
+                MostRecentWorkoutSessionTitle()
+            } else {
+                NoWorkoutSetsErrorText(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Spacing.spacing16)
+                )
+            }
+            MostRecentCalisthenicsSet(
+                calisthenicsUi = calisthenicsUi,
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.spacing16)
@@ -60,9 +66,8 @@ fun CalisthenicsCard(
 }
 
 @Composable
-private fun MostRecentSet(
-    reps: Int?,
-    time: String?,
+private fun MostRecentCalisthenicsSet(
+    calisthenicsUi: CalisthenicsUi,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -70,25 +75,43 @@ private fun MostRecentSet(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
-        reps?.let {
+        if (calisthenicsUi.sets != null && calisthenicsUi.reps != null) {
+            Text(
+                text = stringResource(
+                    id = R.string.text_total_sets,
+                    calisthenicsUi.sets.toString()
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
             Text(
                 text = stringResource(
                     id = R.string.text_total_reps,
-                    reps.toString()
+                    calisthenicsUi.reps.toString()
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )
-        }
-        time?.let {
-            Text(
-                text = stringResource(
-                    id = R.string.text_total_time_elapsed,
-                    time
-                ),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
+            calisthenicsUi.weight?.let {
+                Text(
+                    text = stringResource(
+                        id = R.string.text_total_weight,
+                        it.toString()
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+            calisthenicsUi.time?.let {
+                Text(
+                    text = stringResource(
+                        id = R.string.text_total_time_elapsed,
+                        it
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
     }
 }
