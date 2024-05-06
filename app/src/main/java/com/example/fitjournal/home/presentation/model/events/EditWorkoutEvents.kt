@@ -55,9 +55,10 @@ sealed class EditWorkoutEvents {
         val onSuccessfulDeleteCallback: () -> Unit
     ) : EditWorkoutEvents()
 
-    data class AddNewWeightTrainingItem(
+    data class AddNewWeightTrainingSetToWorkout(
         val newWeightLiftingItem: WeightLiftingModel,
         val workoutType: String,
-        val workoutModel: WorkoutModel
+        val workoutModel: WorkoutModel,
+        val onAddErrorCallback: suspend () -> Unit
     ) : EditWorkoutEvents()
 }

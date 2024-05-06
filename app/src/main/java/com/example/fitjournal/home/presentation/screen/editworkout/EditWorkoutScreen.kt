@@ -80,7 +80,11 @@ fun EditWorkoutScreen(
                 id = R.string.error_with_workout_being_deleted,
                 uiState.data.workoutDetailsModel.name
             )
-            val errorWithSetsBeingDeleted = stringResource(id = R.string.error_with_sets_being_deleted)
+            val errorWithSetsBeingDeleted =
+                stringResource(id = R.string.error_with_sets_being_deleted)
+
+            // string for issues with adding sets
+            val errorWithAddingSets = stringResource(id = R.string.error_with_adding_new_sets)
 
             workoutUpForDeletion = uiState.data.id
 
@@ -146,10 +150,11 @@ fun EditWorkoutScreen(
                                         weight = editWorkoutUiState.weight.toDoubleOrZero()
                                     )
                                     editWorkoutUiState.editWorkoutEvents(
-                                        EditWorkoutEvents.AddNewWeightTrainingItem(
+                                        EditWorkoutEvents.AddNewWeightTrainingSetToWorkout(
                                             newWeightLiftingItem = newWeightTrainingItem,
                                             workoutType = workoutTypeAsString,
-                                            workoutModel = uiState.data
+                                            workoutModel = uiState.data,
+                                            onAddErrorCallback = { showSnackbar(errorWithAddingSets) }
                                         )
                                     )
                                 }
@@ -177,7 +182,11 @@ fun EditWorkoutScreen(
                                             index = index,
                                             workoutType = workoutTypeAsString,
                                             workoutModel = uiState.data,
-                                            onDeleteErrorCallback = { showSnackbar(errorWithSetsBeingDeleted) }
+                                            onDeleteErrorCallback = {
+                                                showSnackbar(
+                                                    errorWithSetsBeingDeleted
+                                                )
+                                            }
                                         )
                                     )
                                 },

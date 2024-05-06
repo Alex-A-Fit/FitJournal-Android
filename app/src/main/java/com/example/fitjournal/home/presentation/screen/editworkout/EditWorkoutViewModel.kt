@@ -109,7 +109,7 @@ class EditWorkoutViewModel @Inject constructor(
                 clearWorkoutFields(event.workoutTypeEnum)
             }
 
-            is EditWorkoutEvents.AddNewWeightTrainingItem -> {
+            is EditWorkoutEvents.AddNewWeightTrainingSetToWorkout -> {
                 val workoutValidity = areWeightLiftingPropertiesValid()
                 if (workoutValidity.isWorkoutValid()) {
                     val newPropsModel = getNewWorkoutPropertiesModel(
@@ -117,8 +117,12 @@ class EditWorkoutViewModel @Inject constructor(
                         editWorkoutFunction = EditWorkoutListFunctions.ADD_WORKOUT_ITEM,
                         newWeightLiftingItem = event.newWeightLiftingItem
                     )
-                    // TODO: Handle error when weight training cant be added in if block
-                    if (newPropsModel == null) return
+                    if (newPropsModel == null) {
+                        viewModelScope.launch {
+                            event.onAddErrorCallback()
+                        }
+                        return
+                    }
                     val workoutModel = event.workoutModel
                     workoutModel.workoutDetailsModel.workoutPropertiesModel = newPropsModel
                     try {
@@ -142,11 +146,13 @@ class EditWorkoutViewModel @Inject constructor(
                                     )
                                 )
                             } else {
-                                // TODO: Handle error when weight training cant be added
+                                event.onAddErrorCallback()
                             }
                         }
                     } catch (e: Exception) {
-                        Unit
+                        viewModelScope.launch {
+                            event.onAddErrorCallback()
+                        }
                     }
                 }
             }
