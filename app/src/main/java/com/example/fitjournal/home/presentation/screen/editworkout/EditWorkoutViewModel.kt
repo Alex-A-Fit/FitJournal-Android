@@ -109,7 +109,7 @@ class EditWorkoutViewModel @Inject constructor(
                 clearWorkoutFields(event.workoutTypeEnum)
             }
 
-            is EditWorkoutEvents.AddNewWeightTrainingItem -> {
+            is EditWorkoutEvents.AddNewWeightTrainingSetToWorkout -> {
                 val workoutValidity = areWeightLiftingPropertiesValid()
                 if (workoutValidity.isWorkoutValid()) {
                     val newPropsModel = getNewWorkoutPropertiesModel(
@@ -117,8 +117,12 @@ class EditWorkoutViewModel @Inject constructor(
                         editWorkoutFunction = EditWorkoutListFunctions.ADD_WORKOUT_ITEM,
                         newWeightLiftingItem = event.newWeightLiftingItem
                     )
-                    // TODO: Handle error when weight training cant be added in if block
-                    if (newPropsModel == null) return
+                    if (newPropsModel == null) {
+                        viewModelScope.launch {
+                            event.onAddErrorCallback()
+                        }
+                        return
+                    }
                     val workoutModel = event.workoutModel
                     workoutModel.workoutDetailsModel.workoutPropertiesModel = newPropsModel
                     try {
@@ -142,11 +146,13 @@ class EditWorkoutViewModel @Inject constructor(
                                     )
                                 )
                             } else {
-                                // TODO: Handle error when weight training cant be added
+                                event.onAddErrorCallback()
                             }
                         }
                     } catch (e: Exception) {
-                        Unit
+                        viewModelScope.launch {
+                            event.onAddErrorCallback()
+                        }
                     }
                 }
             }
@@ -160,8 +166,12 @@ class EditWorkoutViewModel @Inject constructor(
                         workoutTypeEnum = workoutType,
                         editWorkoutFunction = EditWorkoutListFunctions.DELETE_WORKOUT_ITEM
                     )
-                    // TODO need to handle error when newPropertiesModel is null
-                    if (newPropertiesModel == null) return
+                    if (newPropertiesModel == null) {
+                        viewModelScope.launch {
+                            event.onDeleteErrorCallback()
+                        }
+                        return
+                    }
                     workoutModel.workoutDetailsModel.workoutPropertiesModel =
                         newPropertiesModel
                     val realmEntry =
@@ -182,15 +192,34 @@ class EditWorkoutViewModel @Inject constructor(
                                 )
                             )
                         } else {
-                            // TODO: Handle error when weight training cant be removed
+                            event.onDeleteErrorCallback()
                         }
                     }
                 } catch (e: Exception) {
-                    Unit
+                    viewModelScope.launch {
+                        event.onDeleteErrorCallback()
+                    }
                 }
             }
 
             is EditWorkoutEvents.UpdateWorkoutListItem -> TODO()
+            is EditWorkoutEvents.DeleteEntireWorkout -> {
+                try {
+                    viewModelScope.launch {
+                        val wasDeleteSuccessful =
+                            realmWorkoutEntryUseCase.deleteWorkoutEntryFromRealmDbUseCase(workoutId = event.workoutId)
+                        if (wasDeleteSuccessful) {
+                            event.onSuccessfulDeleteCallback()
+                        } else {
+                            event.onDeleteErrorCallback()
+                        }
+                    }
+                } catch (e: Exception) {
+                    viewModelScope.launch {
+                        event.onDeleteErrorCallback()
+                    }
+                }
+            }
         }
     }
 

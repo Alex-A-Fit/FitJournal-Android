@@ -3,7 +3,6 @@ package com.example.fitjournal.core.presentation.commoncomponents.dialogs.compon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,10 +25,6 @@ fun BasicDialog(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = Spacing.spacing12,
-                vertical = Spacing.spacing24
-            )
             .background(
                 color = MaterialTheme.colorScheme.background,
                 shape = RoundedCornerShape(Spacing.spacing32)

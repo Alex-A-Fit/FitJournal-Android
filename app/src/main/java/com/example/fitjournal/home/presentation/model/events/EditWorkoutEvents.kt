@@ -45,12 +45,20 @@ sealed class EditWorkoutEvents {
     data class DeleteWorkoutSetItemInWorkoutModelList(
         val index: Int,
         val workoutType: String,
-        val workoutModel: WorkoutModel
+        val workoutModel: WorkoutModel,
+        val onDeleteErrorCallback: suspend () -> Unit
     ) : EditWorkoutEvents()
 
-    data class AddNewWeightTrainingItem(
+    data class DeleteEntireWorkout(
+        val workoutId: String,
+        val onDeleteErrorCallback: suspend () -> Unit,
+        val onSuccessfulDeleteCallback: () -> Unit
+    ) : EditWorkoutEvents()
+
+    data class AddNewWeightTrainingSetToWorkout(
         val newWeightLiftingItem: WeightLiftingModel,
         val workoutType: String,
-        val workoutModel: WorkoutModel
+        val workoutModel: WorkoutModel,
+        val onAddErrorCallback: suspend () -> Unit
     ) : EditWorkoutEvents()
 }

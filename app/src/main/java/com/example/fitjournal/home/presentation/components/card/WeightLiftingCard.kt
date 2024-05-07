@@ -17,47 +17,51 @@ import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJourna
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
+import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
+import com.example.fitjournal.home.presentation.model.ui.WeightLiftingUi
 
 @Composable
 fun WeightLiftingCard(
-    reps: Int?,
-    sets: Int?,
-    weight: Double?,
-    name: String,
-    icon: Int,
+    weightLiftingUi: WeightLiftingUi,
     modifier: Modifier = Modifier
 ) {
     FitJournalCard(modifier = modifier) {
-        Column {
-            CardTitle(
-                title = name,
-                workoutIcon = icon,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = Spacing.spacing16,
-                        vertical = Spacing.spacing8
-                    ),
-                isWeightTrainingIcon = true
-            )
-            Spacer(modifier = Modifier.height(Spacing.spacing8))
+        CardTitle(
+            title = weightLiftingUi.name,
+            workoutIcon = weightLiftingUi.icon,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = Spacing.spacing16,
+                    vertical = Spacing.spacing8
+                ),
+            isWeightTrainingIcon = true
+        )
+        Spacer(modifier = Modifier.height(Spacing.spacing8))
+        if (weightLiftingUi.doesWeightLiftingPropertyExist()) {
             TopSetTitle()
             TopSetSummary(
-                reps = reps,
-                weight = weight,
-                sets = sets,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Spacing.spacing16),
+                reps = weightLiftingUi.reps?.toString() ?: "",
+                sets = weightLiftingUi.sets?.toString() ?: "",
+                weight = weightLiftingUi.weight?.toString() ?: ""
+            )
+        } else {
+            NoWorkoutSetsErrorText(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.spacing16)
             )
-            Spacer(modifier = Modifier.height(Spacing.spacing8))
-            CardSeeDetailsText(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = Spacing.spacing16)
-            )
-            Spacer(modifier = Modifier.height(Spacing.spacing8))
         }
+        Spacer(modifier = Modifier.height(Spacing.spacing8))
+        CardSeeDetailsText(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = Spacing.spacing16)
+        )
+        Spacer(modifier = Modifier.height(Spacing.spacing8))
     }
 }
 
@@ -66,15 +70,16 @@ private fun TopSetTitle() {
     Text(
         text = stringResource(id = R.string.title_top_set),
         style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier.padding(horizontal = Spacing.spacing16)
     )
 }
 
 @Composable
 private fun TopSetSummary(
-    reps: Int?,
-    sets: Int?,
-    weight: Double?,
+    reps: String,
+    sets: String,
+    weight: String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -82,26 +87,31 @@ private fun TopSetSummary(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
-        sets?.let {
-            Text(
-                text = stringResource(id = R.string.text_total_sets, sets.toString()),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-        reps?.let {
-            Text(
-                text = stringResource(id = R.string.text_total_reps, reps.toString()),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-        weight?.let {
-            Text(
-                text = stringResource(id = R.string.text_total_weight, weight.toString()),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        }
+        Text(
+            text = stringResource(
+                id = R.string.text_total_sets,
+                sets
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+
+        Text(
+            text = stringResource(
+                id = R.string.text_total_reps,
+                reps
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+
+        Text(
+            text = stringResource(
+                id = R.string.text_total_weight,
+                weight
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
 }

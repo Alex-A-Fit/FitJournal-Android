@@ -13,7 +13,7 @@ data class WorkoutDetailsUiModel(
     val name: String,
     val icon: Int,
     val workoutType: WorkoutTypeEnum,
-    val exerciseCardModel: WorkoutPropertiesUiModel
+    val exerciseCardModel: WorkoutPropertiesUiModel?
 )
 
 data class WorkoutPropertiesUiModel(

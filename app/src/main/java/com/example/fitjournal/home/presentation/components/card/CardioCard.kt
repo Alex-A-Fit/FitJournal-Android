@@ -17,23 +17,21 @@ import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJourna
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
-import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentWorkoutSession
+import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentWorkoutSessionTitle
+import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
+import com.example.fitjournal.home.presentation.model.ui.CardioUi
 
 @Composable
 fun CardioCard(
-    name: String,
-    icon: Int,
-    distance: Double?,
-    distanceType: CardioDistanceType,
-    time: String?,
+    cardioUi: CardioUi,
     modifier: Modifier = Modifier
 ) {
     FitJournalCard(modifier = modifier) {
         Column {
             CardTitle(
-                title = name,
-                workoutIcon = icon,
+                title = cardioUi.name,
+                workoutIcon = cardioUi.icon,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -42,15 +40,24 @@ fun CardioCard(
                     )
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
-            MostRecentWorkoutSession()
-            CardioSummary(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = Spacing.spacing16),
-                distanceType = distanceType,
-                time = time,
-                distance = distance
-            )
+            if (cardioUi.doesCardioPropertyExist()) {
+                MostRecentWorkoutSessionTitle()
+                CardioSummary(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Spacing.spacing16),
+                    time = cardioUi.time ?: "",
+                    distance = cardioUi.distance?.toString() ?: "",
+                    laps = cardioUi.laps?.toString(),
+                    distanceType = cardioUi.distanceType
+                )
+            } else {
+                NoWorkoutSetsErrorText(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Spacing.spacing16)
+                )
+            }
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             CardSeeDetailsText(
                 modifier = Modifier
@@ -64,36 +71,43 @@ fun CardioCard(
 
 @Composable
 private fun CardioSummary(
-    distance: Double?,
-    distanceType: CardioDistanceType,
-    time: String?,
-    modifier: Modifier = Modifier
+    time: String,
+    distance: String,
+    modifier: Modifier = Modifier,
+    laps: String? = null,
+    distanceType: CardioDistanceType = CardioDistanceType.MILES
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
-        distance?.let {
+        Text(
+            text = stringResource(
+                id = R.string.text_total_distance_traveled,
+                distance,
+                distanceType.stringValue
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        laps?.let {
             Text(
                 text = stringResource(
-                    id = R.string.text_total_distance_traveled,
-                    distance.toString(),
-                    distanceType.stringValue
+                    id = R.string.text_total_laps,
+                    it.toString()
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }
-        time?.let {
-            Text(
-                text = stringResource(
-                    id = R.string.text_total_time_elapsed,
-                    time
-                ),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        }
+        Text(
+            text = stringResource(
+                id = R.string.text_total_time_elapsed,
+                time
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
 }
