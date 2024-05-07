@@ -31,13 +31,11 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                     name = workoutDetailsModel.name,
                     icon = workoutDetailsModel.icon ?: R.drawable.icon_dumbell,
                     workoutType = WorkoutTypeEnum.WEIGHT_TRAINING,
-                    exerciseCardModel = if (topSet == null) {
-                        null
-                    } else {
+                    exerciseCardModel = topSet?.let {
                         WorkoutPropertiesUiModel(
-                            reps = topSet.reps,
-                            weight = topSet.weight,
-                            sets = topSet.sets
+                            reps = it.reps,
+                            weight = it.weight,
+                            sets = it.sets
                         )
                     }
                 )
@@ -48,10 +46,10 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
             val mostRecentSession =
                 when (val workoutSets = workoutDetailsModel.workoutPropertiesModel) {
                     is WorkoutPropertiesModel.CalisthenicsProps -> {
-                        if (workoutSets.props.isEmpty()) {
-                            null
-                        } else {
+                        if (workoutSets.props.isNotEmpty()) {
                             workoutSets.props.last()
+                        } else {
+                            null
                         }
                     }
 
@@ -64,9 +62,7 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                     name = workoutDetailsModel.name,
                     icon = workoutDetailsModel.icon ?: R.drawable.icon_person,
                     workoutType = WorkoutTypeEnum.CALISTHENICS,
-                    exerciseCardModel = if (mostRecentSession == null) {
-                        null
-                    } else {
+                    exerciseCardModel = mostRecentSession?.let {
                         WorkoutPropertiesUiModel(
                             reps = mostRecentSession.reps,
                             time = mostRecentSession.time,
@@ -82,10 +78,10 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
             val mostRecentSession =
                 when (val workoutSets = workoutDetailsModel.workoutPropertiesModel) {
                     is WorkoutPropertiesModel.CardioProps -> {
-                        if (workoutSets.props.isEmpty()) {
-                            null
-                        } else {
+                        if (workoutSets.props.isNotEmpty()) {
                             workoutSets.props.last()
+                        } else {
+                            null
                         }
                     }
 
@@ -98,9 +94,7 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                     name = workoutDetailsModel.name,
                     icon = workoutDetailsModel.icon ?: R.drawable.icon_sprinting_person,
                     workoutType = WorkoutTypeEnum.CARDIO,
-                    exerciseCardModel = if (mostRecentSession == null) {
-                        null
-                    } else {
+                    exerciseCardModel = mostRecentSession?.let {
                         WorkoutPropertiesUiModel(
                             time = mostRecentSession.time,
                             laps = mostRecentSession.laps,

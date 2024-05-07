@@ -7,4 +7,8 @@ data class CalisthenicsUi(
     val time: String? = null,
     val name: String,
     val icon: Int
-)
+) {
+    fun doesRepsAndSetsExist(): Boolean {
+        return reps != null && sets != null
+    }
+}

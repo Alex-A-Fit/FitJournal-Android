@@ -9,4 +9,8 @@ data class CardioUi(
     val distance: Double? = null,
     val time: String? = null,
     val laps: Double? = null
-)
+) {
+    fun doesCardioPropertyExist(): Boolean {
+        return distance != null && time != null
+    }
+}

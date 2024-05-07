@@ -6,4 +6,8 @@ data class WeightLiftingUi(
     val weight: Double? = null,
     val name: String,
     val icon: Int
-)
+) {
+    fun doesWeightLiftingPropertyExist(): Boolean {
+        return reps != null && sets != null && weight != null
+    }
+}

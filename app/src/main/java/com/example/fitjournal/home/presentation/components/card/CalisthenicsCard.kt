@@ -39,8 +39,17 @@ fun CalisthenicsCard(
                     )
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
-            if (calisthenicsUi.sets != null && calisthenicsUi.reps != null) {
+            if (calisthenicsUi.doesRepsAndSetsExist()) {
                 MostRecentWorkoutSessionTitle()
+                MostRecentCalisthenicsSet(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Spacing.spacing16),
+                    sets = calisthenicsUi.sets?.toString() ?: "",
+                    reps = calisthenicsUi.reps?.toString() ?: "",
+                    weight = calisthenicsUi.weight?.toString(),
+                    time = calisthenicsUi.time
+                )
             } else {
                 NoWorkoutSetsErrorText(
                     modifier = Modifier
@@ -48,12 +57,6 @@ fun CalisthenicsCard(
                         .padding(horizontal = Spacing.spacing16)
                 )
             }
-            MostRecentCalisthenicsSet(
-                calisthenicsUi = calisthenicsUi,
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = Spacing.spacing16)
-            )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             CardSeeDetailsText(
                 modifier = Modifier
@@ -67,51 +70,52 @@ fun CalisthenicsCard(
 
 @Composable
 private fun MostRecentCalisthenicsSet(
-    calisthenicsUi: CalisthenicsUi,
-    modifier: Modifier = Modifier
+    sets: String,
+    reps: String,
+    modifier: Modifier = Modifier,
+    weight: String? = null,
+    time: String? = null
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.Start
     ) {
-        if (calisthenicsUi.sets != null && calisthenicsUi.reps != null) {
+        Text(
+            text = stringResource(
+                id = R.string.text_total_sets,
+                sets
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        Text(
+            text = stringResource(
+                id = R.string.text_total_reps,
+                reps
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        weight?.let {
             Text(
                 text = stringResource(
-                    id = R.string.text_total_sets,
-                    calisthenicsUi.sets.toString()
+                    id = R.string.text_total_weight,
+                    it.toString()
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )
+        }
+        time?.let {
             Text(
                 text = stringResource(
-                    id = R.string.text_total_reps,
-                    calisthenicsUi.reps.toString()
+                    id = R.string.text_total_time_elapsed,
+                    it
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary
             )
-            calisthenicsUi.weight?.let {
-                Text(
-                    text = stringResource(
-                        id = R.string.text_total_weight,
-                        it.toString()
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-            calisthenicsUi.time?.let {
-                Text(
-                    text = stringResource(
-                        id = R.string.text_total_time_elapsed,
-                        it
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
         }
     }
 }
