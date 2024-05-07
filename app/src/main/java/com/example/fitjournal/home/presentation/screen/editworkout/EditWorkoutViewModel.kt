@@ -15,12 +15,14 @@ import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
+import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import com.example.fitjournal.home.presentation.model.enum.EditWorkoutListFunctions
 import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
 import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
+import com.example.fitjournal.home.presentation.model.ui.CalisthenicsValidator
 import com.example.fitjournal.home.presentation.model.ui.WeightLiftingValidator
 import com.example.fitjournal.statistics.domain.mapper.toRealmWorkoutEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -138,8 +140,7 @@ class EditWorkoutViewModel @Inject constructor(
                             if (isUpdateSuccess) {
                                 updateWorkoutState(
                                     newEditWorkoutUiState = editWorkoutState.copy(
-                                        weightLiftingPropertyList = newPropsModel.getWeightLiftingProps()
-                                            .toMutableStateList(),
+                                        weightLiftingPropertyList = newPropsModel.getWeightLiftingProps(),
                                         reps = "",
                                         sets = "",
                                         weight = ""
@@ -184,8 +185,9 @@ class EditWorkoutViewModel @Inject constructor(
                         if (isUpdateSuccess) {
                             updateWorkoutState(
                                 newEditWorkoutUiState = editWorkoutState.copy(
-                                    weightLiftingPropertyList = newPropertiesModel.getWeightLiftingProps()
-                                        .toMutableStateList(),
+                                    weightLiftingPropertyList = newPropertiesModel.getWeightLiftingProps(),
+                                    cardioPropertyList = newPropertiesModel.getCardioProps(),
+                                    calisthenicsPropertyList = newPropertiesModel.getCalisthenicsProps(),
                                     reps = "",
                                     sets = "",
                                     weight = ""
@@ -220,7 +222,90 @@ class EditWorkoutViewModel @Inject constructor(
                     }
                 }
             }
+
+            is EditWorkoutEvents.EditTime -> {
+                updateTimeValue(
+                    value = event.value,
+                    timeDeterminate = event.timeDeterminate
+                )
+            }
+
+            is EditWorkoutEvents.AddNewCalisthenicSetToWorkout -> {
+                val adjustedTimeValues = editWorkoutUseCase.adjustTimeValuesUseCase(event.newCalisthenicItem.time)
+                event.newCalisthenicItem.time = adjustedTimeValues
+                val validWorkout = isCalisthenicsPropertiesValid(event.newCalisthenicItem)
+                if (validWorkout.isWorkoutValid()) {
+                    val newPropsModel = getNewWorkoutPropertiesModel(
+                        workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
+                        editWorkoutFunction = EditWorkoutListFunctions.ADD_WORKOUT_ITEM,
+                        newCalisthenicsItem = event.newCalisthenicItem
+                    )
+                    if (newPropsModel == null) {
+                        viewModelScope.launch {
+                            event.onAddErrorCallback()
+                        }
+                        return
+                    }
+                    val workoutModel = event.workoutModel
+                    workoutModel.workoutDetailsModel.workoutPropertiesModel = newPropsModel
+                    try {
+                        val updatedRealmEntry =
+                            workoutModel.toRealmWorkoutEntry(
+                                workoutType = event.workoutType
+                            )
+                        viewModelScope.launch {
+                            val isUpdateSuccess = realmWorkoutEntryUseCase
+                                .updateSingleWorkoutEntryToRealmDbUseCase(
+                                    updatedRealmWorkoutEntry = updatedRealmEntry
+                                )
+                            if (isUpdateSuccess) {
+                                updateWorkoutState(
+                                    newEditWorkoutUiState = editWorkoutState.copy(
+                                        calisthenicsPropertyList = newPropsModel.getCalisthenicsProps(),
+                                        reps = "",
+                                        sets = "",
+                                        weight = "",
+                                        hour = "",
+                                        minute = "",
+                                        second = ""
+                                    )
+                                )
+                            } else {
+                                event.onAddErrorCallback()
+                            }
+                        }
+                    } catch (e: Exception) {
+                        viewModelScope.launch {
+                            event.onAddErrorCallback()
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    private fun isCalisthenicsPropertiesValid(
+        workoutProperties: CalisthenicsModel
+    ): CalisthenicsValidator {
+        val workoutTime = workoutProperties.time
+        val isRepsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutState.reps)
+        val isSetsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutState.sets)
+        val isTimeValid = if (workoutTime != null) editWorkoutUseCase.isTimeValidUseCase(workoutTime) else true
+        val isWeightValid = if (workoutProperties.weight != null) editWorkoutUseCase.isDoubleValidUseCase(editWorkoutState.weight) else true
+        updateWorkoutState(
+            newEditWorkoutUiState = editWorkoutState.copy(
+                isRepsErrorVisible = !isRepsValid,
+                isSetsErrorVisible = !isSetsValid,
+                isWeightErrorVisible = !isWeightValid,
+                isTimeErrorVisible = !isTimeValid
+            )
+        )
+        return CalisthenicsValidator(
+            isRepsValid = isRepsValid,
+            isSetsValid = isSetsValid,
+            isWeightValid = isWeightValid,
+            isTimeValid = isTimeValid
+        )
     }
 
     private fun getNewWorkoutPropertiesModel(
@@ -323,7 +408,6 @@ class EditWorkoutViewModel @Inject constructor(
 
     fun getSingleWorkout(
         workoutId: String?
-
     ) {
         updateWorkoutState(editWorkoutState.copy(workout = UiState.Loading))
         if (workoutId.isNullOrEmpty()) {
@@ -341,10 +425,14 @@ class EditWorkoutViewModel @Inject constructor(
                                     workout.data.workoutDetailsModel.workoutPropertiesModel
                             ) {
                                 is WorkoutPropertiesModel.CalisthenicsProps -> {
+                                    val calisthenicsProps = workoutList.props.toMutableStateList()
+                                    calisthenicsProps.forEach {
+                                        it.time = editWorkoutUseCase.adjustTimeValuesUseCase(it.time)
+                                    }
                                     Triple(
                                         mutableStateListOf(),
                                         mutableStateListOf(),
-                                        workoutList.props.toMutableStateList()
+                                        calisthenicsProps
                                     )
                                 }
 
@@ -446,7 +534,9 @@ class EditWorkoutViewModel @Inject constructor(
                         reps = "",
                         sets = "",
                         weight = "",
-                        time = "",
+                        hour = "",
+                        minute = "",
+                        second = "",
                         isRepsErrorVisible = false,
                         isSetsErrorVisible = false,
                         isWeightErrorVisible = false,
@@ -459,12 +549,42 @@ class EditWorkoutViewModel @Inject constructor(
                 updateWorkoutState(
                     newEditWorkoutUiState = editWorkoutState.copy(
                         laps = "",
-                        time = "",
                         distance = "",
                         distanceType = CardioDistanceType.MILES,
                         isLapsErrorVisible = false,
                         isTimeErrorVisible = false,
                         isDistanceErrorVisible = false
+                    )
+                )
+            }
+        }
+    }
+
+    private fun updateTimeValue(
+        value: String,
+        timeDeterminate: EditWorkoutTimeDeterminate
+    ) {
+        when (timeDeterminate) {
+            EditWorkoutTimeDeterminate.HOUR -> {
+                updateWorkoutState(
+                    newEditWorkoutUiState = editWorkoutState.copy(
+                        hour = value
+                    )
+                )
+            }
+
+            EditWorkoutTimeDeterminate.MINUTE -> {
+                updateWorkoutState(
+                    newEditWorkoutUiState = editWorkoutState.copy(
+                        minute = value
+                    )
+                )
+            }
+
+            EditWorkoutTimeDeterminate.SECOND -> {
+                updateWorkoutState(
+                    newEditWorkoutUiState = editWorkoutState.copy(
+                        second = value
                     )
                 )
             }

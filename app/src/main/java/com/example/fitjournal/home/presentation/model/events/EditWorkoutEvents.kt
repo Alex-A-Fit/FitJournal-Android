@@ -1,8 +1,10 @@
 package com.example.fitjournal.home.presentation.model.events
 
+import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
+import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 
 sealed class EditWorkoutEvents {
@@ -60,5 +62,17 @@ sealed class EditWorkoutEvents {
         val workoutType: String,
         val workoutModel: WorkoutModel,
         val onAddErrorCallback: suspend () -> Unit
+    ) : EditWorkoutEvents()
+
+    data class AddNewCalisthenicSetToWorkout(
+        val newCalisthenicItem: CalisthenicsModel,
+        val workoutType: String,
+        val workoutModel: WorkoutModel,
+        val onAddErrorCallback: suspend () -> Unit
+    ) : EditWorkoutEvents()
+
+    data class EditTime(
+        val value: String,
+        val timeDeterminate: EditWorkoutTimeDeterminate
     ) : EditWorkoutEvents()
 }

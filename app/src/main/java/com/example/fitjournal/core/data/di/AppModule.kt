@@ -19,9 +19,11 @@ import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntr
 import com.example.fitjournal.core.domain.usecase.realm.workout.UpdateSingleWorkoutEntryToRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.workout.AddOrSubtractDoublesUseCase
 import com.example.fitjournal.core.domain.usecase.workout.AddOrSubtractIntegersUseCase
+import com.example.fitjournal.core.domain.usecase.workout.AdjustTimeValuesUseCase
 import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
 import com.example.fitjournal.core.domain.usecase.workout.IsDoubleValidUseCase
 import com.example.fitjournal.core.domain.usecase.workout.IsIntegerValidUseCase
+import com.example.fitjournal.core.domain.usecase.workout.IsTimeValidUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -102,7 +104,9 @@ object AppModule {
             addOrSubtractDoublesUseCase = AddOrSubtractDoublesUseCase(),
             addOrSubtractIntegersUseCase = AddOrSubtractIntegersUseCase(),
             isIntegerValidUseCase = IsIntegerValidUseCase(),
-            isDoubleValidUseCase = IsDoubleValidUseCase()
+            isDoubleValidUseCase = IsDoubleValidUseCase(),
+            isTimeValidUseCase = IsTimeValidUseCase(),
+            adjustTimeValuesUseCase = AdjustTimeValuesUseCase()
         )
     }
 }

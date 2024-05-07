@@ -13,11 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
+import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJournalCard
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
-import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentWorkoutSessionTitle
+import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentWorkoutTitle
 import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
 import com.example.fitjournal.home.presentation.model.ui.CalisthenicsUi
 
@@ -40,7 +41,7 @@ fun CalisthenicsCard(
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             if (calisthenicsUi.doesRepsAndSetsExist()) {
-                MostRecentWorkoutSessionTitle()
+                MostRecentWorkoutTitle()
                 MostRecentCalisthenicsSet(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -74,7 +75,7 @@ private fun MostRecentCalisthenicsSet(
     reps: String,
     modifier: Modifier = Modifier,
     weight: String? = null,
-    time: String? = null
+    time: TimeModel? = null
 ) {
     Column(
         modifier = modifier,
@@ -111,7 +112,7 @@ private fun MostRecentCalisthenicsSet(
             Text(
                 text = stringResource(
                     id = R.string.text_total_time_elapsed,
-                    it
+                    "${it.hours}:${it.minutes}:${it.seconds}"
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary

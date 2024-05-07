@@ -14,6 +14,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.text.isDigitsOnly
+import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
+import com.example.fitjournal.core.util.extensions.toIntOrZero
 
 // Checks for up to 4 digits are inputted
 // with an optional dot for decimal number
@@ -56,6 +58,7 @@ fun DoubleDecimalTextField(
 
 @Composable
 fun IntegerOnlyTextField(
+    modifier: Modifier = Modifier,
     workoutPropertyValue: String,
     isError: Boolean,
     onValueChanged: (String) -> Unit
@@ -76,7 +79,7 @@ fun IntegerOnlyTextField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done
         ),
-        modifier = Modifier.fillMaxWidth(.35F),
+        modifier = modifier,
         singleLine = true,
         textStyle = MaterialTheme.typography.headlineMedium.copy(
             color = MaterialTheme.colorScheme.onTertiary,
@@ -84,4 +87,79 @@ fun IntegerOnlyTextField(
         ),
         isError = isError
     )
+}
+
+@Composable
+fun TimeOnlyTextField(
+    modifier: Modifier = Modifier,
+    workoutPropertyValue: String,
+    isError: Boolean,
+    timeDeterminate: EditWorkoutTimeDeterminate,
+    onValueChanged: (String) -> Unit
+) {
+    var value by rememberSaveable(workoutPropertyValue) {
+        mutableStateOf(workoutPropertyValue)
+    }
+    TextField(
+        value = value,
+        onValueChange = {
+            if (it.isDigitsOnly() && it.length < 3) {
+                val isTimeValid = checkIfTimeIsValid(
+                    time = it,
+                    timeDeterminate = timeDeterminate
+                )
+                if (isTimeValid != null) {
+                    onValueChanged(it)
+                    value = it
+                } else {
+                    return@TextField
+                }
+            }
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
+        ),
+        modifier = modifier,
+        singleLine = true,
+        textStyle = MaterialTheme.typography.headlineMedium.copy(
+            color = MaterialTheme.colorScheme.onTertiary,
+            textAlign = TextAlign.Center
+        ),
+        isError = isError
+    )
+}
+
+private fun checkIfTimeIsValid(time: String, timeDeterminate: EditWorkoutTimeDeterminate): String? {
+    return when (timeDeterminate) {
+        EditWorkoutTimeDeterminate.HOUR -> {
+            time
+        }
+
+        EditWorkoutTimeDeterminate.MINUTE -> {
+            try {
+                val intValue = time.toIntOrZero()
+                if (intValue < 60) {
+                    time
+                } else {
+                    null
+                }
+            } catch (e: Exception) {
+                null
+            }
+        }
+
+        EditWorkoutTimeDeterminate.SECOND -> {
+            try {
+                val intValue = time.toIntOrZero()
+                if (intValue < 60) {
+                    time
+                } else {
+                    null
+                }
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
 }

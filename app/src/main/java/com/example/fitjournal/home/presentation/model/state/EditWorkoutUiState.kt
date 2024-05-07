@@ -29,7 +29,9 @@ data class EditWorkoutUiState(
     val weight: String = "",
     val isWeightErrorVisible: Boolean = false,
 
-    val time: String = "",
+    val hour: String = "",
+    val minute: String = "",
+    val second: String = "",
     val isTimeErrorVisible: Boolean = false,
 
     val laps: String = "",

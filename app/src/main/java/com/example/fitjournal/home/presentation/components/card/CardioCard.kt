@@ -13,11 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
+import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJournalCard
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
-import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentWorkoutSessionTitle
+import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentTravelTitle
 import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import com.example.fitjournal.home.presentation.model.ui.CardioUi
@@ -41,12 +42,12 @@ fun CardioCard(
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             if (cardioUi.doesCardioPropertyExist()) {
-                MostRecentWorkoutSessionTitle()
+                MostRecentTravelTitle()
                 CardioSummary(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = Spacing.spacing16),
-                    time = cardioUi.time ?: "",
+                    time = cardioUi.time,
                     distance = cardioUi.distance?.toString() ?: "",
                     laps = cardioUi.laps?.toString(),
                     distanceType = cardioUi.distanceType
@@ -71,7 +72,7 @@ fun CardioCard(
 
 @Composable
 private fun CardioSummary(
-    time: String,
+    time: TimeModel?,
     distance: String,
     modifier: Modifier = Modifier,
     laps: String? = null,
@@ -101,13 +102,15 @@ private fun CardioSummary(
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }
-        Text(
-            text = stringResource(
-                id = R.string.text_total_time_elapsed,
-                time
-            ),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
+        time?.let {
+            Text(
+                text = stringResource(
+                    id = R.string.text_total_time_elapsed,
+                    "${time.hours}:${time.minutes}:${time.seconds}"
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }
