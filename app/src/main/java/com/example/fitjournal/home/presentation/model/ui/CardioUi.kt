@@ -1,5 +1,6 @@
 package com.example.fitjournal.home.presentation.model.ui
 
+import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 
 data class CardioUi(
@@ -7,7 +8,7 @@ data class CardioUi(
     val icon: Int,
     val distanceType: CardioDistanceType = CardioDistanceType.MILES,
     val distance: Double? = null,
-    val time: String? = null,
+    val time: TimeModel? = null,
     val laps: Double? = null
 ) {
     fun doesCardioPropertyExist(): Boolean {

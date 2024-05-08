@@ -6,6 +6,7 @@ import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutProper
 import com.example.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
+import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
@@ -35,7 +36,7 @@ fun mapRealmWorkoutPropsToWorkoutPropsModel(
                     CalisthenicsModel(
                         reps = it.reps,
                         sets = it.sets,
-                        time = it.time,
+                        time = breakTimeStringIntoModel(it.time),
                         weight = it.weight
                     )
                 }
@@ -47,8 +48,12 @@ fun mapRealmWorkoutPropsToWorkoutPropsModel(
                 props = workoutProps.listOfCardioSets.map {
                     CardioModel(
                         distance = it.distance,
-                        distanceType = if (it.distanceType == "km") CardioDistanceType.KILOMETERS else CardioDistanceType.MILES,
-                        time = it.time,
+                        distanceType = if (it.distanceType == "km") {
+                            CardioDistanceType.KILOMETERS
+                        } else {
+                            CardioDistanceType.MILES
+                        },
+                        time = breakTimeStringIntoModel(it.time),
                         laps = it.laps
                     )
                 }
@@ -89,17 +94,19 @@ fun mapWorkoutPropsToRealmWorkoutProps(
                 listOfCalisthenicsSet = when (workoutProps) {
                     is WorkoutPropertiesModel.CalisthenicsProps -> {
                         val workoutList = workoutProps.props.map {
+                            val workoutTime = it.time
                             CalisthenicsSet().apply {
                                 reps = it.reps
                                 sets = it.sets
                                 weight = it.weight
-                                time = it.time
+                                time = if (workoutTime == null) "" else "${workoutTime.hours}:${workoutTime.minutes}:${workoutTime.seconds}"
                             }
                         }
                         val realmList = realmListOf<CalisthenicsSet>()
                         realmList.addAll(workoutList)
                         realmList
                     }
+
                     else -> realmListOf()
                 }
             }
@@ -114,16 +121,24 @@ fun mapWorkoutPropsToRealmWorkoutProps(
                                 distance = it.distance
                                 distanceType = it.distanceType.stringValue
                                 laps = it.laps
-                                time = it.time
+                                time = if (it.time == null) "" else "${it.time.hours}:${it.time.minutes}:${it.time.seconds}"
                             }
                         }
                         val realmList = realmListOf<CardioSet>()
                         realmList.addAll(workoutList)
                         realmList
                     }
+
                     else -> realmListOf()
                 }
             }
         }
     }
+}
+
+private fun breakTimeStringIntoModel(time: String?): TimeModel? {
+    if (time == null) return null
+    val timeList = time.split(":")
+    if (timeList.size != 3) return null
+    return TimeModel(hours = timeList[0], minutes = timeList[1], seconds = timeList[2])
 }

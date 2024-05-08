@@ -26,12 +26,13 @@
     <string name="title_calisthenics">Calisthenics</string>
     <string name="title_cardio">Cardio</string>
     <string name="title_top_set">Current Top Set</string>
-    <string name="title_most_recent_workout_session">Most Recent Workout Session</string>
+    <string name="title_most_recent_workout">Most Recent Workout</string>
+    <string name="title_most_recent_travels">Most Recent Travels</string>
     <string name="title_choose_workout_type">Choose a workout type</string>
     <string name="title_create_new_workout">Add New Workout</string>
     <string name="text_edit_workout_title">%1$s (%2$s)</string>
     <string name="title_edit_workout_error">Sorry, the workout you selected could not be found</string>
-    <string name="title_delete_workout">Are You Sure you want to delete \"%1$s\"</string>
+    <string name="title_delete_workout">Are you sure you want to delete \"%1$s\"</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>
@@ -60,6 +61,7 @@
     <string name="text_edit_your_workout">Edit Your Workout Below</string>
     <string name="text_date_and_date_value">Created on: %1$s</string>
     <string name="text_back_to_journal">Go back to Journal</string>
+    <string name="text_not_applicable">N/A</string>
 
     // labels
     <string name="label_rotate_icon">Rotate main fab icon</string>
@@ -68,6 +70,13 @@
     <string name="label_reps">Reps</string>
     <string name="label_sets">Sets</string>
     <string name="label_weight">Weight</string>
+    <string name="label_weight_optional">Weight (Optional)</string>
+    <string name="label_time_elapsed">Time Elapsed</string>
+    <string name="label_time">Time</string>
+    <string name="label_time_elapsed_optional">Time Elapsed (Optional)</string>
+    <string name="label_hour">Hour</string>
+    <string name="label_minute">Minute</string>
+    <string name="label_second">Second</string>
 
     // Button Strings
     <string name="button_cancel">Cancel</string>
@@ -89,6 +98,7 @@
     <string name="error_with_adding_sets">Please enter a valid number of sets (1&#8211;999)</string>
     <string name="error_with_adding_reps">Please enter a valid number of reps (1&#8211;999)</string>
     <string name="error_with_adding_weight">Please enter a valid weight (1&#8211;99999)</string>
+    <string name="error_with_adding_time">Please enter a valid time</string>
     <string name="error_no_details_found">No details found for this workout</string>
 
     // Placeholder strings

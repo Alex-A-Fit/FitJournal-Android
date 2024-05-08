@@ -16,11 +16,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
+import com.example.fitjournal.core.domain.model.CalisthenicsModel
+import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.DeleteButton
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.ClearAndSaveButtons
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutBanner
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutSection
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.CalisthenicsListHeader
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.CalisthenicsWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.DeleteWorkoutDialog
@@ -159,7 +163,34 @@ fun EditWorkoutScreen(
                                     )
                                 }
 
-                                WorkoutTypeEnum.CALISTHENICS -> {}
+                                WorkoutTypeEnum.CALISTHENICS -> {
+                                    val newCalisthenicItem = CalisthenicsModel(
+                                        reps = editWorkoutUiState.reps.toIntOrZero(),
+                                        sets = editWorkoutUiState.sets.toIntOrZero(),
+                                        weight = editWorkoutUiState.weight.toDoubleOrNull(),
+                                        time = if (editWorkoutUiState.hour.isEmpty() &&
+                                            editWorkoutUiState.minute.isEmpty() &&
+                                            editWorkoutUiState.second.isEmpty()
+                                        ) {
+                                            null
+                                        } else {
+                                            TimeModel(
+                                                hours = editWorkoutUiState.hour,
+                                                minutes = editWorkoutUiState.minute,
+                                                seconds = editWorkoutUiState.second
+                                            )
+                                        }
+                                    )
+                                    editWorkoutUiState.editWorkoutEvents(
+                                        EditWorkoutEvents.AddNewCalisthenicSetToWorkout(
+                                            newCalisthenicItem = newCalisthenicItem,
+                                            workoutType = workoutTypeAsString,
+                                            workoutModel = uiState.data,
+                                            onAddErrorCallback = { showSnackbar(errorWithAddingSets) }
+                                        )
+                                    )
+                                }
+
                                 WorkoutTypeEnum.CARDIO -> {}
                             }
                         }
@@ -199,6 +230,30 @@ fun EditWorkoutScreen(
                     }
 
                     WorkoutTypeEnum.CALISTHENICS -> {
+                        if (editWorkoutUiState.calisthenicsPropertyList.isNotEmpty()) {
+                            item { CalisthenicsListHeader() }
+                        }
+                        itemsIndexed(editWorkoutUiState.calisthenicsPropertyList) { index, item ->
+                            CalisthenicsWorkoutSets(
+                                workout = item,
+                                index = index,
+                                deleteSet = {
+                                    editWorkoutUiState.editWorkoutEvents(
+                                        EditWorkoutEvents.DeleteWorkoutSetItemInWorkoutModelList(
+                                            index = index,
+                                            workoutType = workoutTypeAsString,
+                                            workoutModel = uiState.data,
+                                            onDeleteErrorCallback = {
+                                                showSnackbar(
+                                                    errorWithSetsBeingDeleted
+                                                )
+                                            }
+                                        )
+                                    )
+                                },
+                                editSet = {}
+                            )
+                        }
                     }
 
                     WorkoutTypeEnum.CARDIO -> {

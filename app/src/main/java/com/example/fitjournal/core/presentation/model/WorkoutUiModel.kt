@@ -1,5 +1,6 @@
 package com.example.fitjournal.core.presentation.model
 
+import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 
@@ -20,7 +21,7 @@ data class WorkoutPropertiesUiModel(
     val reps: Int? = null,
     val sets: Int? = null,
     val weight: Double? = null,
-    val time: String? = null,
+    val time: TimeModel? = null,
     val distance: Double? = null,
     val distanceType: CardioDistanceType = CardioDistanceType.MILES,
     val laps: Double? = null
