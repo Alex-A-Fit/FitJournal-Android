@@ -32,7 +32,7 @@
     <string name="title_create_new_workout">Add New Workout</string>
     <string name="text_edit_workout_title">%1$s (%2$s)</string>
     <string name="title_edit_workout_error">Sorry, the workout you selected could not be found</string>
-    <string name="title_delete_workout">Are You Sure you want to delete \"%1$s\"</string>
+    <string name="title_delete_workout">Are you sure you want to delete \"%1$s\"</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>
