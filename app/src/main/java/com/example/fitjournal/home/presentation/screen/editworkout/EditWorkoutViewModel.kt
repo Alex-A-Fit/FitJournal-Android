@@ -18,11 +18,11 @@ import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.state.UiState
-import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import com.example.fitjournal.home.presentation.model.enum.EditWorkoutListFunctions
 import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
 import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
 import com.example.fitjournal.home.presentation.model.ui.CalisthenicsValidator
+import com.example.fitjournal.home.presentation.model.ui.CardioValidator
 import com.example.fitjournal.home.presentation.model.ui.WeightLiftingValidator
 import com.example.fitjournal.statistics.domain.mapper.toRealmWorkoutEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -268,6 +268,58 @@ class EditWorkoutViewModel @Inject constructor(
                 }
             }
 
+            is EditWorkoutEvents.AddNewCardioSetToWorkout -> {
+                val adjustedTimeValues =
+                    editWorkoutUseCase.adjustMandatoryTimeValuesUseCase(event.newCardioItem.time)
+                event.newCardioItem.time = adjustedTimeValues
+                val validWorkout = isCardioPropertiesValid(event.newCardioItem)
+                if (validWorkout.isWorkoutValid()) {
+                    val newPropsModel = getNewWorkoutPropertiesModel(
+                        workoutTypeEnum = WorkoutTypeEnum.CARDIO,
+                        editWorkoutFunction = EditWorkoutListFunctions.ADD_WORKOUT_ITEM,
+                        newCardioItem = event.newCardioItem
+                    )
+                    if (newPropsModel == null) {
+                        viewModelScope.launch {
+                            event.onAddErrorCallback()
+                        }
+                        return
+                    }
+                    val workoutModel = event.workoutModel
+                    workoutModel.workoutDetailsModel.workoutPropertiesModel = newPropsModel
+                    try {
+                        val updatedRealmEntry =
+                            workoutModel.toRealmWorkoutEntry(
+                                workoutType = event.workoutType
+                            )
+                        viewModelScope.launch {
+                            val isUpdateSuccess = realmWorkoutEntryUseCase
+                                .updateSingleWorkoutEntryToRealmDbUseCase(
+                                    updatedRealmWorkoutEntry = updatedRealmEntry
+                                )
+                            if (isUpdateSuccess) {
+                                updateWorkoutState(
+                                    newEditWorkoutUiState = editWorkoutState.copy(
+                                        cardioPropertyList = newPropsModel.getCardioProps(),
+                                        laps = "",
+                                        distance = "",
+                                        hour = "",
+                                        minute = "",
+                                        second = ""
+                                    )
+                                )
+                            } else {
+                                event.onAddErrorCallback()
+                            }
+                        }
+                    } catch (e: Exception) {
+                        viewModelScope.launch {
+                            event.onAddErrorCallback()
+                        }
+                    }
+                }
+            }
+
             is EditWorkoutEvents.EditLaps -> {
                 addOrSubtractLaps(
                     editWorkoutFunction = event.editWorkoutFunction,
@@ -335,6 +387,31 @@ class EditWorkoutViewModel @Inject constructor(
             isRepsValid = isRepsValid,
             isSetsValid = isSetsValid,
             isWeightValid = isWeightValid,
+            isTimeValid = isTimeValid
+        )
+    }
+
+    private fun isCardioPropertiesValid(
+        workoutProperties: CardioModel
+    ): CardioValidator {
+        val workoutTime = workoutProperties.time
+        val isLapsValid = if (editWorkoutState.laps != "") {
+            editWorkoutUseCase.isDoubleValidUseCase(editWorkoutState.laps)
+        } else {
+            true
+        }
+        val isDistanceValid = editWorkoutUseCase.isDoubleValidUseCase(editWorkoutState.distance)
+        val isTimeValid = editWorkoutUseCase.isTimeValidUseCase(workoutTime)
+        updateWorkoutState(
+            newEditWorkoutUiState = editWorkoutState.copy(
+                isLapsErrorVisible = !isLapsValid,
+                isDistanceErrorVisible = !isDistanceValid,
+                isTimeErrorVisible = !isTimeValid
+            )
+        )
+        return CardioValidator(
+            isLapsValid = isLapsValid,
+            isDistanceValid = isDistanceValid,
             isTimeValid = isTimeValid
         )
     }
@@ -632,7 +709,6 @@ class EditWorkoutViewModel @Inject constructor(
                         hour = "",
                         minute = "",
                         second = "",
-                        distanceType = CardioDistanceType.MILES,
                         isLapsErrorVisible = false,
                         isTimeErrorVisible = false,
                         isDistanceErrorVisible = false

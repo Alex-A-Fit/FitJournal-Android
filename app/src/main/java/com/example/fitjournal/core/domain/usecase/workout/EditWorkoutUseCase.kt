@@ -6,5 +6,6 @@ data class EditWorkoutUseCase(
     val isIntegerValidUseCase: IsIntegerValidUseCase,
     val isTimeValidUseCase: IsTimeValidUseCase,
     val adjustTimeValuesUseCase: AdjustTimeValuesUseCase,
+    val adjustMandatoryTimeValuesUseCase: AdjustMandatoryTimeValuesUseCase,
     val isDoubleValidUseCase: IsDoubleValidUseCase
 )

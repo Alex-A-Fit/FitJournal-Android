@@ -1,6 +1,7 @@
 package com.example.fitjournal.home.presentation.model.events
 
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
+import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
@@ -94,5 +95,11 @@ sealed class EditWorkoutEvents {
 
     data class OnDistanceValueChange(
         val distanceValue: String
+    ) : EditWorkoutEvents()
+    data class AddNewCardioSetToWorkout(
+        val newCardioItem: CardioModel,
+        val workoutType: String,
+        val workoutModel: WorkoutModel,
+        val onAddErrorCallback: suspend () -> Unit
     ) : EditWorkoutEvents()
 }

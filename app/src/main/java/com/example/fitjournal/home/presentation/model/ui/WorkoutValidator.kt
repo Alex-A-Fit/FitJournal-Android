@@ -16,3 +16,11 @@ data class CalisthenicsValidator(
 ) {
     fun isWorkoutValid() = isRepsValid && isSetsValid && isWeightValid && isTimeValid
 }
+
+data class CardioValidator(
+    val isLapsValid: Boolean,
+    val isDistanceValid: Boolean,
+    val isTimeValid: Boolean
+) {
+    fun isWorkoutValid() = isLapsValid && isDistanceValid && isTimeValid
+}

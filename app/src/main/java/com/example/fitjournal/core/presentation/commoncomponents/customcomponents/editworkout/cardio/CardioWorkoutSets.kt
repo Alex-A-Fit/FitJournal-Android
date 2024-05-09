@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.R
-import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.presentation.theme.Red
 import com.example.fitjournal.core.presentation.theme.Spacing
@@ -70,7 +69,7 @@ fun CardioWorkoutSets(
         )
         Text(
             text =
-                "${workout.time.hours}:${workout.time.minutes}:${workout.time.seconds}",
+            "${workout.time.hours}:${workout.time.minutes}:${workout.time.seconds}",
             modifier = Modifier
                 .weight(2f, fill = false)
                 .fillMaxWidth(),

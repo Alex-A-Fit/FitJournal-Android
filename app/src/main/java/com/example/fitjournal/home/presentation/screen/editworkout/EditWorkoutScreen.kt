@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
+import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.DeleteButton
@@ -193,7 +194,26 @@ fun EditWorkoutScreen(
                                     )
                                 }
 
-                                WorkoutTypeEnum.CARDIO -> {}
+                                WorkoutTypeEnum.CARDIO -> {
+                                    val newCardioItem = CardioModel(
+                                        distance = editWorkoutUiState.distance.toDoubleOrZero(),
+                                        distanceType = editWorkoutUiState.distanceType,
+                                        time = TimeModel(
+                                            hours = editWorkoutUiState.hour,
+                                            minutes = editWorkoutUiState.minute,
+                                            seconds = editWorkoutUiState.second
+                                        ),
+                                        laps = editWorkoutUiState.laps.toDoubleOrNull()
+                                    )
+                                    editWorkoutUiState.editWorkoutEvents(
+                                        EditWorkoutEvents.AddNewCardioSetToWorkout(
+                                            newCardioItem = newCardioItem,
+                                            workoutType = workoutTypeAsString,
+                                            workoutModel = uiState.data,
+                                            onAddErrorCallback = { showSnackbar(errorWithAddingSets) }
+                                        )
+                                    )
+                                }
                             }
                         }
                     )
