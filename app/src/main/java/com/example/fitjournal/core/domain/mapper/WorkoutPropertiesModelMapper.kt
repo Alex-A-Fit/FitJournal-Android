@@ -119,9 +119,9 @@ fun mapWorkoutPropsToRealmWorkoutProps(
                         val workoutList = workoutProps.props.map {
                             CardioSet().apply {
                                 distance = it.distance
-                                distanceType = it.distanceType.stringValue
+                                distanceType = it.distanceType.stringConcatenatedValue
                                 laps = it.laps
-                                time = if (it.time == null) "" else "${it.time.hours}:${it.time.minutes}:${it.time.seconds}"
+                                time = "${it.time.hours}:${it.time.minutes}:${it.time.seconds}"
                             }
                         }
                         val realmList = realmListOf<CardioSet>()

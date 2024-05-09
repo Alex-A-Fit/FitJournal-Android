@@ -1,6 +1,12 @@
 package com.example.fitjournal.home.presentation.mapper
 
+import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.presentation.model.WorkoutDetailsUiModel
+import com.example.fitjournal.core.util.extensions.convertMinutesToHours
+import com.example.fitjournal.core.util.extensions.convertSecondsToMinutes
+import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
+import com.example.fitjournal.core.util.extensions.toDoubleOrZero
+import com.example.fitjournal.core.util.extensions.toIntOrZero
 import com.example.fitjournal.home.presentation.model.ui.CalisthenicsUi
 import com.example.fitjournal.home.presentation.model.ui.CardioUi
 import com.example.fitjournal.home.presentation.model.ui.WeightLiftingUi
@@ -39,7 +45,7 @@ fun WorkoutDetailsUiModel.mapToCalisthenicsUi(): CalisthenicsUi {
 
 fun WorkoutDetailsUiModel.mapToCardioUi(): CardioUi {
     if (this.exerciseCardModel == null) return CardioUi(name = this.name, icon = this.icon)
-    val time = this.exerciseCardModel.time
+    val time = reduceTimeValues(this.exerciseCardModel.time)
     val distance = this.exerciseCardModel.distance
     val distanceType = this.exerciseCardModel.distanceType
     val laps = this.exerciseCardModel.laps
@@ -50,6 +56,28 @@ fun WorkoutDetailsUiModel.mapToCardioUi(): CardioUi {
         icon = this.icon,
         distanceType = distanceType,
         distance = distance,
+        distanceInKm = distance.times(1.609344).roundToTwoDecimalPlaces(),
         laps = laps
+    )
+}
+
+fun reduceTimeValues(time: TimeModel?): TimeModel?{
+    if (time == null) return null
+    // grab total seconds and reduce to how many minutes there are if > 60
+    val currentSeconds = time.seconds
+    val convertedSeconds = currentSeconds.convertSecondsToMinutes()
+    val seconds = convertedSeconds.second.value
+
+    // grab total minutes and reduce to how many hours there are if > 60
+    val currentMinutes = time.minutes.toIntOrZero() + convertedSeconds.first.value
+    val convertedMinutes = currentMinutes.toString().convertMinutesToHours()
+    val minutes = convertedMinutes.second.value
+
+    val hours = time.hours.toIntOrZero() + convertedMinutes.first.value
+
+    return TimeModel(
+        hours = hours.toString(),
+        minutes = minutes.toString(),
+        seconds = seconds.toString()
     )
 }

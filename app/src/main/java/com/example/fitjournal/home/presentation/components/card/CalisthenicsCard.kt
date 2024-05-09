@@ -111,7 +111,7 @@ private fun MostRecentCalisthenicsSet(
         time?.let {
             Text(
                 text = stringResource(
-                    id = R.string.text_total_time_elapsed,
+                    id = R.string.text_total_time,
                     "${it.hours}:${it.minutes}:${it.seconds}"
                 ),
                 style = MaterialTheme.typography.bodySmall,

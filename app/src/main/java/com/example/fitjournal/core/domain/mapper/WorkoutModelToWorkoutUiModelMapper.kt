@@ -1,12 +1,18 @@
 package com.example.fitjournal.core.domain.mapper
 
 import com.example.fitjournal.R
+import com.example.fitjournal.core.domain.model.CardioModel
+import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
+import com.example.fitjournal.core.domain.usecase.workout.AdjustMandatoryTimeValuesUseCase
 import com.example.fitjournal.core.presentation.model.WorkoutDetailsUiModel
 import com.example.fitjournal.core.presentation.model.WorkoutPropertiesUiModel
 import com.example.fitjournal.core.presentation.model.WorkoutUiModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
+import com.example.fitjournal.core.util.extensions.toIntOrZero
+import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 
 fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
     return when (workoutDetailsModel.workoutTypeEnum) {
@@ -75,18 +81,41 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
         }
 
         WorkoutTypeEnum.CARDIO -> {
-            val mostRecentSession =
+            val adjustMandatoryTimeValueUseCase = AdjustMandatoryTimeValuesUseCase()
+            var laps = 0.0
+            var distance = 0.0
+            var hours = 0
+            var minutes = 0
+            var seconds = 0
+            val entireSession =
                 when (val workoutSets = workoutDetailsModel.workoutPropertiesModel) {
                     is WorkoutPropertiesModel.CardioProps -> {
                         if (workoutSets.props.isNotEmpty()) {
-                            workoutSets.props.last()
-                        } else {
-                            null
-                        }
+                            workoutSets.props.forEach {
+                                laps += it.laps ?: 0.0
+                                distance += if (it.distanceType == CardioDistanceType.KILOMETERS) it.distance * 0.621371 else it.distance
+                                hours += it.time.hours.toIntOrZero()
+                                minutes += it.time.minutes.toIntOrZero()
+                                seconds += it.time.seconds.toIntOrZero()
+                            }
+                            CardioModel(
+                                distance = distance.roundToTwoDecimalPlaces(),
+                                distanceType = CardioDistanceType.MILES,
+                                time = TimeModel(
+                                    hours = hours.toString(),
+                                    minutes = minutes.toString(),
+                                    seconds = seconds.toString()
+                                ),
+                                laps = if (laps == 0.0) null else laps
+                            )
+                        } else null
                     }
 
                     else -> null
                 }
+            if (entireSession != null) {
+                entireSession.time = adjustMandatoryTimeValueUseCase(entireSession.time)
+            }
             WorkoutUiModel(
                 date = date,
                 id = id,
@@ -94,12 +123,12 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                     name = workoutDetailsModel.name,
                     icon = workoutDetailsModel.icon ?: R.drawable.icon_sprinting_person,
                     workoutType = WorkoutTypeEnum.CARDIO,
-                    exerciseCardModel = mostRecentSession?.let {
+                    exerciseCardModel = entireSession?.let {
                         WorkoutPropertiesUiModel(
-                            time = mostRecentSession.time,
-                            laps = mostRecentSession.laps,
-                            distance = mostRecentSession.distance,
-                            distanceType = mostRecentSession.distanceType
+                            time = entireSession.time,
+                            laps = entireSession.laps,
+                            distance = entireSession.distance,
+                            distanceType = entireSession.distanceType
                         )
                     }
                 )
