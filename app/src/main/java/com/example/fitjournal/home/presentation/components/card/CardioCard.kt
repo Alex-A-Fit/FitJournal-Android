@@ -52,7 +52,7 @@ fun CardioCard(
                     time = cardioUi.time,
                     distance = cardioUi.distance?.toString() ?: "",
                     distanceInKm = cardioUi.distanceInKm?.toString() ?: "",
-                    laps = cardioUi.laps?.toString(),
+                    laps = cardioUi.laps?.toString()
                 )
             } else {
                 NoWorkoutSetsErrorText(
@@ -78,7 +78,7 @@ private fun CardioSummary(
     distance: String,
     distanceInKm: String,
     modifier: Modifier = Modifier,
-    laps: String? = null,
+    laps: String? = null
 ) {
     val hours = time?.hours.getTimeForUi(EditWorkoutTimeDeterminate.HOUR)
     val minutes = time?.minutes.getTimeForUi(EditWorkoutTimeDeterminate.MINUTE)

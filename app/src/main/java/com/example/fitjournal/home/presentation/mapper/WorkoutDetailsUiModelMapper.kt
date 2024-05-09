@@ -5,7 +5,6 @@ import com.example.fitjournal.core.presentation.model.WorkoutDetailsUiModel
 import com.example.fitjournal.core.util.extensions.convertMinutesToHours
 import com.example.fitjournal.core.util.extensions.convertSecondsToMinutes
 import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
-import com.example.fitjournal.core.util.extensions.toDoubleOrZero
 import com.example.fitjournal.core.util.extensions.toIntOrZero
 import com.example.fitjournal.home.presentation.model.ui.CalisthenicsUi
 import com.example.fitjournal.home.presentation.model.ui.CardioUi
@@ -61,7 +60,7 @@ fun WorkoutDetailsUiModel.mapToCardioUi(): CardioUi {
     )
 }
 
-fun reduceTimeValues(time: TimeModel?): TimeModel?{
+fun reduceTimeValues(time: TimeModel?): TimeModel? {
     if (time == null) return null
     // grab total seconds and reduce to how many minutes there are if > 60
     val currentSeconds = time.seconds

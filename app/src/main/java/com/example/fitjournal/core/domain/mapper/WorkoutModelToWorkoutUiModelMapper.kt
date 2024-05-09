@@ -108,7 +108,9 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                                 ),
                                 laps = if (laps == 0.0) null else laps
                             )
-                        } else null
+                        } else {
+                            null
+                        }
                     }
 
                     else -> null
