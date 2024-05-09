@@ -75,4 +75,24 @@ sealed class EditWorkoutEvents {
         val value: String,
         val timeDeterminate: EditWorkoutTimeDeterminate
     ) : EditWorkoutEvents()
+
+    data class EditLaps(
+        val editWorkoutFunction: EditWorkoutFunction,
+        val value: String
+    ) : EditWorkoutEvents()
+
+    data class OnLapsValueChange(
+        val lapValue: String
+    ) : EditWorkoutEvents()
+
+    data class EditDistance(
+        val editWorkoutFunction: EditWorkoutFunction,
+        val value: String
+    ) : EditWorkoutEvents()
+
+    data object EditDistanceType : EditWorkoutEvents()
+
+    data class OnDistanceValueChange(
+        val distanceValue: String
+    ) : EditWorkoutEvents()
 }

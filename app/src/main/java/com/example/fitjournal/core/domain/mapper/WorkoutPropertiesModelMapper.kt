@@ -53,7 +53,7 @@ fun mapRealmWorkoutPropsToWorkoutPropsModel(
                         } else {
                             CardioDistanceType.MILES
                         },
-                        time = breakTimeStringIntoModel(it.time),
+                        time = breakMandatoryTimeStringIntoModel(it.time),
                         laps = it.laps
                     )
                 }
@@ -140,5 +140,9 @@ private fun breakTimeStringIntoModel(time: String?): TimeModel? {
     if (time == null) return null
     val timeList = time.split(":")
     if (timeList.size != 3) return null
+    return TimeModel(hours = timeList[0], minutes = timeList[1], seconds = timeList[2])
+}
+private fun breakMandatoryTimeStringIntoModel(time: String): TimeModel {
+    val timeList = time.split(":")
     return TimeModel(hours = timeList[0], minutes = timeList[1], seconds = timeList[2])
 }

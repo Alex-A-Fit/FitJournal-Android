@@ -17,7 +17,8 @@
     <string name="content_desc_edit_workout_trash_icon">Trash icon to delete the individual workout row</string>
     <string name="content_desc_edit_workout_pencil_icon">Pencil icon to edit workout entry</string>
     <string name="content_desc_error_icon">Error icon to signify an error has occurred</string>d
-    <string name="content_desc_journal_filled_icon">Journal Icon</string>d
+    <string name="content_desc_journal_filled_icon">Journal Icon</string>
+    <string name="content_desc_distance_type_switch_icon">Icon to flip between miles and kilometers when entering distance</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
@@ -69,7 +70,11 @@
     <string name="label_dismiss_snackbar">Dismiss</string>
     <string name="label_reps">Reps</string>
     <string name="label_sets">Sets</string>
+    <string name="label_laps_optional">Laps (Optional)</string>
+    <string name="label_laps">Laps</string>
     <string name="label_weight">Weight</string>
+    <string name="label_distance_with_value">Distance (Currently in %1$s)</string>
+    <string name="label_distance">Distance</string>
     <string name="label_weight_optional">Weight (Optional)</string>
     <string name="label_time_elapsed">Time Elapsed</string>
     <string name="label_time">Time</string>
@@ -98,6 +103,8 @@
     <string name="error_with_adding_sets">Please enter a valid number of sets (1&#8211;999)</string>
     <string name="error_with_adding_reps">Please enter a valid number of reps (1&#8211;999)</string>
     <string name="error_with_adding_weight">Please enter a valid weight (1&#8211;99999)</string>
+    <string name="error_with_adding_distance">Please enter a valid distance (1&#8211;99999)</string>
+    <string name="error_with_adding_laps">Please enter a valid number of laps</string>
     <string name="error_with_adding_time">Please enter a valid time</string>
     <string name="error_no_details_found">No details found for this workout</string>
 

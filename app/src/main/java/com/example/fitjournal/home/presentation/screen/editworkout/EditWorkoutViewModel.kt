@@ -48,22 +48,12 @@ class EditWorkoutViewModel @Inject constructor(
                     editWorkoutFunction = event.editWorkoutFunction,
                     repValue = event.repValue
                 )
-                updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
-                        isRepsErrorVisible = false
-                    )
-                )
             }
 
             is EditWorkoutEvents.EditSets -> {
                 addOrSubtractSets(
                     editWorkoutFunction = event.editWorkoutFunction,
                     setValue = event.setValue
-                )
-                updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
-                        isSetsErrorVisible = false
-                    )
                 )
             }
 
@@ -72,11 +62,6 @@ class EditWorkoutViewModel @Inject constructor(
                     editWorkoutFunction = event.editWorkoutFunction,
                     weightValue = event.weightValue,
                     valueDifferential = event.valueDifferential
-                )
-                updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
-                        isWeightErrorVisible = false
-                    )
                 )
             }
 
@@ -231,7 +216,8 @@ class EditWorkoutViewModel @Inject constructor(
             }
 
             is EditWorkoutEvents.AddNewCalisthenicSetToWorkout -> {
-                val adjustedTimeValues = editWorkoutUseCase.adjustTimeValuesUseCase(event.newCalisthenicItem.time)
+                val adjustedTimeValues =
+                    editWorkoutUseCase.adjustTimeValuesUseCase(event.newCalisthenicItem.time)
                 event.newCalisthenicItem.time = adjustedTimeValues
                 val validWorkout = isCalisthenicsPropertiesValid(event.newCalisthenicItem)
                 if (validWorkout.isWorkoutValid()) {
@@ -281,6 +267,43 @@ class EditWorkoutViewModel @Inject constructor(
                     }
                 }
             }
+
+            is EditWorkoutEvents.EditLaps -> {
+                addOrSubtractLaps(
+                    editWorkoutFunction = event.editWorkoutFunction,
+                    lapValue = event.value
+                )
+            }
+
+            is EditWorkoutEvents.OnLapsValueChange -> {
+                updateWorkoutState(
+                    newEditWorkoutUiState = editWorkoutState.copy(
+                        laps = event.lapValue,
+                        isLapsErrorVisible = false
+                    )
+                )
+            }
+            is EditWorkoutEvents.EditDistance -> {
+                addOrSubtractDistance(
+                    editWorkoutFunction = event.editWorkoutFunction,
+                    distanceValue = event.value
+                )
+            }
+            is EditWorkoutEvents.OnDistanceValueChange -> {
+                updateWorkoutState(
+                    newEditWorkoutUiState = editWorkoutState.copy(
+                        distance = event.distanceValue,
+                        isDistanceErrorVisible = false
+                    )
+                )
+            }
+            EditWorkoutEvents.EditDistanceType -> {
+                updateWorkoutState(
+                    editWorkoutState.copy(
+                        distanceType = editWorkoutState.distanceType.getNextDistanceType()
+                    )
+                )
+            }
         }
     }
 
@@ -290,8 +313,16 @@ class EditWorkoutViewModel @Inject constructor(
         val workoutTime = workoutProperties.time
         val isRepsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutState.reps)
         val isSetsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutState.sets)
-        val isTimeValid = if (workoutTime != null) editWorkoutUseCase.isTimeValidUseCase(workoutTime) else true
-        val isWeightValid = if (workoutProperties.weight != null) editWorkoutUseCase.isDoubleValidUseCase(editWorkoutState.weight) else true
+        val isTimeValid =
+            if (workoutTime != null) editWorkoutUseCase.isTimeValidUseCase(workoutTime) else true
+        val isWeightValid =
+            if (workoutProperties.weight != null) {
+                editWorkoutUseCase.isDoubleValidUseCase(
+                    editWorkoutState.weight
+                )
+            } else {
+                true
+            }
         updateWorkoutState(
             newEditWorkoutUiState = editWorkoutState.copy(
                 isRepsErrorVisible = !isRepsValid,
@@ -427,7 +458,8 @@ class EditWorkoutViewModel @Inject constructor(
                                 is WorkoutPropertiesModel.CalisthenicsProps -> {
                                     val calisthenicsProps = workoutList.props.toMutableStateList()
                                     calisthenicsProps.forEach {
-                                        it.time = editWorkoutUseCase.adjustTimeValuesUseCase(it.time)
+                                        it.time =
+                                            editWorkoutUseCase.adjustTimeValuesUseCase(it.time)
                                     }
                                     Triple(
                                         mutableStateListOf(),
@@ -486,7 +518,12 @@ class EditWorkoutViewModel @Inject constructor(
             editWorkoutFunction = editWorkoutFunction,
             value = repValue
         )
-        updateWorkoutState(newEditWorkoutUiState = editWorkoutState.copy(reps = newRepValue))
+        updateWorkoutState(
+            newEditWorkoutUiState = editWorkoutState.copy(
+                reps = newRepValue,
+                isRepsErrorVisible = false
+            )
+        )
     }
 
     private fun addOrSubtractSets(
@@ -497,7 +534,12 @@ class EditWorkoutViewModel @Inject constructor(
             editWorkoutFunction = editWorkoutFunction,
             value = setValue
         )
-        updateWorkoutState(newEditWorkoutUiState = editWorkoutState.copy(sets = newSetValue))
+        updateWorkoutState(
+            newEditWorkoutUiState = editWorkoutState.copy(
+                sets = newSetValue,
+                isSetsErrorVisible = false
+            )
+        )
     }
 
     private fun addOrSubtractWeight(
@@ -510,7 +552,44 @@ class EditWorkoutViewModel @Inject constructor(
             value = weightValue,
             valueDifferential = valueDifferential
         )
-        updateWorkoutState(newEditWorkoutUiState = editWorkoutState.copy(weight = newWeightValue))
+        updateWorkoutState(
+            newEditWorkoutUiState = editWorkoutState.copy(
+                weight = newWeightValue,
+                isWeightErrorVisible = false
+            )
+        )
+    }
+
+    private fun addOrSubtractLaps(
+        editWorkoutFunction: EditWorkoutFunction,
+        lapValue: String
+    ) {
+        val newLapValue = editWorkoutUseCase.addOrSubtractDoublesUseCase(
+            editWorkoutFunction = editWorkoutFunction,
+            value = lapValue
+        )
+        updateWorkoutState(
+            newEditWorkoutUiState = editWorkoutState.copy(
+                laps = newLapValue,
+                isLapsErrorVisible = false
+            )
+        )
+    }
+
+    private fun addOrSubtractDistance(
+        editWorkoutFunction: EditWorkoutFunction,
+        distanceValue: String
+    ) {
+        val newDistanceValue = editWorkoutUseCase.addOrSubtractDoublesUseCase(
+            editWorkoutFunction = editWorkoutFunction,
+            value = distanceValue
+        )
+        updateWorkoutState(
+            newEditWorkoutUiState = editWorkoutState.copy(
+                distance = newDistanceValue,
+                isDistanceErrorVisible = false
+            )
+        )
     }
 
     private fun clearWorkoutFields(workoutTypeEnum: WorkoutTypeEnum) {
@@ -550,6 +629,9 @@ class EditWorkoutViewModel @Inject constructor(
                     newEditWorkoutUiState = editWorkoutState.copy(
                         laps = "",
                         distance = "",
+                        hour = "",
+                        minute = "",
+                        second = "",
                         distanceType = CardioDistanceType.MILES,
                         isLapsErrorVisible = false,
                         isTimeErrorVisible = false,

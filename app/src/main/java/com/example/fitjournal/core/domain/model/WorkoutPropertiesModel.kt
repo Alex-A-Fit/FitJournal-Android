@@ -46,7 +46,7 @@ data class WeightLiftingModel(
 data class CardioModel(
     val distance: Double,
     val distanceType: CardioDistanceType = CardioDistanceType.MILES,
-    val time: TimeModel?,
+    val time: TimeModel,
     val laps: Double?
 )
 

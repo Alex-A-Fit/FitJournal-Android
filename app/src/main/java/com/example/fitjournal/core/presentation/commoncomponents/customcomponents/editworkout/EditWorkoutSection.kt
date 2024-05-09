@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.EditWorkoutCalisthenics
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.EditWorkoutCardio
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.EditWorkoutWeightLifting
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
@@ -26,7 +27,9 @@ fun EditWorkoutSection(
             )
     ) {
         when (workoutType) {
-            WorkoutTypeEnum.CARDIO -> Unit
+            WorkoutTypeEnum.CARDIO -> {
+                EditWorkoutCardio(editWorkoutUiState = editWorkoutUiState)
+            }
             WorkoutTypeEnum.CALISTHENICS -> {
                 EditWorkoutCalisthenics(editWorkoutUiState = editWorkoutUiState)
             }

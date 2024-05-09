@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditValueDoubleSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditValueSmallIntegerSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditValueTime
-import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditValueWeightSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutPropertySection
 import com.example.fitjournal.core.presentation.commoncomponents.text.ErrorText
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
@@ -113,7 +113,8 @@ fun EditWorkoutCalisthenics(
     EditWorkoutPropertySection(
         workoutProperty = stringResource(id = R.string.label_weight_optional).uppercase()
     ) {
-        EditValueWeightSection(
+        EditValueDoubleSection(
+            modifier = Modifier.fillMaxWidth(),
             onSubtractValueClicked = {
                 editWorkoutUiState.editWorkoutEvents(
                     EditWorkoutEvents.EditWeight(
@@ -138,7 +139,8 @@ fun EditWorkoutCalisthenics(
                     EditWorkoutEvents.OnWeightValueChange(weightValue = it)
                 )
             },
-            doesTextFieldHaveError = isWeightErrorVisible
+            doesTextFieldHaveError = isWeightErrorVisible,
+            textFieldModifier = Modifier.fillMaxWidth(.5f)
         )
     }
     ErrorText(

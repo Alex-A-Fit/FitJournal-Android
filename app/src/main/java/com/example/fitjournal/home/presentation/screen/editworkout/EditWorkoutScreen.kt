@@ -25,6 +25,8 @@ import com.example.fitjournal.core.presentation.commoncomponents.customcomponent
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.CalisthenicsListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.CalisthenicsWorkoutSets
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.CardioListHeader
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.CardioWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.DeleteWorkoutDialog
@@ -257,6 +259,30 @@ fun EditWorkoutScreen(
                     }
 
                     WorkoutTypeEnum.CARDIO -> {
+                        if (editWorkoutUiState.cardioPropertyList.isNotEmpty()) {
+                            item { CardioListHeader() }
+                        }
+                        itemsIndexed(editWorkoutUiState.cardioPropertyList) { index, item ->
+                            CardioWorkoutSets(
+                                workout = item,
+                                index = index,
+                                deleteSet = {
+                                    editWorkoutUiState.editWorkoutEvents(
+                                        EditWorkoutEvents.DeleteWorkoutSetItemInWorkoutModelList(
+                                            index = index,
+                                            workoutType = workoutTypeAsString,
+                                            workoutModel = uiState.data,
+                                            onDeleteErrorCallback = {
+                                                showSnackbar(
+                                                    errorWithSetsBeingDeleted
+                                                )
+                                            }
+                                        )
+                                    )
+                                },
+                                editSet = {}
+                            )
+                        }
                     }
                 }
                 item {
