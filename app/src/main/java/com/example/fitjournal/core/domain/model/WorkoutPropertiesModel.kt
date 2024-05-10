@@ -43,9 +43,9 @@ sealed class WorkoutPropertiesModel {
 data class WeightLiftingModel(
     val reps: Int,
     val sets: Int,
-    val weight: Double,
-    val weightType: WeightLiftingWeightType = WeightLiftingWeightType.POUNDS,
-    )
+    var weight: Double,
+    val weightType: WeightLiftingWeightType = WeightLiftingWeightType.POUNDS
+)
 data class CardioModel(
     val distance: Double,
     val distanceType: CardioDistanceType = CardioDistanceType.MILES,
@@ -58,8 +58,8 @@ data class CalisthenicsModel(
     val sets: Int,
     var time: TimeModel? = null,
     val weight: Double? = null,
-    val weightType: WeightLiftingWeightType = WeightLiftingWeightType.POUNDS,
-    )
+    val weightType: WeightLiftingWeightType = WeightLiftingWeightType.POUNDS
+)
 
 data class TimeModel(
     val hours: String,

@@ -17,10 +17,11 @@ import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJournalCard
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.core.util.extensions.TwoDecimalOrNoDecimal
 import com.example.fitjournal.core.util.extensions.getTimeForUi
+import com.example.fitjournal.home.presentation.components.card.subcomponents.CalisthenicsSummaryTitle
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
-import com.example.fitjournal.home.presentation.components.card.subcomponents.CalisthenicsSummaryTitle
 import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
 import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 import com.example.fitjournal.home.presentation.model.ui.CalisthenicsUi
@@ -51,8 +52,8 @@ fun CalisthenicsCard(
                         .padding(horizontal = Spacing.spacing16),
                     sets = calisthenicsUi.sets?.toString() ?: "",
                     reps = calisthenicsUi.reps?.toString() ?: "",
-                    weight = calisthenicsUi.weight?.toString(),
-                    weightInKgs = calisthenicsUi.weightInKgs.toString(),
+                    weight = calisthenicsUi.weight?.toString()?.TwoDecimalOrNoDecimal(),
+                    weightInKgs = calisthenicsUi.weightInKgs.toString().TwoDecimalOrNoDecimal(),
                     time = calisthenicsUi.time
                 )
             } else {
@@ -110,7 +111,7 @@ private fun CalisthenicSummary(
         weight?.let {
             Text(
                 text = stringResource(
-                    id = R.string.text_total_weight,
+                    id = R.string.text_total_weight_in_volume,
                     weight.toString(),
                     WeightLiftingWeightType.POUNDS.stringValue,
                     weightInKgs,

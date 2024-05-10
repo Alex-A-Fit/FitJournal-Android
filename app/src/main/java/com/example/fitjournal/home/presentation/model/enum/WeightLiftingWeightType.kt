@@ -14,7 +14,7 @@ enum class WeightLiftingWeightType(
         stringConcatenatedValue = "kgs"
     );
 
-    fun getNextDistanceType(): WeightLiftingWeightType {
+    fun getOtherWeightType(): WeightLiftingWeightType {
         return if (this.stringValue == POUNDS.stringValue) {
             KILOGRAMS
         } else {

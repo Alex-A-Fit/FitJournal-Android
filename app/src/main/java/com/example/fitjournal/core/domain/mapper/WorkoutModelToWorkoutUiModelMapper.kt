@@ -24,13 +24,24 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                     if (workoutSets.props.isEmpty()) {
                         null
                     } else {
-                        workoutSets.props.maxBy { liftingModel ->
-                            liftingModel.weight
+                        var weight = 0.0
+                        workoutSets.props.maxByOrNull { liftingModel ->
+                            weight = if (liftingModel.weightType.stringConcatenatedValue == "kgs") {
+                                liftingModel.weight.times(2.20462)
+                            } else {
+                                liftingModel.weight
+                            }
+                            weight
                         }
                     }
                 }
 
                 else -> null
+            }
+            if (topSet != null) {
+                if (topSet.weightType.stringConcatenatedValue == "kgs") {
+                    topSet.weight = topSet.weight.times(2.20462)
+                }
             }
             WorkoutUiModel(
                 date = date,
@@ -42,7 +53,7 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                     exerciseCardModel = topSet?.let {
                         WorkoutPropertiesUiModel(
                             reps = it.reps,
-                            weight = it.weight,
+                            weight = it.weight.roundToTwoDecimalPlaces(),
                             sets = it.sets
                         )
                     }
@@ -74,20 +85,26 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                                     "kgs" -> {
                                         (it.weight?.times(2.20462)) ?: 0.0
                                     }
+
                                     "lbs" -> {
                                         it.weight ?: 0.0
                                     }
+
                                     else -> 0.0
                                 }
                             }
                             CalisthenicsModel(
                                 reps = reps,
                                 sets = sets,
-                                time = if (hours == 0 && minutes == 0 && seconds == 0) null else TimeModel(
-                                    hours = hours.toString(),
-                                    minutes = minutes.toString(),
-                                    seconds = seconds.toString()
-                                ),
+                                time = if (hours == 0 && minutes == 0 && seconds == 0) {
+                                    null
+                                } else {
+                                    TimeModel(
+                                        hours = hours.toString(),
+                                        minutes = minutes.toString(),
+                                        seconds = seconds.toString()
+                                    )
+                                },
                                 weight = weight
                             )
                         } else {
@@ -168,7 +185,7 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                         WorkoutPropertiesUiModel(
                             time = entireSession.time,
                             laps = entireSession.laps,
-                            distance = entireSession.distance,
+                            distance = entireSession.distance
                         )
                     }
                 )

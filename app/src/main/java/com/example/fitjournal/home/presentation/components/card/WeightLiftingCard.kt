@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJournalCard
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.core.util.extensions.TwoDecimalOrNoDecimal
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
 import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
@@ -47,8 +48,8 @@ fun WeightLiftingCard(
                     .padding(horizontal = Spacing.spacing16),
                 reps = weightLiftingUi.reps?.toString() ?: "",
                 sets = weightLiftingUi.sets?.toString() ?: "",
-                weight = weightLiftingUi.weight?.toString() ?: "",
-                weightInKgs = weightLiftingUi.weightInKgs.toString()
+                weight = weightLiftingUi.weight?.toString()?.TwoDecimalOrNoDecimal() ?: "",
+                weightInKgs = weightLiftingUi.weightInKgs.toString().TwoDecimalOrNoDecimal()
             )
         } else {
             NoWorkoutSetsErrorText(

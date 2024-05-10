@@ -26,7 +26,7 @@ fun mapRealmWorkoutPropsToWorkoutPropsModel(
                         reps = it.reps,
                         sets = it.sets,
                         weight = it.weight,
-                        weightType = if (it.weightType == "lbs"){
+                        weightType = if (it.weightType == "lbs") {
                             WeightLiftingWeightType.POUNDS
                         } else {
                             WeightLiftingWeightType.KILOGRAMS
@@ -44,7 +44,7 @@ fun mapRealmWorkoutPropsToWorkoutPropsModel(
                         sets = it.sets,
                         time = breakTimeStringIntoModel(it.time),
                         weight = it.weight,
-                        weightType = if (it.weightType == "lbs"){
+                        weightType = if (it.weightType == "lbs") {
                             WeightLiftingWeightType.POUNDS
                         } else {
                             WeightLiftingWeightType.KILOGRAMS
@@ -88,6 +88,7 @@ fun mapWorkoutPropsToRealmWorkoutProps(
                                 reps = it.reps
                                 sets = it.sets
                                 weight = it.weight
+                                weightType = it.weightType.stringConcatenatedValue
                             }
                         }
                         val realmList = realmListOf<StrengthTrainingSet>()
@@ -110,6 +111,7 @@ fun mapWorkoutPropsToRealmWorkoutProps(
                                 reps = it.reps
                                 sets = it.sets
                                 weight = it.weight
+                                weightType = it.weightType.stringConcatenatedValue
                                 time = if (workoutTime == null) "" else "${workoutTime.hours}:${workoutTime.minutes}:${workoutTime.seconds}"
                             }
                         }

@@ -92,6 +92,7 @@ sealed class EditWorkoutEvents {
     ) : EditWorkoutEvents()
 
     data object EditDistanceType : EditWorkoutEvents()
+    data object EditWeightType : EditWorkoutEvents()
 
     data class OnDistanceValueChange(
         val distanceValue: String

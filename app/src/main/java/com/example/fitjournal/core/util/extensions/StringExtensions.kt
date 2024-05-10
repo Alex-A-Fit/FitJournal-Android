@@ -10,6 +10,23 @@ fun String.toIntOrZero(): Int {
     return if (this.isBlank()) 0 else this.toIntOrNull() ?: 0
 }
 
+fun String.TwoDecimalOrNoDecimal(): String {
+    return if (this.contains(".")) {
+        val decimalValue = this.substringAfter(".")
+        return if (decimalValue.length == 1) {
+            if (decimalValue[0] == '0') {
+                this.substringBefore(".")
+            } else {
+                this + "0"
+            }
+        } else {
+            this
+        }
+    } else {
+        this
+    }
+}
+
 fun String?.getTimeForUi(timeDeterminate: EditWorkoutTimeDeterminate): String {
     if (this.isNullOrEmpty()) return ""
     return when (val time = this.toIntOrZero()) {

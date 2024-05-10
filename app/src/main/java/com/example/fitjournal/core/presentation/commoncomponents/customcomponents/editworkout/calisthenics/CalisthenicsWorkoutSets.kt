@@ -20,6 +20,7 @@ import com.example.fitjournal.R
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.presentation.theme.Red
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.core.util.extensions.TwoDecimalOrNoDecimal
 
 @Composable
 fun CalisthenicsWorkoutSets(
@@ -68,8 +69,9 @@ fun CalisthenicsWorkoutSets(
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.bodyLarge
         )
+
         Text(
-            text = workout.weight?.toString() ?: stringResource(id = R.string.text_not_applicable),
+            text = if (workout.weight != null) "${workout.weight.toString().TwoDecimalOrNoDecimal()} ${workout.weightType.stringConcatenatedValue}" else stringResource(id = R.string.text_not_applicable),
             modifier = Modifier
                 .weight(2f, fill = false)
                 .fillMaxWidth(),

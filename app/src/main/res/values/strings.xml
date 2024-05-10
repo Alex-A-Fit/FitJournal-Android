@@ -48,6 +48,7 @@
     <string name="text_total_sets">Total Sets: %1$s</string>
     <string name="text_total_laps">Total Laps: %1$s</string>
     <string name="text_total_weight">Total Weight: %1$s %2$s or %3$s %4$s</string>
+    <string name="text_total_weight_in_volume">Total Weight in Volume: %1$s %2$s or %3$s %4$s</string>
     <string name="text_view_workout_details">Click to view/edit workout</string>
     <string name="text_add_to_journal">Add to Journal</string>
     <string name="text_clear_filter">Clear Filter</string>
@@ -72,10 +73,11 @@
     <string name="label_sets">Sets</string>
     <string name="label_laps_optional">Laps (Optional)</string>
     <string name="label_laps">Laps</string>
+    <string name="label_weight_with_value">Weight (Currently in %1$s)</string>
     <string name="label_weight">Weight</string>
     <string name="label_distance_with_value">Total Distance (Currently in %1$s)</string>
     <string name="label_distance">Distance</string>
-    <string name="label_weight_optional">Weight (Optional)</string>
+    <string name="label_weight_optional">Weight (Currently in %1$s) (Optional)</string>
     <string name="label_time_elapsed">Time Elapsed</string>
     <string name="label_time">Time</string>
     <string name="label_time_elapsed_optional">Time Elapsed (Optional)</string>

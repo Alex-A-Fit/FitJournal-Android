@@ -8,6 +8,7 @@ import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
+import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
 
 data class EditWorkoutUiState(
@@ -40,5 +41,6 @@ data class EditWorkoutUiState(
     val distance: String = "",
     val isDistanceErrorVisible: Boolean = false,
 
-    val distanceType: CardioDistanceType = CardioDistanceType.MILES
+    val distanceType: CardioDistanceType = CardioDistanceType.MILES,
+    val weightType: WeightLiftingWeightType = WeightLiftingWeightType.POUNDS
 )

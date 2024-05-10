@@ -154,7 +154,8 @@ fun EditWorkoutScreen(
                                     val newWeightTrainingItem = WeightLiftingModel(
                                         reps = editWorkoutUiState.reps.toIntOrZero(),
                                         sets = editWorkoutUiState.sets.toIntOrZero(),
-                                        weight = editWorkoutUiState.weight.toDoubleOrZero()
+                                        weight = editWorkoutUiState.weight.toDoubleOrZero(),
+                                        weightType = editWorkoutUiState.weightType
                                     )
                                     editWorkoutUiState.editWorkoutEvents(
                                         EditWorkoutEvents.AddNewWeightTrainingSetToWorkout(
@@ -171,6 +172,7 @@ fun EditWorkoutScreen(
                                         reps = editWorkoutUiState.reps.toIntOrZero(),
                                         sets = editWorkoutUiState.sets.toIntOrZero(),
                                         weight = editWorkoutUiState.weight.toDoubleOrNull(),
+                                        weightType = editWorkoutUiState.weightType,
                                         time = if (editWorkoutUiState.hour.isEmpty() &&
                                             editWorkoutUiState.minute.isEmpty() &&
                                             editWorkoutUiState.second.isEmpty()

@@ -352,7 +352,14 @@ class EditWorkoutViewModel @Inject constructor(
             EditWorkoutEvents.EditDistanceType -> {
                 updateWorkoutState(
                     editWorkoutState.copy(
-                        distanceType = editWorkoutState.distanceType.getNextDistanceType()
+                        distanceType = editWorkoutState.distanceType.getOtherDistanceType()
+                    )
+                )
+            }
+            EditWorkoutEvents.EditWeightType -> {
+                updateWorkoutState(
+                    editWorkoutState.copy(
+                        weightType = editWorkoutState.weightType.getOtherWeightType()
                     )
                 )
             }

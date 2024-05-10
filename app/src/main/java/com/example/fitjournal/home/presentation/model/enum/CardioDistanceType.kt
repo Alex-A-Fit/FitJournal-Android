@@ -14,7 +14,7 @@ enum class CardioDistanceType(
         stringConcatenatedValue = "km"
     );
 
-    fun getNextDistanceType(): CardioDistanceType {
+    fun getOtherDistanceType(): CardioDistanceType {
         return if (this.stringValue == MILES.stringValue) {
             KILOMETERS
         } else {
