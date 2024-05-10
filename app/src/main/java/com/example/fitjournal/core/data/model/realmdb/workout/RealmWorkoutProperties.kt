@@ -1,6 +1,7 @@
 package com.example.fitjournal.core.data.model.realmdb.workout
 
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
+import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.EmbeddedRealmObject
 import io.realm.kotlin.types.RealmList
@@ -18,6 +19,7 @@ class StrengthTrainingSet : EmbeddedRealmObject {
     var reps: Int = 0
     var sets: Int = 0
     var weight: Double = 0.0
+    var weightType: String = WeightLiftingWeightType.POUNDS.stringValue
 }
 
 class CalisthenicsSet : EmbeddedRealmObject {
@@ -29,11 +31,12 @@ class CalisthenicsSet : EmbeddedRealmObject {
 
     // weight may be optional
     var weight: Double? = null
+    var weightType: String = WeightLiftingWeightType.POUNDS.stringConcatenatedValue
 }
 
 class CardioSet : EmbeddedRealmObject {
     var distance: Double = 0.0
-    var distanceType: String = CardioDistanceType.MILES.stringValue
+    var distanceType: String = CardioDistanceType.MILES.stringConcatenatedValue
     var time: String = ""
 
     // laps may be optional

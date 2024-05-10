@@ -20,6 +20,7 @@ fun WorkoutDetailsUiModel.mapToWeightLiftingUi(): WeightLiftingUi {
         reps = reps,
         sets = sets,
         weight = weight,
+        weightInKgs = weight.times(0.453592).roundToTwoDecimalPlaces(),
         name = this.name,
         icon = this.icon
     )
@@ -30,12 +31,13 @@ fun WorkoutDetailsUiModel.mapToCalisthenicsUi(): CalisthenicsUi {
     val reps = this.exerciseCardModel.reps
     val sets = this.exerciseCardModel.sets
     val weight = this.exerciseCardModel.weight
-    val time = this.exerciseCardModel.time
+    val time = reduceTimeValues(this.exerciseCardModel.time)
     if (reps == null || sets == null) return CalisthenicsUi(name = this.name, icon = this.icon)
     return CalisthenicsUi(
         reps = reps,
         sets = sets,
         weight = weight,
+        weightInKgs = weight?.times(0.453592)?.roundToTwoDecimalPlaces() ?: 0.0,
         time = time,
         name = this.name,
         icon = this.icon
@@ -46,14 +48,12 @@ fun WorkoutDetailsUiModel.mapToCardioUi(): CardioUi {
     if (this.exerciseCardModel == null) return CardioUi(name = this.name, icon = this.icon)
     val time = reduceTimeValues(this.exerciseCardModel.time)
     val distance = this.exerciseCardModel.distance
-    val distanceType = this.exerciseCardModel.distanceType
     val laps = this.exerciseCardModel.laps
     if (time == null || distance == null) return CardioUi(name = this.name, icon = this.icon)
     return CardioUi(
         time = time,
         name = this.name,
         icon = this.icon,
-        distanceType = distanceType,
         distance = distance,
         distanceInKm = distance.times(1.609344).roundToTwoDecimalPlaces(),
         laps = laps

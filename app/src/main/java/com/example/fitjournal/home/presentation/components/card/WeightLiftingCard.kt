@@ -18,6 +18,7 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
 import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
+import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 import com.example.fitjournal.home.presentation.model.ui.WeightLiftingUi
 
 @Composable
@@ -46,7 +47,8 @@ fun WeightLiftingCard(
                     .padding(horizontal = Spacing.spacing16),
                 reps = weightLiftingUi.reps?.toString() ?: "",
                 sets = weightLiftingUi.sets?.toString() ?: "",
-                weight = weightLiftingUi.weight?.toString() ?: ""
+                weight = weightLiftingUi.weight?.toString() ?: "",
+                weightInKgs = weightLiftingUi.weightInKgs.toString()
             )
         } else {
             NoWorkoutSetsErrorText(
@@ -80,6 +82,7 @@ private fun TopSetSummary(
     reps: String,
     sets: String,
     weight: String,
+    weightInKgs: String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -108,7 +111,10 @@ private fun TopSetSummary(
         Text(
             text = stringResource(
                 id = R.string.text_total_weight,
-                weight
+                weight,
+                WeightLiftingWeightType.POUNDS.stringValue,
+                weightInKgs,
+                WeightLiftingWeightType.KILOGRAMS.stringValue
             ),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onPrimary

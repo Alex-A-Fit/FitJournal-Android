@@ -20,7 +20,7 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.extensions.getTimeForUi
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
-import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentTravelTitle
+import com.example.fitjournal.home.presentation.components.card.subcomponents.CardioSummaryTitle
 import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import com.example.fitjournal.home.presentation.model.ui.CardioUi
@@ -44,7 +44,7 @@ fun CardioCard(
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             if (cardioUi.doesCardioPropertyExist()) {
-                MostRecentTravelTitle()
+                CardioSummaryTitle()
                 CardioSummary(
                     modifier = Modifier
                         .fillMaxWidth()

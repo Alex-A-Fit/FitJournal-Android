@@ -26,8 +26,8 @@
     <string name="title_weight_training">Weight Training</string>
     <string name="title_calisthenics">Calisthenics</string>
     <string name="title_cardio">Cardio</string>
-    <string name="title_top_set">Current Top Set</string>
-    <string name="title_most_recent_workout">Most Recent Workout</string>
+    <string name="title_top_set">Top Set Summary</string>
+    <string name="title_calisthenics_session_summary">Calisthenics Session Summary</string>
     <string name="title_cardio_session_summary">Cardio Session Summary</string>
     <string name="title_choose_workout_type">Choose a workout type</string>
     <string name="title_create_new_workout">Add New Workout</string>
@@ -47,7 +47,7 @@
     <string name="text_total_reps">Total Reps: %1$s</string>
     <string name="text_total_sets">Total Sets: %1$s</string>
     <string name="text_total_laps">Total Laps: %1$s</string>
-    <string name="text_total_weight">Total Weight: %1$s</string>
+    <string name="text_total_weight">Total Weight: %1$s %2$s or %3$s %4$s</string>
     <string name="text_view_workout_details">Click to view/edit workout</string>
     <string name="text_add_to_journal">Add to Journal</string>
     <string name="text_clear_filter">Clear Filter</string>

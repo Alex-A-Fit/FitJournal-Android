@@ -3,6 +3,7 @@ package com.example.fitjournal.core.presentation.model
 import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
+import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 
 data class WorkoutUiModel(
     val id: String,
@@ -23,6 +24,5 @@ data class WorkoutPropertiesUiModel(
     val weight: Double? = null,
     val time: TimeModel? = null,
     val distance: Double? = null,
-    val distanceType: CardioDistanceType = CardioDistanceType.MILES,
     val laps: Double? = null
 )

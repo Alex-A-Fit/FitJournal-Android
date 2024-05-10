@@ -11,6 +11,7 @@ import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
+import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 import io.realm.kotlin.ext.realmListOf
 
 fun mapRealmWorkoutPropsToWorkoutPropsModel(
@@ -24,7 +25,12 @@ fun mapRealmWorkoutPropsToWorkoutPropsModel(
                     WeightLiftingModel(
                         reps = it.reps,
                         sets = it.sets,
-                        weight = it.weight
+                        weight = it.weight,
+                        weightType = if (it.weightType == "lbs"){
+                            WeightLiftingWeightType.POUNDS
+                        } else {
+                            WeightLiftingWeightType.KILOGRAMS
+                        }
                     )
                 }
             )
@@ -37,7 +43,12 @@ fun mapRealmWorkoutPropsToWorkoutPropsModel(
                         reps = it.reps,
                         sets = it.sets,
                         time = breakTimeStringIntoModel(it.time),
-                        weight = it.weight
+                        weight = it.weight,
+                        weightType = if (it.weightType == "lbs"){
+                            WeightLiftingWeightType.POUNDS
+                        } else {
+                            WeightLiftingWeightType.KILOGRAMS
+                        }
                     )
                 }
             )

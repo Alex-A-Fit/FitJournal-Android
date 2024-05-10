@@ -1,11 +1,13 @@
 package com.example.fitjournal.core.domain.mapper
 
 import com.example.fitjournal.R
+import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.domain.usecase.workout.AdjustMandatoryTimeValuesUseCase
+import com.example.fitjournal.core.domain.usecase.workout.AdjustTimeValuesUseCase
 import com.example.fitjournal.core.presentation.model.WorkoutDetailsUiModel
 import com.example.fitjournal.core.presentation.model.WorkoutPropertiesUiModel
 import com.example.fitjournal.core.presentation.model.WorkoutUiModel
@@ -49,11 +51,45 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
         }
 
         WorkoutTypeEnum.CALISTHENICS -> {
-            val mostRecentSession =
+            val adjustTimeValueUseCase = AdjustTimeValuesUseCase()
+            var reps = 0
+            var sets = 0
+            var hours = 0
+            var minutes = 0
+            var seconds = 0
+            var time: TimeModel? = null
+            var weight = 0.0
+
+            val entireSession =
                 when (val workoutSets = workoutDetailsModel.workoutPropertiesModel) {
                     is WorkoutPropertiesModel.CalisthenicsProps -> {
                         if (workoutSets.props.isNotEmpty()) {
-                            workoutSets.props.last()
+                            workoutSets.props.forEach {
+                                reps += it.reps
+                                sets += it.sets
+                                hours += it.time?.hours?.toIntOrZero() ?: 0
+                                minutes += it.time?.minutes?.toIntOrZero() ?: 0
+                                seconds += it.time?.seconds?.toIntOrZero() ?: 0
+                                weight += when (it.weightType.stringConcatenatedValue) {
+                                    "kgs" -> {
+                                        (it.weight?.times(2.20462)) ?: 0.0
+                                    }
+                                    "lbs" -> {
+                                        it.weight ?: 0.0
+                                    }
+                                    else -> 0.0
+                                }
+                            }
+                            CalisthenicsModel(
+                                reps = reps,
+                                sets = sets,
+                                time = if (hours == 0 && minutes == 0 && seconds == 0) null else TimeModel(
+                                    hours = hours.toString(),
+                                    minutes = minutes.toString(),
+                                    seconds = seconds.toString()
+                                ),
+                                weight = weight
+                            )
                         } else {
                             null
                         }
@@ -61,6 +97,9 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
 
                     else -> null
                 }
+            if (entireSession != null) {
+                entireSession.time = adjustTimeValueUseCase(entireSession.time)
+            }
             WorkoutUiModel(
                 date = date,
                 id = id,
@@ -68,12 +107,12 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                     name = workoutDetailsModel.name,
                     icon = workoutDetailsModel.icon ?: R.drawable.icon_person,
                     workoutType = WorkoutTypeEnum.CALISTHENICS,
-                    exerciseCardModel = mostRecentSession?.let {
+                    exerciseCardModel = entireSession?.let {
                         WorkoutPropertiesUiModel(
-                            reps = mostRecentSession.reps,
-                            time = mostRecentSession.time,
-                            weight = mostRecentSession.weight,
-                            sets = mostRecentSession.sets
+                            reps = it.reps,
+                            time = it.time,
+                            weight = if (it.weight == 0.0 || it.weight == null) null else it.weight.roundToTwoDecimalPlaces(),
+                            sets = it.sets
                         )
                     }
                 )
@@ -130,7 +169,6 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                             time = entireSession.time,
                             laps = entireSession.laps,
                             distance = entireSession.distance,
-                            distanceType = entireSession.distanceType
                         )
                     }
                 )

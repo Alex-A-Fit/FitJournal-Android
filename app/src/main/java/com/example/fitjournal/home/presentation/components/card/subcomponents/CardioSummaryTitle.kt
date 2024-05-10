@@ -10,7 +10,7 @@ import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
-fun MostRecentTravelTitle() {
+fun CardioSummaryTitle() {
     Text(
         text = stringResource(id = R.string.title_cardio_session_summary),
         color = MaterialTheme.colorScheme.onPrimary,

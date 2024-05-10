@@ -4,6 +4,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
+import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
+
 // domain model used as a middle man between data and ui layer
 sealed class WorkoutPropertiesModel {
     data class WeightLiftingProps(
@@ -41,8 +43,9 @@ sealed class WorkoutPropertiesModel {
 data class WeightLiftingModel(
     val reps: Int,
     val sets: Int,
-    val weight: Double
-)
+    val weight: Double,
+    val weightType: WeightLiftingWeightType = WeightLiftingWeightType.POUNDS,
+    )
 data class CardioModel(
     val distance: Double,
     val distanceType: CardioDistanceType = CardioDistanceType.MILES,
@@ -54,8 +57,9 @@ data class CalisthenicsModel(
     val reps: Int,
     val sets: Int,
     var time: TimeModel? = null,
-    val weight: Double? = null
-)
+    val weight: Double? = null,
+    val weightType: WeightLiftingWeightType = WeightLiftingWeightType.POUNDS,
+    )
 
 data class TimeModel(
     val hours: String,
