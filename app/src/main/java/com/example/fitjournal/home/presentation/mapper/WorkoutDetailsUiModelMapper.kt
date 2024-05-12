@@ -2,6 +2,8 @@ package com.example.fitjournal.home.presentation.mapper
 
 import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.presentation.model.WorkoutDetailsUiModel
+import com.example.fitjournal.core.util.constants.Constants.MILES_TO_KILOMETERS_CONVERSION_FACTOR
+import com.example.fitjournal.core.util.constants.Constants.POUNDS_TO_KILOGRAMS_CONVERSION_FACTOR
 import com.example.fitjournal.core.util.extensions.convertMinutesToHours
 import com.example.fitjournal.core.util.extensions.convertSecondsToMinutes
 import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
@@ -20,7 +22,7 @@ fun WorkoutDetailsUiModel.mapToWeightLiftingUi(): WeightLiftingUi {
         reps = reps,
         sets = sets,
         weight = weight,
-        weightInKgs = weight.times(0.453592).roundToTwoDecimalPlaces(),
+        weightInKgs = weight.times(POUNDS_TO_KILOGRAMS_CONVERSION_FACTOR).roundToTwoDecimalPlaces(),
         name = this.name,
         icon = this.icon
     )
@@ -37,7 +39,7 @@ fun WorkoutDetailsUiModel.mapToCalisthenicsUi(): CalisthenicsUi {
         reps = reps,
         sets = sets,
         weight = weight,
-        weightInKgs = weight?.times(0.453592)?.roundToTwoDecimalPlaces() ?: 0.0,
+        weightInKgs = weight?.times(POUNDS_TO_KILOGRAMS_CONVERSION_FACTOR)?.roundToTwoDecimalPlaces() ?: 0.0,
         time = time,
         name = this.name,
         icon = this.icon
@@ -55,7 +57,7 @@ fun WorkoutDetailsUiModel.mapToCardioUi(): CardioUi {
         name = this.name,
         icon = this.icon,
         distance = distance,
-        distanceInKm = distance.times(1.609344).roundToTwoDecimalPlaces(),
+        distanceInKm = distance.times(MILES_TO_KILOMETERS_CONVERSION_FACTOR).roundToTwoDecimalPlaces(),
         laps = laps
     )
 }

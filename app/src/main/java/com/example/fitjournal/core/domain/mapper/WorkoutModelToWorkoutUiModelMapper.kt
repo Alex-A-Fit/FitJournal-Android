@@ -12,6 +12,8 @@ import com.example.fitjournal.core.presentation.model.WorkoutDetailsUiModel
 import com.example.fitjournal.core.presentation.model.WorkoutPropertiesUiModel
 import com.example.fitjournal.core.presentation.model.WorkoutUiModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.core.util.constants.Constants.KILOGRAMS_TO_POUNDS_CONVERSION_FACTOR
+import com.example.fitjournal.core.util.constants.Constants.KILOMETERS_TO_MILES_CONVERSION_FACTOR
 import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
 import com.example.fitjournal.core.util.extensions.toIntOrZero
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
@@ -27,7 +29,7 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                         var weight = 0.0
                         workoutSets.props.maxByOrNull { liftingModel ->
                             weight = if (liftingModel.weightType.stringConcatenatedValue == "kgs") {
-                                liftingModel.weight.times(2.20462)
+                                liftingModel.weight.times(KILOGRAMS_TO_POUNDS_CONVERSION_FACTOR)
                             } else {
                                 liftingModel.weight
                             }
@@ -40,7 +42,7 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
             }
             if (topSet != null) {
                 if (topSet.weightType.stringConcatenatedValue == "kgs") {
-                    topSet.weight = topSet.weight.times(2.20462)
+                    topSet.weight = topSet.weight.times(KILOGRAMS_TO_POUNDS_CONVERSION_FACTOR)
                 }
             }
             WorkoutUiModel(
@@ -83,7 +85,7 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                                 seconds += it.time?.seconds?.toIntOrZero() ?: 0
                                 weight += when (it.weightType.stringConcatenatedValue) {
                                     "kgs" -> {
-                                        (it.weight?.times(2.20462)) ?: 0.0
+                                        (it.weight?.times(KILOGRAMS_TO_POUNDS_CONVERSION_FACTOR)) ?: 0.0
                                     }
 
                                     "lbs" -> {
@@ -149,7 +151,7 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                         if (workoutSets.props.isNotEmpty()) {
                             workoutSets.props.forEach {
                                 laps += it.laps ?: 0.0
-                                distance += if (it.distanceType == CardioDistanceType.KILOMETERS) it.distance * 0.621371 else it.distance
+                                distance += if (it.distanceType == CardioDistanceType.KILOMETERS) it.distance.times(KILOMETERS_TO_MILES_CONVERSION_FACTOR) else it.distance
                                 hours += it.time.hours.toIntOrZero()
                                 minutes += it.time.minutes.toIntOrZero()
                                 seconds += it.time.seconds.toIntOrZero()
