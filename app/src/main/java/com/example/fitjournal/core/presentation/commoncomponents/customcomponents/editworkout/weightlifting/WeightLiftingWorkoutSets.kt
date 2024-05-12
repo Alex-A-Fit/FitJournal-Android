@@ -20,6 +20,7 @@ import com.example.fitjournal.R
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.presentation.theme.Red
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.core.util.extensions.TwoDecimalOrNoDecimal
 
 @Composable
 fun WeightLiftingWorkoutSets(
@@ -68,7 +69,7 @@ fun WeightLiftingWorkoutSets(
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            text = workout.weight.toString(),
+            text = "${workout.weight.toString().TwoDecimalOrNoDecimal()} ${workout.weightType.stringConcatenatedValue}",
             modifier = Modifier
                 .weight(2f, fill = false)
                 .fillMaxWidth(),

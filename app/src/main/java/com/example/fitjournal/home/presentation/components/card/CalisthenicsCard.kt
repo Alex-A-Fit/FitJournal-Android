@@ -15,11 +15,15 @@ import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJournalCard
+import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.core.util.extensions.TwoDecimalOrNoDecimal
+import com.example.fitjournal.core.util.extensions.getTimeForUi
+import com.example.fitjournal.home.presentation.components.card.subcomponents.CalisthenicsSummaryTitle
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
-import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentWorkoutTitle
 import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
+import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 import com.example.fitjournal.home.presentation.model.ui.CalisthenicsUi
 
 @Composable
@@ -41,14 +45,15 @@ fun CalisthenicsCard(
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             if (calisthenicsUi.doesRepsAndSetsExist()) {
-                MostRecentWorkoutTitle()
-                MostRecentCalisthenicsSet(
+                CalisthenicsSummaryTitle()
+                CalisthenicSummary(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = Spacing.spacing16),
                     sets = calisthenicsUi.sets?.toString() ?: "",
                     reps = calisthenicsUi.reps?.toString() ?: "",
-                    weight = calisthenicsUi.weight?.toString(),
+                    weight = calisthenicsUi.weight?.toString()?.TwoDecimalOrNoDecimal(),
+                    weightInKgs = calisthenicsUi.weightInKgs.toString().TwoDecimalOrNoDecimal(),
                     time = calisthenicsUi.time
                 )
             } else {
@@ -70,13 +75,18 @@ fun CalisthenicsCard(
 }
 
 @Composable
-private fun MostRecentCalisthenicsSet(
+private fun CalisthenicSummary(
     sets: String,
     reps: String,
     modifier: Modifier = Modifier,
     weight: String? = null,
+    weightInKgs: String = "",
     time: TimeModel? = null
 ) {
+    val hours = time?.hours.getTimeForUi(EditWorkoutTimeDeterminate.HOUR)
+    val minutes = time?.minutes.getTimeForUi(EditWorkoutTimeDeterminate.MINUTE)
+    val seconds = time?.seconds.getTimeForUi(EditWorkoutTimeDeterminate.SECOND)
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -101,8 +111,11 @@ private fun MostRecentCalisthenicsSet(
         weight?.let {
             Text(
                 text = stringResource(
-                    id = R.string.text_total_weight,
-                    it.toString()
+                    id = R.string.text_total_weight_in_volume,
+                    weight.toString(),
+                    WeightLiftingWeightType.POUNDS.stringValue,
+                    weightInKgs,
+                    WeightLiftingWeightType.KILOGRAMS.stringValue
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary
@@ -111,8 +124,8 @@ private fun MostRecentCalisthenicsSet(
         time?.let {
             Text(
                 text = stringResource(
-                    id = R.string.text_total_time_elapsed,
-                    "${it.hours}:${it.minutes}:${it.seconds}"
+                    id = R.string.text_total_time,
+                    "$hours$minutes$seconds"
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary

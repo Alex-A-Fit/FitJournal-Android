@@ -10,7 +10,7 @@ class AddOrSubtractDoublesUseCase @Inject constructor() {
         value: String,
         valueDifferential: Double = 1.0
     ): String {
-        val DEFAULT_VALUE = "0.0"
+        val DEFAULT_VALUE = "0"
         return when (editWorkoutFunction) {
             EditWorkoutFunction.ADD_VALUE -> {
                 try {
@@ -29,9 +29,9 @@ class AddOrSubtractDoublesUseCase @Inject constructor() {
             EditWorkoutFunction.SUBTRACT_VALUE -> {
                 try {
                     val currentValue = value.toDoubleOrZero()
-                    if (currentValue == 0.0) return currentValue.toString()
+                    if (currentValue == 0.0) return DEFAULT_VALUE
                     val projectedValue = currentValue.minus(valueDifferential)
-                    if (projectedValue >= 0.0) {
+                    if (projectedValue > 0.0) {
                         projectedValue.toString()
                     } else {
                         DEFAULT_VALUE

@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -61,35 +60,34 @@ fun EditValueSmallIntegerSection(
 }
 
 @Composable
-fun EditValueWeightSection(
+fun EditValueDoubleSection(
     onSubtractValueClicked: (String) -> Unit,
     onAddValueClicked: (String) -> Unit,
     onValueChanged: (String) -> Unit,
     workoutPropertyValue: String,
-    doesTextFieldHaveError: Boolean
+    doesTextFieldHaveError: Boolean,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
+    modifier: Modifier,
+    textFieldModifier: Modifier
 ) {
     val value by rememberSaveable(workoutPropertyValue) {
         mutableStateOf(workoutPropertyValue)
     }
-
-    Column(
-        modifier = Modifier.fillMaxWidth()
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = horizontalArrangement
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            SubtractValueButton(onClick = { onSubtractValueClicked(value) })
-            Spacer(modifier = Modifier.width(Spacing.spacing8))
-            DoubleDecimalTextField(
-                workoutPropertyValue = workoutPropertyValue,
-                onValueChanged = { onValueChanged(it) },
-                isError = doesTextFieldHaveError
-            )
-            Spacer(modifier = Modifier.width(Spacing.spacing8))
-            AddValueButton(onClick = { onAddValueClicked(value) })
-        }
+        SubtractValueButton(onClick = { onSubtractValueClicked(value) })
+        Spacer(modifier = Modifier.width(Spacing.spacing8))
+        DoubleDecimalTextField(
+            workoutPropertyValue = workoutPropertyValue,
+            onValueChanged = { onValueChanged(it) },
+            isError = doesTextFieldHaveError,
+            modifier = textFieldModifier
+        )
+        Spacer(modifier = Modifier.width(Spacing.spacing8))
+        AddValueButton(onClick = { onAddValueClicked(value) })
     }
 }
 

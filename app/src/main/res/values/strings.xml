@@ -17,7 +17,8 @@
     <string name="content_desc_edit_workout_trash_icon">Trash icon to delete the individual workout row</string>
     <string name="content_desc_edit_workout_pencil_icon">Pencil icon to edit workout entry</string>
     <string name="content_desc_error_icon">Error icon to signify an error has occurred</string>d
-    <string name="content_desc_journal_filled_icon">Journal Icon</string>d
+    <string name="content_desc_journal_filled_icon">Journal Icon</string>
+    <string name="content_desc_distance_type_switch_icon">Icon to flip between miles and kilometers when entering distance</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
@@ -25,9 +26,9 @@
     <string name="title_weight_training">Weight Training</string>
     <string name="title_calisthenics">Calisthenics</string>
     <string name="title_cardio">Cardio</string>
-    <string name="title_top_set">Current Top Set</string>
-    <string name="title_most_recent_workout">Most Recent Workout</string>
-    <string name="title_most_recent_travels">Most Recent Travels</string>
+    <string name="title_top_set">Top Set Summary</string>
+    <string name="title_calisthenics_session_summary">Calisthenics Session Summary</string>
+    <string name="title_cardio_session_summary">Cardio Session Summary</string>
     <string name="title_choose_workout_type">Choose a workout type</string>
     <string name="title_create_new_workout">Add New Workout</string>
     <string name="text_edit_workout_title">%1$s (%2$s)</string>
@@ -41,12 +42,13 @@
     <string name="subtitle_delete_workout">on %1$s?</string>
 
     // General Strings
-    <string name="text_total_distance_traveled">Total Distance traveled: %1$s %2$s</string>
-    <string name="text_total_time_elapsed">Total Time Elapsed: %1$s</string>
+    <string name="text_total_distance">Total Distance: %1$s %2$s or %3$s %4$s</string>
+    <string name="text_total_time">Total Time: %1$s</string>
     <string name="text_total_reps">Total Reps: %1$s</string>
     <string name="text_total_sets">Total Sets: %1$s</string>
     <string name="text_total_laps">Total Laps: %1$s</string>
-    <string name="text_total_weight">Total Weight: %1$s</string>
+    <string name="text_total_weight">Total Weight: %1$s %2$s or %3$s %4$s</string>
+    <string name="text_total_weight_in_volume">Total Weight in Volume: %1$s %2$s or %3$s %4$s</string>
     <string name="text_view_workout_details">Click to view/edit workout</string>
     <string name="text_add_to_journal">Add to Journal</string>
     <string name="text_clear_filter">Clear Filter</string>
@@ -69,8 +71,13 @@
     <string name="label_dismiss_snackbar">Dismiss</string>
     <string name="label_reps">Reps</string>
     <string name="label_sets">Sets</string>
+    <string name="label_laps_optional">Laps (Optional)</string>
+    <string name="label_laps">Laps</string>
+    <string name="label_weight_with_value">Weight (Currently in %1$s)</string>
     <string name="label_weight">Weight</string>
-    <string name="label_weight_optional">Weight (Optional)</string>
+    <string name="label_distance_with_value">Total Distance (Currently in %1$s)</string>
+    <string name="label_distance">Distance</string>
+    <string name="label_weight_optional">Weight (Currently in %1$s) (Optional)</string>
     <string name="label_time_elapsed">Time Elapsed</string>
     <string name="label_time">Time</string>
     <string name="label_time_elapsed_optional">Time Elapsed (Optional)</string>
@@ -98,6 +105,8 @@
     <string name="error_with_adding_sets">Please enter a valid number of sets (1&#8211;999)</string>
     <string name="error_with_adding_reps">Please enter a valid number of reps (1&#8211;999)</string>
     <string name="error_with_adding_weight">Please enter a valid weight (1&#8211;99999)</string>
+    <string name="error_with_adding_distance">Please enter a valid distance (1&#8211;99999)</string>
+    <string name="error_with_adding_laps">Please enter a valid number of laps</string>
     <string name="error_with_adding_time">Please enter a valid time</string>
     <string name="error_no_details_found">No details found for this workout</string>
 

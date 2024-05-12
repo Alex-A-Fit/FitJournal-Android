@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics
+package com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,19 +17,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.R
-import com.example.fitjournal.core.domain.model.CalisthenicsModel
+import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.presentation.theme.Red
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.core.util.extensions.TwoDecimalOrNoDecimal
 
 @Composable
-fun CalisthenicsWorkoutSets(
-    workout: CalisthenicsModel,
+fun CardioWorkoutSets(
+    workout: CardioModel,
     index: Int,
     deleteSet: (Int) -> Unit,
     editSet: (Int) -> Unit
 ) {
-    val workoutTime = workout.time
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,7 +50,7 @@ fun CalisthenicsWorkoutSets(
             tint = MaterialTheme.colorScheme.primary
         )
         Text(
-            text = workout.sets.toString(),
+            text = workout.laps?.toString() ?: stringResource(id = R.string.text_not_applicable),
             modifier = Modifier
                 .weight(2f, fill = false)
                 .fillMaxWidth(),
@@ -61,17 +59,7 @@ fun CalisthenicsWorkoutSets(
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            text = workout.reps.toString(),
-            modifier = Modifier
-                .weight(2f, fill = false)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.bodyLarge
-        )
-
-        Text(
-            text = if (workout.weight != null) "${workout.weight.toString().TwoDecimalOrNoDecimal()} ${workout.weightType.stringConcatenatedValue}" else stringResource(id = R.string.text_not_applicable),
+            text = "${workout.distance}${workout.distanceType.stringConcatenatedValue}",
             modifier = Modifier
                 .weight(2f, fill = false)
                 .fillMaxWidth(),
@@ -80,11 +68,8 @@ fun CalisthenicsWorkoutSets(
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            text = if (workoutTime == null) {
-                stringResource(id = R.string.text_not_applicable)
-            } else {
-                "${workoutTime.hours}:${workoutTime.minutes}:${workoutTime.seconds}"
-            },
+            text =
+            "${workout.time.hours}:${workout.time.minutes}:${workout.time.seconds}",
             modifier = Modifier
                 .weight(2f, fill = false)
                 .fillMaxWidth(),

@@ -15,10 +15,12 @@ import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJournalCard
+import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.core.util.extensions.getTimeForUi
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardTitle
-import com.example.fitjournal.home.presentation.components.card.subcomponents.MostRecentTravelTitle
+import com.example.fitjournal.home.presentation.components.card.subcomponents.CardioSummaryTitle
 import com.example.fitjournal.home.presentation.components.text.NoWorkoutSetsErrorText
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import com.example.fitjournal.home.presentation.model.ui.CardioUi
@@ -42,15 +44,15 @@ fun CardioCard(
             )
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             if (cardioUi.doesCardioPropertyExist()) {
-                MostRecentTravelTitle()
+                CardioSummaryTitle()
                 CardioSummary(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = Spacing.spacing16),
                     time = cardioUi.time,
                     distance = cardioUi.distance?.toString() ?: "",
-                    laps = cardioUi.laps?.toString(),
-                    distanceType = cardioUi.distanceType
+                    distanceInKm = cardioUi.distanceInKm?.toString() ?: "",
+                    laps = cardioUi.laps?.toString()
                 )
             } else {
                 NoWorkoutSetsErrorText(
@@ -74,10 +76,14 @@ fun CardioCard(
 private fun CardioSummary(
     time: TimeModel?,
     distance: String,
+    distanceInKm: String,
     modifier: Modifier = Modifier,
-    laps: String? = null,
-    distanceType: CardioDistanceType = CardioDistanceType.MILES
+    laps: String? = null
 ) {
+    val hours = time?.hours.getTimeForUi(EditWorkoutTimeDeterminate.HOUR)
+    val minutes = time?.minutes.getTimeForUi(EditWorkoutTimeDeterminate.MINUTE)
+    val seconds = time?.seconds.getTimeForUi(EditWorkoutTimeDeterminate.SECOND)
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -85,9 +91,11 @@ private fun CardioSummary(
     ) {
         Text(
             text = stringResource(
-                id = R.string.text_total_distance_traveled,
+                id = R.string.text_total_distance,
                 distance,
-                distanceType.stringValue
+                CardioDistanceType.MILES.stringValue,
+                distanceInKm,
+                CardioDistanceType.KILOMETERS.stringValue
             ),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onPrimary
@@ -105,8 +113,8 @@ private fun CardioSummary(
         time?.let {
             Text(
                 text = stringResource(
-                    id = R.string.text_total_time_elapsed,
-                    "${time.hours}:${time.minutes}:${time.seconds}"
+                    id = R.string.text_total_time,
+                    "$hours$minutes$seconds"
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary

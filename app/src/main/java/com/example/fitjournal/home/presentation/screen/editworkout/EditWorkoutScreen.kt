@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
+import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.DeleteButton
@@ -25,6 +26,8 @@ import com.example.fitjournal.core.presentation.commoncomponents.customcomponent
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.CalisthenicsListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.CalisthenicsWorkoutSets
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.CardioListHeader
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.CardioWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.DeleteWorkoutDialog
@@ -151,7 +154,8 @@ fun EditWorkoutScreen(
                                     val newWeightTrainingItem = WeightLiftingModel(
                                         reps = editWorkoutUiState.reps.toIntOrZero(),
                                         sets = editWorkoutUiState.sets.toIntOrZero(),
-                                        weight = editWorkoutUiState.weight.toDoubleOrZero()
+                                        weight = editWorkoutUiState.weight.toDoubleOrZero(),
+                                        weightType = editWorkoutUiState.weightType
                                     )
                                     editWorkoutUiState.editWorkoutEvents(
                                         EditWorkoutEvents.AddNewWeightTrainingSetToWorkout(
@@ -168,6 +172,7 @@ fun EditWorkoutScreen(
                                         reps = editWorkoutUiState.reps.toIntOrZero(),
                                         sets = editWorkoutUiState.sets.toIntOrZero(),
                                         weight = editWorkoutUiState.weight.toDoubleOrNull(),
+                                        weightType = editWorkoutUiState.weightType,
                                         time = if (editWorkoutUiState.hour.isEmpty() &&
                                             editWorkoutUiState.minute.isEmpty() &&
                                             editWorkoutUiState.second.isEmpty()
@@ -191,7 +196,26 @@ fun EditWorkoutScreen(
                                     )
                                 }
 
-                                WorkoutTypeEnum.CARDIO -> {}
+                                WorkoutTypeEnum.CARDIO -> {
+                                    val newCardioItem = CardioModel(
+                                        distance = editWorkoutUiState.distance.toDoubleOrZero(),
+                                        distanceType = editWorkoutUiState.distanceType,
+                                        time = TimeModel(
+                                            hours = editWorkoutUiState.hour,
+                                            minutes = editWorkoutUiState.minute,
+                                            seconds = editWorkoutUiState.second
+                                        ),
+                                        laps = editWorkoutUiState.laps.toDoubleOrNull()
+                                    )
+                                    editWorkoutUiState.editWorkoutEvents(
+                                        EditWorkoutEvents.AddNewCardioSetToWorkout(
+                                            newCardioItem = newCardioItem,
+                                            workoutType = workoutTypeAsString,
+                                            workoutModel = uiState.data,
+                                            onAddErrorCallback = { showSnackbar(errorWithAddingSets) }
+                                        )
+                                    )
+                                }
                             }
                         }
                     )
@@ -257,6 +281,30 @@ fun EditWorkoutScreen(
                     }
 
                     WorkoutTypeEnum.CARDIO -> {
+                        if (editWorkoutUiState.cardioPropertyList.isNotEmpty()) {
+                            item { CardioListHeader() }
+                        }
+                        itemsIndexed(editWorkoutUiState.cardioPropertyList) { index, item ->
+                            CardioWorkoutSets(
+                                workout = item,
+                                index = index,
+                                deleteSet = {
+                                    editWorkoutUiState.editWorkoutEvents(
+                                        EditWorkoutEvents.DeleteWorkoutSetItemInWorkoutModelList(
+                                            index = index,
+                                            workoutType = workoutTypeAsString,
+                                            workoutModel = uiState.data,
+                                            onDeleteErrorCallback = {
+                                                showSnackbar(
+                                                    errorWithSetsBeingDeleted
+                                                )
+                                            }
+                                        )
+                                    )
+                                },
+                                editSet = {}
+                            )
+                        }
                     }
                 }
                 item {

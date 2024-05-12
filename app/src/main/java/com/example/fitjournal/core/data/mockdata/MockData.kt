@@ -6,6 +6,7 @@ import com.example.fitjournal.core.data.model.realmdb.workout.CardioSet
 import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
 import com.example.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
+import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 
 // mock data variables that are generic functions
 // are meant so we can create copies with different Ids
@@ -19,6 +20,7 @@ object MockData {
                     reps = 10
                     sets = 2
                     weight = 365.0
+                    weightType = WeightLiftingWeightType.POUNDS.stringConcatenatedValue
                 }
             ),
             id = id
@@ -34,11 +36,13 @@ object MockData {
                     reps = 8
                     sets = 3
                     weight = 220.0
+                    weightType = WeightLiftingWeightType.POUNDS.stringConcatenatedValue
                 },
                 StrengthTrainingSet().apply {
                     reps = 5
                     sets = 1
                     weight = 110.0
+                    weightType = WeightLiftingWeightType.POUNDS.stringConcatenatedValue
                 }
             ),
             id = id
@@ -54,6 +58,7 @@ object MockData {
                     reps = 25
                     sets = 2
                     weight = 10.0
+                    weightType = WeightLiftingWeightType.POUNDS.stringConcatenatedValue
                     time = "00:03:00"
                 }
             ),
@@ -114,7 +119,7 @@ object MockData {
             workoutSet = arrayOf(
                 CardioSet().apply {
                     distance = 3.2
-                    distanceType = CardioDistanceType.KILOMETERS.stringValue
+                    distanceType = CardioDistanceType.KILOMETERS.stringConcatenatedValue
                     time = "00:30:00"
                     laps = 13.0
                 }

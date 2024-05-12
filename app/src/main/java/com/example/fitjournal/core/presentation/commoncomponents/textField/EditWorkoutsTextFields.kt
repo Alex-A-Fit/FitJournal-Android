@@ -1,6 +1,5 @@
 package com.example.fitjournal.core.presentation.commoncomponents.textField
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
@@ -20,12 +19,13 @@ import com.example.fitjournal.core.util.extensions.toIntOrZero
 // Checks for up to 4 digits are inputted
 // with an optional dot for decimal number
 // as long as max numbers are not reached.
-const val REGEX_DECIMAL_PATTERN = """^(\d){0,4}(\.)?([0-9]{1})?${'$'}"""
+const val REGEX_DECIMAL_PATTERN = """^(\d){0,3}(\.)?([0-9]{1,2})?${'$'}"""
 
 @Composable
 fun DoubleDecimalTextField(
     workoutPropertyValue: String,
     isError: Boolean,
+    modifier: Modifier = Modifier,
     onValueChanged: (String) -> Unit
 ) {
     var value by rememberSaveable(workoutPropertyValue) {
@@ -46,7 +46,7 @@ fun DoubleDecimalTextField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done
         ),
-        modifier = Modifier.fillMaxWidth(.5F),
+        modifier = modifier,
         singleLine = true,
         textStyle = MaterialTheme.typography.headlineMedium.copy(
             color = MaterialTheme.colorScheme.onTertiary,

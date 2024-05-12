@@ -11,6 +11,7 @@ import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
+import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 import io.realm.kotlin.ext.realmListOf
 
 fun mapRealmWorkoutPropsToWorkoutPropsModel(
@@ -24,7 +25,12 @@ fun mapRealmWorkoutPropsToWorkoutPropsModel(
                     WeightLiftingModel(
                         reps = it.reps,
                         sets = it.sets,
-                        weight = it.weight
+                        weight = it.weight,
+                        weightType = if (it.weightType == "lbs") {
+                            WeightLiftingWeightType.POUNDS
+                        } else {
+                            WeightLiftingWeightType.KILOGRAMS
+                        }
                     )
                 }
             )
@@ -37,7 +43,12 @@ fun mapRealmWorkoutPropsToWorkoutPropsModel(
                         reps = it.reps,
                         sets = it.sets,
                         time = breakTimeStringIntoModel(it.time),
-                        weight = it.weight
+                        weight = it.weight,
+                        weightType = if (it.weightType == "lbs") {
+                            WeightLiftingWeightType.POUNDS
+                        } else {
+                            WeightLiftingWeightType.KILOGRAMS
+                        }
                     )
                 }
             )
@@ -53,7 +64,7 @@ fun mapRealmWorkoutPropsToWorkoutPropsModel(
                         } else {
                             CardioDistanceType.MILES
                         },
-                        time = breakTimeStringIntoModel(it.time),
+                        time = breakMandatoryTimeStringIntoModel(it.time),
                         laps = it.laps
                     )
                 }
@@ -77,6 +88,7 @@ fun mapWorkoutPropsToRealmWorkoutProps(
                                 reps = it.reps
                                 sets = it.sets
                                 weight = it.weight
+                                weightType = it.weightType.stringConcatenatedValue
                             }
                         }
                         val realmList = realmListOf<StrengthTrainingSet>()
@@ -99,6 +111,7 @@ fun mapWorkoutPropsToRealmWorkoutProps(
                                 reps = it.reps
                                 sets = it.sets
                                 weight = it.weight
+                                weightType = it.weightType.stringConcatenatedValue
                                 time = if (workoutTime == null) "" else "${workoutTime.hours}:${workoutTime.minutes}:${workoutTime.seconds}"
                             }
                         }
@@ -119,9 +132,9 @@ fun mapWorkoutPropsToRealmWorkoutProps(
                         val workoutList = workoutProps.props.map {
                             CardioSet().apply {
                                 distance = it.distance
-                                distanceType = it.distanceType.stringValue
+                                distanceType = it.distanceType.stringConcatenatedValue
                                 laps = it.laps
-                                time = if (it.time == null) "" else "${it.time.hours}:${it.time.minutes}:${it.time.seconds}"
+                                time = "${it.time.hours}:${it.time.minutes}:${it.time.seconds}"
                             }
                         }
                         val realmList = realmListOf<CardioSet>()
@@ -140,5 +153,9 @@ private fun breakTimeStringIntoModel(time: String?): TimeModel? {
     if (time == null) return null
     val timeList = time.split(":")
     if (timeList.size != 3) return null
+    return TimeModel(hours = timeList[0], minutes = timeList[1], seconds = timeList[2])
+}
+private fun breakMandatoryTimeStringIntoModel(time: String): TimeModel {
+    val timeList = time.split(":")
     return TimeModel(hours = timeList[0], minutes = timeList[1], seconds = timeList[2])
 }

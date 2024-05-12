@@ -8,6 +8,7 @@ data class CardioUi(
     val icon: Int,
     val distanceType: CardioDistanceType = CardioDistanceType.MILES,
     val distance: Double? = null,
+    val distanceInKm: Double? = null,
     val time: TimeModel? = null,
     val laps: Double? = null
 ) {

@@ -25,7 +25,9 @@ fun EditWorkoutPropertySection(
 }
 
 @Composable
-fun WorkoutPropertyText(workoutProperty: String) {
+fun WorkoutPropertyText(
+    workoutProperty: String
+) {
     Text(
         text = "$workoutProperty:",
         style = MaterialTheme
@@ -35,6 +37,7 @@ fun WorkoutPropertyText(workoutProperty: String) {
             ),
         color = MediumGray
     )
+
     HorizontalDivider(
         thickness = Spacing.spacing2,
         color = MaterialTheme.colorScheme.tertiary

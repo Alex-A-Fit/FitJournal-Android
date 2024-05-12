@@ -1,5 +1,6 @@
 package com.example.fitjournal.core.presentation.screens.lottie
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
@@ -17,7 +18,12 @@ fun LottieHomeScreenAnimation(
     mainActivityState: MainActivityUiState,
     navController: NavController
 ) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.fit_journal_animation))
+    val nightMode = isSystemInDarkTheme()
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(
+            if (nightMode) R.raw.fit_journal_animation_night else R.raw.fit_journal_animation
+        )
+    )
     val progress by animateLottieCompositionAsState(composition)
     LottieAnimation(
         composition = composition,

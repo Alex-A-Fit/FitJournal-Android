@@ -10,9 +10,9 @@ import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
-fun MostRecentWorkoutTitle() {
+fun CalisthenicsSummaryTitle() {
     Text(
-        text = stringResource(id = R.string.title_most_recent_workout),
+        text = stringResource(id = R.string.title_calisthenics_session_summary),
         color = MaterialTheme.colorScheme.onPrimary,
         style = MaterialTheme.typography.titleMedium,
         modifier = Modifier.padding(horizontal = Spacing.spacing16)
