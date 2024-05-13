@@ -1,7 +1,6 @@
 package com.example.fitjournal.journalEntry.screen.journalEntry.details.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.commoncomponents.EditWorkoutRepsSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.commoncomponents.EditWorkoutSetsSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.components.EditWorkoutMandatoryWeightSection

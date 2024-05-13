@@ -23,7 +23,6 @@ import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.DeleteButton
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.ClearAndSaveButtons
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutBanner
-import com.example.fitjournal.home.presentation.screen.editworkout.components.EditWorkoutSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.CalisthenicsListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.CalisthenicsWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.CardioListHeader
@@ -42,6 +41,7 @@ import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.components.editworkout.EditWorkoutErrorScreen
 import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
 import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
+import com.example.fitjournal.home.presentation.screen.editworkout.components.EditWorkoutSection
 
 @Composable
 fun EditWorkoutScreen(

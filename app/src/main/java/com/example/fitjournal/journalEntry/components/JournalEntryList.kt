@@ -59,7 +59,7 @@ fun JournalEntryList(
 }
 
 @Composable
-private fun ExerciseItem(exercise: String, showDialog: MutableState<Boolean>? = null) {
+private fun ExerciseItem(exercise: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

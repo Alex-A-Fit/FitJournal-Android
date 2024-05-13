@@ -1,7 +1,6 @@
 package com.example.fitjournal.home.presentation.screen.editworkout.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.components.EditWorkoutOptionalTimeSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.components.EditWorkoutOptionalWeightSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.commoncomponents.EditWorkoutRepsSection
