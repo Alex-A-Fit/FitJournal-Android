@@ -23,7 +23,7 @@ import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.DeleteButton
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.ClearAndSaveButtons
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutBanner
-import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutSection
+import com.example.fitjournal.home.presentation.screen.editworkout.components.EditWorkoutSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.CalisthenicsListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.CalisthenicsWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.CardioListHeader
@@ -277,6 +277,9 @@ fun EditWorkoutScreen(
                                 },
                                 editSet = {}
                             )
+                            if (index != editWorkoutUiState.calisthenicsPropertyList.lastIndex) {
+                                Spacer(modifier = Modifier.height(Spacing.spacing8))
+                            }
                         }
                     }
 
@@ -304,6 +307,9 @@ fun EditWorkoutScreen(
                                 },
                                 editSet = {}
                             )
+                            if (index != editWorkoutUiState.cardioPropertyList.lastIndex) {
+                                Spacer(modifier = Modifier.height(Spacing.spacing8))
+                            }
                         }
                     }
                 }
@@ -331,7 +337,7 @@ fun EditWorkoutScreen(
 }
 
 @Composable
-private fun WorkoutTitle(
+fun WorkoutTitle(
     workoutName: String,
     workoutType: String
 ) {

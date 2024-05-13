@@ -13,34 +13,32 @@ import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditValueTime
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutPropertySection
 import com.example.fitjournal.core.presentation.commoncomponents.text.ErrorText
+import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.theme.Red
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
-import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
 
 @Composable
 fun EditWorkoutMandatoryTimeSection(
-    editWorkoutUiState: EditWorkoutUiState
+    isTimeErrorVisible: Boolean,
+    hourValue: String,
+    minuteValue: String,
+    secondValue: String,
+    onTimeValueChanged: (String, EditWorkoutTimeDeterminate) -> Unit
 ) {
-    val isTimeErrorVisible by remember(editWorkoutUiState.isTimeErrorVisible) {
-        mutableStateOf(editWorkoutUiState.isTimeErrorVisible)
+    val isErrorVisible by remember(isTimeErrorVisible) {
+        mutableStateOf(isTimeErrorVisible)
     }
     EditWorkoutPropertySection(
         workoutProperty = stringResource(id = R.string.label_time_elapsed).uppercase()
     ) {
         EditValueTime(
             onValueChanged = { value, timeDeterminate ->
-                editWorkoutUiState.editWorkoutEvents(
-                    EditWorkoutEvents.EditTime(
-                        value = value,
-                        timeDeterminate = timeDeterminate
-                    )
-                )
+                onTimeValueChanged(value, timeDeterminate)
             },
-            hrValue = editWorkoutUiState.hour,
-            minValue = editWorkoutUiState.minute,
-            secValue = editWorkoutUiState.second,
-            doesTextFieldHaveError = isTimeErrorVisible
+            hrValue = hourValue,
+            minValue = minuteValue,
+            secValue = secondValue,
+            doesTextFieldHaveError = isErrorVisible
         )
     }
     ErrorText(
@@ -48,6 +46,6 @@ fun EditWorkoutMandatoryTimeSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = Spacing.spacing8),
-        color = if (isTimeErrorVisible) Red else Color.Transparent
+        color = if (isErrorVisible) Red else Color.Transparent
     )
 }

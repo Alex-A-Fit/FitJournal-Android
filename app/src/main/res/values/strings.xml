@@ -90,7 +90,8 @@
     <string name="button_confirm">Confirm</string>
     <string name="button_create_workout">Create Workout</string>
     <string name="button_clear">Clear</string>
-    <string name="button_save">Save</string>
+    <string name="button_save_set">Save Set</string>
+    <string name="button_save_workout">Save Workout</string>
     <string name="button_delete">Delete</string>
     <string name="button_delete_workout">Delete Workout</string>
 

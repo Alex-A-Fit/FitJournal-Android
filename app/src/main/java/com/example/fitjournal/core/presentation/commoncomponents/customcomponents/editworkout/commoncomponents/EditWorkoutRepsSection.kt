@@ -16,15 +16,16 @@ import com.example.fitjournal.core.presentation.commoncomponents.text.ErrorText
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.theme.Red
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
-import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
 
 @Composable
 fun EditWorkoutRepsSection(
-    editWorkoutUiState: EditWorkoutUiState
+    isRepsErrorVisible: Boolean,
+    editRepValue: (EditWorkoutFunction, String) -> Unit,
+    repValue: String,
+    onRepValueChange: (String) -> Unit
 ) {
-    val isRepsErrorVisible by remember(editWorkoutUiState.isRepsErrorVisible) {
-        mutableStateOf(editWorkoutUiState.isRepsErrorVisible)
+    val isErrorVisible by remember(isRepsErrorVisible) {
+        mutableStateOf(isRepsErrorVisible)
     }
 
     EditWorkoutPropertySection(
@@ -32,28 +33,16 @@ fun EditWorkoutRepsSection(
     ) {
         EditValueSmallIntegerSection(
             onSubtractValueClicked = {
-                editWorkoutUiState.editWorkoutEvents(
-                    EditWorkoutEvents.EditReps(
-                        editWorkoutFunction = EditWorkoutFunction.SUBTRACT_VALUE,
-                        repValue = it
-                    )
-                )
+                editRepValue(EditWorkoutFunction.SUBTRACT_VALUE, it)
             },
             onAddValueClicked = {
-                editWorkoutUiState.editWorkoutEvents(
-                    EditWorkoutEvents.EditReps(
-                        editWorkoutFunction = EditWorkoutFunction.ADD_VALUE,
-                        repValue = it
-                    )
-                )
+                editRepValue(EditWorkoutFunction.ADD_VALUE, it)
             },
-            workoutPropertyValue = editWorkoutUiState.reps,
+            workoutPropertyValue = repValue,
             onValueChanged = {
-                editWorkoutUiState.editWorkoutEvents(
-                    EditWorkoutEvents.OnRepValueChange(repValue = it)
-                )
+                onRepValueChange(it)
             },
-            doesTextFieldHaveError = isRepsErrorVisible
+            doesTextFieldHaveError = isErrorVisible
         )
     }
     ErrorText(
@@ -61,6 +50,6 @@ fun EditWorkoutRepsSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = Spacing.spacing8),
-        color = if (isRepsErrorVisible) Red else Color.Transparent
+        color = if (isErrorVisible) Red else Color.Transparent
     )
 }

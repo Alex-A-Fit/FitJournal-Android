@@ -40,9 +40,10 @@ import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutSc
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutViewModel
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
-import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryDetailsScreen
 import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryScreen
 import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryViewModel
+import com.example.fitjournal.journalEntry.screen.journalEntry.details.JournalEntryDetailsScreen
+import com.example.fitjournal.journalEntry.screen.journalEntry.details.JournalEntryDetailsViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
 import com.example.fitjournal.statistics.presentation.screen.StatisticsScreen
@@ -56,8 +57,9 @@ class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeScreenViewModel by viewModels()
     private val libraryScreenViewModel: LibraryScreenViewModel by viewModels()
     private val statisticsViewModel: StatisticsViewModel by viewModels()
-    private val journalEntryViewModel: JournalEntryViewModel by viewModels()
     private val editWorkoutViewModel: EditWorkoutViewModel by viewModels()
+    private val journalEntryViewModel: JournalEntryViewModel by viewModels()
+    private val journalEntryDetailsViewModel: JournalEntryDetailsViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -289,12 +291,11 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainModifier ->
                                     JournalEntryScreen(
                                         modifier = mainModifier,
-                                        selectedJournalEntry = {
-                                            journalEntryViewModel.selectedWorkoutDetail.value = it
-                                        },
-                                        navigateToDestination = { navigation ->
+                                        journalEntryState = journalEntryViewModel.journalEntryState,
+                                        navigateToDestination = {
+                                            showChildFabs = false
                                             navigateToDestination(
-                                                navigationInterface = navigation,
+                                                navigationInterface = it,
                                                 navController = navController
                                             )
                                         }
@@ -320,9 +321,15 @@ class MainActivity : ComponentActivity() {
                                 bottomBarVisibility = bottomBarVisibility.value
                             )
                         }
-                        composable(Route.JOURNAL_ENTRY_DETAILS) {
+                        composable("${Route.JOURNAL_ENTRY_DETAILS}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}") { backStackEntry ->
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
+                                journalEntryDetailsViewModel.addWorkoutNameAndType(
+                                    workoutName = backStackEntry.arguments?.getString("workoutName")
+                                        ?: "",
+                                    workoutType = backStackEntry.arguments?.getString("workoutType")
+                                        ?: ""
+                                )
                             }
                             AppScreen(
                                 showMainFabIcon = false,
@@ -331,14 +338,26 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainModifier ->
                                     JournalEntryDetailsScreen(
                                         modifier = mainModifier,
-                                        viewModel = journalEntryViewModel
+                                        journalEntryDetailsUiState = journalEntryDetailsViewModel.journalEntryDetailsUiState,
+                                        showSnackbar = {
+                                            showSnackBar(
+                                                snackBarHostState = snackBarState,
+                                                message = it
+                                            )
+                                        },
+                                        navigateToJournal = {
+                                            navigateToDestination(
+                                                navigationInterface = it,
+                                                navController = navController
+                                            )
+                                        }
                                     )
                                 },
                                 topAppBar = {
                                     TopAppBar(
                                         appBarTitle = {
                                             Text(
-                                                text = "Journal Entry",
+                                                text = "Add Workout To Journal",
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
@@ -347,7 +366,7 @@ class MainActivity : ComponentActivity() {
                                             IconButton(onClick = {
                                                 navController.navigateUp()
                                                 navController.navigateUp()
-                                                journalEntryViewModel.save()
+//                                                journalEntryViewModel.save()
                                             }) {
                                                 Text(
                                                     text = "Save",
@@ -363,7 +382,12 @@ class MainActivity : ComponentActivity() {
                                         modifier = Modifier.fillMaxWidth()
                                     )
                                 },
-                                navigateToDestination = { },
+                                navigateToDestination = {
+                                    navigationEvent(
+                                        navigationInterface = it,
+                                        navController = navController
+                                    )
+                                },
                                 navController = navController,
                                 bottomBarVisibility = bottomBarVisibility.value
                             )
@@ -467,7 +491,7 @@ fun navigateToDestination(
         )
     }
 
-    NavigationInterface.NavigateToJournalEntryDetails -> {
+    is NavigationInterface.NavigateToJournalEntryDetails -> {
         navigationEvent(
             navigationInterface = navigationInterface,
             navController = navController

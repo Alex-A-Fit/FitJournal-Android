@@ -23,18 +23,22 @@ import com.example.fitjournal.core.presentation.commoncomponents.text.ErrorText
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.theme.Red
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
-import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
+import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 
 @Composable
 fun EditWorkoutDistanceSection(
-    editWorkoutUiState: EditWorkoutUiState
+    isDistanceErrorVisible: Boolean,
+    distanceType: CardioDistanceType,
+    distanceValue: String,
+    editDistanceTypeEvent: () -> Unit,
+    onDistanceValueChange: (String) -> Unit,
+    editDistanceEvent: (EditWorkoutFunction, String) -> Unit
 ) {
-    val isDistanceErrorVisible by remember(editWorkoutUiState.isDistanceErrorVisible) {
-        mutableStateOf(editWorkoutUiState.isDistanceErrorVisible)
+    val isErrorVisible by remember(isDistanceErrorVisible) {
+        mutableStateOf(isDistanceErrorVisible)
     }
-    val milesOrKilometerText by remember(editWorkoutUiState.distanceType) {
-        mutableStateOf(editWorkoutUiState.distanceType)
+    val milesOrKilometerText by remember(distanceType) {
+        mutableStateOf(distanceType)
     }
     EditWorkoutPropertySection(
         workoutProperty = stringResource(
@@ -53,35 +57,25 @@ fun EditWorkoutDistanceSection(
                     .weight(3f)
                     .fillMaxWidth(),
                 onSubtractValueClicked = {
-                    editWorkoutUiState.editWorkoutEvents(
-                        EditWorkoutEvents.EditDistance(
-                            editWorkoutFunction = EditWorkoutFunction.SUBTRACT_VALUE,
-                            value = it
-                        )
+                    editDistanceEvent(
+                        EditWorkoutFunction.SUBTRACT_VALUE,
+                        it
                     )
                 },
                 onAddValueClicked = {
-                    editWorkoutUiState.editWorkoutEvents(
-                        EditWorkoutEvents.EditDistance(
-                            editWorkoutFunction = EditWorkoutFunction.ADD_VALUE,
-                            value = it
-                        )
+                    editDistanceEvent(
+                        EditWorkoutFunction.ADD_VALUE,
+                        it
                     )
                 },
-                workoutPropertyValue = editWorkoutUiState.distance,
+                workoutPropertyValue = distanceValue,
                 onValueChanged = {
-                    editWorkoutUiState.editWorkoutEvents(
-                        EditWorkoutEvents.OnDistanceValueChange(distanceValue = it)
-                    )
+                    onDistanceValueChange(it)
                 },
-                doesTextFieldHaveError = isDistanceErrorVisible
+                doesTextFieldHaveError = isErrorVisible
             )
             IconButton(
-                onClick = {
-                    editWorkoutUiState.editWorkoutEvents(
-                        EditWorkoutEvents.EditDistanceType
-                    )
-                },
+                onClick = editDistanceTypeEvent,
                 modifier = Modifier.weight(0.5f)
             ) {
                 Icon(
@@ -97,6 +91,6 @@ fun EditWorkoutDistanceSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = Spacing.spacing8),
-        color = if (isDistanceErrorVisible) Red else Color.Transparent
+        color = if (isErrorVisible) Red else Color.Transparent
     )
 }

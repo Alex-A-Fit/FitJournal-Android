@@ -1,26 +1,32 @@
 package com.example.fitjournal.journalEntry.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
+import androidx.compose.ui.res.painterResource
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.listHeader.CategoryHeader
-import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.library.presentation.screen.library.components.ExerciseItem
+import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun JournalEntryList(
-    workoutList: List<Pair<WorkoutTypeEnum, List<RealmWorkoutLibrary>>>,
-    selectedWorkout: (RealmWorkoutLibrary) -> Unit
+    workoutList: SnapshotStateList<WorkoutCategory>,
+    selectedWorkout: (String, String) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -31,12 +37,14 @@ fun JournalEntryList(
             val (workoutType, workouts) = childList
             if (workouts.isNotEmpty()) {
                 stickyHeader {
-                    CategoryHeader(text = workoutType.workoutTitle())
+                    CategoryHeader(text = workoutType)
                 }
 
                 itemsIndexed(workouts) { index, exercise ->
-                    TextButton(onClick = { selectedWorkout.invoke(exercise) }) {
-                        ExerciseItem(exercise = exercise.name)
+                    TextButton(
+                        onClick = { selectedWorkout(exercise.workoutName, workoutType) }
+                    ) {
+                        ExerciseItem(exercise = exercise.workoutName)
                     }
                     if (index != workouts.lastIndex) {
                         HorizontalDivider(
@@ -48,4 +56,29 @@ fun JournalEntryList(
             }
         }
     }
+}
+
+@Composable
+private fun ExerciseItem(exercise: String, showDialog: MutableState<Boolean>? = null) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = Spacing.spacing12),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        ExerciseName(exercise = exercise)
+        Image(
+            painter = painterResource(id = R.drawable.ic_right_chevron),
+            contentDescription = "Navigate to exercise details"
+        )
+    }
+}
+
+@Composable
+private fun ExerciseName(exercise: String) {
+    Text(
+        text = exercise,
+        color = MaterialTheme.colorScheme.onPrimary,
+        style = MaterialTheme.typography.bodyLarge
+    )
 }

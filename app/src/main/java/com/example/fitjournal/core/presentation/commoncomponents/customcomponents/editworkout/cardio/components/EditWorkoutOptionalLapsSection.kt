@@ -16,15 +16,16 @@ import com.example.fitjournal.core.presentation.commoncomponents.text.ErrorText
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.theme.Red
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
-import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
 
 @Composable
 fun EditWorkoutOptionalLapsSection(
-    editWorkoutUiState: EditWorkoutUiState
+    isLapsErrorVisible: Boolean,
+    lapsValue: String,
+    onLapsValueChange: (String) -> Unit,
+    editLapsEvent: (EditWorkoutFunction, String) -> Unit
 ) {
-    val isLapsErrorVisible by remember(editWorkoutUiState.isLapsErrorVisible) {
-        mutableStateOf(editWorkoutUiState.isLapsErrorVisible)
+    val isErrorVisible by remember(isLapsErrorVisible) {
+        mutableStateOf(isLapsErrorVisible)
     }
 
     EditWorkoutPropertySection(
@@ -35,28 +36,22 @@ fun EditWorkoutOptionalLapsSection(
             modifier = Modifier
                 .fillMaxWidth(),
             onSubtractValueClicked = {
-                editWorkoutUiState.editWorkoutEvents(
-                    EditWorkoutEvents.EditLaps(
-                        editWorkoutFunction = EditWorkoutFunction.SUBTRACT_VALUE,
-                        value = it
-                    )
+                editLapsEvent(
+                    EditWorkoutFunction.SUBTRACT_VALUE,
+                    it
                 )
             },
             onAddValueClicked = {
-                editWorkoutUiState.editWorkoutEvents(
-                    EditWorkoutEvents.EditLaps(
-                        editWorkoutFunction = EditWorkoutFunction.ADD_VALUE,
-                        value = it
-                    )
+                editLapsEvent(
+                    EditWorkoutFunction.ADD_VALUE,
+                    it
                 )
             },
-            workoutPropertyValue = editWorkoutUiState.laps,
+            workoutPropertyValue = lapsValue,
             onValueChanged = {
-                editWorkoutUiState.editWorkoutEvents(
-                    EditWorkoutEvents.OnLapsValueChange(lapValue = it)
-                )
+                onLapsValueChange(it)
             },
-            doesTextFieldHaveError = isLapsErrorVisible
+            doesTextFieldHaveError = isErrorVisible
         )
     }
     ErrorText(
@@ -64,6 +59,6 @@ fun EditWorkoutOptionalLapsSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = Spacing.spacing8),
-        color = if (isLapsErrorVisible) Red else Color.Transparent
+        color = if (isErrorVisible) Red else Color.Transparent
     )
 }
