@@ -18,6 +18,7 @@
     <string name="content_desc_edit_workout_pencil_icon">Pencil icon to edit workout entry</string>
     <string name="content_desc_error_icon">Error icon to signify an error has occurred</string>d
     <string name="content_desc_journal_filled_icon">Journal Icon</string>
+    <string name="content_desc_navigate_to_add_workout_icon">Right chevron to signify adding workout to journal</string>
     <string name="content_desc_distance_type_switch_icon">Icon to flip between miles and kilometers when entering distance</string>
 
     // Title Strings

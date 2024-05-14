@@ -17,6 +17,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.listHeader.CategoryHeader
 import com.example.fitjournal.core.presentation.theme.Spacing
@@ -69,7 +70,7 @@ private fun ExerciseItem(exercise: String) {
         ExerciseName(exercise = exercise)
         Image(
             painter = painterResource(id = R.drawable.ic_right_chevron),
-            contentDescription = "Navigate to exercise details"
+            contentDescription = stringResource(id = R.string.content_desc_navigate_to_add_workout_icon)
         )
     }
 }
