@@ -12,4 +12,6 @@ object Route {
 
 object Arguments {
     const val WORKOUT_ID = "/{workoutId}"
+    const val WORKOUT_NAME = "/{workoutName}"
+    const val WORKOUT_TYPE = "/{workoutType}"
 }

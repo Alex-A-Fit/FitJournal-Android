@@ -1,21 +1,18 @@
-package com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout
+package com.example.fitjournal.journalEntry.screen.journalEntry.details.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.EditWorkoutCalisthenics
-import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.EditWorkoutCardio
-import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.EditWorkoutWeightLifting
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
+import com.example.fitjournal.journalEntry.model.JournalEntryDetailsUiState
 
 @Composable
-fun EditWorkoutSection(
+fun AddWorkoutSection(
     workoutType: WorkoutTypeEnum,
-    editWorkoutUiState: EditWorkoutUiState
+    journalEntryDetailsUiState: JournalEntryDetailsUiState
 ) {
     Column(
         modifier = Modifier
@@ -28,13 +25,13 @@ fun EditWorkoutSection(
     ) {
         when (workoutType) {
             WorkoutTypeEnum.CARDIO -> {
-                EditWorkoutCardio(editWorkoutUiState = editWorkoutUiState)
+                AddWorkoutCardio(journalEntryDetailsUiState = journalEntryDetailsUiState)
             }
             WorkoutTypeEnum.CALISTHENICS -> {
-                EditWorkoutCalisthenics(editWorkoutUiState = editWorkoutUiState)
+                AddWorkoutCalisthenics(journalEntryDetailsUiState = journalEntryDetailsUiState)
             }
             WorkoutTypeEnum.WEIGHT_TRAINING -> {
-                EditWorkoutWeightLifting(editWorkoutUiState = editWorkoutUiState)
+                AddWorkoutWeightLifting(journalEntryDetailsUiState = journalEntryDetailsUiState)
             }
         }
     }

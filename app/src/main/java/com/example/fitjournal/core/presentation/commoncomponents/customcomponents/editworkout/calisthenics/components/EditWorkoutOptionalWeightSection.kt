@@ -23,23 +23,26 @@ import com.example.fitjournal.core.presentation.commoncomponents.text.ErrorText
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.theme.Red
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
-import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
 
 @Composable
 fun EditWorkoutOptionalWeightSection(
-    editWorkoutUiState: EditWorkoutUiState
+    isWeightErrorVisible: Boolean,
+    poundsOrKilogramsText: String,
+    weightValue: String,
+    onWeightTypeClicked: () -> Unit,
+    onWeightValueChange: (String) -> Unit,
+    editWeightValue: (EditWorkoutFunction, String) -> Unit
 ) {
-    val isWeightErrorVisible by remember(editWorkoutUiState.isWeightErrorVisible) {
-        mutableStateOf(editWorkoutUiState.isWeightErrorVisible)
+    val isErrorVisible by remember(isWeightErrorVisible) {
+        mutableStateOf(isWeightErrorVisible)
     }
-    val poundsOrKilogramsText by remember(editWorkoutUiState.weightType) {
-        mutableStateOf(editWorkoutUiState.weightType)
+    val weightTypeText by remember(poundsOrKilogramsText) {
+        mutableStateOf(poundsOrKilogramsText)
     }
     EditWorkoutPropertySection(
         workoutProperty = stringResource(
             id = R.string.label_weight_optional,
-            poundsOrKilogramsText
+            weightTypeText
         ).uppercase()
     ) {
         Row(
@@ -53,36 +56,20 @@ fun EditWorkoutOptionalWeightSection(
                     .weight(3f)
                     .fillMaxWidth(),
                 onSubtractValueClicked = {
-                    editWorkoutUiState.editWorkoutEvents(
-                        EditWorkoutEvents.EditWeight(
-                            editWorkoutFunction = EditWorkoutFunction.SUBTRACT_VALUE,
-                            weightValue = it,
-                            valueDifferential = 1.0
-                        )
-                    )
+                    editWeightValue(EditWorkoutFunction.SUBTRACT_VALUE, it)
                 },
                 onAddValueClicked = {
-                    editWorkoutUiState.editWorkoutEvents(
-                        EditWorkoutEvents.EditWeight(
-                            editWorkoutFunction = EditWorkoutFunction.ADD_VALUE,
-                            weightValue = it,
-                            valueDifferential = 1.0
-                        )
-                    )
+                    editWeightValue(EditWorkoutFunction.ADD_VALUE, it)
                 },
-                workoutPropertyValue = editWorkoutUiState.weight,
+                workoutPropertyValue = weightValue,
                 onValueChanged = {
-                    editWorkoutUiState.editWorkoutEvents(
-                        EditWorkoutEvents.OnWeightValueChange(weightValue = it)
-                    )
+                    onWeightValueChange(it)
                 },
-                doesTextFieldHaveError = isWeightErrorVisible
+                doesTextFieldHaveError = isErrorVisible
             )
             IconButton(
                 onClick = {
-                    editWorkoutUiState.editWorkoutEvents(
-                        EditWorkoutEvents.EditWeightType
-                    )
+                    onWeightTypeClicked()
                 },
                 modifier = Modifier.weight(0.5f)
             ) {
@@ -98,7 +85,7 @@ fun EditWorkoutOptionalWeightSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = Spacing.spacing8),
-            color = if (isWeightErrorVisible) Red else Color.Transparent
+            color = if (isErrorVisible) Red else Color.Transparent
         )
     }
 }

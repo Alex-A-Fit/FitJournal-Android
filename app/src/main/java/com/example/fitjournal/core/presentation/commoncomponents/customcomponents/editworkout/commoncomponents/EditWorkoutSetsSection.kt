@@ -16,15 +16,16 @@ import com.example.fitjournal.core.presentation.commoncomponents.text.ErrorText
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.theme.Red
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
-import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
 
 @Composable
 fun EditWorkoutSetsSection(
-    editWorkoutUiState: EditWorkoutUiState
+    isErrorVisible: Boolean,
+    editSetsValue: (EditWorkoutFunction, String) -> Unit,
+    setsValue: String,
+    onSetValueChange: (String) -> Unit
 ) {
-    val isSetsErrorVisible by remember(editWorkoutUiState.isSetsErrorVisible) {
-        mutableStateOf(editWorkoutUiState.isSetsErrorVisible)
+    val isSetsErrorVisible by remember(isErrorVisible) {
+        mutableStateOf(isErrorVisible)
     }
 
     EditWorkoutPropertySection(
@@ -32,26 +33,14 @@ fun EditWorkoutSetsSection(
     ) {
         EditValueSmallIntegerSection(
             onSubtractValueClicked = {
-                editWorkoutUiState.editWorkoutEvents(
-                    EditWorkoutEvents.EditSets(
-                        editWorkoutFunction = EditWorkoutFunction.SUBTRACT_VALUE,
-                        setValue = it
-                    )
-                )
+                editSetsValue(EditWorkoutFunction.SUBTRACT_VALUE, it)
             },
             onAddValueClicked = {
-                editWorkoutUiState.editWorkoutEvents(
-                    EditWorkoutEvents.EditSets(
-                        editWorkoutFunction = EditWorkoutFunction.ADD_VALUE,
-                        setValue = it
-                    )
-                )
+                editSetsValue(EditWorkoutFunction.ADD_VALUE, it)
             },
-            workoutPropertyValue = editWorkoutUiState.sets,
+            workoutPropertyValue = setsValue,
             onValueChanged = {
-                editWorkoutUiState.editWorkoutEvents(
-                    EditWorkoutEvents.OnSetValueChange(setValue = it)
-                )
+                onSetValueChange(it)
             },
             doesTextFieldHaveError = isSetsErrorVisible
         )

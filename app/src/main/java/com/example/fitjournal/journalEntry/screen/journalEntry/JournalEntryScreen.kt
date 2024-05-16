@@ -8,24 +8,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
 import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.journalEntry.components.JournalEntryList
+import com.example.fitjournal.journalEntry.model.JournalEntryUiModel
+import com.example.fitjournal.journalEntry.model.events.JournalEntryEvents
 
 @Composable
 fun JournalEntryScreen(
     modifier: Modifier,
-    selectedJournalEntry: (RealmWorkoutLibrary) -> Unit,
+    journalEntryState: JournalEntryUiModel,
     navigateToDestination: (NavigationInterface) -> Unit
 ) {
-    val viewModel: JournalEntryViewModel = viewModel()
-    val searchText = remember { mutableStateOf("") }
+    val searchText = rememberSaveable(journalEntryState.searchedTerm) {
+        mutableStateOf(journalEntryState.searchedTerm)
+    }
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -45,15 +47,23 @@ fun JournalEntryScreen(
         SearchBar(
             searchedTerm = searchText.value,
             updateSearch = { searchedText ->
-                searchText.value = searchedText
+                journalEntryState.handleJournalEntryClickEvents(
+                    JournalEntryEvents.FilterSearchByWorkout(
+                        searchedText
+                    )
+                )
             },
-            clearSearch = { },
+            clearSearch = {
+                journalEntryState.handleJournalEntryClickEvents(JournalEntryEvents.ClearSearchBarFilter)
+            },
             keyboardController = keyboardController,
             focusManager = focusManager
         )
-        JournalEntryList(viewModel.searchWorkout(searchText.value)) {
-            selectedJournalEntry.invoke(it)
-            navigateToDestination.invoke(NavigationInterface.NavigateToJournalEntryDetails)
-        }
+        JournalEntryList(
+            workoutList = journalEntryState.listOfSearchedWorkouts,
+            selectedWorkout = { name, type ->
+                navigateToDestination(NavigationInterface.NavigateToJournalEntryDetails(name, type))
+            }
+        )
     }
 }

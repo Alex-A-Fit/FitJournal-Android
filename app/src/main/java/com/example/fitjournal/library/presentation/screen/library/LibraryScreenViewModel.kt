@@ -7,9 +7,9 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
+import com.example.fitjournal.core.util.filter.searchForText
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory
 import com.example.fitjournal.library.presentation.screen.library.utils.mapToLibraryUiList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -54,20 +54,6 @@ class LibraryScreenViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    private fun searchForText(text: String, list: List<WorkoutCategory>): List<WorkoutCategory> {
-        val filteredList = list.map { category ->
-            WorkoutCategory(
-                name = category.name,
-                items =
-                category.items.filter { workout ->
-                    val lowercaseWorkout = workout.workoutName.lowercase()
-                    lowercaseWorkout.contains(text.lowercase())
-                }.toMutableStateList()
-            )
-        }
-        return filteredList.filterNot { it.items.isEmpty() }
     }
 
     private fun updateLibraryWorkoutState(newLibraryWorkoutState: LibraryWorkoutUiModel) {
