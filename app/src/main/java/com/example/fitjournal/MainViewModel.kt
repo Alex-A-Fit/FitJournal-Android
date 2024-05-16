@@ -66,7 +66,6 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-
 }
 
 sealed interface MainActivityUiState {

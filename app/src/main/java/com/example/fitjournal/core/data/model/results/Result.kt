@@ -1,6 +1,6 @@
 package com.example.fitjournal.core.data.model.results
 
-enum class Result{
+enum class Result {
     SUCCESS,
     FAILURE
 }

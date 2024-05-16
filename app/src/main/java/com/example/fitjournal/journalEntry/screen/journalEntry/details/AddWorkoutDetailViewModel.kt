@@ -290,7 +290,7 @@ class AddWorkoutDetailViewModel @Inject constructor(
             }
 
             AddWorkoutDetailEvents.StopAddWorkoutJob -> {
-                if (addWorkoutJob != null){
+                if (addWorkoutJob != null) {
                     addWorkoutJob?.cancel("User clicked back button")
                 }
             }
