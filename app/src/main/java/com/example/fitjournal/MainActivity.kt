@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -49,6 +50,7 @@ import com.example.fitjournal.library.presentation.screen.library.LibraryScreenV
 import com.example.fitjournal.statistics.presentation.screen.StatisticsScreen
 import com.example.fitjournal.statistics.presentation.screen.StatisticsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -125,7 +127,7 @@ class MainActivity : ComponentActivity() {
                                     showChildFabs = it
                                 },
                                 addWorkoutToLibraryItemDatabase = { addWorkoutToDbModel ->
-                                    mainViewModel.addWorkoutToDatabase(
+                                    mainViewModel.addWorkoutToLibraryDatabase(
                                         workoutName = addWorkoutToDbModel.workoutName,
                                         workoutTypeEnum = addWorkoutToDbModel.workoutType,
                                         successCallback = {
@@ -195,7 +197,7 @@ class MainActivity : ComponentActivity() {
                                     showChildFabs = it
                                 },
                                 addWorkoutToLibraryItemDatabase = { addWorkoutToDbModel ->
-                                    mainViewModel.addWorkoutToDatabase(
+                                    mainViewModel.addWorkoutToLibraryDatabase(
                                         workoutName = addWorkoutToDbModel.workoutName,
                                         workoutTypeEnum = addWorkoutToDbModel.workoutType,
                                         successCallback = {
@@ -280,7 +282,7 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
-                        composable(Route.JOURNAL_ENTRY_SCREEN) {
+                        composable(Route.ADD_WORKOUT_SCREEN) {
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
                             }
@@ -321,7 +323,7 @@ class MainActivity : ComponentActivity() {
                                 bottomBarVisibility = bottomBarVisibility.value
                             )
                         }
-                        composable("${Route.JOURNAL_ENTRY_DETAILS}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}") { backStackEntry ->
+                        composable("${Route.ADD_WORKOUT_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}") { backStackEntry ->
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
                                 addWorkoutDetailViewModel.addWorkoutNameAndType(
@@ -338,15 +340,26 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainModifier ->
                                     AddWorkoutDetailScreen(
                                         modifier = mainModifier,
-                                        journalEntryDetailsUiState = addWorkoutDetailViewModel.journalEntryDetailsUiState,
+                                        addWorkoutDetailUiState = addWorkoutDetailViewModel.addWorkoutDetailUiState,
                                         showSnackbar = {
                                             showSnackBar(
                                                 snackBarHostState = snackBarState,
                                                 message = it
                                             )
                                         },
-                                        navigateToAddWorkoutScreen = {
+                                        navigateBackToAddWorkoutScreen = {
                                             navController.navigateUp()
+                                        },
+                                        navigateBackToJournal = {
+                                            navController.navigateUp()
+                                            navController.navigateUp()
+
+                                            lifecycleScope.launch {
+                                                showSnackBar(
+                                                    snackBarHostState = snackBarState,
+                                                    message = it
+                                                )
+                                            }
                                         }
                                     )
                                 },
@@ -358,18 +371,6 @@ class MainActivity : ComponentActivity() {
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
-                                        },
-                                        endAlignedActionIcon = {
-                                            IconButton(onClick = {
-                                                navController.navigateUp()
-                                                navController.navigateUp()
-//                                                journalEntryViewModel.save()
-                                            }) {
-                                                Text(
-                                                    text = "Save",
-                                                    style = MaterialTheme.typography.titleMedium
-                                                )
-                                            }
                                         },
                                         navigationIcon = {
                                             NavigateUpIconButton(

@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
+import com.example.fitjournal.core.data.model.results.Result
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.TimeModel
@@ -41,8 +42,8 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.extensions.toDoubleOrZero
 import com.example.fitjournal.core.util.extensions.toIntOrZero
 import com.example.fitjournal.home.presentation.screen.editworkout.WorkoutTitle
-import com.example.fitjournal.journalEntry.model.JournalEntryDetailsUiState
-import com.example.fitjournal.journalEntry.model.events.JournalEntryDetailsEvents
+import com.example.fitjournal.journalEntry.model.AddWorkoutDetailUiState
+import com.example.fitjournal.journalEntry.model.events.AddWorkoutDetailEvents
 import com.example.fitjournal.journalEntry.screen.journalEntry.details.components.AddWorkoutErrorScreen
 import com.example.fitjournal.journalEntry.screen.journalEntry.details.components.AddWorkoutSection
 import kotlinx.coroutines.launch
@@ -50,9 +51,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddWorkoutDetailScreen(
     modifier: Modifier,
-    journalEntryDetailsUiState: JournalEntryDetailsUiState,
+    addWorkoutDetailUiState: AddWorkoutDetailUiState,
     showSnackbar: suspend (String) -> Unit,
-    navigateToAddWorkoutScreen: () -> Unit
+    navigateBackToAddWorkoutScreen: () -> Unit,
+    navigateBackToJournal: (String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     var showLoadingScreenDialog by rememberSaveable {
@@ -62,19 +64,23 @@ fun AddWorkoutDetailScreen(
         mutableStateOf(false)
     }
     LaunchedEffect(
-        key1 = journalEntryDetailsUiState.calisthenicsPropertyList,
-        key2 = journalEntryDetailsUiState.cardioPropertyList,
-        key3 = journalEntryDetailsUiState.weightLiftingPropertyList
+        key1 = addWorkoutDetailUiState.calisthenicsPropertyList,
+        key2 = addWorkoutDetailUiState.cardioPropertyList,
+        key3 = addWorkoutDetailUiState.weightLiftingPropertyList
     ) {
-        enableSaveButton = journalEntryDetailsUiState.calisthenicsPropertyList.isNotEmpty() ||
-            journalEntryDetailsUiState.cardioPropertyList.isNotEmpty() ||
-            journalEntryDetailsUiState.weightLiftingPropertyList.isNotEmpty()
+        enableSaveButton = addWorkoutDetailUiState.calisthenicsPropertyList.isNotEmpty() ||
+            addWorkoutDetailUiState.cardioPropertyList.isNotEmpty() ||
+            addWorkoutDetailUiState.weightLiftingPropertyList.isNotEmpty()
     }
     val workoutCanceled = stringResource(id = R.string.error_add_workout_canceled)
+    val workoutSuccessfullyAdded = stringResource(
+        id = R.string.text_workout_successfully_added_to_journal,
+        addWorkoutDetailUiState.workoutName
+    )
     if (showLoadingScreenDialog) {
         TransparentLoadingScreenDialog(
             onBackPress = {
-                // cancel workout
+                addWorkoutDetailUiState.addWorkoutDetailEvents(AddWorkoutDetailEvents.StopAddWorkoutJob)
                 showLoadingScreenDialog = false
                 coroutineScope.launch {
                     showSnackbar(workoutCanceled)
@@ -82,12 +88,12 @@ fun AddWorkoutDetailScreen(
             }
         )
     }
-    if (journalEntryDetailsUiState.workoutName.isEmpty() || journalEntryDetailsUiState.workoutType.isEmpty() || journalEntryDetailsUiState.workoutTypeEnum == null) {
-        AddWorkoutErrorScreen(navigateToAddWorkoutScreen = navigateToAddWorkoutScreen)
+    if (addWorkoutDetailUiState.workoutName.isEmpty() || addWorkoutDetailUiState.workoutType.isEmpty() || addWorkoutDetailUiState.workoutTypeEnum == null) {
+        AddWorkoutErrorScreen(navigateToAddWorkoutScreen = navigateBackToAddWorkoutScreen)
     } else {
-        LaunchedEffect(key1 = journalEntryDetailsUiState.workoutName) {
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.ClearViewModelState
+        LaunchedEffect(key1 = addWorkoutDetailUiState.workoutName) {
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.ClearViewModelState
             )
         }
         // strings needed if we want to delete a set
@@ -104,41 +110,42 @@ fun AddWorkoutDetailScreen(
         ) {
             item {
                 WorkoutTitle(
-                    workoutName = journalEntryDetailsUiState.workoutName,
-                    workoutType = journalEntryDetailsUiState.workoutType
+                    workoutName = addWorkoutDetailUiState.workoutName,
+                    workoutType = addWorkoutDetailUiState.workoutType
                 )
             }
             item {
-                EditWorkoutBanner(workoutDate = journalEntryDetailsUiState.date)
+                EditWorkoutBanner(workoutDate = addWorkoutDetailUiState.date)
             }
             item {
                 AddWorkoutSection(
-                    workoutType = journalEntryDetailsUiState.workoutTypeEnum,
-                    journalEntryDetailsUiState = journalEntryDetailsUiState
+                    workoutType = addWorkoutDetailUiState.workoutTypeEnum,
+                    addWorkoutDetailUiState = addWorkoutDetailUiState
                 )
             }
             item {
+                // clear and save buttons for adding sets to workout
                 ClearAndSaveButtons(
                     clearBtnOnClick = {
-                        journalEntryDetailsUiState.journalEntryDetailsEvents(
-                            JournalEntryDetailsEvents.ClearWorkoutTextFields(
-                                journalEntryDetailsUiState.workoutTypeEnum
+                        addWorkoutDetailUiState.addWorkoutDetailEvents(
+                            AddWorkoutDetailEvents.ClearWorkoutTextFields(
+                                addWorkoutDetailUiState.workoutTypeEnum
                             )
                         )
                     },
                     saveBtnOnClick = {
-                        when (journalEntryDetailsUiState.workoutTypeEnum) {
+                        when (addWorkoutDetailUiState.workoutTypeEnum) {
                             WorkoutTypeEnum.WEIGHT_TRAINING -> {
                                 val newWeightTrainingItem = WeightLiftingModel(
-                                    reps = journalEntryDetailsUiState.reps.toIntOrZero(),
-                                    sets = journalEntryDetailsUiState.sets.toIntOrZero(),
-                                    weight = journalEntryDetailsUiState.weight.toDoubleOrZero(),
-                                    weightType = journalEntryDetailsUiState.weightType
+                                    reps = addWorkoutDetailUiState.reps.toIntOrZero(),
+                                    sets = addWorkoutDetailUiState.sets.toIntOrZero(),
+                                    weight = addWorkoutDetailUiState.weight.toDoubleOrZero(),
+                                    weightType = addWorkoutDetailUiState.weightType
                                 )
-                                journalEntryDetailsUiState.journalEntryDetailsEvents(
-                                    JournalEntryDetailsEvents.AddNewWeightTrainingSetToWorkout(
+                                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                                    AddWorkoutDetailEvents.AddNewWeightTrainingSetToWorkout(
                                         newWeightLiftingItem = newWeightTrainingItem,
-                                        workoutType = journalEntryDetailsUiState.workoutType,
+                                        workoutType = addWorkoutDetailUiState.workoutType,
                                         onAddErrorCallback = { showSnackbar(errorWithAddingSets) }
                                     )
                                 )
@@ -146,27 +153,27 @@ fun AddWorkoutDetailScreen(
 
                             WorkoutTypeEnum.CALISTHENICS -> {
                                 val newCalisthenicItem = CalisthenicsModel(
-                                    reps = journalEntryDetailsUiState.reps.toIntOrZero(),
-                                    sets = journalEntryDetailsUiState.sets.toIntOrZero(),
-                                    weight = journalEntryDetailsUiState.weight.toDoubleOrNull(),
-                                    weightType = journalEntryDetailsUiState.weightType,
-                                    time = if (journalEntryDetailsUiState.hour.isEmpty() &&
-                                        journalEntryDetailsUiState.minute.isEmpty() &&
-                                        journalEntryDetailsUiState.second.isEmpty()
+                                    reps = addWorkoutDetailUiState.reps.toIntOrZero(),
+                                    sets = addWorkoutDetailUiState.sets.toIntOrZero(),
+                                    weight = addWorkoutDetailUiState.weight.toDoubleOrNull(),
+                                    weightType = addWorkoutDetailUiState.weightType,
+                                    time = if (addWorkoutDetailUiState.hour.isEmpty() &&
+                                        addWorkoutDetailUiState.minute.isEmpty() &&
+                                        addWorkoutDetailUiState.second.isEmpty()
                                     ) {
                                         null
                                     } else {
                                         TimeModel(
-                                            hours = journalEntryDetailsUiState.hour,
-                                            minutes = journalEntryDetailsUiState.minute,
-                                            seconds = journalEntryDetailsUiState.second
+                                            hours = addWorkoutDetailUiState.hour,
+                                            minutes = addWorkoutDetailUiState.minute,
+                                            seconds = addWorkoutDetailUiState.second
                                         )
                                     }
                                 )
-                                journalEntryDetailsUiState.journalEntryDetailsEvents(
-                                    JournalEntryDetailsEvents.AddNewCalisthenicSetToWorkout(
+                                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                                    AddWorkoutDetailEvents.AddNewCalisthenicSetToWorkout(
                                         newCalisthenicItem = newCalisthenicItem,
-                                        workoutType = journalEntryDetailsUiState.workoutType,
+                                        workoutType = addWorkoutDetailUiState.workoutType,
                                         onAddErrorCallback = { showSnackbar(errorWithAddingSets) }
                                     )
                                 )
@@ -174,70 +181,70 @@ fun AddWorkoutDetailScreen(
 
                             WorkoutTypeEnum.CARDIO -> {
                                 val newCardioItem = CardioModel(
-                                    distance = journalEntryDetailsUiState.distance.toDoubleOrZero(),
-                                    distanceType = journalEntryDetailsUiState.distanceType,
+                                    distance = addWorkoutDetailUiState.distance.toDoubleOrZero(),
+                                    distanceType = addWorkoutDetailUiState.distanceType,
                                     time = TimeModel(
-                                        hours = journalEntryDetailsUiState.hour,
-                                        minutes = journalEntryDetailsUiState.minute,
-                                        seconds = journalEntryDetailsUiState.second
+                                        hours = addWorkoutDetailUiState.hour,
+                                        minutes = addWorkoutDetailUiState.minute,
+                                        seconds = addWorkoutDetailUiState.second
                                     ),
-                                    laps = journalEntryDetailsUiState.laps.toDoubleOrNull()
+                                    laps = addWorkoutDetailUiState.laps.toDoubleOrNull()
                                 )
-                                journalEntryDetailsUiState.journalEntryDetailsEvents(
-                                    JournalEntryDetailsEvents.AddNewCardioSetToWorkout(
+                                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                                    AddWorkoutDetailEvents.AddNewCardioSetToWorkout(
                                         newCardioItem = newCardioItem,
-                                        workoutType = journalEntryDetailsUiState.workoutType,
+                                        workoutType = addWorkoutDetailUiState.workoutType,
                                         onAddErrorCallback = { showSnackbar(errorWithAddingSets) }
                                     )
                                 )
                             }
                         }
                     },
-                    showSaveButton = when (journalEntryDetailsUiState.workoutTypeEnum) {
+                    showSaveButton = when (addWorkoutDetailUiState.workoutTypeEnum) {
                         WorkoutTypeEnum.WEIGHT_TRAINING -> {
                             (
-                                journalEntryDetailsUiState.reps.isNotEmpty() &&
-                                    journalEntryDetailsUiState.sets.isNotEmpty() &&
-                                    journalEntryDetailsUiState.weight.isNotEmpty()
+                                addWorkoutDetailUiState.reps.isNotEmpty() &&
+                                    addWorkoutDetailUiState.sets.isNotEmpty() &&
+                                    addWorkoutDetailUiState.weight.isNotEmpty()
                                 )
                         }
 
                         WorkoutTypeEnum.CALISTHENICS -> {
                             (
-                                journalEntryDetailsUiState.reps.isNotEmpty() &&
-                                    journalEntryDetailsUiState.sets.isNotEmpty()
+                                addWorkoutDetailUiState.reps.isNotEmpty() &&
+                                    addWorkoutDetailUiState.sets.isNotEmpty()
                                 )
                         }
 
                         WorkoutTypeEnum.CARDIO -> {
                             (
-                                journalEntryDetailsUiState.distance.isNotEmpty() &&
+                                addWorkoutDetailUiState.distance.isNotEmpty() &&
                                     (
-                                        journalEntryDetailsUiState.hour.isNotEmpty() ||
-                                            journalEntryDetailsUiState.minute.isNotEmpty() ||
-                                            journalEntryDetailsUiState.second.isNotEmpty()
+                                        addWorkoutDetailUiState.hour.isNotEmpty() ||
+                                            addWorkoutDetailUiState.minute.isNotEmpty() ||
+                                            addWorkoutDetailUiState.second.isNotEmpty()
                                         )
                                 )
                         }
                     }
                 )
             }
-            when (journalEntryDetailsUiState.workoutTypeEnum) {
+            when (addWorkoutDetailUiState.workoutTypeEnum) {
                 WorkoutTypeEnum.WEIGHT_TRAINING -> {
-                    if (journalEntryDetailsUiState.weightLiftingPropertyList.isNotEmpty()) {
+                    if (addWorkoutDetailUiState.weightLiftingPropertyList.isNotEmpty()) {
                         item {
                             WeightLiftingListHeader()
                         }
                     }
-                    itemsIndexed(journalEntryDetailsUiState.weightLiftingPropertyList) { index, item ->
+                    itemsIndexed(addWorkoutDetailUiState.weightLiftingPropertyList) { index, item ->
                         WeightLiftingWorkoutSets(
                             workout = item,
                             index = index,
                             deleteSet = {
-                                journalEntryDetailsUiState.journalEntryDetailsEvents(
-                                    JournalEntryDetailsEvents.DeleteWorkoutSetItemInWorkoutModelList(
+                                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                                    AddWorkoutDetailEvents.DeleteWorkoutSetItemInWorkoutModelList(
                                         index = index,
-                                        workoutType = journalEntryDetailsUiState.workoutTypeEnum,
+                                        workoutType = addWorkoutDetailUiState.workoutTypeEnum,
                                         onDeleteErrorCallback = {
                                             showSnackbar(errorWithSetsBeingDeleted)
                                         }
@@ -246,25 +253,25 @@ fun AddWorkoutDetailScreen(
                             },
                             editSet = {}
                         )
-                        if (index != journalEntryDetailsUiState.weightLiftingPropertyList.lastIndex) {
+                        if (index != addWorkoutDetailUiState.weightLiftingPropertyList.lastIndex) {
                             Spacer(modifier = Modifier.height(Spacing.spacing8))
                         }
                     }
                 }
 
                 WorkoutTypeEnum.CALISTHENICS -> {
-                    if (journalEntryDetailsUiState.calisthenicsPropertyList.isNotEmpty()) {
+                    if (addWorkoutDetailUiState.calisthenicsPropertyList.isNotEmpty()) {
                         item { CalisthenicsListHeader() }
                     }
-                    itemsIndexed(journalEntryDetailsUiState.calisthenicsPropertyList) { index, item ->
+                    itemsIndexed(addWorkoutDetailUiState.calisthenicsPropertyList) { index, item ->
                         CalisthenicsWorkoutSets(
                             workout = item,
                             index = index,
                             deleteSet = {
-                                journalEntryDetailsUiState.journalEntryDetailsEvents(
-                                    JournalEntryDetailsEvents.DeleteWorkoutSetItemInWorkoutModelList(
+                                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                                    AddWorkoutDetailEvents.DeleteWorkoutSetItemInWorkoutModelList(
                                         index = index,
-                                        workoutType = journalEntryDetailsUiState.workoutTypeEnum,
+                                        workoutType = addWorkoutDetailUiState.workoutTypeEnum,
                                         onDeleteErrorCallback = {
                                             showSnackbar(errorWithSetsBeingDeleted)
                                         }
@@ -273,25 +280,25 @@ fun AddWorkoutDetailScreen(
                             },
                             editSet = {}
                         )
-                        if (index != journalEntryDetailsUiState.calisthenicsPropertyList.lastIndex) {
+                        if (index != addWorkoutDetailUiState.calisthenicsPropertyList.lastIndex) {
                             Spacer(modifier = Modifier.height(Spacing.spacing8))
                         }
                     }
                 }
 
                 WorkoutTypeEnum.CARDIO -> {
-                    if (journalEntryDetailsUiState.cardioPropertyList.isNotEmpty()) {
+                    if (addWorkoutDetailUiState.cardioPropertyList.isNotEmpty()) {
                         item { CardioListHeader() }
                     }
-                    itemsIndexed(journalEntryDetailsUiState.cardioPropertyList) { index, item ->
+                    itemsIndexed(addWorkoutDetailUiState.cardioPropertyList) { index, item ->
                         CardioWorkoutSets(
                             workout = item,
                             index = index,
                             deleteSet = {
-                                journalEntryDetailsUiState.journalEntryDetailsEvents(
-                                    JournalEntryDetailsEvents.DeleteWorkoutSetItemInWorkoutModelList(
+                                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                                    AddWorkoutDetailEvents.DeleteWorkoutSetItemInWorkoutModelList(
                                         index = index,
-                                        workoutType = journalEntryDetailsUiState.workoutTypeEnum,
+                                        workoutType = addWorkoutDetailUiState.workoutTypeEnum,
                                         onDeleteErrorCallback = {
                                             showSnackbar(errorWithSetsBeingDeleted)
                                         }
@@ -300,13 +307,14 @@ fun AddWorkoutDetailScreen(
                             },
                             editSet = {}
                         )
-                        if (index != journalEntryDetailsUiState.cardioPropertyList.lastIndex) {
+                        if (index != addWorkoutDetailUiState.cardioPropertyList.lastIndex) {
                             Spacer(modifier = Modifier.height(Spacing.spacing8))
                         }
                     }
                 }
             }
             item {
+                // save button for adding workout to journal
                 SaveButton(
                     text = stringResource(id = R.string.button_save_workout),
                     modifier = Modifier
@@ -321,7 +329,25 @@ fun AddWorkoutDetailScreen(
                     ),
                     onClick = {
                         showLoadingScreenDialog = true
-                        // call viewmodel fn and pass back result
+                        addWorkoutDetailUiState.addWorkoutDetailEvents(
+                            AddWorkoutDetailEvents.AddWorkoutToRealm(
+                                callback = { realmResult ->
+                                    when (realmResult) {
+                                        Result.SUCCESS -> {
+                                            showLoadingScreenDialog = false
+                                            navigateBackToJournal(workoutSuccessfullyAdded)
+                                        }
+
+                                        Result.FAILURE -> {
+                                            showLoadingScreenDialog = false
+                                            coroutineScope.launch {
+                                                showSnackbar(workoutSuccessfullyAdded)
+                                            }
+                                        }
+                                    }
+                                }
+                            )
+                        )
                     },
                     buttonColor = ButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,

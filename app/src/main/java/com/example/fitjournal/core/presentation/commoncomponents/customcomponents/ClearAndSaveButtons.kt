@@ -59,7 +59,9 @@ fun ClearAndSaveButtons(
         }
     } else {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Spacing.spacing16),
             horizontalArrangement = Arrangement.Center
         ) {
             ClearButton(

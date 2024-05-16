@@ -44,7 +44,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun addWorkoutToDatabase(
+    fun addWorkoutToLibraryDatabase(
         workoutName: String,
         workoutType: String,
         workoutTypeEnum: WorkoutTypeEnum,
@@ -66,6 +66,7 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
 }
 
 sealed interface MainActivityUiState {
