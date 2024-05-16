@@ -114,7 +114,7 @@
     <string name="error_with_adding_laps">Please enter a valid number of laps</string>
     <string name="error_with_adding_time">Please enter a valid time</string>
     <string name="error_no_details_found">No details found for this workout</string>
-    <string name="error_add_workout_canceled">Adding workout to journal was canceled</string>
+    <string name="error_add_workout_canceled">Adding workout to journal was cancelled</string>
 
     // Placeholder strings
     <string name="text_library_searchbar_placeholder">Search for workout</string>
