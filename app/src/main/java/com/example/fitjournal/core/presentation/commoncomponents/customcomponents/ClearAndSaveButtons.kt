@@ -3,6 +3,7 @@ package com.example.fitjournal.core.presentation.commoncomponents.customcomponen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,35 +24,51 @@ import com.example.fitjournal.core.presentation.theme.White
 @Composable
 fun ClearAndSaveButtons(
     clearBtnOnClick: () -> Unit,
-    saveBtnOnClick: () -> Unit
+    saveBtnOnClick: () -> Unit,
+    showSaveButton: Boolean = true
 ) {
-    FlowRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(Spacing.spacing16),
-        horizontalArrangement = Arrangement.SpaceAround
-    ) {
-        ClearButton(
-            textModifier = Modifier.padding(
-                horizontal = Spacing.spacing32,
-                vertical = Spacing.spacing4
-            ),
-            onClick = clearBtnOnClick
-        )
-        Spacer(modifier = Modifier.width(Spacing.spacing8))
-        SaveButton(
-            textModifier = Modifier.padding(
-                horizontal = Spacing.spacing32,
-                vertical = Spacing.spacing4
-            ),
-            text = stringResource(id = R.string.button_save_set),
-            onClick = saveBtnOnClick,
-            buttonColor = ButtonColors(
-                containerColor = SuccessGreen,
-                contentColor = White,
-                disabledContainerColor = SuccessGreen,
-                disabledContentColor = MaterialTheme.colorScheme.onTertiary
+    if (showSaveButton) {
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Spacing.spacing16),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            ClearButton(
+                textModifier = Modifier.padding(
+                    horizontal = Spacing.spacing32,
+                    vertical = Spacing.spacing4
+                ),
+                onClick = clearBtnOnClick
             )
-        )
+            Spacer(modifier = Modifier.width(Spacing.spacing8))
+            SaveButton(
+                textModifier = Modifier.padding(
+                    horizontal = Spacing.spacing32,
+                    vertical = Spacing.spacing4
+                ),
+                text = stringResource(id = R.string.button_save_set),
+                onClick = saveBtnOnClick,
+                buttonColor = ButtonColors(
+                    containerColor = SuccessGreen,
+                    contentColor = White,
+                    disabledContainerColor = SuccessGreen,
+                    disabledContentColor = MaterialTheme.colorScheme.onTertiary
+                )
+            )
+        }
+    } else {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            ClearButton(
+                textModifier = Modifier.padding(
+                    horizontal = Spacing.spacing32,
+                    vertical = Spacing.spacing4
+                ),
+                onClick = clearBtnOnClick
+            )
+        }
     }
 }

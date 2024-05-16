@@ -40,10 +40,10 @@ import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutSc
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutViewModel
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
-import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryScreen
-import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryViewModel
-import com.example.fitjournal.journalEntry.screen.journalEntry.details.JournalEntryDetailsScreen
-import com.example.fitjournal.journalEntry.screen.journalEntry.details.JournalEntryDetailsViewModel
+import com.example.fitjournal.journalEntry.screen.journalEntry.AddWorkoutScreen
+import com.example.fitjournal.journalEntry.screen.journalEntry.AddWorkoutViewModel
+import com.example.fitjournal.journalEntry.screen.journalEntry.details.AddWorkoutDetailScreen
+import com.example.fitjournal.journalEntry.screen.journalEntry.details.AddWorkoutDetailViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
 import com.example.fitjournal.statistics.presentation.screen.StatisticsScreen
@@ -58,8 +58,8 @@ class MainActivity : ComponentActivity() {
     private val libraryScreenViewModel: LibraryScreenViewModel by viewModels()
     private val statisticsViewModel: StatisticsViewModel by viewModels()
     private val editWorkoutViewModel: EditWorkoutViewModel by viewModels()
-    private val journalEntryViewModel: JournalEntryViewModel by viewModels()
-    private val journalEntryDetailsViewModel: JournalEntryDetailsViewModel by viewModels()
+    private val addWorkoutViewModel: AddWorkoutViewModel by viewModels()
+    private val addWorkoutDetailViewModel: AddWorkoutDetailViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -289,9 +289,9 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 snackBarHostState = snackBarState,
                                 mainScreen = { mainModifier ->
-                                    JournalEntryScreen(
+                                    AddWorkoutScreen(
                                         modifier = mainModifier,
-                                        journalEntryState = journalEntryViewModel.journalEntryState,
+                                        journalEntryState = addWorkoutViewModel.journalEntryState,
                                         navigateToDestination = {
                                             showChildFabs = false
                                             navigateToDestination(
@@ -324,7 +324,7 @@ class MainActivity : ComponentActivity() {
                         composable("${Route.JOURNAL_ENTRY_DETAILS}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}") { backStackEntry ->
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
-                                journalEntryDetailsViewModel.addWorkoutNameAndType(
+                                addWorkoutDetailViewModel.addWorkoutNameAndType(
                                     workoutName = backStackEntry.arguments?.getString("workoutName")
                                         ?: "",
                                     workoutType = backStackEntry.arguments?.getString("workoutType")
@@ -336,20 +336,17 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 snackBarHostState = snackBarState,
                                 mainScreen = { mainModifier ->
-                                    JournalEntryDetailsScreen(
+                                    AddWorkoutDetailScreen(
                                         modifier = mainModifier,
-                                        journalEntryDetailsUiState = journalEntryDetailsViewModel.journalEntryDetailsUiState,
+                                        journalEntryDetailsUiState = addWorkoutDetailViewModel.journalEntryDetailsUiState,
                                         showSnackbar = {
                                             showSnackBar(
                                                 snackBarHostState = snackBarState,
                                                 message = it
                                             )
                                         },
-                                        navigateToJournal = {
-                                            navigateToDestination(
-                                                navigationInterface = it,
-                                                navController = navController
-                                            )
+                                        navigateToAddWorkoutScreen = {
+                                            navController.navigateUp()
                                         }
                                     )
                                 },

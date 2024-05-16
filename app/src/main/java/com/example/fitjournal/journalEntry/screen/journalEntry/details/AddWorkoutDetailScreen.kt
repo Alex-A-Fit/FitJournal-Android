@@ -11,6 +11,11 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,8 +33,8 @@ import com.example.fitjournal.core.presentation.commoncomponents.customcomponent
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.CardioWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingWorkoutSets
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.TransparentLoadingScreenDialog
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
-import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.DisabledBackgroundGray
 import com.example.fitjournal.core.presentation.theme.MediumGray
 import com.example.fitjournal.core.presentation.theme.Spacing
@@ -38,17 +43,47 @@ import com.example.fitjournal.core.util.extensions.toIntOrZero
 import com.example.fitjournal.home.presentation.screen.editworkout.WorkoutTitle
 import com.example.fitjournal.journalEntry.model.JournalEntryDetailsUiState
 import com.example.fitjournal.journalEntry.model.events.JournalEntryDetailsEvents
+import com.example.fitjournal.journalEntry.screen.journalEntry.details.components.AddWorkoutErrorScreen
 import com.example.fitjournal.journalEntry.screen.journalEntry.details.components.AddWorkoutSection
+import kotlinx.coroutines.launch
 
 @Composable
-fun JournalEntryDetailsScreen(
+fun AddWorkoutDetailScreen(
     modifier: Modifier,
     journalEntryDetailsUiState: JournalEntryDetailsUiState,
     showSnackbar: suspend (String) -> Unit,
-    navigateToJournal: (NavigationInterface) -> Unit
+    navigateToAddWorkoutScreen: () -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    var showLoadingScreenDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var enableSaveButton by rememberSaveable {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(
+        key1 = journalEntryDetailsUiState.calisthenicsPropertyList,
+        key2 = journalEntryDetailsUiState.cardioPropertyList,
+        key3 = journalEntryDetailsUiState.weightLiftingPropertyList
+    ) {
+        enableSaveButton = journalEntryDetailsUiState.calisthenicsPropertyList.isNotEmpty() ||
+            journalEntryDetailsUiState.cardioPropertyList.isNotEmpty() ||
+            journalEntryDetailsUiState.weightLiftingPropertyList.isNotEmpty()
+    }
+    val workoutCanceled = stringResource(id = R.string.error_add_workout_canceled)
+    if (showLoadingScreenDialog) {
+        TransparentLoadingScreenDialog(
+            onBackPress = {
+                // cancel workout
+                showLoadingScreenDialog = false
+                coroutineScope.launch {
+                    showSnackbar(workoutCanceled)
+                }
+            }
+        )
+    }
     if (journalEntryDetailsUiState.workoutName.isEmpty() || journalEntryDetailsUiState.workoutType.isEmpty() || journalEntryDetailsUiState.workoutTypeEnum == null) {
-        // TODO Error state to direct user they cant add workout
+        AddWorkoutErrorScreen(navigateToAddWorkoutScreen = navigateToAddWorkoutScreen)
     } else {
         LaunchedEffect(key1 = journalEntryDetailsUiState.workoutName) {
             journalEntryDetailsUiState.journalEntryDetailsEvents(
@@ -157,6 +192,33 @@ fun JournalEntryDetailsScreen(
                                 )
                             }
                         }
+                    },
+                    showSaveButton = when (journalEntryDetailsUiState.workoutTypeEnum) {
+                        WorkoutTypeEnum.WEIGHT_TRAINING -> {
+                            (
+                                journalEntryDetailsUiState.reps.isNotEmpty() &&
+                                    journalEntryDetailsUiState.sets.isNotEmpty() &&
+                                    journalEntryDetailsUiState.weight.isNotEmpty()
+                                )
+                        }
+
+                        WorkoutTypeEnum.CALISTHENICS -> {
+                            (
+                                journalEntryDetailsUiState.reps.isNotEmpty() &&
+                                    journalEntryDetailsUiState.sets.isNotEmpty()
+                                )
+                        }
+
+                        WorkoutTypeEnum.CARDIO -> {
+                            (
+                                journalEntryDetailsUiState.distance.isNotEmpty() &&
+                                    (
+                                        journalEntryDetailsUiState.hour.isNotEmpty() ||
+                                            journalEntryDetailsUiState.minute.isNotEmpty() ||
+                                            journalEntryDetailsUiState.second.isNotEmpty()
+                                        )
+                                )
+                        }
                     }
                 )
             }
@@ -258,7 +320,8 @@ fun JournalEntryDetailsScreen(
                         vertical = Spacing.spacing4
                     ),
                     onClick = {
-                        // TODO add save workout feature
+                        showLoadingScreenDialog = true
+                        // call viewmodel fn and pass back result
                     },
                     buttonColor = ButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
@@ -266,7 +329,7 @@ fun JournalEntryDetailsScreen(
                         disabledContainerColor = DisabledBackgroundGray,
                         disabledContentColor = MediumGray
                     ),
-                    isEnabled = false
+                    isEnabled = enableSaveButton
                 )
             }
         }

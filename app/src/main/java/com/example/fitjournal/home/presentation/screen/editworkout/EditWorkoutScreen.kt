@@ -38,9 +38,9 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.extensions.toDoubleOrZero
 import com.example.fitjournal.core.util.extensions.toIntOrZero
 import com.example.fitjournal.core.util.state.UiState
-import com.example.fitjournal.home.presentation.components.editworkout.EditWorkoutErrorScreen
 import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
 import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
+import com.example.fitjournal.home.presentation.screen.editworkout.components.EditWorkoutErrorScreen
 import com.example.fitjournal.home.presentation.screen.editworkout.components.EditWorkoutSection
 
 @Composable

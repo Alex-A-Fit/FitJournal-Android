@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class JournalEntryDetailsViewModel @Inject constructor(
+class AddWorkoutDetailViewModel @Inject constructor(
     private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase,
     private val editWorkoutUseCase: EditWorkoutUseCase
 ) : ViewModel() {
