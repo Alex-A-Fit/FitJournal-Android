@@ -1,13 +1,13 @@
-package com.example.fitjournal.journalEntry.screen.journalEntry.details.components
+package com.example.fitjournal.addWorkout.screen.journalEntry.details.components
 
 import androidx.compose.runtime.Composable
+import com.example.fitjournal.addWorkout.model.AddWorkoutDetailUiState
+import com.example.fitjournal.addWorkout.model.events.AddWorkoutDetailEvents
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.components.EditWorkoutDistanceSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.components.EditWorkoutMandatoryTimeSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.components.EditWorkoutOptionalLapsSection
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
-import com.example.fitjournal.journalEntry.model.AddWorkoutDetailUiState
-import com.example.fitjournal.journalEntry.model.events.AddWorkoutDetailEvents
 
 @Composable
 fun AddWorkoutCardio(

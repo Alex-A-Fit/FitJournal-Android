@@ -1,4 +1,4 @@
-package com.example.fitjournal.journalEntry.screen.journalEntry
+package com.example.fitjournal.addWorkout.screen.journalEntry
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -12,12 +12,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import com.example.fitjournal.addWorkout.components.UserWorkoutList
+import com.example.fitjournal.addWorkout.model.JournalEntryUiModel
+import com.example.fitjournal.addWorkout.model.events.JournalEntryEvents
 import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.journalEntry.components.JournalEntryList
-import com.example.fitjournal.journalEntry.model.JournalEntryUiModel
-import com.example.fitjournal.journalEntry.model.events.JournalEntryEvents
 
 @Composable
 fun AddWorkoutScreen(
@@ -59,7 +59,7 @@ fun AddWorkoutScreen(
             keyboardController = keyboardController,
             focusManager = focusManager
         )
-        JournalEntryList(
+        UserWorkoutList(
             workoutList = journalEntryState.listOfSearchedWorkouts,
             selectedWorkout = { name, type ->
                 navigateToDestination(NavigationInterface.NavigateToJournalEntryDetails(name, type))

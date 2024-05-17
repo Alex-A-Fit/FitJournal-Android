@@ -24,6 +24,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.fitjournal.addWorkout.screen.journalEntry.AddWorkoutScreen
+import com.example.fitjournal.addWorkout.screen.journalEntry.AddWorkoutViewModel
+import com.example.fitjournal.addWorkout.screen.journalEntry.details.AddWorkoutDetailScreen
+import com.example.fitjournal.addWorkout.screen.journalEntry.details.AddWorkoutDetailViewModel
 import com.example.fitjournal.core.presentation.commoncomponents.appbars.TopAppBar
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.iconbuttons.NavigateUpIconButton
 import com.example.fitjournal.core.presentation.navigation.Arguments
@@ -40,10 +44,6 @@ import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutSc
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutViewModel
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
-import com.example.fitjournal.journalEntry.screen.journalEntry.AddWorkoutScreen
-import com.example.fitjournal.journalEntry.screen.journalEntry.AddWorkoutViewModel
-import com.example.fitjournal.journalEntry.screen.journalEntry.details.AddWorkoutDetailScreen
-import com.example.fitjournal.journalEntry.screen.journalEntry.details.AddWorkoutDetailViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
 import com.example.fitjournal.statistics.presentation.screen.StatisticsScreen

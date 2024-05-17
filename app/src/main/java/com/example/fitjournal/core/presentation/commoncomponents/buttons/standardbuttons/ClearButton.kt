@@ -16,7 +16,8 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 fun ClearButton(
     modifier: Modifier = Modifier,
     textModifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    text: String = stringResource(id = R.string.button_clear)
 ) {
     TextButton(
         onClick = onClick,
@@ -33,7 +34,7 @@ fun ClearButton(
         modifier = modifier
     ) {
         Text(
-            text = stringResource(id = R.string.button_clear),
+            text = text,
             style = MaterialTheme.typography.titleLarge,
             modifier = textModifier
         )

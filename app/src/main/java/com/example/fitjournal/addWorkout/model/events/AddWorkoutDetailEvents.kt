@@ -1,4 +1,4 @@
-package com.example.fitjournal.journalEntry.model.events
+package com.example.fitjournal.addWorkout.model.events
 
 import com.example.fitjournal.core.data.model.results.Result
 import com.example.fitjournal.core.domain.model.CalisthenicsModel

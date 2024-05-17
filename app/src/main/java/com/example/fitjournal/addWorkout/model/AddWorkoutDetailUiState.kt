@@ -1,7 +1,8 @@
-package com.example.fitjournal.journalEntry.model
+package com.example.fitjournal.addWorkout.model
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.example.fitjournal.addWorkout.model.events.AddWorkoutDetailEvents
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
@@ -9,7 +10,6 @@ import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
-import com.example.fitjournal.journalEntry.model.events.AddWorkoutDetailEvents
 import java.time.LocalDate
 
 data class AddWorkoutDetailUiState(

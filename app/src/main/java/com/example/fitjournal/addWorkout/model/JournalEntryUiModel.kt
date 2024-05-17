@@ -1,8 +1,8 @@
-package com.example.fitjournal.journalEntry.model
+package com.example.fitjournal.addWorkout.model
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.example.fitjournal.journalEntry.model.events.JournalEntryEvents
+import com.example.fitjournal.addWorkout.model.events.JournalEntryEvents
 import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory
 
 data class JournalEntryUiModel(
