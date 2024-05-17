@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -20,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,15 +40,16 @@ import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutSc
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutViewModel
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
-import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryScreen
-import com.example.fitjournal.journalEntry.screen.journalEntry.JournalEntryViewModel
-import com.example.fitjournal.journalEntry.screen.journalEntry.details.JournalEntryDetailsScreen
-import com.example.fitjournal.journalEntry.screen.journalEntry.details.JournalEntryDetailsViewModel
+import com.example.fitjournal.journalEntry.screen.journalEntry.AddWorkoutScreen
+import com.example.fitjournal.journalEntry.screen.journalEntry.AddWorkoutViewModel
+import com.example.fitjournal.journalEntry.screen.journalEntry.details.AddWorkoutDetailScreen
+import com.example.fitjournal.journalEntry.screen.journalEntry.details.AddWorkoutDetailViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
 import com.example.fitjournal.statistics.presentation.screen.StatisticsScreen
 import com.example.fitjournal.statistics.presentation.screen.StatisticsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -58,8 +59,8 @@ class MainActivity : ComponentActivity() {
     private val libraryScreenViewModel: LibraryScreenViewModel by viewModels()
     private val statisticsViewModel: StatisticsViewModel by viewModels()
     private val editWorkoutViewModel: EditWorkoutViewModel by viewModels()
-    private val journalEntryViewModel: JournalEntryViewModel by viewModels()
-    private val journalEntryDetailsViewModel: JournalEntryDetailsViewModel by viewModels()
+    private val addWorkoutViewModel: AddWorkoutViewModel by viewModels()
+    private val addWorkoutDetailViewModel: AddWorkoutDetailViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,7 +126,7 @@ class MainActivity : ComponentActivity() {
                                     showChildFabs = it
                                 },
                                 addWorkoutToLibraryItemDatabase = { addWorkoutToDbModel ->
-                                    mainViewModel.addWorkoutToDatabase(
+                                    mainViewModel.addWorkoutToLibraryDatabase(
                                         workoutName = addWorkoutToDbModel.workoutName,
                                         workoutTypeEnum = addWorkoutToDbModel.workoutType,
                                         successCallback = {
@@ -195,7 +196,7 @@ class MainActivity : ComponentActivity() {
                                     showChildFabs = it
                                 },
                                 addWorkoutToLibraryItemDatabase = { addWorkoutToDbModel ->
-                                    mainViewModel.addWorkoutToDatabase(
+                                    mainViewModel.addWorkoutToLibraryDatabase(
                                         workoutName = addWorkoutToDbModel.workoutName,
                                         workoutTypeEnum = addWorkoutToDbModel.workoutType,
                                         successCallback = {
@@ -280,7 +281,7 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
-                        composable(Route.JOURNAL_ENTRY_SCREEN) {
+                        composable(Route.ADD_WORKOUT_SCREEN) {
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
                             }
@@ -289,9 +290,9 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 snackBarHostState = snackBarState,
                                 mainScreen = { mainModifier ->
-                                    JournalEntryScreen(
+                                    AddWorkoutScreen(
                                         modifier = mainModifier,
-                                        journalEntryState = journalEntryViewModel.journalEntryState,
+                                        journalEntryState = addWorkoutViewModel.journalEntryState,
                                         navigateToDestination = {
                                             showChildFabs = false
                                             navigateToDestination(
@@ -321,10 +322,10 @@ class MainActivity : ComponentActivity() {
                                 bottomBarVisibility = bottomBarVisibility.value
                             )
                         }
-                        composable("${Route.JOURNAL_ENTRY_DETAILS}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}") { backStackEntry ->
+                        composable("${Route.ADD_WORKOUT_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}") { backStackEntry ->
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
-                                journalEntryDetailsViewModel.addWorkoutNameAndType(
+                                addWorkoutDetailViewModel.addWorkoutNameAndType(
                                     workoutName = backStackEntry.arguments?.getString("workoutName")
                                         ?: "",
                                     workoutType = backStackEntry.arguments?.getString("workoutType")
@@ -336,20 +337,28 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier,
                                 snackBarHostState = snackBarState,
                                 mainScreen = { mainModifier ->
-                                    JournalEntryDetailsScreen(
+                                    AddWorkoutDetailScreen(
                                         modifier = mainModifier,
-                                        journalEntryDetailsUiState = journalEntryDetailsViewModel.journalEntryDetailsUiState,
+                                        addWorkoutDetailUiState = addWorkoutDetailViewModel.addWorkoutDetailUiState,
                                         showSnackbar = {
                                             showSnackBar(
                                                 snackBarHostState = snackBarState,
                                                 message = it
                                             )
                                         },
-                                        navigateToJournal = {
-                                            navigateToDestination(
-                                                navigationInterface = it,
-                                                navController = navController
-                                            )
+                                        navigateBackToAddWorkoutScreen = {
+                                            navController.navigateUp()
+                                        },
+                                        navigateBackToJournal = {
+                                            navController.navigateUp()
+                                            navController.navigateUp()
+
+                                            lifecycleScope.launch {
+                                                showSnackBar(
+                                                    snackBarHostState = snackBarState,
+                                                    message = it
+                                                )
+                                            }
                                         }
                                     )
                                 },
@@ -361,18 +370,6 @@ class MainActivity : ComponentActivity() {
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
-                                        },
-                                        endAlignedActionIcon = {
-                                            IconButton(onClick = {
-                                                navController.navigateUp()
-                                                navController.navigateUp()
-//                                                journalEntryViewModel.save()
-                                            }) {
-                                                Text(
-                                                    text = "Save",
-                                                    style = MaterialTheme.typography.titleMedium
-                                                )
-                                            }
                                         },
                                         navigationIcon = {
                                             NavigateUpIconButton(

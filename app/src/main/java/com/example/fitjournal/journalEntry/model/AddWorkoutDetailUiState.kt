@@ -9,11 +9,11 @@ import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
-import com.example.fitjournal.journalEntry.model.events.JournalEntryDetailsEvents
+import com.example.fitjournal.journalEntry.model.events.AddWorkoutDetailEvents
 import java.time.LocalDate
 
-data class JournalEntryDetailsUiState(
-    val journalEntryDetailsEvents: (JournalEntryDetailsEvents) -> Unit,
+data class AddWorkoutDetailUiState(
+    val addWorkoutDetailEvents: (AddWorkoutDetailEvents) -> Unit,
     val workoutName: String = "",
     val workoutType: String = "",
     val workoutTypeEnum: WorkoutTypeEnum? = null,

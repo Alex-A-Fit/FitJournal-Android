@@ -5,66 +5,66 @@ import com.example.fitjournal.core.presentation.commoncomponents.customcomponent
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.commoncomponents.EditWorkoutSetsSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.components.EditWorkoutMandatoryWeightSection
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
-import com.example.fitjournal.journalEntry.model.JournalEntryDetailsUiState
-import com.example.fitjournal.journalEntry.model.events.JournalEntryDetailsEvents
+import com.example.fitjournal.journalEntry.model.AddWorkoutDetailUiState
+import com.example.fitjournal.journalEntry.model.events.AddWorkoutDetailEvents
 
 @Composable
 fun AddWorkoutWeightLifting(
-    journalEntryDetailsUiState: JournalEntryDetailsUiState
+    addWorkoutDetailUiState: AddWorkoutDetailUiState
 ) {
     EditWorkoutSetsSection(
-        isErrorVisible = journalEntryDetailsUiState.isSetsErrorVisible,
+        isErrorVisible = addWorkoutDetailUiState.isSetsErrorVisible,
         editSetsValue = { editWorkoutFunction: EditWorkoutFunction, setValue: String ->
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.EditSets(
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.EditSets(
                     editWorkoutFunction = editWorkoutFunction,
                     setValue = setValue
                 )
             )
         },
-        setsValue = journalEntryDetailsUiState.sets,
+        setsValue = addWorkoutDetailUiState.sets,
         onSetValueChange = {
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.OnSetValueChange(
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.OnSetValueChange(
                     it
                 )
             )
         }
     )
     EditWorkoutRepsSection(
-        isRepsErrorVisible = journalEntryDetailsUiState.isRepsErrorVisible,
+        isRepsErrorVisible = addWorkoutDetailUiState.isRepsErrorVisible,
         editRepValue = { editWorkoutFunction: EditWorkoutFunction, repValue: String ->
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.EditReps(
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.EditReps(
                     editWorkoutFunction = editWorkoutFunction,
                     repValue = repValue
                 )
             )
         },
-        repValue = journalEntryDetailsUiState.reps,
+        repValue = addWorkoutDetailUiState.reps,
         onRepValueChange = {
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.OnRepValueChange(
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.OnRepValueChange(
                     it
                 )
             )
         }
     )
     EditWorkoutMandatoryWeightSection(
-        isWeightErrorVisible = journalEntryDetailsUiState.isWeightErrorVisible,
-        poundsOrKilogramsText = journalEntryDetailsUiState.weightType.stringValue,
-        weightValue = journalEntryDetailsUiState.weight,
+        isWeightErrorVisible = addWorkoutDetailUiState.isWeightErrorVisible,
+        poundsOrKilogramsText = addWorkoutDetailUiState.weightType.stringValue,
+        weightValue = addWorkoutDetailUiState.weight,
         onWeightTypeClicked = {
-            journalEntryDetailsUiState.journalEntryDetailsEvents(JournalEntryDetailsEvents.EditWeightType)
+            addWorkoutDetailUiState.addWorkoutDetailEvents(AddWorkoutDetailEvents.EditWeightType)
         },
         onWeightValueChange = {
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.OnWeightValueChange(it)
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.OnWeightValueChange(it)
             )
         },
         editWeightValue = { editWorkoutFunction: EditWorkoutFunction, weightValue: String ->
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.EditWeight(
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.EditWeight(
                     editWorkoutFunction = editWorkoutFunction,
                     weightValue = weightValue
                 )

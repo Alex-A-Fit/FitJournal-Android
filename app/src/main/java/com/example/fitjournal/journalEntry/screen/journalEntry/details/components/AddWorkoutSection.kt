@@ -7,12 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.journalEntry.model.JournalEntryDetailsUiState
+import com.example.fitjournal.journalEntry.model.AddWorkoutDetailUiState
 
 @Composable
 fun AddWorkoutSection(
     workoutType: WorkoutTypeEnum,
-    journalEntryDetailsUiState: JournalEntryDetailsUiState
+    addWorkoutDetailUiState: AddWorkoutDetailUiState
 ) {
     Column(
         modifier = Modifier
@@ -25,13 +25,13 @@ fun AddWorkoutSection(
     ) {
         when (workoutType) {
             WorkoutTypeEnum.CARDIO -> {
-                AddWorkoutCardio(journalEntryDetailsUiState = journalEntryDetailsUiState)
+                AddWorkoutCardio(addWorkoutDetailUiState = addWorkoutDetailUiState)
             }
             WorkoutTypeEnum.CALISTHENICS -> {
-                AddWorkoutCalisthenics(journalEntryDetailsUiState = journalEntryDetailsUiState)
+                AddWorkoutCalisthenics(addWorkoutDetailUiState = addWorkoutDetailUiState)
             }
             WorkoutTypeEnum.WEIGHT_TRAINING -> {
-                AddWorkoutWeightLifting(journalEntryDetailsUiState = journalEntryDetailsUiState)
+                AddWorkoutWeightLifting(addWorkoutDetailUiState = addWorkoutDetailUiState)
             }
         }
     }

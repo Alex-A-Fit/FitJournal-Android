@@ -6,41 +6,53 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fitjournal.R
+import com.example.fitjournal.core.data.model.results.Result
 import com.example.fitjournal.core.data.util.getWorkoutType
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
+import com.example.fitjournal.core.domain.model.WorkoutDetailsModel
+import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import com.example.fitjournal.home.presentation.model.enum.EditWorkoutListFunctions
 import com.example.fitjournal.home.presentation.model.ui.CalisthenicsValidator
 import com.example.fitjournal.home.presentation.model.ui.CardioValidator
 import com.example.fitjournal.home.presentation.model.ui.WeightLiftingValidator
-import com.example.fitjournal.journalEntry.model.JournalEntryDetailsUiState
-import com.example.fitjournal.journalEntry.model.events.JournalEntryDetailsEvents
+import com.example.fitjournal.journalEntry.model.AddWorkoutDetailUiState
+import com.example.fitjournal.journalEntry.model.events.AddWorkoutDetailEvents
+import com.example.fitjournal.statistics.domain.mapper.toRealmWorkoutEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import org.mongodb.kbson.ObjectId
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class JournalEntryDetailsViewModel @Inject constructor(
+class AddWorkoutDetailViewModel @Inject constructor(
     private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase,
     private val editWorkoutUseCase: EditWorkoutUseCase
 ) : ViewModel() {
-    var journalEntryDetailsUiState: JournalEntryDetailsUiState by mutableStateOf(
-        JournalEntryDetailsUiState(
-            journalEntryDetailsEvents = ::journalEntryDetailsEvents
+    var addWorkoutDetailUiState: AddWorkoutDetailUiState by mutableStateOf(
+        AddWorkoutDetailUiState(
+            addWorkoutDetailEvents = ::journalEntryDetailsEvents
         )
     )
         private set
 
-    fun journalEntryDetailsEvents(event: JournalEntryDetailsEvents) {
+    private var addWorkoutJob: Job? = null
+
+    private fun journalEntryDetailsEvents(event: AddWorkoutDetailEvents) {
         when (event) {
-            is JournalEntryDetailsEvents.AddNewCalisthenicSetToWorkout -> {
+            is AddWorkoutDetailEvents.AddNewCalisthenicSetToWorkout -> {
                 val adjustedTimeValues =
                     editWorkoutUseCase.adjustTimeValuesUseCase(event.newCalisthenicItem.time)
                 event.newCalisthenicItem.time = adjustedTimeValues
@@ -52,7 +64,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
                         newCalisthenicsItem = event.newCalisthenicItem
                     )
                     updateWorkoutState(
-                        newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                        newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                             calisthenicsPropertyList = newPropsModel?.getCalisthenicsProps()
                                 ?: mutableStateListOf(),
                             reps = "",
@@ -66,7 +78,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
                 }
             }
 
-            is JournalEntryDetailsEvents.AddNewCardioSetToWorkout -> {
+            is AddWorkoutDetailEvents.AddNewCardioSetToWorkout -> {
                 val adjustedTimeValues =
                     editWorkoutUseCase.adjustMandatoryTimeValuesUseCase(event.newCardioItem.time)
                 event.newCardioItem.time = adjustedTimeValues
@@ -78,7 +90,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
                         newCardioItem = event.newCardioItem
                     )
                     updateWorkoutState(
-                        newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                        newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                             cardioPropertyList = newPropsModel?.getCardioProps()
                                 ?: mutableStateListOf(),
                             laps = "",
@@ -91,7 +103,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
                 }
             }
 
-            is JournalEntryDetailsEvents.AddNewWeightTrainingSetToWorkout -> {
+            is AddWorkoutDetailEvents.AddNewWeightTrainingSetToWorkout -> {
                 val workoutValidity = areWeightLiftingPropertiesValid()
                 if (workoutValidity.isWorkoutValid()) {
                     val newPropsModel = getNewWorkoutPropertiesModel(
@@ -100,7 +112,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
                         newWeightLiftingItem = event.newWeightLiftingItem
                     )
                     updateWorkoutState(
-                        newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                        newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                             weightLiftingPropertyList = newPropsModel?.getWeightLiftingProps()
                                 ?: mutableStateListOf(),
                             reps = "",
@@ -111,12 +123,12 @@ class JournalEntryDetailsViewModel @Inject constructor(
                 }
             }
 
-            is JournalEntryDetailsEvents.ClearWorkoutTextFields -> {
+            is AddWorkoutDetailEvents.ClearWorkoutTextFields -> {
                 clearWorkoutFields(event.workoutTypeEnum)
             }
 
-            is JournalEntryDetailsEvents.DeleteWorkoutSetItemInWorkoutModelList -> {
-                val workoutType = journalEntryDetailsUiState.workoutTypeEnum
+            is AddWorkoutDetailEvents.DeleteWorkoutSetItemInWorkoutModelList -> {
+                val workoutType = addWorkoutDetailUiState.workoutTypeEnum
                 if (workoutType == null) {
                     viewModelScope.launch {
                         event.onDeleteErrorCallback()
@@ -136,7 +148,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
                         return
                     }
                     updateWorkoutState(
-                        newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                        newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                             weightLiftingPropertyList = newPropertiesModel.getWeightLiftingProps(),
                             cardioPropertyList = newPropertiesModel.getCardioProps(),
                             calisthenicsPropertyList = newPropertiesModel.getCalisthenicsProps(),
@@ -152,51 +164,51 @@ class JournalEntryDetailsViewModel @Inject constructor(
                 }
             }
 
-            is JournalEntryDetailsEvents.EditDistance -> {
+            is AddWorkoutDetailEvents.EditDistance -> {
                 addOrSubtractDistance(
                     editWorkoutFunction = event.editWorkoutFunction,
                     distanceValue = event.value
                 )
             }
 
-            JournalEntryDetailsEvents.EditDistanceType -> {
-                val newDistanceType = journalEntryDetailsUiState.distanceType.getOtherDistanceType()
+            AddWorkoutDetailEvents.EditDistanceType -> {
+                val newDistanceType = addWorkoutDetailUiState.distanceType.getOtherDistanceType()
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         distanceType = newDistanceType
                     )
                 )
             }
 
-            is JournalEntryDetailsEvents.EditLaps -> {
+            is AddWorkoutDetailEvents.EditLaps -> {
                 addOrSubtractLaps(
                     editWorkoutFunction = event.editWorkoutFunction,
                     lapValue = event.value
                 )
             }
 
-            is JournalEntryDetailsEvents.EditReps -> {
+            is AddWorkoutDetailEvents.EditReps -> {
                 addOrSubtractReps(
                     editWorkoutFunction = event.editWorkoutFunction,
                     repValue = event.repValue
                 )
             }
 
-            is JournalEntryDetailsEvents.EditSets -> {
+            is AddWorkoutDetailEvents.EditSets -> {
                 addOrSubtractSets(
                     editWorkoutFunction = event.editWorkoutFunction,
                     setValue = event.setValue
                 )
             }
 
-            is JournalEntryDetailsEvents.EditTime -> {
+            is AddWorkoutDetailEvents.EditTime -> {
                 updateTimeValue(
                     value = event.value,
                     timeDeterminate = event.timeDeterminate
                 )
             }
 
-            is JournalEntryDetailsEvents.EditWeight -> {
+            is AddWorkoutDetailEvents.EditWeight -> {
                 addOrSubtractWeight(
                     editWorkoutFunction = event.editWorkoutFunction,
                     weightValue = event.weightValue,
@@ -204,68 +216,83 @@ class JournalEntryDetailsViewModel @Inject constructor(
                 )
             }
 
-            JournalEntryDetailsEvents.EditWeightType -> {
-                val getOtherWeightType = journalEntryDetailsUiState.weightType.getOtherWeightType()
+            AddWorkoutDetailEvents.EditWeightType -> {
+                val getOtherWeightType = addWorkoutDetailUiState.weightType.getOtherWeightType()
                 updateWorkoutState(
-                    journalEntryDetailsUiState.copy(
+                    addWorkoutDetailUiState.copy(
                         weightType = getOtherWeightType
                     )
                 )
             }
 
-            is JournalEntryDetailsEvents.OnDistanceValueChange -> {
+            is AddWorkoutDetailEvents.OnDistanceValueChange -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         distance = event.distanceValue,
                         isDistanceErrorVisible = false
                     )
                 )
             }
 
-            is JournalEntryDetailsEvents.OnLapsValueChange -> {
+            is AddWorkoutDetailEvents.OnLapsValueChange -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         laps = event.lapValue,
                         isLapsErrorVisible = false
                     )
                 )
             }
 
-            is JournalEntryDetailsEvents.OnRepValueChange -> {
+            is AddWorkoutDetailEvents.OnRepValueChange -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         reps = event.repValue,
                         isRepsErrorVisible = false
                     )
                 )
             }
 
-            is JournalEntryDetailsEvents.OnSetValueChange -> {
+            is AddWorkoutDetailEvents.OnSetValueChange -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         sets = event.setValue,
                         isSetsErrorVisible = false
                     )
                 )
             }
 
-            is JournalEntryDetailsEvents.OnWeightValueChange -> {
+            is AddWorkoutDetailEvents.OnWeightValueChange -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         weight = event.weightValue,
                         isWeightErrorVisible = false
                     )
                 )
             }
 
-            is JournalEntryDetailsEvents.UpdateWorkoutListItem -> TODO()
-            JournalEntryDetailsEvents.ClearViewModelState -> {
-                journalEntryDetailsUiState = JournalEntryDetailsUiState(
-                    workoutName = journalEntryDetailsUiState.workoutName,
-                    workoutType = journalEntryDetailsUiState.workoutType,
-                    workoutTypeEnum = journalEntryDetailsUiState.workoutTypeEnum,
-                    journalEntryDetailsEvents = ::journalEntryDetailsEvents
+            is AddWorkoutDetailEvents.UpdateWorkoutListItem -> TODO()
+            AddWorkoutDetailEvents.ClearViewModelState -> {
+                addWorkoutDetailUiState = AddWorkoutDetailUiState(
+                    workoutName = addWorkoutDetailUiState.workoutName,
+                    workoutType = addWorkoutDetailUiState.workoutType,
+                    workoutTypeEnum = addWorkoutDetailUiState.workoutTypeEnum,
+                    addWorkoutDetailEvents = ::journalEntryDetailsEvents
                 )
+            }
+
+            is AddWorkoutDetailEvents.AddWorkoutToRealm -> {
+                addWorkoutJob = viewModelScope.launch {
+                    addWorkoutToRealm { realmResult ->
+                        event.callback(realmResult)
+                    }
+                }
+                addWorkoutJob?.start()
+            }
+
+            AddWorkoutDetailEvents.StopAddWorkoutJob -> {
+                if (addWorkoutJob != null) {
+                    addWorkoutJob?.cancel("User clicked back button")
+                }
             }
         }
     }
@@ -284,7 +311,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
                     EditWorkoutListFunctions.ADD_WORKOUT_ITEM -> {
                         if (newWeightLiftingItem != null) {
                             val weightTrainingWorkoutList =
-                                journalEntryDetailsUiState.weightLiftingPropertyList
+                                addWorkoutDetailUiState.weightLiftingPropertyList
                             weightTrainingWorkoutList.add(newWeightLiftingItem)
                             WorkoutPropertiesModel
                                 .WeightLiftingProps(weightTrainingWorkoutList)
@@ -295,7 +322,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
 
                     EditWorkoutListFunctions.DELETE_WORKOUT_ITEM -> {
                         val weightTrainingWorkoutList =
-                            journalEntryDetailsUiState.weightLiftingPropertyList
+                            addWorkoutDetailUiState.weightLiftingPropertyList
                         weightTrainingWorkoutList.removeAt(index)
                         WorkoutPropertiesModel
                             .WeightLiftingProps(weightTrainingWorkoutList)
@@ -308,7 +335,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
                     EditWorkoutListFunctions.ADD_WORKOUT_ITEM -> {
                         if (newCalisthenicsItem != null) {
                             val calisthenicsWorkoutList =
-                                journalEntryDetailsUiState.calisthenicsPropertyList
+                                addWorkoutDetailUiState.calisthenicsPropertyList
                             calisthenicsWorkoutList.add(newCalisthenicsItem)
                             WorkoutPropertiesModel
                                 .CalisthenicsProps(calisthenicsWorkoutList)
@@ -319,7 +346,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
 
                     EditWorkoutListFunctions.DELETE_WORKOUT_ITEM -> {
                         val calisthenicsWorkoutList =
-                            journalEntryDetailsUiState.calisthenicsPropertyList
+                            addWorkoutDetailUiState.calisthenicsPropertyList
                         calisthenicsWorkoutList.removeAt(index)
                         WorkoutPropertiesModel
                             .CalisthenicsProps(calisthenicsWorkoutList)
@@ -332,7 +359,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
                     EditWorkoutListFunctions.ADD_WORKOUT_ITEM -> {
                         if (newCardioItem != null) {
                             val cardioWorkoutList =
-                                journalEntryDetailsUiState.cardioPropertyList
+                                addWorkoutDetailUiState.cardioPropertyList
                             cardioWorkoutList.add(newCardioItem)
                             WorkoutPropertiesModel
                                 .CardioProps(cardioWorkoutList)
@@ -342,7 +369,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
                     }
 
                     EditWorkoutListFunctions.DELETE_WORKOUT_ITEM -> {
-                        val cardioWorkoutList = journalEntryDetailsUiState.cardioPropertyList
+                        val cardioWorkoutList = addWorkoutDetailUiState.cardioPropertyList
                         cardioWorkoutList.removeAt(index)
                         WorkoutPropertiesModel
                             .CardioProps(cardioWorkoutList)
@@ -356,16 +383,16 @@ class JournalEntryDetailsViewModel @Inject constructor(
         workoutProperties: CardioModel
     ): CardioValidator {
         val workoutTime = workoutProperties.time
-        val isLapsValid = if (journalEntryDetailsUiState.laps != "") {
-            editWorkoutUseCase.isDoubleValidUseCase(journalEntryDetailsUiState.laps)
+        val isLapsValid = if (addWorkoutDetailUiState.laps != "") {
+            editWorkoutUseCase.isDoubleValidUseCase(addWorkoutDetailUiState.laps)
         } else {
             true
         }
         val isDistanceValid =
-            editWorkoutUseCase.isDoubleValidUseCase(journalEntryDetailsUiState.distance)
+            editWorkoutUseCase.isDoubleValidUseCase(addWorkoutDetailUiState.distance)
         val isTimeValid = editWorkoutUseCase.isTimeValidUseCase(workoutTime)
         updateWorkoutState(
-            newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 isLapsErrorVisible = !isLapsValid,
                 isDistanceErrorVisible = !isDistanceValid,
                 isTimeErrorVisible = !isTimeValid
@@ -382,20 +409,20 @@ class JournalEntryDetailsViewModel @Inject constructor(
         workoutProperties: CalisthenicsModel
     ): CalisthenicsValidator {
         val workoutTime = workoutProperties.time
-        val isRepsValid = editWorkoutUseCase.isIntegerValidUseCase(journalEntryDetailsUiState.reps)
-        val isSetsValid = editWorkoutUseCase.isIntegerValidUseCase(journalEntryDetailsUiState.sets)
+        val isRepsValid = editWorkoutUseCase.isIntegerValidUseCase(addWorkoutDetailUiState.reps)
+        val isSetsValid = editWorkoutUseCase.isIntegerValidUseCase(addWorkoutDetailUiState.sets)
         val isTimeValid =
             if (workoutTime != null) editWorkoutUseCase.isTimeValidUseCase(workoutTime) else true
         val isWeightValid =
             if (workoutProperties.weight != null) {
                 editWorkoutUseCase.isDoubleValidUseCase(
-                    journalEntryDetailsUiState.weight
+                    addWorkoutDetailUiState.weight
                 )
             } else {
                 true
             }
         updateWorkoutState(
-            newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 isRepsErrorVisible = !isRepsValid,
                 isSetsErrorVisible = !isSetsValid,
                 isWeightErrorVisible = !isWeightValid,
@@ -411,12 +438,12 @@ class JournalEntryDetailsViewModel @Inject constructor(
     }
 
     private fun areWeightLiftingPropertiesValid(): WeightLiftingValidator {
-        val isRepsValid = editWorkoutUseCase.isIntegerValidUseCase(journalEntryDetailsUiState.reps)
-        val isSetsValid = editWorkoutUseCase.isIntegerValidUseCase(journalEntryDetailsUiState.sets)
+        val isRepsValid = editWorkoutUseCase.isIntegerValidUseCase(addWorkoutDetailUiState.reps)
+        val isSetsValid = editWorkoutUseCase.isIntegerValidUseCase(addWorkoutDetailUiState.sets)
         val isWeightValid =
-            editWorkoutUseCase.isDoubleValidUseCase(journalEntryDetailsUiState.weight)
+            editWorkoutUseCase.isDoubleValidUseCase(addWorkoutDetailUiState.weight)
         updateWorkoutState(
-            newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 isRepsErrorVisible = !isRepsValid,
                 isSetsErrorVisible = !isSetsValid,
                 isWeightErrorVisible = !isWeightValid
@@ -438,7 +465,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
             value = repValue
         )
         updateWorkoutState(
-            newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 reps = newRepValue,
                 isRepsErrorVisible = false
             )
@@ -454,7 +481,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
             value = setValue
         )
         updateWorkoutState(
-            newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 sets = newSetValue,
                 isSetsErrorVisible = false
             )
@@ -472,7 +499,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
             valueDifferential = valueDifferential
         )
         updateWorkoutState(
-            newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 weight = newWeightValue,
                 isWeightErrorVisible = false
             )
@@ -488,7 +515,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
             value = lapValue
         )
         updateWorkoutState(
-            newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 laps = newLapValue,
                 isLapsErrorVisible = false
             )
@@ -504,7 +531,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
             value = distanceValue
         )
         updateWorkoutState(
-            newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 distance = newDistanceValue,
                 isDistanceErrorVisible = false
             )
@@ -515,7 +542,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
         when (workoutTypeEnum) {
             WorkoutTypeEnum.WEIGHT_TRAINING -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         reps = "",
                         sets = "",
                         weight = "",
@@ -528,7 +555,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
 
             WorkoutTypeEnum.CALISTHENICS -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         reps = "",
                         sets = "",
                         weight = "",
@@ -545,7 +572,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
 
             WorkoutTypeEnum.CARDIO -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         laps = "",
                         distance = "",
                         hour = "",
@@ -567,7 +594,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
         when (timeDeterminate) {
             EditWorkoutTimeDeterminate.HOUR -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         hour = value
                     )
                 )
@@ -575,7 +602,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
 
             EditWorkoutTimeDeterminate.MINUTE -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         minute = value
                     )
                 )
@@ -583,7 +610,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
 
             EditWorkoutTimeDeterminate.SECOND -> {
                 updateWorkoutState(
-                    newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                         second = value
                     )
                 )
@@ -593,7 +620,7 @@ class JournalEntryDetailsViewModel @Inject constructor(
 
     fun addWorkoutNameAndType(workoutName: String, workoutType: String) {
         updateWorkoutState(
-            newJournalEntryDetailsUiState = journalEntryDetailsUiState.copy(
+            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 workoutName = workoutName,
                 workoutType = workoutType,
                 workoutTypeEnum = getWorkoutType(workoutType)
@@ -601,7 +628,87 @@ class JournalEntryDetailsViewModel @Inject constructor(
         )
     }
 
-    private fun updateWorkoutState(newJournalEntryDetailsUiState: JournalEntryDetailsUiState) {
-        journalEntryDetailsUiState = newJournalEntryDetailsUiState
+    private fun updateWorkoutState(newAddWorkoutDetailUiState: AddWorkoutDetailUiState) {
+        addWorkoutDetailUiState = newAddWorkoutDetailUiState
+    }
+
+    private suspend fun addWorkoutToRealm(
+        callback: (Result) -> Unit
+    ) {
+        val newId = ObjectId().toHexString()
+        val newDate = LocalDate.now().formatToCommonDate()
+        when (addWorkoutDetailUiState.workoutTypeEnum) {
+            WorkoutTypeEnum.WEIGHT_TRAINING -> {
+                val newWorkoutModel = WorkoutModel(
+                    id = newId,
+                    workoutDetailsModel = WorkoutDetailsModel(
+                        name = addWorkoutDetailUiState.workoutName,
+                        icon = R.drawable.icon_dumbell,
+                        workoutTypeEnum = WorkoutTypeEnum.WEIGHT_TRAINING,
+                        workoutPropertiesModel = WorkoutPropertiesModel
+                            .WeightLiftingProps(addWorkoutDetailUiState.weightLiftingPropertyList)
+                    ),
+                    date = newDate
+                )
+                saveToRealm(
+                    workoutModel = newWorkoutModel,
+                    callback = callback
+                )
+            }
+
+            WorkoutTypeEnum.CALISTHENICS -> {
+                val newWorkoutModel = WorkoutModel(
+                    id = newId,
+                    workoutDetailsModel = WorkoutDetailsModel(
+                        name = addWorkoutDetailUiState.workoutName,
+                        icon = R.drawable.icon_person,
+                        workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
+                        workoutPropertiesModel = WorkoutPropertiesModel
+                            .CalisthenicsProps(addWorkoutDetailUiState.calisthenicsPropertyList)
+                    ),
+                    date = newDate
+                )
+                saveToRealm(
+                    workoutModel = newWorkoutModel,
+                    callback = callback
+                )
+            }
+
+            WorkoutTypeEnum.CARDIO -> {
+                val newWorkoutModel = WorkoutModel(
+                    id = newId,
+                    workoutDetailsModel = WorkoutDetailsModel(
+                        name = addWorkoutDetailUiState.workoutName,
+                        icon = R.drawable.icon_sprinting_person,
+                        workoutTypeEnum = WorkoutTypeEnum.CARDIO,
+                        workoutPropertiesModel = WorkoutPropertiesModel
+                            .CardioProps(addWorkoutDetailUiState.cardioPropertyList)
+                    ),
+                    date = newDate
+                )
+                saveToRealm(
+                    workoutModel = newWorkoutModel,
+                    callback = callback
+                )
+            }
+
+            null -> callback(Result.FAILURE)
+        }
+    }
+
+    private suspend fun saveToRealm(
+        workoutModel: WorkoutModel,
+        callback: (Result) -> Unit
+    ) {
+        try {
+            val realmWorkout = workoutModel.toRealmWorkoutEntry(addWorkoutDetailUiState.workoutType)
+            val isAddSuccess =
+                realmWorkoutEntryUseCase.addSingleWorkoutEntryToRealmDbUseCase(realmWorkout)
+            if (isAddSuccess) callback(Result.SUCCESS) else callback(Result.FAILURE)
+        } catch (e: IllegalArgumentException) {
+            callback(Result.FAILURE)
+        } catch (e: Exception) {
+            callback(Result.FAILURE)
+        }
     }
 }

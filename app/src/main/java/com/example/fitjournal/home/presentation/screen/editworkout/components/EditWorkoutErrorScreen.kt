@@ -1,4 +1,4 @@
-package com.example.fitjournal.home.presentation.components.editworkout
+package com.example.fitjournal.home.presentation.screen.editworkout.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

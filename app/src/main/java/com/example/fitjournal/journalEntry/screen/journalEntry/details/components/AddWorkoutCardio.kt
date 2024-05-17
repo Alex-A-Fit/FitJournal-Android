@@ -6,26 +6,26 @@ import com.example.fitjournal.core.presentation.commoncomponents.customcomponent
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.components.EditWorkoutOptionalLapsSection
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
-import com.example.fitjournal.journalEntry.model.JournalEntryDetailsUiState
-import com.example.fitjournal.journalEntry.model.events.JournalEntryDetailsEvents
+import com.example.fitjournal.journalEntry.model.AddWorkoutDetailUiState
+import com.example.fitjournal.journalEntry.model.events.AddWorkoutDetailEvents
 
 @Composable
 fun AddWorkoutCardio(
-    journalEntryDetailsUiState: JournalEntryDetailsUiState
+    addWorkoutDetailUiState: AddWorkoutDetailUiState
 ) {
     EditWorkoutOptionalLapsSection(
-        isLapsErrorVisible = journalEntryDetailsUiState.isLapsErrorVisible,
-        lapsValue = journalEntryDetailsUiState.laps,
+        isLapsErrorVisible = addWorkoutDetailUiState.isLapsErrorVisible,
+        lapsValue = addWorkoutDetailUiState.laps,
         onLapsValueChange = {
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.OnLapsValueChange(
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.OnLapsValueChange(
                     it
                 )
             )
         },
         editLapsEvent = { editWorkoutFunction: EditWorkoutFunction, lapValue: String ->
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.EditLaps(
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.EditLaps(
                     editWorkoutFunction,
                     lapValue
                 )
@@ -33,24 +33,24 @@ fun AddWorkoutCardio(
         }
     )
     EditWorkoutDistanceSection(
-        isDistanceErrorVisible = journalEntryDetailsUiState.isDistanceErrorVisible,
-        distanceType = journalEntryDetailsUiState.distanceType,
-        distanceValue = journalEntryDetailsUiState.distance,
+        isDistanceErrorVisible = addWorkoutDetailUiState.isDistanceErrorVisible,
+        distanceType = addWorkoutDetailUiState.distanceType,
+        distanceValue = addWorkoutDetailUiState.distance,
         editDistanceTypeEvent = {
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.EditDistanceType
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.EditDistanceType
             )
         },
         onDistanceValueChange = {
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.OnDistanceValueChange(
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.OnDistanceValueChange(
                     it
                 )
             )
         },
         editDistanceEvent = { editWorkoutFunction: EditWorkoutFunction, distanceValue: String ->
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.EditDistance(
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.EditDistance(
                     editWorkoutFunction = editWorkoutFunction,
                     value = distanceValue
                 )
@@ -59,13 +59,13 @@ fun AddWorkoutCardio(
 
     )
     EditWorkoutMandatoryTimeSection(
-        isTimeErrorVisible = journalEntryDetailsUiState.isTimeErrorVisible,
-        hourValue = journalEntryDetailsUiState.hour,
-        minuteValue = journalEntryDetailsUiState.minute,
-        secondValue = journalEntryDetailsUiState.second,
+        isTimeErrorVisible = addWorkoutDetailUiState.isTimeErrorVisible,
+        hourValue = addWorkoutDetailUiState.hour,
+        minuteValue = addWorkoutDetailUiState.minute,
+        secondValue = addWorkoutDetailUiState.second,
         onTimeValueChanged = { newValue: String, editWorkoutTimeDeterminate: EditWorkoutTimeDeterminate ->
-            journalEntryDetailsUiState.journalEntryDetailsEvents(
-                JournalEntryDetailsEvents.EditTime(
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.EditTime(
                     value = newValue,
                     timeDeterminate = editWorkoutTimeDeterminate
                 )

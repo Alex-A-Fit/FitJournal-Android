@@ -34,6 +34,7 @@
     <string name="title_create_new_workout">Add New Workout</string>
     <string name="text_edit_workout_title">%1$s (%2$s)</string>
     <string name="title_edit_workout_error">Sorry, the workout you selected could not be found</string>
+    <string name="title_add_workout_error">Sorry, the workout you selected can not be added to your journal. Please go back and try again.</string>
     <string name="title_delete_workout">Are you sure you want to delete \"%1$s\"</string>
 
     // SubTitle Strings
@@ -64,6 +65,7 @@
     <string name="text_edit_your_workout">Edit Your Workout Below</string>
     <string name="text_date_and_date_value">Created on: %1$s</string>
     <string name="text_back_to_journal">Go back to Journal</string>
+    <string name="text_back_to_add_workout_list">Go back to Workout List</string>
     <string name="text_not_applicable">N/A</string>
 
     // labels
@@ -98,6 +100,7 @@
 
     // Success Strings
     <string name="text_workout_successfully_added_to_library">\"%1$s\" was added to your Library!</string>
+    <string name="text_workout_successfully_added_to_journal">\"%1$s\" was added to your Journal!</string>
 
     // Error Strings
     <string name="error_with_workout_being_added_to_library">\"%1$s\" could not be added. Please Try Again.</string>
@@ -111,6 +114,7 @@
     <string name="error_with_adding_laps">Please enter a valid number of laps</string>
     <string name="error_with_adding_time">Please enter a valid time</string>
     <string name="error_no_details_found">No details found for this workout</string>
+    <string name="error_add_workout_canceled">Adding workout to journal was cancelled</string>
 
     // Placeholder strings
     <string name="text_library_searchbar_placeholder">Search for workout</string>

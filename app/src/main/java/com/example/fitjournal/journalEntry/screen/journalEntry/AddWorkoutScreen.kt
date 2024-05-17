@@ -20,7 +20,7 @@ import com.example.fitjournal.journalEntry.model.JournalEntryUiModel
 import com.example.fitjournal.journalEntry.model.events.JournalEntryEvents
 
 @Composable
-fun JournalEntryScreen(
+fun AddWorkoutScreen(
     modifier: Modifier,
     journalEntryState: JournalEntryUiModel,
     navigateToDestination: (NavigationInterface) -> Unit
