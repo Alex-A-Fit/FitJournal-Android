@@ -247,7 +247,7 @@ fun WorkoutTypeSubtitle() {
 }
 
 @Composable
-private fun WorkoutTypeSuggestions(
+fun WorkoutTypeSuggestions(
     updateWorkoutTypeChosen: (WorkoutTypeEnum) -> Unit,
     workoutTypeChosen: WorkoutTypeEnum?
 ) {

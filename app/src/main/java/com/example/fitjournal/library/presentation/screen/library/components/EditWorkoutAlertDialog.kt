@@ -3,14 +3,14 @@ package com.example.fitjournal.library.presentation.screen.library.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,9 +23,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.CreateWorkoutSubtitle
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.WorkoutNameTextField
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.WorkoutTypeSubtitle
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.WorkoutTypeSuggestions
+import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
@@ -38,33 +42,61 @@ fun EditWorkoutAlertDialog(
     val gradient = Brush.linearGradient(
         0.0f to MaterialTheme.colorScheme.primary,
         1.0f to Color.White,
-        start = Offset.Zero,
-        end = Offset.Infinite
+        start = Offset.Infinite,
+        end = Offset.Zero
     )
 
     Dialog(onDismissRequest = { onDismissRequest() }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
-        Box {
-            Card(
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.95F)
+                .background(gradient, shape = RoundedCornerShape(Spacing.spacing16))
+        ) {
+            Column(
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(0.95F),
-                shape = RoundedCornerShape(16.dp)
+                    .fillMaxSize()
+                    .padding(horizontal = Spacing.spacing16)
             ) {
-                Column(
+                Text(
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontWeight = FontWeight.Bold,
+                    text = dialogTitle,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(gradient)
-                        .padding(horizontal = Spacing.spacing16)
-                ) {
-                    Text(
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontWeight = FontWeight.Bold,
-                        text = dialogTitle,
-                        modifier = Modifier
-                            .padding(Spacing.spacing16)
-                            .align(alignment = Alignment.CenterHorizontally)
+                        .padding(Spacing.spacing16)
+                        .align(alignment = Alignment.CenterHorizontally)
+                )
+
+                Spacer(modifier = Modifier.height(Spacing.spacing16))
+                Column {
+                    // TODO Change 'Workout Name' text
+                    CreateWorkoutSubtitle()
+
+                    Spacer(modifier = Modifier.height(Spacing.spacing16))
+
+                    // TODO Make TextField work
+                    WorkoutNameTextField(
+                        workoutNameValue = dialogTitle,
+                        updateWorkoutName = {}
                     )
+
+                    Spacer(modifier = Modifier.height(Spacing.spacing16))
+
+                    WorkoutTypeSubtitle()
+
+                    Spacer(modifier = Modifier.height(Spacing.spacing8))
+
+                    // TODO add functionality
+                    WorkoutTypeSuggestions(
+                        updateWorkoutTypeChosen = {},
+                        workoutTypeChosen = WorkoutTypeEnum.WEIGHT_TRAINING
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1F))
+
+                // TODO Update Button Colors and Add functionality
+                Column {
                     ElevatedButton(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = onDismissRequest
@@ -84,6 +116,7 @@ fun EditWorkoutAlertDialog(
                         Text(text = "Add Workout")
                     }
                 }
+                Spacer(modifier = Modifier.height(Spacing.spacing32))
             }
 
             IconButton(
