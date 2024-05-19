@@ -14,15 +14,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 
 @Composable
-fun ExerciseItem(exercise: String, showDialog: MutableState<Boolean>? = null) {
+fun ExerciseItem(
+    exercise: String,
+    showDialog: MutableState<Boolean>? = null,
+    workoutOnClick: (LibraryWorkoutClickEvents) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = Spacing.spacing12)
             .clickable {
                 showDialog?.value = true
+                workoutOnClick(
+                    LibraryWorkoutClickEvents.WorkoutItemClicked(
+                        workoutTitle = exercise
+                    )
+                )
             },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.library.presentation.screen.library.components.DialogExamples
+import com.example.fitjournal.library.presentation.screen.library.components.EditWorkoutDialog
 import com.example.fitjournal.library.presentation.screen.library.components.LibraryListSection
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
@@ -32,7 +32,10 @@ fun LibraryScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val openAlertDialog = remember { mutableStateOf(false) }
 
-    DialogExamples(showDialog = openAlertDialog)
+    EditWorkoutDialog(
+        showDialog = openAlertDialog,
+        workoutItemDialogUiModel = libraryWorkoutState.workoutItemDialogUiModel
+    )
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -65,7 +68,8 @@ fun LibraryScreen(
             categories = libraryWorkoutState.listOfSearchedWorkouts,
             isBlurActive = isBlurActive,
             libraryScreenListState = libraryScreenListState,
-            showDialog = openAlertDialog
+            showDialog = openAlertDialog,
+            workoutOnClick = libraryWorkoutState.handleLibraryWorkoutClickEvents
         )
     }
 }
