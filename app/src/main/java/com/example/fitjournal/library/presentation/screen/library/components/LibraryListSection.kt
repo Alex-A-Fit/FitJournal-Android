@@ -17,6 +17,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.core.presentation.commoncomponents.listHeader.CategoryHeader
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -26,7 +27,8 @@ fun LibraryListSection(
     isBlurActive: Boolean,
     modifier: Modifier = Modifier,
     libraryScreenListState: LazyListState,
-    showDialog: MutableState<Boolean>
+    showDialog: MutableState<Boolean>,
+    workoutOnClick: (LibraryWorkoutClickEvents) -> Unit
 ) {
     val workoutLibraryList = remember(categories) {
         categories
@@ -43,7 +45,7 @@ fun LibraryListSection(
             }
             itemsIndexed(category.items) { index, workout ->
                 Column(modifier = modifier.padding(start = Spacing.spacing16)) {
-                    ExerciseItem(exercise = workout.workoutName, showDialog = showDialog)
+                    ExerciseItem(exercise = workout.workoutName, showDialog = showDialog, workoutOnClick = workoutOnClick)
                     if (index != category.items.lastIndex) {
                         HorizontalDivider(
                             thickness = Spacing.spacing1,

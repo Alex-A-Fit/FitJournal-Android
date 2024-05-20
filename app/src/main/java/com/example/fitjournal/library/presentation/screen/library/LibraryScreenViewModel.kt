@@ -10,6 +10,7 @@ import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibr
 import com.example.fitjournal.core.util.filter.searchForText
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
+import com.example.fitjournal.library.presentation.screen.library.model.WorkoutItemDialogUiModel
 import com.example.fitjournal.library.presentation.screen.library.utils.mapToLibraryUiList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -50,6 +51,16 @@ class LibraryScreenViewModel @Inject constructor(
                     newLibraryWorkoutState = libraryWorkoutState.copy(
                         searchedTerm = event.text,
                         listOfSearchedWorkouts = filteredList.toMutableStateList()
+                    )
+                )
+            }
+
+            is LibraryWorkoutClickEvents.WorkoutItemClicked -> {
+                updateLibraryWorkoutState(
+                    newLibraryWorkoutState = libraryWorkoutState.copy(
+                        workoutItemDialogUiModel = WorkoutItemDialogUiModel(
+                            workoutTitle = event.workoutTitle
+                        )
                     )
                 )
             }
