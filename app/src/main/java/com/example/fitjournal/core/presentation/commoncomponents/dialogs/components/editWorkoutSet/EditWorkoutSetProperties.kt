@@ -8,19 +8,33 @@ import com.example.fitjournal.core.presentation.commoncomponents.dialogs.compone
 
 @Composable
 fun EditWorkoutSetProperties(
-    workoutTypeDialog: WorkoutTypeDialog
+    workoutTypeDialog: WorkoutTypeDialog,
+    isWorkoutValid: (Boolean, WorkoutTypeDialog?) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         when (workoutTypeDialog) {
             is WorkoutTypeDialog.Calisthenics -> {
-                EditWorkoutSetCalisthenics(workoutTypeDialog.editWorkoutSetCalisthenicsModel)
+                EditWorkoutSetCalisthenics(
+                    editWorkoutSetCalisthenicsModel = workoutTypeDialog.editWorkoutSetCalisthenicsModel,
+                    isWorkoutValid = isWorkoutValid
+                )
             }
+
             is WorkoutTypeDialog.Cardio -> {
-                EditWorkoutSetCardio(editWorkoutSetCardioModel = workoutTypeDialog.editWorkoutSetCardioModel)
+                EditWorkoutSetCardio(
+                    editWorkoutSetCardioModel = workoutTypeDialog.editWorkoutSetCardioModel,
+                    isWorkoutValid = isWorkoutValid
+                )
             }
+
             is WorkoutTypeDialog.WeightLifting -> {
-                EditWorkoutSetWeightLifting(editWorkoutSetWeightLiftingModel = workoutTypeDialog.editWorkoutSetWeightLiftingModel)
+                EditWorkoutSetWeightLifting(
+                    editWorkoutSetWeightLiftingModel = workoutTypeDialog.editWorkoutSetWeightLiftingModel,
+                    isWorkoutValid = isWorkoutValid
+                )
             }
+
+            WorkoutTypeDialog.None -> Unit
         }
     }
 }
