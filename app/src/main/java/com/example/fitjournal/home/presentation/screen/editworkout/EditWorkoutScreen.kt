@@ -138,7 +138,7 @@ fun EditWorkoutScreen(
                 )
             }
 
-            if (showLoadingDialog){
+            if (showLoadingDialog) {
                 TransparentLoadingScreenDialog(onBackPress = {})
             }
 
