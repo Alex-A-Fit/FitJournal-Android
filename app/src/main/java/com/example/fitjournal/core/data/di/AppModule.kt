@@ -4,6 +4,7 @@ import com.example.fitjournal.core.data.repository.RealmWorkoutEntryRepositoryIm
 import com.example.fitjournal.core.data.repository.RealmWorkoutLibraryRepositoryImpl
 import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
 import com.example.fitjournal.core.domain.repository.RealmWorkoutLibraryRepository
+import com.example.fitjournal.core.domain.usecase.editworkoutdialog.CreateModelForEditWorkoutDialogUseCase
 import com.example.fitjournal.core.domain.usecase.realm.library.AddSingleLibraryItemToRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.library.CreateMockDataOfRealmWorkoutLibraryUseCase
 import com.example.fitjournal.core.domain.usecase.realm.library.DeleteLibraryItemFromRealmDbUseCase
@@ -110,5 +111,10 @@ object AppModule {
             adjustTimeValuesUseCase = AdjustTimeValuesUseCase(),
             adjustMandatoryTimeValuesUseCase = AdjustMandatoryTimeValuesUseCase()
         )
+    }
+
+    @Provides
+    fun provideCreateModelForEditWorkoutDialogUseCase(): CreateModelForEditWorkoutDialogUseCase {
+        return CreateModelForEditWorkoutDialogUseCase()
     }
 }

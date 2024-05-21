@@ -24,9 +24,8 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 @Composable
 fun CardioWorkoutSets(
     workout: CardioModel,
-    index: Int,
-    deleteSet: (Int) -> Unit,
-    editSet: (Int) -> Unit
+    deleteSet: () -> Unit,
+    editSet: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -42,7 +41,7 @@ fun CardioWorkoutSets(
         Icon(
             modifier = Modifier
                 .clickable {
-                    editSet(index)
+                    editSet()
                 }
                 .weight(0.5f, fill = true),
             imageVector = Icons.Filled.Create,
@@ -59,7 +58,7 @@ fun CardioWorkoutSets(
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            text = "${workout.distance}${workout.distanceType.stringConcatenatedValue}",
+            text = "${workout.distance} ${workout.distanceType.stringConcatenatedValue}",
             modifier = Modifier
                 .weight(2f, fill = false)
                 .fillMaxWidth(),
@@ -80,7 +79,7 @@ fun CardioWorkoutSets(
         Icon(
             modifier = Modifier
                 .clickable {
-                    deleteSet(index)
+                    deleteSet()
                 }
                 .weight(0.5f, fill = true),
             imageVector = Icons.Filled.Delete,

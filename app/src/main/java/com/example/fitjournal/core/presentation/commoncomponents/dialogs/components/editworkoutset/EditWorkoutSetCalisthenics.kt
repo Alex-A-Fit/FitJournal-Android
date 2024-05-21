@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet
+package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -7,79 +7,96 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.text.isDigitsOnly
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.components.EditWorkoutOptionalTimeSection
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.components.EditWorkoutOptionalWeightSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.commoncomponents.EditWorkoutRepsSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.commoncomponents.EditWorkoutSetsSection
-import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.components.EditWorkoutMandatoryWeightSection
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.EditWorkoutSetWeightLiftingModel
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.WorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.EditWorkoutSetCalisthenicsModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
-import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
+import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.util.extensions.toDoubleOrZero
 import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 
 @Composable
-fun EditWorkoutSetWeightLifting(
-    editWorkoutSetWeightLiftingModel: EditWorkoutSetWeightLiftingModel,
+fun EditWorkoutSetCalisthenics(
+    editWorkoutSetCalisthenicsModel: EditWorkoutSetCalisthenicsModel,
     isWorkoutValid: (Boolean, WorkoutTypeDialog?) -> Unit
 ) {
     var repValue by rememberSaveable {
-        mutableStateOf(editWorkoutSetWeightLiftingModel.reps)
+        mutableStateOf(editWorkoutSetCalisthenicsModel.reps)
     }
     var isRepErrorVisible by rememberSaveable {
         mutableStateOf(false)
     }
     var setValue by rememberSaveable {
-        mutableStateOf(editWorkoutSetWeightLiftingModel.sets)
+        mutableStateOf(editWorkoutSetCalisthenicsModel.sets)
     }
     var isSetErrorVisible by rememberSaveable {
         mutableStateOf(false)
     }
     var weightValue by rememberSaveable {
-        mutableStateOf(editWorkoutSetWeightLiftingModel.weight)
+        mutableStateOf(editWorkoutSetCalisthenicsModel.weight)
     }
     var isWeightErrorVisible by rememberSaveable {
         mutableStateOf(false)
     }
     var weightType by rememberSaveable {
-        mutableStateOf(editWorkoutSetWeightLiftingModel.weightType)
+        mutableStateOf(editWorkoutSetCalisthenicsModel.weightType)
     }
-    LaunchedEffect(
-        key1 = repValue,
-        key2 = setValue,
-        key3 = weightValue
-    ) {
-        if (isRepErrorVisible || isSetErrorVisible || isWeightErrorVisible) {
+    var hourValue by rememberSaveable {
+        mutableStateOf(editWorkoutSetCalisthenicsModel.hr)
+    }
+    var minuteValue by rememberSaveable {
+        mutableStateOf(editWorkoutSetCalisthenicsModel.min)
+    }
+    var secondValue by rememberSaveable {
+        mutableStateOf(editWorkoutSetCalisthenicsModel.sec)
+    }
+    var isTimeErrorVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(key1 = repValue, key2 = setValue, key3 = weightValue) {
+        if (isRepErrorVisible || isSetErrorVisible || isTimeErrorVisible || isWeightErrorVisible) {
             isWorkoutValid(false, null)
         } else {
             isWorkoutValid(
                 true,
-                WorkoutTypeDialog.WeightLifting(
-                    editWorkoutSetWeightLiftingModel = EditWorkoutSetWeightLiftingModel(
+                WorkoutTypeDialog.Calisthenics(
+                    editWorkoutSetCalisthenicsModel = EditWorkoutSetCalisthenicsModel(
                         reps = repValue,
                         sets = setValue,
                         weight = weightValue,
                         weightType = weightType,
-                        index = editWorkoutSetWeightLiftingModel.index
+                        hr = if (hourValue.length == 1) "0$hourValue" else hourValue,
+                        min = if (minuteValue.length == 1) "0$minuteValue" else minuteValue,
+                        sec = if (secondValue.length == 1) "0$secondValue" else secondValue,
+                        index = editWorkoutSetCalisthenicsModel.index
                     )
                 )
             )
         }
     }
     LaunchedEffect(
-        key1 = weightType
+        key1 = hourValue,
+        key2 = minuteValue,
+        key3 = secondValue
     ) {
-        if (isRepErrorVisible || isSetErrorVisible || isWeightErrorVisible) {
+        if (isRepErrorVisible || isSetErrorVisible || isTimeErrorVisible || isWeightErrorVisible) {
             isWorkoutValid(false, null)
         } else {
             isWorkoutValid(
                 true,
-                WorkoutTypeDialog.WeightLifting(
-                    editWorkoutSetWeightLiftingModel = EditWorkoutSetWeightLiftingModel(
+                WorkoutTypeDialog.Calisthenics(
+                    editWorkoutSetCalisthenicsModel = EditWorkoutSetCalisthenicsModel(
                         reps = repValue,
                         sets = setValue,
                         weight = weightValue,
                         weightType = weightType,
-                        index = editWorkoutSetWeightLiftingModel.index
+                        hr = if (hourValue.length == 1) "0$hourValue" else hourValue,
+                        min = if (minuteValue.length == 1) "0$minuteValue" else minuteValue,
+                        sec = if (secondValue.length == 1) "0$secondValue" else secondValue,
+                        index = editWorkoutSetCalisthenicsModel.index
                     )
                 )
             )
@@ -156,19 +173,19 @@ fun EditWorkoutSetWeightLifting(
             repValue = it
         }
     )
-    EditWorkoutMandatoryWeightSection(
+    EditWorkoutOptionalWeightSection(
         isWeightErrorVisible = isWeightErrorVisible,
         poundsOrKilogramsText = weightType.stringValue,
         weightValue = weightValue,
         onWeightTypeClicked = {
-            weightType = if (weightType == WeightLiftingWeightType.POUNDS) {
-                WeightLiftingWeightType.KILOGRAMS
-            } else {
-                WeightLiftingWeightType.POUNDS
-            }
+            weightType =
+                if (weightType == WeightLiftingWeightType.POUNDS) {
+                    WeightLiftingWeightType.KILOGRAMS
+                } else {
+                    WeightLiftingWeightType.POUNDS
+                }
         },
         onWeightValueChange = {
-            isWeightErrorVisible = it.isBlank()
             weightValue = it
         },
         editWeightValue = { editWorkoutFunction: EditWorkoutFunction, weight: String ->
@@ -201,21 +218,38 @@ fun EditWorkoutSetWeightLifting(
                         weightValue =
                             when (editWorkoutFunction) {
                                 EditWorkoutFunction.ADD_VALUE -> (weight.toDoubleOrZero() + 1).toString()
-                                EditWorkoutFunction.SUBTRACT_VALUE -> {
-                                    val newWeight = weight.toDoubleOrZero() - 1
-                                    when {
-                                        newWeight <= 0 -> "0"
-                                        else -> newWeight.roundToTwoDecimalPlaces().toString()
-                                    }
-                                }
+                                EditWorkoutFunction.SUBTRACT_VALUE -> (weight.toDoubleOrZero() - 1).toString()
                             }
                     }
                 }
-                if (weightValue.toDoubleOrNull() == null) {
-                    isWeightErrorVisible = true
-                }
             } catch (e: Exception) {
                 isWeightErrorVisible = true
+            }
+        }
+    )
+    EditWorkoutOptionalTimeSection(
+        isTimeErrorVisible = isTimeErrorVisible,
+        hourValue = hourValue,
+        minuteValue = minuteValue,
+        secondValue = secondValue,
+        onTimeValueChanged = { timeValue: String, editWorkoutTimeDeterminate: EditWorkoutTimeDeterminate ->
+            isTimeErrorVisible = false
+            when (editWorkoutTimeDeterminate) {
+                EditWorkoutTimeDeterminate.HOUR -> {
+                    hourValue = timeValue
+                }
+
+                EditWorkoutTimeDeterminate.MINUTE -> {
+                    minuteValue = timeValue
+                }
+
+                EditWorkoutTimeDeterminate.SECOND -> {
+                    secondValue = timeValue
+                }
+            }
+            if (timeValue.isEmpty()) return@EditWorkoutOptionalTimeSection
+            if (timeValue.toIntOrNull() == null) {
+                isTimeErrorVisible = true
             }
         }
     )

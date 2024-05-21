@@ -1,10 +1,10 @@
-package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet
+package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.WorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
 
 @Composable
 fun EditWorkoutSetProperties(

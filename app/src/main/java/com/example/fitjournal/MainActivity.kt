@@ -19,15 +19,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.fitjournal.addWorkout.screen.journalEntry.AddWorkoutScreen
-import com.example.fitjournal.addWorkout.screen.journalEntry.AddWorkoutViewModel
-import com.example.fitjournal.addWorkout.screen.journalEntry.details.AddWorkoutDetailScreen
-import com.example.fitjournal.addWorkout.screen.journalEntry.details.AddWorkoutDetailViewModel
+import com.example.fitjournal.addWorkout.screen.addworkout.AddWorkoutScreen
+import com.example.fitjournal.addWorkout.screen.addworkout.AddWorkoutViewModel
+import com.example.fitjournal.addWorkout.screen.addworkout.details.AddWorkoutDetailScreen
+import com.example.fitjournal.addWorkout.screen.addworkout.details.AddWorkoutDetailViewModel
 import com.example.fitjournal.core.presentation.commoncomponents.appbars.TopAppBar
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.iconbuttons.NavigateUpIconButton
 import com.example.fitjournal.core.presentation.navigation.Arguments
@@ -174,13 +175,21 @@ class MainActivity : ComponentActivity() {
                                     HomeScreen(
                                         modifier = mainScreenModifier.fillMaxSize(),
                                         homeScreenState = homeViewModel.homeScreenState,
-                                        snackBarHostState = snackBarState,
                                         isBlurActive = showChildFabs,
                                         lazyListState = homeScreenListState,
                                         navigateToDestination = { navInterface ->
                                             navigateToDestination(
                                                 navigationInterface = navInterface,
                                                 navController = navController
+                                            )
+                                        },
+                                        removeBlur = {
+                                            showChildFabs = false
+                                        },
+                                        showSnackBar = {
+                                            showSnackBar(
+                                                snackBarHostState = snackBarState,
+                                                message = it
                                             )
                                         }
                                     )
@@ -306,7 +315,7 @@ class MainActivity : ComponentActivity() {
                                     TopAppBar(
                                         appBarTitle = {
                                             Text(
-                                                text = "Journal Entry",
+                                                text = stringResource(id = R.string.title_add_to_journal),
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
@@ -366,7 +375,7 @@ class MainActivity : ComponentActivity() {
                                     TopAppBar(
                                         appBarTitle = {
                                             Text(
-                                                text = "Add Workout To Journal",
+                                                text = stringResource(id = R.string.title_add_to_journal),
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
@@ -412,7 +421,7 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainScreenModifier ->
                                     EditWorkoutScreen(
                                         modifier = mainScreenModifier,
-                                        editWorkoutViewModel.editWorkoutState,
+                                        editWorkoutViewModel.editWorkoutUiState,
                                         navigateToJournal = {
                                             navController.navigateUp()
                                         },

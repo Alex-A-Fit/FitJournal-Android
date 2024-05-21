@@ -1,4 +1,4 @@
-package com.example.fitjournal.addWorkout.screen.journalEntry
+package com.example.fitjournal.addWorkout.screen.addworkout
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue

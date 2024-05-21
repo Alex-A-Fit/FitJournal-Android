@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model
+package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model
 
 sealed class WorkoutTypeDialog {
     data class Cardio(val editWorkoutSetCardioModel: EditWorkoutSetCardioModel) : WorkoutTypeDialog()

@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model
+package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model
 
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.util.extensions.toDoubleOrZero

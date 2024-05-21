@@ -7,17 +7,17 @@ import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
-import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
-import java.time.LocalDate
+import com.example.fitjournal.home.presentation.util.constants.GeneralConstants
 
 data class AddWorkoutDetailUiState(
     val addWorkoutDetailEvents: (AddWorkoutDetailEvents) -> Unit,
     val workoutName: String = "",
     val workoutType: String = "",
     val workoutTypeEnum: WorkoutTypeEnum? = null,
-    val date: String = LocalDate.now().formatToCommonDate(),
+    val localDate: String = GeneralConstants.todayDate,
+    val localDateInMillis: Long = GeneralConstants.todayDateTimeInMilli,
 
     // three lists make up the list of sets user did for each workout
     val weightLiftingPropertyList: SnapshotStateList<WeightLiftingModel> = mutableStateListOf(),

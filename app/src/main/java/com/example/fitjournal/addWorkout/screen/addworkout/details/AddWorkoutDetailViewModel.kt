@@ -1,4 +1,4 @@
-package com.example.fitjournal.addWorkout.screen.journalEntry.details
+package com.example.fitjournal.addWorkout.screen.addworkout.details
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -11,18 +11,23 @@ import com.example.fitjournal.addWorkout.model.AddWorkoutDetailUiState
 import com.example.fitjournal.addWorkout.model.events.AddWorkoutDetailEvents
 import com.example.fitjournal.core.data.model.results.Result
 import com.example.fitjournal.core.data.util.getWorkoutType
+import com.example.fitjournal.core.domain.managers.DateManager
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutDetailsModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
+import com.example.fitjournal.core.domain.usecase.editworkoutdialog.CreateModelForEditWorkoutDialogUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.toCalisthenicsModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.toCardioModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.toWeightLiftingModel
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
-import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import com.example.fitjournal.home.presentation.model.enum.EditWorkoutListFunctions
 import com.example.fitjournal.home.presentation.model.ui.CalisthenicsValidator
 import com.example.fitjournal.home.presentation.model.ui.CardioValidator
@@ -33,13 +38,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
-import java.time.LocalDate
+import java.time.ZoneOffset
 import javax.inject.Inject
 
 @HiltViewModel
 class AddWorkoutDetailViewModel @Inject constructor(
     private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase,
-    private val editWorkoutUseCase: EditWorkoutUseCase
+    private val editWorkoutUseCase: EditWorkoutUseCase,
+    private val createModelForEditWorkoutDialogUseCase: CreateModelForEditWorkoutDialogUseCase
 ) : ViewModel() {
     var addWorkoutDetailUiState: AddWorkoutDetailUiState by mutableStateOf(
         AddWorkoutDetailUiState(
@@ -270,7 +276,6 @@ class AddWorkoutDetailViewModel @Inject constructor(
                 )
             }
 
-            is AddWorkoutDetailEvents.UpdateWorkoutListItem -> TODO()
             AddWorkoutDetailEvents.ClearViewModelState -> {
                 addWorkoutDetailUiState = AddWorkoutDetailUiState(
                     workoutName = addWorkoutDetailUiState.workoutName,
@@ -293,6 +298,72 @@ class AddWorkoutDetailViewModel @Inject constructor(
                 if (addWorkoutJob != null) {
                     addWorkoutJob?.cancel("User clicked back button")
                 }
+            }
+
+            is AddWorkoutDetailEvents.CreateModelForEditWorkoutDialog -> {
+                val workoutSet = createModelForEditWorkoutDialogUseCase(
+                    workoutTypeEnum = event.workoutTypeEnum,
+                    workoutPropertiesModel = event.workoutPropertiesModel,
+                    index = event.index
+                )
+                event.getWorkoutSetCallback(workoutSet)
+            }
+
+            is AddWorkoutDetailEvents.UpdateWorkoutProperties -> {
+                when (event.workoutTypeDialog) {
+                    is WorkoutTypeDialog.Calisthenics -> {
+                        val updatedWorkoutSet =
+                            event.workoutTypeDialog.editWorkoutSetCalisthenicsModel
+                        val workoutListOfSets = addWorkoutDetailUiState.calisthenicsPropertyList
+                        workoutListOfSets[updatedWorkoutSet.index] =
+                            updatedWorkoutSet.toCalisthenicsModel()
+                        updateWorkoutState(
+                            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
+                                calisthenicsPropertyList = workoutListOfSets
+                            )
+                        )
+                    }
+
+                    is WorkoutTypeDialog.Cardio -> {
+                        val updatedWorkoutSet =
+                            event.workoutTypeDialog.editWorkoutSetCardioModel
+                        val workoutListOfSets = addWorkoutDetailUiState.cardioPropertyList
+                        workoutListOfSets[updatedWorkoutSet.index] =
+                            updatedWorkoutSet.toCardioModel()
+                        updateWorkoutState(
+                            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
+                                cardioPropertyList = workoutListOfSets
+                            )
+                        )
+                    }
+
+                    is WorkoutTypeDialog.WeightLifting -> {
+                        val updatedWorkoutSet =
+                            event.workoutTypeDialog.editWorkoutSetWeightLiftingModel
+                        val workoutListOfSets = addWorkoutDetailUiState.weightLiftingPropertyList
+                        workoutListOfSets[updatedWorkoutSet.index] =
+                            updatedWorkoutSet.toWeightLiftingModel()
+                        updateWorkoutState(
+                            newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
+                                weightLiftingPropertyList = workoutListOfSets
+                            )
+                        )
+                    }
+
+                    WorkoutTypeDialog.None -> Unit
+                }
+            }
+
+            is AddWorkoutDetailEvents.SelectDateFromDatePicker -> {
+                val selectedDate = DateManager.getSelectedDate(
+                    event.userSelectedDate
+                )
+                updateWorkoutState(
+                    newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
+                        localDate = selectedDate.localDateString,
+                        localDateInMillis = (selectedDate.localDateTime.toEpochSecond(ZoneOffset.UTC) * 1000)
+                    )
+                )
             }
         }
     }
@@ -636,7 +707,6 @@ class AddWorkoutDetailViewModel @Inject constructor(
         callback: (Result) -> Unit
     ) {
         val newId = ObjectId().toHexString()
-        val newDate = LocalDate.now().formatToCommonDate()
         when (addWorkoutDetailUiState.workoutTypeEnum) {
             WorkoutTypeEnum.WEIGHT_TRAINING -> {
                 val newWorkoutModel = WorkoutModel(
@@ -648,7 +718,7 @@ class AddWorkoutDetailViewModel @Inject constructor(
                         workoutPropertiesModel = WorkoutPropertiesModel
                             .WeightLiftingProps(addWorkoutDetailUiState.weightLiftingPropertyList)
                     ),
-                    date = newDate
+                    date = addWorkoutDetailUiState.localDate
                 )
                 saveToRealm(
                     workoutModel = newWorkoutModel,
@@ -666,7 +736,7 @@ class AddWorkoutDetailViewModel @Inject constructor(
                         workoutPropertiesModel = WorkoutPropertiesModel
                             .CalisthenicsProps(addWorkoutDetailUiState.calisthenicsPropertyList)
                     ),
-                    date = newDate
+                    date = addWorkoutDetailUiState.localDate
                 )
                 saveToRealm(
                     workoutModel = newWorkoutModel,
@@ -684,7 +754,7 @@ class AddWorkoutDetailViewModel @Inject constructor(
                         workoutPropertiesModel = WorkoutPropertiesModel
                             .CardioProps(addWorkoutDetailUiState.cardioPropertyList)
                     ),
-                    date = newDate
+                    date = addWorkoutDetailUiState.localDate
                 )
                 saveToRealm(
                     workoutModel = newWorkoutModel,

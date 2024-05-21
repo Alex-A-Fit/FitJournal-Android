@@ -9,19 +9,18 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
+import com.example.fitjournal.core.domain.managers.DateManager
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
+import com.example.fitjournal.core.domain.usecase.editworkoutdialog.CreateModelForEditWorkoutDialogUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.EditWorkoutSetCalisthenicsModel
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.EditWorkoutSetCardioModel
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.EditWorkoutSetWeightLiftingModel
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.WorkoutTypeDialog
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.toCalisthenicsModel
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.toCardioModel
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.toWeightLiftingModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.toCalisthenicsModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.toCardioModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.toWeightLiftingModel
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
@@ -35,14 +34,17 @@ import com.example.fitjournal.home.presentation.model.ui.WeightLiftingValidator
 import com.example.fitjournal.statistics.domain.mapper.toRealmWorkoutEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.ZoneOffset
 import javax.inject.Inject
 
 @HiltViewModel
 class EditWorkoutViewModel @Inject constructor(
     private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase,
-    private val editWorkoutUseCase: EditWorkoutUseCase
+    private val editWorkoutUseCase: EditWorkoutUseCase,
+    private val createModelForEditWorkoutDialogUseCase: CreateModelForEditWorkoutDialogUseCase
 ) : ViewModel() {
-    var editWorkoutState: EditWorkoutUiState by mutableStateOf(
+    var editWorkoutUiState: EditWorkoutUiState by mutableStateOf(
         EditWorkoutUiState(
             editWorkoutEvents = ::editWorkoutEvents
         )
@@ -75,7 +77,7 @@ class EditWorkoutViewModel @Inject constructor(
 
             is EditWorkoutEvents.OnRepValueChange -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         reps = event.repValue,
                         isRepsErrorVisible = false
                     )
@@ -84,7 +86,7 @@ class EditWorkoutViewModel @Inject constructor(
 
             is EditWorkoutEvents.OnSetValueChange -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         sets = event.setValue,
                         isSetsErrorVisible = false
                     )
@@ -93,7 +95,7 @@ class EditWorkoutViewModel @Inject constructor(
 
             is EditWorkoutEvents.OnWeightValueChange -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         weight = event.weightValue,
                         isWeightErrorVisible = false
                     )
@@ -165,7 +167,7 @@ class EditWorkoutViewModel @Inject constructor(
                             )
                         if (isUpdateSuccess) {
                             updateWorkoutState(
-                                newEditWorkoutUiState = editWorkoutState.copy(
+                                newEditWorkoutUiState = editWorkoutUiState.copy(
                                     weightLiftingPropertyList = newPropertiesModel.getWeightLiftingProps(),
                                     cardioPropertyList = newPropertiesModel.getCardioProps(),
                                     calisthenicsPropertyList = newPropertiesModel.getCalisthenicsProps(),
@@ -191,7 +193,7 @@ class EditWorkoutViewModel @Inject constructor(
                     is WorkoutTypeDialog.Calisthenics -> {
                         val updatedWorkoutSet =
                             event.workoutTypeDialog.editWorkoutSetCalisthenicsModel
-                        val workoutListOfSets = editWorkoutState.calisthenicsPropertyList
+                        val workoutListOfSets = editWorkoutUiState.calisthenicsPropertyList
                         workoutListOfSets[updatedWorkoutSet.index] =
                             updatedWorkoutSet.toCalisthenicsModel()
                         workout.workoutDetailsModel.workoutPropertiesModel =
@@ -218,7 +220,7 @@ class EditWorkoutViewModel @Inject constructor(
                     is WorkoutTypeDialog.Cardio -> {
                         val updatedWorkoutSet =
                             event.workoutTypeDialog.editWorkoutSetCardioModel
-                        val workoutListOfSets = editWorkoutState.cardioPropertyList
+                        val workoutListOfSets = editWorkoutUiState.cardioPropertyList
                         workoutListOfSets[updatedWorkoutSet.index] =
                             updatedWorkoutSet.toCardioModel()
                         workout.workoutDetailsModel.workoutPropertiesModel =
@@ -241,10 +243,11 @@ class EditWorkoutViewModel @Inject constructor(
                             }
                         }
                     }
+
                     is WorkoutTypeDialog.WeightLifting -> {
                         val updatedWorkoutSet =
                             event.workoutTypeDialog.editWorkoutSetWeightLiftingModel
-                        val workoutListOfSets = editWorkoutState.weightLiftingPropertyList
+                        val workoutListOfSets = editWorkoutUiState.weightLiftingPropertyList
                         workoutListOfSets[updatedWorkoutSet.index] =
                             updatedWorkoutSet.toWeightLiftingModel()
                         workout.workoutDetailsModel.workoutPropertiesModel =
@@ -267,6 +270,7 @@ class EditWorkoutViewModel @Inject constructor(
                             }
                         }
                     }
+
                     WorkoutTypeDialog.None -> Unit
                 }
             }
@@ -381,7 +385,7 @@ class EditWorkoutViewModel @Inject constructor(
 
             is EditWorkoutEvents.OnLapsValueChange -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         laps = event.lapValue,
                         isLapsErrorVisible = false
                     )
@@ -397,7 +401,7 @@ class EditWorkoutViewModel @Inject constructor(
 
             is EditWorkoutEvents.OnDistanceValueChange -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         distance = event.distanceValue,
                         isDistanceErrorVisible = false
                     )
@@ -406,27 +410,72 @@ class EditWorkoutViewModel @Inject constructor(
 
             EditWorkoutEvents.EditDistanceType -> {
                 updateWorkoutState(
-                    editWorkoutState.copy(
-                        distanceType = editWorkoutState.distanceType.getOtherDistanceType()
+                    editWorkoutUiState.copy(
+                        distanceType = editWorkoutUiState.distanceType.getOtherDistanceType()
                     )
                 )
             }
 
             EditWorkoutEvents.EditWeightType -> {
                 updateWorkoutState(
-                    editWorkoutState.copy(
-                        weightType = editWorkoutState.weightType.getOtherWeightType()
+                    editWorkoutUiState.copy(
+                        weightType = editWorkoutUiState.weightType.getOtherWeightType()
                     )
                 )
             }
 
             is EditWorkoutEvents.GetWorkoutSet -> {
-                val workoutSet = createWorkoutSetModel(
+                val workoutSet = createModelForEditWorkoutDialogUseCase(
                     workoutTypeEnum = event.workoutTypeEnum,
                     workoutPropertiesModel = event.workoutPropertiesModel,
                     index = event.index
                 )
                 event.getWorkoutSetCallback(workoutSet)
+            }
+
+            is EditWorkoutEvents.SelectDateFromDatePicker -> {
+                val selectedDate = DateManager.getSelectedDate(
+                    event.userSelectedDate
+                )
+                try {
+                    val workout = event.workout.copy(date = selectedDate.localDateString)
+                    viewModelScope.launch {
+                        val wasUpdateSuccess =
+                            realmWorkoutEntryUseCase.updateSingleWorkoutEntryToRealmDbUseCase(
+                                updatedRealmWorkoutEntry = workout.toRealmWorkoutEntry(event.workoutType)
+                            )
+                        if (wasUpdateSuccess) {
+                            updateWorkoutState(
+                                newEditWorkoutUiState = editWorkoutUiState.copy(
+                                    localDate = selectedDate.localDateString,
+                                    localDateInMillis = (
+                                        selectedDate.localDateTime.toEpochSecond(
+                                            ZoneOffset.UTC
+                                        ) * 1000
+                                        )
+                                )
+                            )
+                            event.onSuccessfulUpdateCallback()
+                        } else {
+                            event.onErrorCallback()
+                        }
+                    }
+                } catch (e: Exception) {
+                    viewModelScope.launch {
+                        event.onErrorCallback()
+                    }
+                }
+            }
+
+            is EditWorkoutEvents.UpdateDate -> {
+                val date = LocalDate.parse(event.date, DateManager.getCommonDateFormat())
+                updateWorkoutState(
+                    newEditWorkoutUiState =
+                    editWorkoutUiState.copy(
+                        localDate = date.format(DateManager.getCommonDateFormat()),
+                        localDateInMillis = (date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli())
+                    )
+                )
             }
         }
     }
@@ -435,20 +484,20 @@ class EditWorkoutViewModel @Inject constructor(
         workoutProperties: CalisthenicsModel
     ): CalisthenicsValidator {
         val workoutTime = workoutProperties.time
-        val isRepsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutState.reps)
-        val isSetsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutState.sets)
+        val isRepsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutUiState.reps)
+        val isSetsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutUiState.sets)
         val isTimeValid =
             if (workoutTime != null) editWorkoutUseCase.isTimeValidUseCase(workoutTime) else true
         val isWeightValid =
             if (workoutProperties.weight != null) {
                 editWorkoutUseCase.isDoubleValidUseCase(
-                    editWorkoutState.weight
+                    editWorkoutUiState.weight
                 )
             } else {
                 true
             }
         updateWorkoutState(
-            newEditWorkoutUiState = editWorkoutState.copy(
+            newEditWorkoutUiState = editWorkoutUiState.copy(
                 isRepsErrorVisible = !isRepsValid,
                 isSetsErrorVisible = !isSetsValid,
                 isWeightErrorVisible = !isWeightValid,
@@ -467,15 +516,15 @@ class EditWorkoutViewModel @Inject constructor(
         workoutProperties: CardioModel
     ): CardioValidator {
         val workoutTime = workoutProperties.time
-        val isLapsValid = if (editWorkoutState.laps != "") {
-            editWorkoutUseCase.isDoubleValidUseCase(editWorkoutState.laps)
+        val isLapsValid = if (editWorkoutUiState.laps != "") {
+            editWorkoutUseCase.isDoubleValidUseCase(editWorkoutUiState.laps)
         } else {
             true
         }
-        val isDistanceValid = editWorkoutUseCase.isDoubleValidUseCase(editWorkoutState.distance)
+        val isDistanceValid = editWorkoutUseCase.isDoubleValidUseCase(editWorkoutUiState.distance)
         val isTimeValid = editWorkoutUseCase.isTimeValidUseCase(workoutTime)
         updateWorkoutState(
-            newEditWorkoutUiState = editWorkoutState.copy(
+            newEditWorkoutUiState = editWorkoutUiState.copy(
                 isLapsErrorVisible = !isLapsValid,
                 isDistanceErrorVisible = !isDistanceValid,
                 isTimeErrorVisible = !isTimeValid
@@ -502,7 +551,7 @@ class EditWorkoutViewModel @Inject constructor(
                     EditWorkoutListFunctions.ADD_WORKOUT_ITEM -> {
                         if (newWeightLiftingItem != null) {
                             val weightTrainingWorkoutList =
-                                editWorkoutState.weightLiftingPropertyList
+                                editWorkoutUiState.weightLiftingPropertyList
                             weightTrainingWorkoutList.add(newWeightLiftingItem)
                             WorkoutPropertiesModel
                                 .WeightLiftingProps(weightTrainingWorkoutList)
@@ -512,7 +561,7 @@ class EditWorkoutViewModel @Inject constructor(
                     }
 
                     EditWorkoutListFunctions.DELETE_WORKOUT_ITEM -> {
-                        val weightTrainingWorkoutList = editWorkoutState.weightLiftingPropertyList
+                        val weightTrainingWorkoutList = editWorkoutUiState.weightLiftingPropertyList
                         weightTrainingWorkoutList.removeAt(index)
                         WorkoutPropertiesModel
                             .WeightLiftingProps(weightTrainingWorkoutList)
@@ -525,7 +574,7 @@ class EditWorkoutViewModel @Inject constructor(
                     EditWorkoutListFunctions.ADD_WORKOUT_ITEM -> {
                         if (newCalisthenicsItem != null) {
                             val calisthenicsWorkoutList =
-                                editWorkoutState.calisthenicsPropertyList
+                                editWorkoutUiState.calisthenicsPropertyList
                             calisthenicsWorkoutList.add(newCalisthenicsItem)
                             WorkoutPropertiesModel
                                 .CalisthenicsProps(calisthenicsWorkoutList)
@@ -535,7 +584,7 @@ class EditWorkoutViewModel @Inject constructor(
                     }
 
                     EditWorkoutListFunctions.DELETE_WORKOUT_ITEM -> {
-                        val calisthenicsWorkoutList = editWorkoutState.calisthenicsPropertyList
+                        val calisthenicsWorkoutList = editWorkoutUiState.calisthenicsPropertyList
                         calisthenicsWorkoutList.removeAt(index)
                         WorkoutPropertiesModel
                             .CalisthenicsProps(calisthenicsWorkoutList)
@@ -548,7 +597,7 @@ class EditWorkoutViewModel @Inject constructor(
                     EditWorkoutListFunctions.ADD_WORKOUT_ITEM -> {
                         if (newCardioItem != null) {
                             val cardioWorkoutList =
-                                editWorkoutState.cardioPropertyList
+                                editWorkoutUiState.cardioPropertyList
                             cardioWorkoutList.add(newCardioItem)
                             WorkoutPropertiesModel
                                 .CardioProps(cardioWorkoutList)
@@ -558,7 +607,7 @@ class EditWorkoutViewModel @Inject constructor(
                     }
 
                     EditWorkoutListFunctions.DELETE_WORKOUT_ITEM -> {
-                        val cardioWorkoutList = editWorkoutState.cardioPropertyList
+                        val cardioWorkoutList = editWorkoutUiState.cardioPropertyList
                         cardioWorkoutList.removeAt(index)
                         WorkoutPropertiesModel
                             .CardioProps(cardioWorkoutList)
@@ -569,11 +618,11 @@ class EditWorkoutViewModel @Inject constructor(
     }
 
     private fun areWeightLiftingPropertiesValid(): WeightLiftingValidator {
-        val isRepsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutState.reps)
-        val isSetsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutState.sets)
-        val isWeightValid = editWorkoutUseCase.isDoubleValidUseCase(editWorkoutState.weight)
+        val isRepsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutUiState.reps)
+        val isSetsValid = editWorkoutUseCase.isIntegerValidUseCase(editWorkoutUiState.sets)
+        val isWeightValid = editWorkoutUseCase.isDoubleValidUseCase(editWorkoutUiState.weight)
         updateWorkoutState(
-            newEditWorkoutUiState = editWorkoutState.copy(
+            newEditWorkoutUiState = editWorkoutUiState.copy(
                 isRepsErrorVisible = !isRepsValid,
                 isSetsErrorVisible = !isSetsValid,
                 isWeightErrorVisible = !isWeightValid
@@ -589,9 +638,9 @@ class EditWorkoutViewModel @Inject constructor(
     fun getSingleWorkout(
         workoutId: String?
     ) {
-        updateWorkoutState(editWorkoutState.copy(workout = UiState.Loading))
+        updateWorkoutState(editWorkoutUiState.copy(workout = UiState.Loading))
         if (workoutId.isNullOrEmpty()) {
-            updateWorkoutState(editWorkoutState.copy(workout = UiState.Error))
+            updateWorkoutState(editWorkoutUiState.copy(workout = UiState.Error))
             return
         }
         try {
@@ -642,7 +691,7 @@ class EditWorkoutViewModel @Inject constructor(
                         )
                     }
                 updateWorkoutState(
-                    editWorkoutState.copy(
+                    editWorkoutUiState.copy(
                         workout = workout,
                         weightLiftingPropertyList = workoutLists.first,
                         cardioPropertyList = workoutLists.second,
@@ -656,7 +705,7 @@ class EditWorkoutViewModel @Inject constructor(
     }
 
     private fun updateWorkoutState(newEditWorkoutUiState: EditWorkoutUiState) {
-        editWorkoutState = newEditWorkoutUiState
+        editWorkoutUiState = newEditWorkoutUiState
     }
 
     private fun addOrSubtractReps(
@@ -668,7 +717,7 @@ class EditWorkoutViewModel @Inject constructor(
             value = repValue
         )
         updateWorkoutState(
-            newEditWorkoutUiState = editWorkoutState.copy(
+            newEditWorkoutUiState = editWorkoutUiState.copy(
                 reps = newRepValue,
                 isRepsErrorVisible = false
             )
@@ -684,7 +733,7 @@ class EditWorkoutViewModel @Inject constructor(
             value = setValue
         )
         updateWorkoutState(
-            newEditWorkoutUiState = editWorkoutState.copy(
+            newEditWorkoutUiState = editWorkoutUiState.copy(
                 sets = newSetValue,
                 isSetsErrorVisible = false
             )
@@ -702,7 +751,7 @@ class EditWorkoutViewModel @Inject constructor(
             valueDifferential = valueDifferential
         )
         updateWorkoutState(
-            newEditWorkoutUiState = editWorkoutState.copy(
+            newEditWorkoutUiState = editWorkoutUiState.copy(
                 weight = newWeightValue,
                 isWeightErrorVisible = false
             )
@@ -718,7 +767,7 @@ class EditWorkoutViewModel @Inject constructor(
             value = lapValue
         )
         updateWorkoutState(
-            newEditWorkoutUiState = editWorkoutState.copy(
+            newEditWorkoutUiState = editWorkoutUiState.copy(
                 laps = newLapValue,
                 isLapsErrorVisible = false
             )
@@ -734,7 +783,7 @@ class EditWorkoutViewModel @Inject constructor(
             value = distanceValue
         )
         updateWorkoutState(
-            newEditWorkoutUiState = editWorkoutState.copy(
+            newEditWorkoutUiState = editWorkoutUiState.copy(
                 distance = newDistanceValue,
                 isDistanceErrorVisible = false
             )
@@ -745,7 +794,7 @@ class EditWorkoutViewModel @Inject constructor(
         when (workoutTypeEnum) {
             WorkoutTypeEnum.WEIGHT_TRAINING -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         reps = "",
                         sets = "",
                         weight = "",
@@ -758,7 +807,7 @@ class EditWorkoutViewModel @Inject constructor(
 
             WorkoutTypeEnum.CALISTHENICS -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         reps = "",
                         sets = "",
                         weight = "",
@@ -775,7 +824,7 @@ class EditWorkoutViewModel @Inject constructor(
 
             WorkoutTypeEnum.CARDIO -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         laps = "",
                         distance = "",
                         hour = "",
@@ -797,7 +846,7 @@ class EditWorkoutViewModel @Inject constructor(
         when (timeDeterminate) {
             EditWorkoutTimeDeterminate.HOUR -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         hour = value
                     )
                 )
@@ -805,7 +854,7 @@ class EditWorkoutViewModel @Inject constructor(
 
             EditWorkoutTimeDeterminate.MINUTE -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         minute = value
                     )
                 )
@@ -813,63 +862,8 @@ class EditWorkoutViewModel @Inject constructor(
 
             EditWorkoutTimeDeterminate.SECOND -> {
                 updateWorkoutState(
-                    newEditWorkoutUiState = editWorkoutState.copy(
+                    newEditWorkoutUiState = editWorkoutUiState.copy(
                         second = value
-                    )
-                )
-            }
-        }
-    }
-
-    private fun createWorkoutSetModel(
-        workoutTypeEnum: WorkoutTypeEnum,
-        workoutPropertiesModel: WorkoutPropertiesModel,
-        index: Int
-    ): WorkoutTypeDialog {
-        return when (workoutTypeEnum) {
-            WorkoutTypeEnum.WEIGHT_TRAINING -> {
-                val workoutList = workoutPropertiesModel.getWeightLiftingProps()
-                val chosenWorkout = workoutList[index]
-                WorkoutTypeDialog.WeightLifting(
-                    editWorkoutSetWeightLiftingModel = EditWorkoutSetWeightLiftingModel(
-                        reps = chosenWorkout.reps.toString(),
-                        sets = chosenWorkout.sets.toString(),
-                        weight = chosenWorkout.weight.toString(),
-                        weightType = chosenWorkout.weightType,
-                        index = index
-                    )
-                )
-            }
-
-            WorkoutTypeEnum.CALISTHENICS -> {
-                val workoutList = workoutPropertiesModel.getCalisthenicsProps()
-                val chosenWorkout = workoutList[index]
-                WorkoutTypeDialog.Calisthenics(
-                    editWorkoutSetCalisthenicsModel = EditWorkoutSetCalisthenicsModel(
-                        reps = chosenWorkout.reps.toString(),
-                        sets = chosenWorkout.sets.toString(),
-                        weight = chosenWorkout.weight?.toString() ?: "",
-                        weightType = chosenWorkout.weightType,
-                        hr = chosenWorkout.time?.hours ?: "",
-                        min = chosenWorkout.time?.minutes ?: "",
-                        sec = chosenWorkout.time?.seconds ?: "",
-                        index = index
-                    )
-                )
-            }
-
-            WorkoutTypeEnum.CARDIO -> {
-                val workoutList = workoutPropertiesModel.getCardioProps()
-                val chosenWorkout = workoutList[index]
-                WorkoutTypeDialog.Cardio(
-                    editWorkoutSetCardioModel = EditWorkoutSetCardioModel(
-                        laps = chosenWorkout.laps?.toString() ?: "",
-                        distance = chosenWorkout.distance.toString(),
-                        distanceType = chosenWorkout.distanceType,
-                        hr = chosenWorkout.time.hours,
-                        min = chosenWorkout.time.minutes,
-                        sec = chosenWorkout.time.seconds,
-                        index = index
                     )
                 )
             }
@@ -891,7 +885,7 @@ class EditWorkoutViewModel @Inject constructor(
             if (isUpdateSuccess) {
                 if (clearFields) {
                     updateWorkoutState(
-                        newEditWorkoutUiState = editWorkoutState.copy(
+                        newEditWorkoutUiState = editWorkoutUiState.copy(
                             weightLiftingPropertyList = newPropsModel.getWeightLiftingProps(),
                             cardioPropertyList = newPropsModel.getCardioProps(),
                             calisthenicsPropertyList = newPropsModel.getCalisthenicsProps(),
@@ -907,7 +901,7 @@ class EditWorkoutViewModel @Inject constructor(
                     )
                 } else {
                     updateWorkoutState(
-                        newEditWorkoutUiState = editWorkoutState.copy(
+                        newEditWorkoutUiState = editWorkoutUiState.copy(
                             weightLiftingPropertyList = newPropsModel.getWeightLiftingProps(),
                             cardioPropertyList = newPropsModel.getCardioProps(),
                             calisthenicsPropertyList = newPropsModel.getCalisthenicsProps()

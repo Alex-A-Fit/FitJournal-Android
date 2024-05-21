@@ -25,9 +25,8 @@ import com.example.fitjournal.core.util.extensions.TwoDecimalOrNoDecimal
 @Composable
 fun CalisthenicsWorkoutSets(
     workout: CalisthenicsModel,
-    index: Int,
-    deleteSet: (Int) -> Unit,
-    editSet: (Int) -> Unit
+    deleteSet: () -> Unit,
+    editSet: () -> Unit
 ) {
     val workoutTime = workout.time
     Row(
@@ -44,7 +43,7 @@ fun CalisthenicsWorkoutSets(
         Icon(
             modifier = Modifier
                 .clickable {
-                    editSet(index)
+                    editSet()
                 }
                 .weight(0.5f, fill = true),
             imageVector = Icons.Filled.Create,
@@ -95,7 +94,7 @@ fun CalisthenicsWorkoutSets(
         Icon(
             modifier = Modifier
                 .clickable {
-                    deleteSet(index)
+                    deleteSet()
                 }
                 .weight(0.5f, fill = true),
             imageVector = Icons.Filled.Delete,

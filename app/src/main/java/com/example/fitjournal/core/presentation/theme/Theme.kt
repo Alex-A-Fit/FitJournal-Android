@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColorScheme(
     primary = BlueSecondary,
+    inversePrimary = DarkGray2,
     secondary = BlueVariant,
     tertiary = BluePrimary,
     onPrimary = LightGray,
@@ -17,6 +18,7 @@ private val DarkColorPalette = darkColorScheme(
 
 private val LightColorPalette = lightColorScheme(
     primary = BluePrimary,
+    inversePrimary = LightGray,
     secondary = BlueVariant,
     tertiary = BlueLight,
     onPrimary = DarkGray2,

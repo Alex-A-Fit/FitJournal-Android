@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet
+package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,8 +9,8 @@ import androidx.compose.runtime.setValue
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.components.EditWorkoutDistanceSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.components.EditWorkoutMandatoryTimeSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.components.EditWorkoutOptionalLapsSection
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.EditWorkoutSetCardioModel
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.WorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.EditWorkoutSetCardioModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
@@ -66,9 +66,9 @@ fun EditWorkoutSetCardio(
                         laps = lapValue,
                         distance = distanceValue,
                         distanceType = distanceType,
-                        hr = hourValue,
-                        min = minuteValue,
-                        sec = secondValue,
+                        hr = if (hourValue.length == 1) "0$hourValue" else hourValue,
+                        min = if (minuteValue.length == 1) "0$minuteValue" else minuteValue,
+                        sec = if (secondValue.length == 1) "0$secondValue" else secondValue,
                         index = editWorkoutSetCardioModel.index
                     )
                 )
@@ -90,9 +90,9 @@ fun EditWorkoutSetCardio(
                         laps = lapValue,
                         distance = distanceValue,
                         distanceType = distanceType,
-                        hr = hourValue,
-                        min = minuteValue,
-                        sec = secondValue,
+                        hr = if (hourValue.length == 1) "0$hourValue" else hourValue,
+                        min = if (minuteValue.length == 1) "0$minuteValue" else minuteValue,
+                        sec = if (secondValue.length == 1) "0$secondValue" else secondValue,
                         index = editWorkoutSetCardioModel.index
                     )
                 )

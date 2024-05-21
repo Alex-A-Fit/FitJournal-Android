@@ -38,8 +38,8 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.ClearButton
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.SaveButton
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.EditWorkoutSetProperties
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.WorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.EditWorkoutSetProperties
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.theme.DarkGray2
 import com.example.fitjournal.core.presentation.theme.DisabledBackgroundGray
 import com.example.fitjournal.core.presentation.theme.MediumGray

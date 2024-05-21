@@ -1,17 +1,15 @@
-package com.example.fitjournal.addWorkout.screen.journalEntry.details.components
+package com.example.fitjournal.addWorkout.screen.addworkout.details.components
 
 import androidx.compose.runtime.Composable
 import com.example.fitjournal.addWorkout.model.AddWorkoutDetailUiState
 import com.example.fitjournal.addWorkout.model.events.AddWorkoutDetailEvents
-import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.components.EditWorkoutOptionalTimeSection
-import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.calisthenics.components.EditWorkoutOptionalWeightSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.commoncomponents.EditWorkoutRepsSection
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.commoncomponents.EditWorkoutSetsSection
+import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.components.EditWorkoutMandatoryWeightSection
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
-import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 
 @Composable
-fun AddWorkoutCalisthenics(
+fun AddWorkoutWeightLifting(
     addWorkoutDetailUiState: AddWorkoutDetailUiState
 ) {
     EditWorkoutSetsSection(
@@ -19,14 +17,18 @@ fun AddWorkoutCalisthenics(
         editSetsValue = { editWorkoutFunction: EditWorkoutFunction, setValue: String ->
             addWorkoutDetailUiState.addWorkoutDetailEvents(
                 AddWorkoutDetailEvents.EditSets(
-                    editWorkoutFunction,
-                    setValue
+                    editWorkoutFunction = editWorkoutFunction,
+                    setValue = setValue
                 )
             )
         },
         setsValue = addWorkoutDetailUiState.sets,
         onSetValueChange = {
-            addWorkoutDetailUiState.addWorkoutDetailEvents(AddWorkoutDetailEvents.OnSetValueChange(it))
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.OnSetValueChange(
+                    it
+                )
+            )
         }
     )
     EditWorkoutRepsSection(
@@ -34,17 +36,21 @@ fun AddWorkoutCalisthenics(
         editRepValue = { editWorkoutFunction: EditWorkoutFunction, repValue: String ->
             addWorkoutDetailUiState.addWorkoutDetailEvents(
                 AddWorkoutDetailEvents.EditReps(
-                    editWorkoutFunction,
-                    repValue
+                    editWorkoutFunction = editWorkoutFunction,
+                    repValue = repValue
                 )
             )
         },
         repValue = addWorkoutDetailUiState.reps,
         onRepValueChange = {
-            addWorkoutDetailUiState.addWorkoutDetailEvents(AddWorkoutDetailEvents.OnRepValueChange(it))
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.OnRepValueChange(
+                    it
+                )
+            )
         }
     )
-    EditWorkoutOptionalWeightSection(
+    EditWorkoutMandatoryWeightSection(
         isWeightErrorVisible = addWorkoutDetailUiState.isWeightErrorVisible,
         poundsOrKilogramsText = addWorkoutDetailUiState.weightType.stringValue,
         weightValue = addWorkoutDetailUiState.weight,
@@ -52,27 +58,15 @@ fun AddWorkoutCalisthenics(
             addWorkoutDetailUiState.addWorkoutDetailEvents(AddWorkoutDetailEvents.EditWeightType)
         },
         onWeightValueChange = {
-            addWorkoutDetailUiState.addWorkoutDetailEvents(AddWorkoutDetailEvents.OnWeightValueChange(it))
+            addWorkoutDetailUiState.addWorkoutDetailEvents(
+                AddWorkoutDetailEvents.OnWeightValueChange(it)
+            )
         },
         editWeightValue = { editWorkoutFunction: EditWorkoutFunction, weightValue: String ->
             addWorkoutDetailUiState.addWorkoutDetailEvents(
                 AddWorkoutDetailEvents.EditWeight(
-                    editWorkoutFunction,
-                    weightValue
-                )
-            )
-        }
-    )
-    EditWorkoutOptionalTimeSection(
-        isTimeErrorVisible = addWorkoutDetailUiState.isTimeErrorVisible,
-        hourValue = addWorkoutDetailUiState.hour,
-        minuteValue = addWorkoutDetailUiState.minute,
-        secondValue = addWorkoutDetailUiState.second,
-        onTimeValueChanged = { timeValue: String, editWorkoutTimeDeterminate: EditWorkoutTimeDeterminate ->
-            addWorkoutDetailUiState.addWorkoutDetailEvents(
-                AddWorkoutDetailEvents.EditTime(
-                    timeValue,
-                    editWorkoutTimeDeterminate
+                    editWorkoutFunction = editWorkoutFunction,
+                    weightValue = weightValue
                 )
             )
         }

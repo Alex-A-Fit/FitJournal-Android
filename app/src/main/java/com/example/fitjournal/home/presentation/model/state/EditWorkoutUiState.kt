@@ -10,10 +10,13 @@ import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
+import com.example.fitjournal.home.presentation.util.constants.GeneralConstants
 
 data class EditWorkoutUiState(
     val workout: UiState<WorkoutModel> = UiState.None,
     val editWorkoutEvents: (EditWorkoutEvents) -> Unit,
+    val localDate: String = GeneralConstants.todayDate,
+    val localDateInMillis: Long = GeneralConstants.todayDateTimeInMilli,
 
     // three lists make up the list of sets user did for each workout
     val weightLiftingPropertyList: SnapshotStateList<WeightLiftingModel> = mutableStateListOf(),
