@@ -109,7 +109,7 @@
     // Error Strings
     <string name="error_with_workout_being_added_to_library">\"%1$s\" could not be added. Please Try Again.</string>
     <string name="error_with_workout_being_deleted">\"%1$s\" could not be deleted. Please Try Again.</string>
-    <string name="error_with_sets_being_deleted">Could not delete sets. Please Try Again.</string>
+    <string name="error_with_sets_being_deleted">Could not delete set(s). Please Try Again.</string>
     <string name="error_with_adding_new_sets">Could not add set(s). Please Try Again.</string>
     <string name="error_with_updating_new_sets">Could not update set(s). Please Try Again.</string>
     <string name="error_with_adding_sets">Please enter a valid number of sets (1&#8211;999)</string>
