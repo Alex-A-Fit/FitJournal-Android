@@ -99,7 +99,7 @@ class MainActivity : ComponentActivity() {
                                         isBlurActive = showChildFabs,
                                         libraryScreenListState = libraryScreenListState,
                                         removeBlur = {
-                                            showChildFabs = it
+                                            showChildFabs = !it
                                         }
                                     )
                                 },

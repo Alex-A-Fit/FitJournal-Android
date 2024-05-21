@@ -69,7 +69,8 @@ fun LibraryScreen(
             isBlurActive = isBlurActive,
             libraryScreenListState = libraryScreenListState,
             showDialog = openAlertDialog,
-            workoutOnClick = libraryWorkoutState.handleLibraryWorkoutClickEvents
+            workoutOnClick = libraryWorkoutState.handleLibraryWorkoutClickEvents,
+            removeBlur = removeBlur
         )
     }
 }
