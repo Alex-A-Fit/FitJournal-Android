@@ -14,8 +14,6 @@ import com.example.fitjournal.core.presentation.commoncomponents.dialogs.compone
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.utils.EditWorkoutSetUtilFunctions
-import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
-import com.example.fitjournal.core.util.extensions.toDoubleOrZero
 import com.example.fitjournal.core.util.extensions.toIntOrZero
 import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
 
