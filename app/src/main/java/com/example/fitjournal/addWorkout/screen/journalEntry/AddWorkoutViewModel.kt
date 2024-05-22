@@ -1,4 +1,4 @@
-package com.example.fitjournal.journalEntry.screen.journalEntry
+package com.example.fitjournal.addWorkout.screen.journalEntry
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -7,12 +7,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fitjournal.addWorkout.model.JournalEntryUiModel
+import com.example.fitjournal.addWorkout.model.events.JournalEntryEvents
 import com.example.fitjournal.core.data.mockdata.MockData
 import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
 import com.example.fitjournal.core.util.filter.searchForText
-import com.example.fitjournal.journalEntry.model.JournalEntryUiModel
-import com.example.fitjournal.journalEntry.model.events.JournalEntryEvents
 import com.example.fitjournal.library.presentation.screen.library.utils.mapToLibraryUiList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

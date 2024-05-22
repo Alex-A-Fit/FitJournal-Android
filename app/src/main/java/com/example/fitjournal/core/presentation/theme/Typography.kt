@@ -36,7 +36,7 @@ val typography = Typography(
         fontSize = 22.sp,
         lineHeight = 22.sp,
         letterSpacing = 0.sp,
-        fontFamily = Inter.regular
+        fontFamily = Inter.bold
     ),
     titleLarge = TextStyle(
         fontSize = 20.sp,

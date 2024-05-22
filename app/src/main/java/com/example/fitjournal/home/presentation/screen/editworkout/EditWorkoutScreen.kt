@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -30,6 +31,9 @@ import com.example.fitjournal.core.presentation.commoncomponents.customcomponent
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.DeleteWorkoutDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.EditWorkoutSetDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.TransparentLoadingScreenDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.commoncomponents.text.CommonSubtitleText
 import com.example.fitjournal.core.presentation.commoncomponents.text.CommonTitleText
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
@@ -53,11 +57,22 @@ fun EditWorkoutScreen(
     var showDeleteDialog by rememberSaveable {
         mutableStateOf(false)
     }
+    var showLoadingDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
     // holds onto the id of the currently viewed workout
     // so we can delete it if need be
     var workoutUpForDeletion by rememberSaveable {
         mutableStateOf("")
     }
+
+    var showEditWorkoutSetDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var editWorkoutSet: WorkoutTypeDialog by remember {
+        mutableStateOf(WorkoutTypeDialog.None)
+    }
+
     when (val uiState = editWorkoutUiState.workout) {
         UiState.Empty -> {
             EditWorkoutErrorScreen(
@@ -92,8 +107,40 @@ fun EditWorkoutScreen(
 
             // string for issues with adding sets
             val errorWithAddingSets = stringResource(id = R.string.error_with_adding_new_sets)
+            val errorWithUpdatingSets = stringResource(id = R.string.error_with_updating_new_sets)
 
+            // workout type as a string value
+            val workoutTypeAsString =
+                stringResource(id = uiState.data.workoutDetailsModel.workoutTypeEnum.stringId)
             workoutUpForDeletion = uiState.data.id
+
+            if (showEditWorkoutSetDialog) {
+                EditWorkoutSetDialog(
+                    onDismissRequest = {
+                        showEditWorkoutSetDialog = false
+                    },
+                    onSaveWorkoutPressed = {
+                        showEditWorkoutSetDialog = false
+                        showLoadingDialog = true
+                        editWorkoutUiState.editWorkoutEvents(
+                            EditWorkoutEvents.UpdateWorkoutListItem(
+                                workoutTypeDialog = it,
+                                workoutModel = uiState.data,
+                                workoutType = workoutTypeAsString,
+                                onUpdateErrorCallback = { showSnackbar(errorWithUpdatingSets) },
+                                onSuccessfulUpdateCallback = {
+                                    showLoadingDialog = false
+                                }
+                            )
+                        )
+                    },
+                    workoutTypeDialog = editWorkoutSet
+                )
+            }
+
+            if (showLoadingDialog) {
+                TransparentLoadingScreenDialog(onBackPress = {})
+            }
 
             if (showDeleteDialog) {
                 DeleteWorkoutDialog(
@@ -117,8 +164,7 @@ fun EditWorkoutScreen(
 
                 )
             }
-            val workoutTypeAsString =
-                stringResource(id = uiState.data.workoutDetailsModel.workoutTypeEnum.stringId)
+
             LazyColumn(
                 modifier = modifier,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -245,7 +291,19 @@ fun EditWorkoutScreen(
                                         )
                                     )
                                 },
-                                editSet = {}
+                                editSet = {
+                                    editWorkoutUiState.editWorkoutEvents(
+                                        EditWorkoutEvents.GetWorkoutSet(
+                                            workoutTypeEnum = WorkoutTypeEnum.WEIGHT_TRAINING,
+                                            workoutPropertiesModel = uiState.data.workoutDetailsModel.workoutPropertiesModel,
+                                            index = it,
+                                            getWorkoutSetCallback = { workoutToEdit ->
+                                                editWorkoutSet = workoutToEdit
+                                                showEditWorkoutSetDialog = true
+                                            }
+                                        )
+                                    )
+                                }
                             )
                             if (index != editWorkoutUiState.weightLiftingPropertyList.lastIndex) {
                                 Spacer(modifier = Modifier.height(Spacing.spacing8))
@@ -275,7 +333,19 @@ fun EditWorkoutScreen(
                                         )
                                     )
                                 },
-                                editSet = {}
+                                editSet = {
+                                    editWorkoutUiState.editWorkoutEvents(
+                                        EditWorkoutEvents.GetWorkoutSet(
+                                            workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
+                                            workoutPropertiesModel = uiState.data.workoutDetailsModel.workoutPropertiesModel,
+                                            index = it,
+                                            getWorkoutSetCallback = { workoutToEdit ->
+                                                editWorkoutSet = workoutToEdit
+                                                showEditWorkoutSetDialog = true
+                                            }
+                                        )
+                                    )
+                                }
                             )
                             if (index != editWorkoutUiState.calisthenicsPropertyList.lastIndex) {
                                 Spacer(modifier = Modifier.height(Spacing.spacing8))
@@ -305,7 +375,19 @@ fun EditWorkoutScreen(
                                         )
                                     )
                                 },
-                                editSet = {}
+                                editSet = {
+                                    editWorkoutUiState.editWorkoutEvents(
+                                        EditWorkoutEvents.GetWorkoutSet(
+                                            workoutTypeEnum = WorkoutTypeEnum.CARDIO,
+                                            workoutPropertiesModel = uiState.data.workoutDetailsModel.workoutPropertiesModel,
+                                            index = it,
+                                            getWorkoutSetCallback = { workoutToEdit ->
+                                                editWorkoutSet = workoutToEdit
+                                                showEditWorkoutSetDialog = true
+                                            }
+                                        )
+                                    )
+                                }
                             )
                             if (index != editWorkoutUiState.cardioPropertyList.lastIndex) {
                                 Spacer(modifier = Modifier.height(Spacing.spacing8))

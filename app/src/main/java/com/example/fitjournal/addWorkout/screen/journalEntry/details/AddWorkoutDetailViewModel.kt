@@ -1,4 +1,4 @@
-package com.example.fitjournal.journalEntry.screen.journalEntry.details
+package com.example.fitjournal.addWorkout.screen.journalEntry.details
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -7,6 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.R
+import com.example.fitjournal.addWorkout.model.AddWorkoutDetailUiState
+import com.example.fitjournal.addWorkout.model.events.AddWorkoutDetailEvents
 import com.example.fitjournal.core.data.model.results.Result
 import com.example.fitjournal.core.data.util.getWorkoutType
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
@@ -25,8 +27,6 @@ import com.example.fitjournal.home.presentation.model.enum.EditWorkoutListFuncti
 import com.example.fitjournal.home.presentation.model.ui.CalisthenicsValidator
 import com.example.fitjournal.home.presentation.model.ui.CardioValidator
 import com.example.fitjournal.home.presentation.model.ui.WeightLiftingValidator
-import com.example.fitjournal.journalEntry.model.AddWorkoutDetailUiState
-import com.example.fitjournal.journalEntry.model.events.AddWorkoutDetailEvents
 import com.example.fitjournal.statistics.domain.mapper.toRealmWorkoutEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

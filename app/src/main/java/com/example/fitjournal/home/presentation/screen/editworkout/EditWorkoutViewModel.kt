@@ -8,12 +8,20 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.EditWorkoutSetCalisthenicsModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.EditWorkoutSetCardioModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.EditWorkoutSetWeightLiftingModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.WorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.toCalisthenicsModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.toCardioModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.toWeightLiftingModel
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
@@ -117,24 +125,12 @@ class EditWorkoutViewModel @Inject constructor(
                             workoutModel.toRealmWorkoutEntry(
                                 workoutType = event.workoutType
                             )
-                        viewModelScope.launch {
-                            val isUpdateSuccess = realmWorkoutEntryUseCase
-                                .updateSingleWorkoutEntryToRealmDbUseCase(
-                                    updatedRealmWorkoutEntry = updatedRealmEntry
-                                )
-                            if (isUpdateSuccess) {
-                                updateWorkoutState(
-                                    newEditWorkoutUiState = editWorkoutState.copy(
-                                        weightLiftingPropertyList = newPropsModel.getWeightLiftingProps(),
-                                        reps = "",
-                                        sets = "",
-                                        weight = ""
-                                    )
-                                )
-                            } else {
-                                event.onAddErrorCallback()
-                            }
-                        }
+                        callUpdateWorkoutUseCase(
+                            updatedRealmEntry = updatedRealmEntry,
+                            newPropsModel = newPropsModel,
+                            onErrorCallback = event.onAddErrorCallback,
+                            clearFields = true
+                        )
                     } catch (e: Exception) {
                         viewModelScope.launch {
                             event.onAddErrorCallback()
@@ -189,7 +185,92 @@ class EditWorkoutViewModel @Inject constructor(
                 }
             }
 
-            is EditWorkoutEvents.UpdateWorkoutListItem -> TODO()
+            is EditWorkoutEvents.UpdateWorkoutListItem -> {
+                val workout = event.workoutModel
+                when (event.workoutTypeDialog) {
+                    is WorkoutTypeDialog.Calisthenics -> {
+                        val updatedWorkoutSet =
+                            event.workoutTypeDialog.editWorkoutSetCalisthenicsModel
+                        val workoutListOfSets = editWorkoutState.calisthenicsPropertyList
+                        workoutListOfSets[updatedWorkoutSet.index] =
+                            updatedWorkoutSet.toCalisthenicsModel()
+                        workout.workoutDetailsModel.workoutPropertiesModel =
+                            WorkoutPropertiesModel.CalisthenicsProps(workoutListOfSets)
+                        try {
+                            val updatedRealmEntry =
+                                workout.toRealmWorkoutEntry(
+                                    workoutType = event.workoutType
+                                )
+                            callUpdateWorkoutUseCase(
+                                updatedRealmEntry = updatedRealmEntry,
+                                newPropsModel = workout.workoutDetailsModel.workoutPropertiesModel,
+                                onErrorCallback = event.onUpdateErrorCallback,
+                                onSuccessCallback = event.onSuccessfulUpdateCallback,
+                                clearFields = false
+                            )
+                        } catch (e: Exception) {
+                            viewModelScope.launch {
+                                event.onUpdateErrorCallback()
+                            }
+                        }
+                    }
+
+                    is WorkoutTypeDialog.Cardio -> {
+                        val updatedWorkoutSet =
+                            event.workoutTypeDialog.editWorkoutSetCardioModel
+                        val workoutListOfSets = editWorkoutState.cardioPropertyList
+                        workoutListOfSets[updatedWorkoutSet.index] =
+                            updatedWorkoutSet.toCardioModel()
+                        workout.workoutDetailsModel.workoutPropertiesModel =
+                            WorkoutPropertiesModel.CardioProps(workoutListOfSets)
+                        try {
+                            val updatedRealmEntry =
+                                workout.toRealmWorkoutEntry(
+                                    workoutType = event.workoutType
+                                )
+                            callUpdateWorkoutUseCase(
+                                updatedRealmEntry = updatedRealmEntry,
+                                newPropsModel = workout.workoutDetailsModel.workoutPropertiesModel,
+                                onErrorCallback = event.onUpdateErrorCallback,
+                                onSuccessCallback = event.onSuccessfulUpdateCallback,
+                                clearFields = false
+                            )
+                        } catch (e: Exception) {
+                            viewModelScope.launch {
+                                event.onUpdateErrorCallback()
+                            }
+                        }
+                    }
+                    is WorkoutTypeDialog.WeightLifting -> {
+                        val updatedWorkoutSet =
+                            event.workoutTypeDialog.editWorkoutSetWeightLiftingModel
+                        val workoutListOfSets = editWorkoutState.weightLiftingPropertyList
+                        workoutListOfSets[updatedWorkoutSet.index] =
+                            updatedWorkoutSet.toWeightLiftingModel()
+                        workout.workoutDetailsModel.workoutPropertiesModel =
+                            WorkoutPropertiesModel.WeightLiftingProps(workoutListOfSets)
+                        try {
+                            val updatedRealmEntry =
+                                workout.toRealmWorkoutEntry(
+                                    workoutType = event.workoutType
+                                )
+                            callUpdateWorkoutUseCase(
+                                updatedRealmEntry = updatedRealmEntry,
+                                newPropsModel = workout.workoutDetailsModel.workoutPropertiesModel,
+                                onErrorCallback = event.onUpdateErrorCallback,
+                                clearFields = false,
+                                onSuccessCallback = event.onSuccessfulUpdateCallback
+                            )
+                        } catch (e: Exception) {
+                            viewModelScope.launch {
+                                event.onUpdateErrorCallback()
+                            }
+                        }
+                    }
+                    WorkoutTypeDialog.None -> Unit
+                }
+            }
+
             is EditWorkoutEvents.DeleteEntireWorkout -> {
                 try {
                     viewModelScope.launch {
@@ -239,27 +320,12 @@ class EditWorkoutViewModel @Inject constructor(
                             workoutModel.toRealmWorkoutEntry(
                                 workoutType = event.workoutType
                             )
-                        viewModelScope.launch {
-                            val isUpdateSuccess = realmWorkoutEntryUseCase
-                                .updateSingleWorkoutEntryToRealmDbUseCase(
-                                    updatedRealmWorkoutEntry = updatedRealmEntry
-                                )
-                            if (isUpdateSuccess) {
-                                updateWorkoutState(
-                                    newEditWorkoutUiState = editWorkoutState.copy(
-                                        calisthenicsPropertyList = newPropsModel.getCalisthenicsProps(),
-                                        reps = "",
-                                        sets = "",
-                                        weight = "",
-                                        hour = "",
-                                        minute = "",
-                                        second = ""
-                                    )
-                                )
-                            } else {
-                                event.onAddErrorCallback()
-                            }
-                        }
+                        callUpdateWorkoutUseCase(
+                            updatedRealmEntry = updatedRealmEntry,
+                            newPropsModel = newPropsModel,
+                            onErrorCallback = event.onAddErrorCallback,
+                            clearFields = true
+                        )
                     } catch (e: Exception) {
                         viewModelScope.launch {
                             event.onAddErrorCallback()
@@ -292,26 +358,12 @@ class EditWorkoutViewModel @Inject constructor(
                             workoutModel.toRealmWorkoutEntry(
                                 workoutType = event.workoutType
                             )
-                        viewModelScope.launch {
-                            val isUpdateSuccess = realmWorkoutEntryUseCase
-                                .updateSingleWorkoutEntryToRealmDbUseCase(
-                                    updatedRealmWorkoutEntry = updatedRealmEntry
-                                )
-                            if (isUpdateSuccess) {
-                                updateWorkoutState(
-                                    newEditWorkoutUiState = editWorkoutState.copy(
-                                        cardioPropertyList = newPropsModel.getCardioProps(),
-                                        laps = "",
-                                        distance = "",
-                                        hour = "",
-                                        minute = "",
-                                        second = ""
-                                    )
-                                )
-                            } else {
-                                event.onAddErrorCallback()
-                            }
-                        }
+                        callUpdateWorkoutUseCase(
+                            updatedRealmEntry = updatedRealmEntry,
+                            newPropsModel = newPropsModel,
+                            onErrorCallback = event.onAddErrorCallback,
+                            clearFields = true
+                        )
                     } catch (e: Exception) {
                         viewModelScope.launch {
                             event.onAddErrorCallback()
@@ -335,12 +387,14 @@ class EditWorkoutViewModel @Inject constructor(
                     )
                 )
             }
+
             is EditWorkoutEvents.EditDistance -> {
                 addOrSubtractDistance(
                     editWorkoutFunction = event.editWorkoutFunction,
                     distanceValue = event.value
                 )
             }
+
             is EditWorkoutEvents.OnDistanceValueChange -> {
                 updateWorkoutState(
                     newEditWorkoutUiState = editWorkoutState.copy(
@@ -349,6 +403,7 @@ class EditWorkoutViewModel @Inject constructor(
                     )
                 )
             }
+
             EditWorkoutEvents.EditDistanceType -> {
                 updateWorkoutState(
                     editWorkoutState.copy(
@@ -356,12 +411,22 @@ class EditWorkoutViewModel @Inject constructor(
                     )
                 )
             }
+
             EditWorkoutEvents.EditWeightType -> {
                 updateWorkoutState(
                     editWorkoutState.copy(
                         weightType = editWorkoutState.weightType.getOtherWeightType()
                     )
                 )
+            }
+
+            is EditWorkoutEvents.GetWorkoutSet -> {
+                val workoutSet = createWorkoutSetModel(
+                    workoutTypeEnum = event.workoutTypeEnum,
+                    workoutPropertiesModel = event.workoutPropertiesModel,
+                    index = event.index
+                )
+                event.getWorkoutSetCallback(workoutSet)
             }
         }
     }
@@ -752,6 +817,106 @@ class EditWorkoutViewModel @Inject constructor(
                         second = value
                     )
                 )
+            }
+        }
+    }
+
+    private fun createWorkoutSetModel(
+        workoutTypeEnum: WorkoutTypeEnum,
+        workoutPropertiesModel: WorkoutPropertiesModel,
+        index: Int
+    ): WorkoutTypeDialog {
+        return when (workoutTypeEnum) {
+            WorkoutTypeEnum.WEIGHT_TRAINING -> {
+                val workoutList = workoutPropertiesModel.getWeightLiftingProps()
+                val chosenWorkout = workoutList[index]
+                WorkoutTypeDialog.WeightLifting(
+                    editWorkoutSetWeightLiftingModel = EditWorkoutSetWeightLiftingModel(
+                        reps = chosenWorkout.reps.toString(),
+                        sets = chosenWorkout.sets.toString(),
+                        weight = chosenWorkout.weight.toString(),
+                        weightType = chosenWorkout.weightType,
+                        index = index
+                    )
+                )
+            }
+
+            WorkoutTypeEnum.CALISTHENICS -> {
+                val workoutList = workoutPropertiesModel.getCalisthenicsProps()
+                val chosenWorkout = workoutList[index]
+                WorkoutTypeDialog.Calisthenics(
+                    editWorkoutSetCalisthenicsModel = EditWorkoutSetCalisthenicsModel(
+                        reps = chosenWorkout.reps.toString(),
+                        sets = chosenWorkout.sets.toString(),
+                        weight = chosenWorkout.weight?.toString() ?: "",
+                        weightType = chosenWorkout.weightType,
+                        hr = chosenWorkout.time?.hours ?: "",
+                        min = chosenWorkout.time?.minutes ?: "",
+                        sec = chosenWorkout.time?.seconds ?: "",
+                        index = index
+                    )
+                )
+            }
+
+            WorkoutTypeEnum.CARDIO -> {
+                val workoutList = workoutPropertiesModel.getCardioProps()
+                val chosenWorkout = workoutList[index]
+                WorkoutTypeDialog.Cardio(
+                    editWorkoutSetCardioModel = EditWorkoutSetCardioModel(
+                        laps = chosenWorkout.laps?.toString() ?: "",
+                        distance = chosenWorkout.distance.toString(),
+                        distanceType = chosenWorkout.distanceType,
+                        hr = chosenWorkout.time.hours,
+                        min = chosenWorkout.time.minutes,
+                        sec = chosenWorkout.time.seconds,
+                        index = index
+                    )
+                )
+            }
+        }
+    }
+
+    private fun callUpdateWorkoutUseCase(
+        updatedRealmEntry: RealmWorkoutEntry,
+        newPropsModel: WorkoutPropertiesModel,
+        onErrorCallback: suspend () -> Unit,
+        onSuccessCallback: () -> Unit = {},
+        clearFields: Boolean
+    ) {
+        viewModelScope.launch {
+            val isUpdateSuccess = realmWorkoutEntryUseCase
+                .updateSingleWorkoutEntryToRealmDbUseCase(
+                    updatedRealmWorkoutEntry = updatedRealmEntry
+                )
+            if (isUpdateSuccess) {
+                if (clearFields) {
+                    updateWorkoutState(
+                        newEditWorkoutUiState = editWorkoutState.copy(
+                            weightLiftingPropertyList = newPropsModel.getWeightLiftingProps(),
+                            cardioPropertyList = newPropsModel.getCardioProps(),
+                            calisthenicsPropertyList = newPropsModel.getCalisthenicsProps(),
+                            reps = "",
+                            sets = "",
+                            weight = "",
+                            hour = "",
+                            minute = "",
+                            second = "",
+                            laps = "",
+                            distance = ""
+                        )
+                    )
+                } else {
+                    updateWorkoutState(
+                        newEditWorkoutUiState = editWorkoutState.copy(
+                            weightLiftingPropertyList = newPropsModel.getWeightLiftingProps(),
+                            cardioPropertyList = newPropsModel.getCardioProps(),
+                            calisthenicsPropertyList = newPropsModel.getCalisthenicsProps()
+                        )
+                    )
+                }
+                onSuccessCallback()
+            } else {
+                onErrorCallback()
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.fitjournal.journalEntry.components
+package com.example.fitjournal.addWorkout.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -24,7 +24,7 @@ import com.example.fitjournal.library.presentation.screen.library.model.WorkoutC
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun JournalEntryList(
+fun UserWorkoutList(
     workoutList: SnapshotStateList<WorkoutCategory>,
     selectedWorkout: (String, String) -> Unit
 ) {

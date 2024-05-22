@@ -1,4 +1,4 @@
-package com.example.fitjournal.journalEntry.screen.journalEntry.details
+package com.example.fitjournal.addWorkout.screen.journalEntry.details
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
+import com.example.fitjournal.addWorkout.model.AddWorkoutDetailUiState
+import com.example.fitjournal.addWorkout.model.events.AddWorkoutDetailEvents
+import com.example.fitjournal.addWorkout.screen.journalEntry.details.components.AddWorkoutErrorScreen
+import com.example.fitjournal.addWorkout.screen.journalEntry.details.components.AddWorkoutSection
 import com.example.fitjournal.core.data.model.results.Result
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
@@ -42,10 +46,6 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.extensions.toDoubleOrZero
 import com.example.fitjournal.core.util.extensions.toIntOrZero
 import com.example.fitjournal.home.presentation.screen.editworkout.WorkoutTitle
-import com.example.fitjournal.journalEntry.model.AddWorkoutDetailUiState
-import com.example.fitjournal.journalEntry.model.events.AddWorkoutDetailEvents
-import com.example.fitjournal.journalEntry.screen.journalEntry.details.components.AddWorkoutErrorScreen
-import com.example.fitjournal.journalEntry.screen.journalEntry.details.components.AddWorkoutSection
 import kotlinx.coroutines.launch
 
 @Composable

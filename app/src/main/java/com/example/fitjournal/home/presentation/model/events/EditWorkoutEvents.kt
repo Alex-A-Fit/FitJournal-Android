@@ -4,6 +4,8 @@ import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
+import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
@@ -42,7 +44,11 @@ sealed class EditWorkoutEvents {
     ) : EditWorkoutEvents()
 
     data class UpdateWorkoutListItem(
-        val index: Int
+        val workoutTypeDialog: WorkoutTypeDialog,
+        val workoutModel: WorkoutModel,
+        val workoutType: String,
+        val onSuccessfulUpdateCallback: () -> Unit,
+        val onUpdateErrorCallback: suspend () -> Unit
     ) : EditWorkoutEvents()
 
     data class DeleteWorkoutSetItemInWorkoutModelList(
@@ -102,5 +108,12 @@ sealed class EditWorkoutEvents {
         val workoutType: String,
         val workoutModel: WorkoutModel,
         val onAddErrorCallback: suspend () -> Unit
+    ) : EditWorkoutEvents()
+
+    data class GetWorkoutSet(
+        val workoutTypeEnum: WorkoutTypeEnum,
+        val workoutPropertiesModel: WorkoutPropertiesModel,
+        val index: Int,
+        val getWorkoutSetCallback: (WorkoutTypeDialog) -> Unit
     ) : EditWorkoutEvents()
 }

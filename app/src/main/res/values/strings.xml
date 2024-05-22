@@ -18,6 +18,7 @@
     <string name="content_desc_edit_workout_pencil_icon">Pencil icon to edit workout entry</string>
     <string name="content_desc_error_icon">Error icon to signify an error has occurred</string>d
     <string name="content_desc_journal_filled_icon">Journal Icon</string>
+    <string name="content_desc_close_dialog_icon">X symbol to cancel dialog</string>
     <string name="content_desc_navigate_to_add_workout_icon">Right chevron to signify adding workout to journal</string>
     <string name="content_desc_distance_type_switch_icon">Icon to flip between miles and kilometers when entering distance</string>
 
@@ -28,6 +29,7 @@
     <string name="title_calisthenics">Calisthenics</string>
     <string name="title_cardio">Cardio</string>
     <string name="title_top_set">Top Set Summary</string>
+    <string name="title_edit_set">Edit Set</string>
     <string name="title_calisthenics_session_summary">Calisthenics Session Summary</string>
     <string name="title_cardio_session_summary">Cardio Session Summary</string>
     <string name="title_choose_workout_type">Choose a workout type</string>
@@ -90,11 +92,13 @@
 
     // Button Strings
     <string name="button_cancel">Cancel</string>
+    <string name="button_cancel_edit">Cancel Edit</string>
     <string name="button_confirm">Confirm</string>
     <string name="button_create_workout">Create Workout</string>
     <string name="button_clear">Clear</string>
     <string name="button_save_set">Save Set</string>
     <string name="button_save_workout">Save Workout</string>
+    <string name="button_update_workout">Update Workout</string>
     <string name="button_delete">Delete</string>
     <string name="button_delete_workout">Delete Workout</string>
 
@@ -105,13 +109,14 @@
     // Error Strings
     <string name="error_with_workout_being_added_to_library">\"%1$s\" could not be added. Please Try Again.</string>
     <string name="error_with_workout_being_deleted">\"%1$s\" could not be deleted. Please Try Again.</string>
-    <string name="error_with_sets_being_deleted">Could not delete sets. Please Try Again.</string>
+    <string name="error_with_sets_being_deleted">Could not delete set(s). Please Try Again.</string>
     <string name="error_with_adding_new_sets">Could not add set(s). Please Try Again.</string>
+    <string name="error_with_updating_new_sets">Could not update set(s). Please Try Again.</string>
     <string name="error_with_adding_sets">Please enter a valid number of sets (1&#8211;999)</string>
     <string name="error_with_adding_reps">Please enter a valid number of reps (1&#8211;999)</string>
-    <string name="error_with_adding_weight">Please enter a valid weight (1&#8211;99999)</string>
-    <string name="error_with_adding_distance">Please enter a valid distance (1&#8211;99999)</string>
-    <string name="error_with_adding_laps">Please enter a valid number of laps</string>
+    <string name="error_with_adding_weight">Please enter a valid weight (0.01&#8211;99999)</string>
+    <string name="error_with_adding_distance">Please enter a valid distance (0.01&#8211;99999)</string>
+    <string name="error_with_adding_laps">Please enter a valid number of laps (0.01&#8211;99999)</string>
     <string name="error_with_adding_time">Please enter a valid time</string>
     <string name="error_no_details_found">No details found for this workout</string>
     <string name="error_add_workout_canceled">Adding workout to journal was cancelled</string>
