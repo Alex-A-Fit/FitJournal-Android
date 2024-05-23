@@ -208,9 +208,11 @@ class HomeScreenViewModel @Inject constructor(
 
     // should be call on load or when needed for loading screen
     private fun getDataFromRealmDb() {
-        updateHomeScreenState(newHomeScreenState = homeScreenState.copy(
-            listOfVisibleWorkoutsUiState = UiState.Loading
-        ))
+        updateHomeScreenState(
+            newHomeScreenState = homeScreenState.copy(
+                listOfVisibleWorkoutsUiState = UiState.Loading
+            )
+        )
         viewModelScope.launch {
             val masterWorkoutList = realmWorkoutEntryUseCase.getRealmWorkoutEntryList()
             if (masterWorkoutList.isNotEmpty()) {

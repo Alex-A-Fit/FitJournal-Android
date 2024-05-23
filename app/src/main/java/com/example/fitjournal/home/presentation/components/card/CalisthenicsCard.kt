@@ -17,7 +17,6 @@ import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.presentation.commoncomponents.cards.FitJournalCard
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.core.util.extensions.TwoDecimalOrNoDecimal
 import com.example.fitjournal.core.util.extensions.getTimeForUi
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CalisthenicsSummaryTitle
 import com.example.fitjournal.home.presentation.components.card.subcomponents.CardSeeDetailsText
@@ -52,8 +51,10 @@ fun CalisthenicsCard(
                         .padding(horizontal = Spacing.spacing16),
                     sets = calisthenicsUi.sets?.toString() ?: "",
                     reps = calisthenicsUi.reps?.toString() ?: "",
-                    weight = calisthenicsUi.weight?.toString()?.TwoDecimalOrNoDecimal(),
-                    weightInKgs = calisthenicsUi.weightInKgs.toString().TwoDecimalOrNoDecimal(),
+                    // removing weight until a better statistic can be established
+                    // also see WorkoutModelToWorkoutUiModelMapper for logic on weight
+//                    weight = calisthenicsUi.weight?.toString()?.TwoDecimalOrNoDecimal(),
+//                    weightInKgs = calisthenicsUi.weightInKgs.toString().TwoDecimalOrNoDecimal(),
                     time = calisthenicsUi.time
                 )
             } else {

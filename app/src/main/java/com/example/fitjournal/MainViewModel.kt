@@ -11,7 +11,6 @@ import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntr
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

@@ -83,17 +83,19 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                                 hours += it.time?.hours?.toIntOrZero() ?: 0
                                 minutes += it.time?.minutes?.toIntOrZero() ?: 0
                                 seconds += it.time?.seconds?.toIntOrZero() ?: 0
-                                weight += when (it.weightType.stringConcatenatedValue) {
-                                    "kgs" -> {
-                                        (it.weight?.times(KILOGRAMS_TO_POUNDS_CONVERSION_FACTOR)) ?: 0.0
-                                    }
-
-                                    "lbs" -> {
-                                        it.weight ?: 0.0
-                                    }
-
-                                    else -> 0.0
-                                }
+                                // removing weight until a better statistic can be established
+//                                weight += when (it.weightType.stringConcatenatedValue) {
+//                                    "kgs" -> {
+//                                        val newWeight = (it.weight?.times(KILOGRAMS_TO_POUNDS_CONVERSION_FACTOR)) ?: 0.0
+//                                        newWeight * it.reps * it.sets
+//                                    }
+//
+//                                    "lbs" -> {
+//                                        (it.weight ?: 0.0) * it.reps * it.sets
+//                                    }
+//
+//                                    else -> 0.0
+//                                }
                             }
                             CalisthenicsModel(
                                 reps = reps,
