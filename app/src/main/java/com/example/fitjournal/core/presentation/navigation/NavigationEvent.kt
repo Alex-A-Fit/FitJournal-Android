@@ -19,7 +19,7 @@ fun navigationEvent(
             navController.navigate(Route.WORKOUT_STATISTICS_SCREEN)
         }
 
-        NavigationInterface.NavigateToJournalEntry -> {
+        NavigationInterface.NavigateToAddWorkout -> {
             navController.navigate(Route.ADD_WORKOUT_SCREEN)
         }
 
@@ -29,7 +29,7 @@ fun navigationEvent(
             )
         }
 
-        is NavigationInterface.NavigateToJournalEntryDetails -> {
+        is NavigationInterface.NavigateToAddWorkoutDetails -> {
             navController.navigate("${Route.ADD_WORKOUT_DETAILS_SCREEN}/${navigationInterface.workoutName}/${navigationInterface.workoutType}")
         }
     }

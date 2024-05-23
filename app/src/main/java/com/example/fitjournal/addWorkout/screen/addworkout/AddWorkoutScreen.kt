@@ -62,7 +62,7 @@ fun AddWorkoutScreen(
         UserWorkoutList(
             workoutList = journalEntryState.listOfSearchedWorkouts,
             selectedWorkout = { name, type ->
-                navigateToDestination(NavigationInterface.NavigateToJournalEntryDetails(name, type))
+                navigateToDestination(NavigationInterface.NavigateToAddWorkoutDetails(name, type))
             }
         )
     }

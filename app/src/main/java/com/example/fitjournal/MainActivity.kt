@@ -495,14 +495,14 @@ fun navigateToDestination(
         )
     }
 
-    NavigationInterface.NavigateToJournalEntry -> {
+    NavigationInterface.NavigateToAddWorkout -> {
         navigationEvent(
             navigationInterface = navigationInterface,
             navController = navController
         )
     }
 
-    is NavigationInterface.NavigateToJournalEntryDetails -> {
+    is NavigationInterface.NavigateToAddWorkoutDetails -> {
         navigationEvent(
             navigationInterface = navigationInterface,
             navController = navController

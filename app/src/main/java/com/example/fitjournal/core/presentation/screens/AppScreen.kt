@@ -174,7 +174,7 @@ fun AppScreen(
                         },
                         navigateToJournalEntry = {
                             displayChildFabs?.invoke(false)
-                            navigateToDestination(NavigationInterface.NavigateToJournalEntry)
+                            navigateToDestination(NavigationInterface.NavigateToAddWorkout)
                         }
                     )
                     AddWorkoutFab(
