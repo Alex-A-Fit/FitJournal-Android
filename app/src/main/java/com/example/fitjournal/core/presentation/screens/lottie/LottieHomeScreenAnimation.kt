@@ -15,7 +15,6 @@ import com.example.fitjournal.core.presentation.navigation.navigationEvent
 
 @Composable
 fun LottieHomeScreenAnimation(
-    mainActivityState: MainActivityUiState,
     navController: NavController
 ) {
     val nightMode = isSystemInDarkTheme()
@@ -29,11 +28,10 @@ fun LottieHomeScreenAnimation(
         composition = composition,
         progress = { progress }
     )
-    when (mainActivityState) {
-        MainActivityUiState.Success -> navigationEvent(
+    if (progress == 1f) {
+        navigationEvent(
             navigationInterface = NavigationInterface.NavigateToHome,
             navController = navController
         )
-        else -> Unit
     }
 }

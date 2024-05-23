@@ -16,6 +16,8 @@ import javax.inject.Inject
 class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryRepository {
     private val realm = FitJournal.realm
 
+    override var shouldViewModelFetchRealmData: Boolean = false
+
     override suspend fun addMockDataToRealm() {
         // this is how we would write workout to realm db
         realm.write {
@@ -67,6 +69,7 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
         return realm.write {
             return@write try {
                 copyToRealm(realmWorkoutEntry, updatePolicy = UpdatePolicy.ALL)
+                shouldViewModelFetchRealmData = true
                 true
             } catch (e: IllegalArgumentException) {
                 // catch for copyToRealm() in case it throws error
@@ -93,6 +96,7 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
                     originalRealmWorkoutEntry.workout = updatedRealmWorkoutEntry.workout
                     originalRealmWorkoutEntry.timeStamp = updatedRealmWorkoutEntry.timeStamp
                     copyToRealm(originalRealmWorkoutEntry, updatePolicy = UpdatePolicy.ALL)
+                    shouldViewModelFetchRealmData = true
                     wasUpdateSuccessful = true
                 } else {
                     wasUpdateSuccessful = false
@@ -119,6 +123,7 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
                 ).also {
                     wasWorkoutDeleted = if (it != null) {
                         delete(it)
+                        shouldViewModelFetchRealmData = true
                         true
                     } else {
                         false
@@ -133,6 +138,10 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
                 false
             }
         }
+    }
+
+    override fun updateShouldViewModelFetchRealmData(shouldFetch: Boolean) {
+        shouldViewModelFetchRealmData = shouldFetch
     }
 
     private fun createWorkoutId(): String {

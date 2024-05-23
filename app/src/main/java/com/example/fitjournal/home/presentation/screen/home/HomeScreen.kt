@@ -50,14 +50,8 @@ fun HomeScreen(
     removeBlur: () -> Unit,
     showSnackBar: suspend (String) -> Unit
 ) {
-    LaunchedEffect(key1 = homeScreenState.listOfVisibleWorkoutsUiState) {
-        when (homeScreenState.listOfVisibleWorkoutsUiState) {
-            UiState.None -> {
-                homeScreenState.homeScreenEvents(HomeScreenEvents.CollectRealmWorkoutEntryFromDb)
-            }
-
-            else -> Unit
-        }
+    LaunchedEffect(key1 = true) {
+        homeScreenState.homeScreenEvents(HomeScreenEvents.SyncRealmWorkoutEntryFromDb)
     }
 
     val isDatePickerDialogShowing by rememberSaveable(homeScreenState.isDatePickerDialogShowing) {

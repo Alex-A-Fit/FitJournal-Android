@@ -41,6 +41,7 @@ import com.example.fitjournal.core.presentation.screens.lottie.LottieHomeScreenA
 import com.example.fitjournal.core.presentation.theme.FitJournalTheme
 import com.example.fitjournal.home.presentation.components.appbar.EditWorkoutTopAppBar
 import com.example.fitjournal.home.presentation.components.appbar.HomeTopAppBar
+import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutScreen
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutViewModel
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
@@ -66,7 +67,13 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainViewModel.runSplashScreen()
+        mainViewModel.getDataFromRealm(
+            getDataFromRealmForHomeScreen = {
+                homeViewModel.homeScreenState.homeScreenEvents(
+                    HomeScreenEvents.CollectRealmWorkoutEntryFromDb
+                )
+            }
+        )
         setContent {
             FitJournalTheme {
                 val navController = rememberNavController()
@@ -159,7 +166,6 @@ class MainActivity : ComponentActivity() {
                         composable(Route.HOME_SCREEN) {
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = true
-                                homeViewModel.clearUiState()
                             }
                             AppScreen(
                                 showChildrenFabIcons = showChildFabs,
@@ -400,7 +406,6 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(LOTTIE_INTRO) {
                             LottieHomeScreenAnimation(
-                                mainActivityState = mainViewModel.appScreenState,
                                 navController = navController
                             )
                         }

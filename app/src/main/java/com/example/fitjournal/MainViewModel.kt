@@ -37,11 +37,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun runSplashScreen() {
-        viewModelScope.launch {
-            delay(2000L)
-            appScreenState = MainActivityUiState.Success
-        }
+    fun getDataFromRealm(
+        getDataFromRealmForHomeScreen: () -> Unit
+    ) {
+        getDataFromRealmForHomeScreen()
     }
 
     fun addWorkoutToLibraryDatabase(
