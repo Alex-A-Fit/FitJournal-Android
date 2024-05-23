@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,7 +34,7 @@ import com.example.fitjournal.core.presentation.commoncomponents.customcomponent
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.DeleteWorkoutDialog
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.EditWorkoutSetDialog
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.TransparentLoadingScreenDialog
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.WorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.commoncomponents.text.CommonSubtitleText
 import com.example.fitjournal.core.presentation.commoncomponents.text.CommonTitleText
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
@@ -42,6 +43,7 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.extensions.toDoubleOrZero
 import com.example.fitjournal.core.util.extensions.toIntOrZero
 import com.example.fitjournal.core.util.state.UiState
+import com.example.fitjournal.home.presentation.components.datepicker.FitJournalDatePickerDialog
 import com.example.fitjournal.home.presentation.model.events.EditWorkoutEvents
 import com.example.fitjournal.home.presentation.model.state.EditWorkoutUiState
 import com.example.fitjournal.home.presentation.screen.editworkout.components.EditWorkoutErrorScreen
@@ -72,6 +74,11 @@ fun EditWorkoutScreen(
     var editWorkoutSet: WorkoutTypeDialog by remember {
         mutableStateOf(WorkoutTypeDialog.None)
     }
+    var showDatePickerDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+    val dateUpdatedText = stringResource(id = R.string.text_date_updated)
+    val dateFailedToUpdateText = stringResource(id = R.string.error_date_update_failed)
 
     when (val uiState = editWorkoutUiState.workout) {
         UiState.Empty -> {
@@ -97,6 +104,9 @@ fun EditWorkoutScreen(
         }
 
         is UiState.Success -> {
+            LaunchedEffect(key1 = uiState) {
+                editWorkoutUiState.editWorkoutEvents(EditWorkoutEvents.UpdateDate(uiState.data.date))
+            }
             // strings needed if we want to delete a workout or set
             val onDeleteFailedSnackBarText = stringResource(
                 id = R.string.error_with_workout_being_deleted,
@@ -165,6 +175,33 @@ fun EditWorkoutScreen(
                 )
             }
 
+            if (showDatePickerDialog) {
+                FitJournalDatePickerDialog(
+                    currentDate = editWorkoutUiState.localDateInMillis,
+                    selectDate = { selectedDate ->
+                        editWorkoutUiState.editWorkoutEvents(
+                            EditWorkoutEvents.SelectDateFromDatePicker(
+                                userSelectedDate = selectedDate,
+                                onSuccessfulUpdateCallback = {
+                                    showDatePickerDialog = false
+                                    showSnackbar(dateUpdatedText)
+                                },
+                                workout = uiState.data,
+                                workoutType = workoutTypeAsString,
+                                onErrorCallback = {
+                                    showDatePickerDialog = false
+                                    showSnackbar(dateFailedToUpdateText)
+                                }
+                            )
+                        )
+                        showDatePickerDialog = false
+                    },
+                    dismissDialog = {
+                        showDatePickerDialog = false
+                    }
+                )
+            }
+
             LazyColumn(
                 modifier = modifier,
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -177,7 +214,12 @@ fun EditWorkoutScreen(
                     )
                 }
                 item {
-                    EditWorkoutBanner(workoutDate = uiState.data.date)
+                    EditWorkoutBanner(
+                        workoutDate = editWorkoutUiState.localDate,
+                        openTimePicker = {
+                            showDatePickerDialog = true
+                        }
+                    )
                 }
                 item {
                     EditWorkoutSection(
@@ -276,7 +318,6 @@ fun EditWorkoutScreen(
                         itemsIndexed(editWorkoutUiState.weightLiftingPropertyList) { index, item ->
                             WeightLiftingWorkoutSets(
                                 workout = item,
-                                index = index,
                                 deleteSet = {
                                     editWorkoutUiState.editWorkoutEvents(
                                         EditWorkoutEvents.DeleteWorkoutSetItemInWorkoutModelList(
@@ -296,7 +337,7 @@ fun EditWorkoutScreen(
                                         EditWorkoutEvents.GetWorkoutSet(
                                             workoutTypeEnum = WorkoutTypeEnum.WEIGHT_TRAINING,
                                             workoutPropertiesModel = uiState.data.workoutDetailsModel.workoutPropertiesModel,
-                                            index = it,
+                                            index = index,
                                             getWorkoutSetCallback = { workoutToEdit ->
                                                 editWorkoutSet = workoutToEdit
                                                 showEditWorkoutSetDialog = true
@@ -318,7 +359,6 @@ fun EditWorkoutScreen(
                         itemsIndexed(editWorkoutUiState.calisthenicsPropertyList) { index, item ->
                             CalisthenicsWorkoutSets(
                                 workout = item,
-                                index = index,
                                 deleteSet = {
                                     editWorkoutUiState.editWorkoutEvents(
                                         EditWorkoutEvents.DeleteWorkoutSetItemInWorkoutModelList(
@@ -338,7 +378,7 @@ fun EditWorkoutScreen(
                                         EditWorkoutEvents.GetWorkoutSet(
                                             workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
                                             workoutPropertiesModel = uiState.data.workoutDetailsModel.workoutPropertiesModel,
-                                            index = it,
+                                            index = index,
                                             getWorkoutSetCallback = { workoutToEdit ->
                                                 editWorkoutSet = workoutToEdit
                                                 showEditWorkoutSetDialog = true
@@ -360,7 +400,6 @@ fun EditWorkoutScreen(
                         itemsIndexed(editWorkoutUiState.cardioPropertyList) { index, item ->
                             CardioWorkoutSets(
                                 workout = item,
-                                index = index,
                                 deleteSet = {
                                     editWorkoutUiState.editWorkoutEvents(
                                         EditWorkoutEvents.DeleteWorkoutSetItemInWorkoutModelList(
@@ -380,7 +419,7 @@ fun EditWorkoutScreen(
                                         EditWorkoutEvents.GetWorkoutSet(
                                             workoutTypeEnum = WorkoutTypeEnum.CARDIO,
                                             workoutPropertiesModel = uiState.data.workoutDetailsModel.workoutPropertiesModel,
-                                            index = it,
+                                            index = index,
                                             getWorkoutSetCallback = { workoutToEdit ->
                                                 editWorkoutSet = workoutToEdit
                                                 showEditWorkoutSetDialog = true

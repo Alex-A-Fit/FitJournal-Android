@@ -1,6 +1,5 @@
 package com.example.fitjournal.home.presentation.model.events
 
-import androidx.compose.material3.SnackbarHostState
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 
 sealed class HomeScreenEvents {
@@ -10,9 +9,6 @@ sealed class HomeScreenEvents {
     data object CollectRealmWorkoutEntryFromDb : HomeScreenEvents()
     data object SyncRealmWorkoutEntryFromDb : HomeScreenEvents()
     data class OnConfirmFilterExercisesDialog(val filterList: List<WorkoutTypeEnum>) : HomeScreenEvents()
-    data class SelectDateFromDatePicker(
-        val userSelectedDate: Long,
-        val snackBarHostState: SnackbarHostState
-    ) : HomeScreenEvents()
+    data class SelectDateFromDatePicker(val userSelectedDate: Long) : HomeScreenEvents()
     data class UpdateFilterDialog(val isDialogShowing: Boolean) : HomeScreenEvents()
 }

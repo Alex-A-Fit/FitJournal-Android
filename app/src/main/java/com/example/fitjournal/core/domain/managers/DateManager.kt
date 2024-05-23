@@ -1,5 +1,6 @@
 package com.example.fitjournal.core.domain.managers
 
+import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -46,16 +47,19 @@ object DateManager {
         val localDate = localDateTime.toLocalDate()
         return UserSelectedDate(
             localDateTime = localDateTime,
-            localDateString = formatDate(localDate.toString())
+            localDateString = localDate.formatToCommonDate()
         )
     }
 
-    fun formatDate(dateString: String): String {
+    private fun formatDate(dateString: String): String {
         return LocalDate.parse(dateString).format(dateFormat).toString()
     }
 
     fun getTimeInMilliseconds(currentDate: LocalDateTime): Long {
         return currentDate.toEpochSecond(ZoneOffset.UTC) * 1000
+    }
+    fun getCommonDateFormat(): DateTimeFormatter {
+        return dateFormat
     }
 }
 

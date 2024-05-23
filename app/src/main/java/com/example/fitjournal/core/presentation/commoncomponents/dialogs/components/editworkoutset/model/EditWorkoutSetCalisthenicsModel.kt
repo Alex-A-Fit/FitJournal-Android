@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model
+package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model
 
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.TimeModel
@@ -20,7 +20,15 @@ fun EditWorkoutSetCalisthenicsModel.toCalisthenicsModel(): CalisthenicsModel {
     return CalisthenicsModel(
         reps = reps.toIntOrZero(),
         sets = sets.toIntOrZero(),
-        time = if (hr.isEmpty() && min.isEmpty() && sec.isEmpty()) null else TimeModel(hours = hr, minutes = min, seconds = sec),
+        time = if (hr.isEmpty() && min.isEmpty() && sec.isEmpty()) {
+            null
+        } else {
+            TimeModel(
+                hours = hr.ifEmpty { "00" },
+                minutes = min.ifEmpty { "00" },
+                seconds = sec.ifEmpty { "00" }
+            )
+        },
         weight = weight.toDoubleOrNull(),
         weightType = weightType
     )

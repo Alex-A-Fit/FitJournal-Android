@@ -1,6 +1,8 @@
 package com.example.fitjournal.home.presentation.screen.home
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -10,16 +12,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.FilterWorkoutTypeDialog
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
@@ -34,16 +37,18 @@ import com.example.fitjournal.home.presentation.mapper.mapToCardioUi
 import com.example.fitjournal.home.presentation.mapper.mapToWeightLiftingUi
 import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.model.state.HomeScreenUiState
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeScreenState: HomeScreenUiState,
-    snackBarHostState: SnackbarHostState,
     lazyListState: LazyListState,
     navigateToDestination: (NavigationInterface) -> Unit,
-    isBlurActive: Boolean
+    isBlurActive: Boolean,
+    removeBlur: () -> Unit,
+    showSnackBar: suspend (String) -> Unit
 ) {
     LaunchedEffect(key1 = homeScreenState.listOfVisibleWorkoutsUiState) {
         when (homeScreenState.listOfVisibleWorkoutsUiState) {
@@ -55,15 +60,15 @@ fun HomeScreen(
         }
     }
 
-    var isDatePickerDialogShowing by rememberSaveable {
+    val isDatePickerDialogShowing by rememberSaveable(homeScreenState.isDatePickerDialogShowing) {
         mutableStateOf(homeScreenState.isDatePickerDialogShowing)
     }
-    var isFilterDialogShowing by remember {
+    val isFilterDialogShowing by rememberSaveable(homeScreenState.isFilterDialogShowing) {
         mutableStateOf(homeScreenState.isFilterDialogShowing)
     }
-
-    isFilterDialogShowing = homeScreenState.isFilterDialogShowing
-    isDatePickerDialogShowing = homeScreenState.isDatePickerDialogShowing
+    val clickIndication = LocalIndication.current
+    val dateUpdatedText = stringResource(id = R.string.text_date_updated)
+    val coroutineScope = rememberCoroutineScope()
     Box(
         modifier = modifier
     ) {
@@ -73,10 +78,12 @@ fun HomeScreen(
                 selectDate = { selectedDate ->
                     homeScreenState.homeScreenEvents(
                         HomeScreenEvents.SelectDateFromDatePicker(
-                            userSelectedDate = selectedDate,
-                            snackBarHostState = snackBarHostState
+                            userSelectedDate = selectedDate
                         )
                     )
+                    coroutineScope.launch {
+                        showSnackBar(dateUpdatedText)
+                    }
                 },
                 dismissDialog = {
                     homeScreenState.homeScreenEvents(HomeScreenEvents.DismissDatePicker)
@@ -104,7 +111,7 @@ fun HomeScreen(
             )
         }
         when (val workoutList = homeScreenState.listOfVisibleWorkoutsUiState) {
-            UiState.Loading -> {
+            UiState.Loading, UiState.None -> {
                 // need to provide loading animation of some sorts
                 Unit
             }
@@ -112,10 +119,6 @@ fun HomeScreen(
             UiState.Empty, is UiState.Error -> {
                 // need to provide empty state of some sorts for empty and error
                 Unit
-            }
-
-            UiState.None -> {
-                // none should be defaulted to loading
             }
 
             is UiState.Success -> {
@@ -132,12 +135,20 @@ fun HomeScreen(
                                     weightLiftingUi = workout.workoutDetailsUiModel.mapToWeightLiftingUi(),
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .clickable {
-                                            navigateToDestination(
-                                                NavigationInterface.NavigateToEditWorkout(
-                                                    workout.id
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication =
+                                            if (isBlurActive) null else clickIndication
+                                        ) {
+                                            if (isBlurActive) {
+                                                removeBlur()
+                                            } else {
+                                                navigateToDestination(
+                                                    NavigationInterface.NavigateToEditWorkout(
+                                                        workout.id
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
                                 )
                             }
@@ -147,12 +158,19 @@ fun HomeScreen(
                                     calisthenicsUi = workout.workoutDetailsUiModel.mapToCalisthenicsUi(),
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .clickable {
-                                            navigateToDestination(
-                                                NavigationInterface.NavigateToEditWorkout(
-                                                    workout.id
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = if (isBlurActive) null else clickIndication
+                                        ) {
+                                            if (isBlurActive) {
+                                                removeBlur()
+                                            } else {
+                                                navigateToDestination(
+                                                    NavigationInterface.NavigateToEditWorkout(
+                                                        workout.id
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
                                 )
                             }
@@ -162,12 +180,19 @@ fun HomeScreen(
                                     cardioUi = workout.workoutDetailsUiModel.mapToCardioUi(),
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .clickable {
-                                            navigateToDestination(
-                                                NavigationInterface.NavigateToEditWorkout(
-                                                    workout.id
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = if (isBlurActive) null else clickIndication
+                                        ) {
+                                            if (isBlurActive) {
+                                                removeBlur()
+                                            } else {
+                                                navigateToDestination(
+                                                    NavigationInterface.NavigateToEditWorkout(
+                                                        workout.id
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
                                 )
                             }

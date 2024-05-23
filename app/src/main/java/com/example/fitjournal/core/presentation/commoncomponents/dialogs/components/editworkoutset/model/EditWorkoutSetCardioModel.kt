@@ -1,4 +1,4 @@
-package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model
+package com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model
 
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.TimeModel
@@ -20,9 +20,9 @@ fun EditWorkoutSetCardioModel.toCardioModel(): CardioModel {
         distance = distance.toDoubleOrZero(),
         distanceType = distanceType,
         time = TimeModel(
-            hours = hr,
-            minutes = min,
-            seconds = sec
+            hours = hr.ifEmpty { "00" },
+            minutes = min.ifEmpty { "00" },
+            seconds = sec.ifEmpty { "00" }
         ),
         laps = laps.toDoubleOrNull()
     )

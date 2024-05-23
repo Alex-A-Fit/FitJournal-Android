@@ -1,4 +1,4 @@
-package com.example.fitjournal.addWorkout.screen.journalEntry.details
+package com.example.fitjournal.addWorkout.screen.addworkout.details
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -22,13 +23,14 @@ import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.addWorkout.model.AddWorkoutDetailUiState
 import com.example.fitjournal.addWorkout.model.events.AddWorkoutDetailEvents
-import com.example.fitjournal.addWorkout.screen.journalEntry.details.components.AddWorkoutErrorScreen
-import com.example.fitjournal.addWorkout.screen.journalEntry.details.components.AddWorkoutSection
+import com.example.fitjournal.addWorkout.screen.addworkout.details.components.AddWorkoutErrorScreen
+import com.example.fitjournal.addWorkout.screen.addworkout.details.components.AddWorkoutSection
 import com.example.fitjournal.core.data.model.results.Result
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.TimeModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
+import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.SaveButton
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.ClearAndSaveButtons
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.EditWorkoutBanner
@@ -38,13 +40,16 @@ import com.example.fitjournal.core.presentation.commoncomponents.customcomponent
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.cardio.CardioWorkoutSets
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingListHeader
 import com.example.fitjournal.core.presentation.commoncomponents.customcomponents.editworkout.weightlifting.WeightLiftingWorkoutSets
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.EditWorkoutSetDialog
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.TransparentLoadingScreenDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.DisabledBackgroundGray
 import com.example.fitjournal.core.presentation.theme.MediumGray
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.extensions.toDoubleOrZero
 import com.example.fitjournal.core.util.extensions.toIntOrZero
+import com.example.fitjournal.home.presentation.components.datepicker.FitJournalDatePickerDialog
 import com.example.fitjournal.home.presentation.screen.editworkout.WorkoutTitle
 import kotlinx.coroutines.launch
 
@@ -63,6 +68,21 @@ fun AddWorkoutDetailScreen(
     var enableSaveButton by rememberSaveable {
         mutableStateOf(false)
     }
+    var showEditWorkoutSetDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var editWorkoutSet: WorkoutTypeDialog by remember {
+        mutableStateOf(WorkoutTypeDialog.None)
+    }
+    val workoutCanceled = stringResource(id = R.string.error_add_workout_canceled)
+    val workoutSuccessfullyAdded = stringResource(
+        id = R.string.text_workout_successfully_added_to_journal,
+        addWorkoutDetailUiState.workoutName
+    )
+    var showDatePickerDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     LaunchedEffect(
         key1 = addWorkoutDetailUiState.calisthenicsPropertyList,
         key2 = addWorkoutDetailUiState.cardioPropertyList,
@@ -72,11 +92,41 @@ fun AddWorkoutDetailScreen(
             addWorkoutDetailUiState.cardioPropertyList.isNotEmpty() ||
             addWorkoutDetailUiState.weightLiftingPropertyList.isNotEmpty()
     }
-    val workoutCanceled = stringResource(id = R.string.error_add_workout_canceled)
-    val workoutSuccessfullyAdded = stringResource(
-        id = R.string.text_workout_successfully_added_to_journal,
-        addWorkoutDetailUiState.workoutName
-    )
+
+    if (showDatePickerDialog) {
+        FitJournalDatePickerDialog(
+            currentDate = addWorkoutDetailUiState.localDateInMillis,
+            selectDate = { selectedDate ->
+                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                    AddWorkoutDetailEvents.SelectDateFromDatePicker(
+                        userSelectedDate = selectedDate
+                    )
+                )
+                showDatePickerDialog = false
+            },
+            dismissDialog = {
+                showDatePickerDialog = false
+            }
+        )
+    }
+
+    if (showEditWorkoutSetDialog) {
+        EditWorkoutSetDialog(
+            onDismissRequest = {
+                showEditWorkoutSetDialog = false
+            },
+            onSaveWorkoutPressed = {
+                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                    AddWorkoutDetailEvents.UpdateWorkoutProperties(
+                        workoutTypeDialog = it
+                    )
+                )
+                showEditWorkoutSetDialog = false
+            },
+            workoutTypeDialog = editWorkoutSet
+        )
+    }
+
     if (showLoadingScreenDialog) {
         TransparentLoadingScreenDialog(
             onBackPress = {
@@ -115,7 +165,12 @@ fun AddWorkoutDetailScreen(
                 )
             }
             item {
-                EditWorkoutBanner(workoutDate = addWorkoutDetailUiState.date)
+                EditWorkoutBanner(
+                    workoutDate = addWorkoutDetailUiState.localDate,
+                    openTimePicker = {
+                        showDatePickerDialog = true
+                    }
+                )
             }
             item {
                 AddWorkoutSection(
@@ -239,7 +294,6 @@ fun AddWorkoutDetailScreen(
                     itemsIndexed(addWorkoutDetailUiState.weightLiftingPropertyList) { index, item ->
                         WeightLiftingWorkoutSets(
                             workout = item,
-                            index = index,
                             deleteSet = {
                                 addWorkoutDetailUiState.addWorkoutDetailEvents(
                                     AddWorkoutDetailEvents.DeleteWorkoutSetItemInWorkoutModelList(
@@ -251,7 +305,21 @@ fun AddWorkoutDetailScreen(
                                     )
                                 )
                             },
-                            editSet = {}
+                            editSet = {
+                                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                                    AddWorkoutDetailEvents.CreateModelForEditWorkoutDialog(
+                                        workoutTypeEnum = WorkoutTypeEnum.WEIGHT_TRAINING,
+                                        workoutPropertiesModel = WorkoutPropertiesModel.WeightLiftingProps(
+                                            addWorkoutDetailUiState.weightLiftingPropertyList
+                                        ),
+                                        index = index,
+                                        getWorkoutSetCallback = { workoutToEdit ->
+                                            editWorkoutSet = workoutToEdit
+                                            showEditWorkoutSetDialog = true
+                                        }
+                                    )
+                                )
+                            }
                         )
                         if (index != addWorkoutDetailUiState.weightLiftingPropertyList.lastIndex) {
                             Spacer(modifier = Modifier.height(Spacing.spacing8))
@@ -266,7 +334,6 @@ fun AddWorkoutDetailScreen(
                     itemsIndexed(addWorkoutDetailUiState.calisthenicsPropertyList) { index, item ->
                         CalisthenicsWorkoutSets(
                             workout = item,
-                            index = index,
                             deleteSet = {
                                 addWorkoutDetailUiState.addWorkoutDetailEvents(
                                     AddWorkoutDetailEvents.DeleteWorkoutSetItemInWorkoutModelList(
@@ -278,7 +345,21 @@ fun AddWorkoutDetailScreen(
                                     )
                                 )
                             },
-                            editSet = {}
+                            editSet = {
+                                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                                    AddWorkoutDetailEvents.CreateModelForEditWorkoutDialog(
+                                        workoutTypeEnum = WorkoutTypeEnum.CALISTHENICS,
+                                        workoutPropertiesModel = WorkoutPropertiesModel.CalisthenicsProps(
+                                            addWorkoutDetailUiState.calisthenicsPropertyList
+                                        ),
+                                        index = index,
+                                        getWorkoutSetCallback = { workoutToEdit ->
+                                            editWorkoutSet = workoutToEdit
+                                            showEditWorkoutSetDialog = true
+                                        }
+                                    )
+                                )
+                            }
                         )
                         if (index != addWorkoutDetailUiState.calisthenicsPropertyList.lastIndex) {
                             Spacer(modifier = Modifier.height(Spacing.spacing8))
@@ -293,7 +374,6 @@ fun AddWorkoutDetailScreen(
                     itemsIndexed(addWorkoutDetailUiState.cardioPropertyList) { index, item ->
                         CardioWorkoutSets(
                             workout = item,
-                            index = index,
                             deleteSet = {
                                 addWorkoutDetailUiState.addWorkoutDetailEvents(
                                     AddWorkoutDetailEvents.DeleteWorkoutSetItemInWorkoutModelList(
@@ -305,7 +385,21 @@ fun AddWorkoutDetailScreen(
                                     )
                                 )
                             },
-                            editSet = {}
+                            editSet = {
+                                addWorkoutDetailUiState.addWorkoutDetailEvents(
+                                    AddWorkoutDetailEvents.CreateModelForEditWorkoutDialog(
+                                        workoutTypeEnum = WorkoutTypeEnum.CARDIO,
+                                        workoutPropertiesModel = WorkoutPropertiesModel.CardioProps(
+                                            addWorkoutDetailUiState.cardioPropertyList
+                                        ),
+                                        index = index,
+                                        getWorkoutSetCallback = { workoutToEdit ->
+                                            editWorkoutSet = workoutToEdit
+                                            showEditWorkoutSetDialog = true
+                                        }
+                                    )
+                                )
+                            }
                         )
                         if (index != addWorkoutDetailUiState.cardioPropertyList.lastIndex) {
                             Spacer(modifier = Modifier.height(Spacing.spacing8))

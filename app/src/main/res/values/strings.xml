@@ -21,6 +21,7 @@
     <string name="content_desc_close_dialog_icon">X symbol to cancel dialog</string>
     <string name="content_desc_navigate_to_add_workout_icon">Right chevron to signify adding workout to journal</string>
     <string name="content_desc_distance_type_switch_icon">Icon to flip between miles and kilometers when entering distance</string>
+    <string name="content_desc_navigate_to_exercise_details_icon">Navigate to exercise details</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
@@ -34,6 +35,7 @@
     <string name="title_cardio_session_summary">Cardio Session Summary</string>
     <string name="title_choose_workout_type">Choose a workout type</string>
     <string name="title_create_new_workout">Add New Workout</string>
+    <string name="title_add_to_journal">Add To Journal</string>
     <string name="text_edit_workout_title">%1$s (%2$s)</string>
     <string name="title_edit_workout_error">Sorry, the workout you selected could not be found</string>
     <string name="title_add_workout_error">Sorry, the workout you selected can not be added to your journal. Please go back and try again.</string>
@@ -65,7 +67,7 @@
     <string name="text_cardio_menu_title">Cardio</string>
     <string name="text_calisthenics_menu_title">Calisthenics</string>
     <string name="text_edit_your_workout">Edit Your Workout Below</string>
-    <string name="text_date_and_date_value">Created on: %1$s</string>
+    <string name="text_chosen_date">Chosen Date:</string>
     <string name="text_back_to_journal">Go back to Journal</string>
     <string name="text_back_to_add_workout_list">Go back to Workout List</string>
     <string name="text_not_applicable">N/A</string>
@@ -105,6 +107,7 @@
     // Success Strings
     <string name="text_workout_successfully_added_to_library">\"%1$s\" was added to your Library!</string>
     <string name="text_workout_successfully_added_to_journal">\"%1$s\" was added to your Journal!</string>
+    <string name="text_date_updated">Date Updated</string>
 
     // Error Strings
     <string name="error_with_workout_being_added_to_library">\"%1$s\" could not be added. Please Try Again.</string>
@@ -120,6 +123,8 @@
     <string name="error_with_adding_time">Please enter a valid time</string>
     <string name="error_no_details_found">No details found for this workout</string>
     <string name="error_add_workout_canceled">Adding workout to journal was cancelled</string>
+    <string name="error_date_update_failed">Error, date failed to update</string>
+
 
     // Placeholder strings
     <string name="text_library_searchbar_placeholder">Search for workout</string>

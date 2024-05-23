@@ -5,7 +5,7 @@ import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editWorkoutSet.model.WorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
@@ -115,5 +115,17 @@ sealed class EditWorkoutEvents {
         val workoutPropertiesModel: WorkoutPropertiesModel,
         val index: Int,
         val getWorkoutSetCallback: (WorkoutTypeDialog) -> Unit
+    ) : EditWorkoutEvents()
+
+    data class SelectDateFromDatePicker(
+        val userSelectedDate: Long,
+        val workout: WorkoutModel,
+        val workoutType: String,
+        val onSuccessfulUpdateCallback: suspend () -> Unit,
+        val onErrorCallback: suspend () -> Unit
+    ) : EditWorkoutEvents()
+
+    data class UpdateDate(
+        val date: String
     ) : EditWorkoutEvents()
 }

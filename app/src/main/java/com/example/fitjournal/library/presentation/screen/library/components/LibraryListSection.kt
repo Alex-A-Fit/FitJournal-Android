@@ -25,9 +25,10 @@ import com.example.fitjournal.library.presentation.screen.library.model.WorkoutC
 fun LibraryListSection(
     categories: SnapshotStateList<WorkoutCategory>,
     isBlurActive: Boolean,
-    modifier: Modifier = Modifier,
     libraryScreenListState: LazyListState,
     showDialog: MutableState<Boolean>,
+    modifier: Modifier = Modifier,
+    removeBlur: (Boolean) -> Unit,
     workoutOnClick: (LibraryWorkoutClickEvents) -> Unit
 ) {
     val workoutLibraryList = remember(categories) {
@@ -45,7 +46,13 @@ fun LibraryListSection(
             }
             itemsIndexed(category.items) { index, workout ->
                 Column(modifier = modifier.padding(start = Spacing.spacing16)) {
-                    ExerciseItem(exercise = workout.workoutName, showDialog = showDialog, workoutOnClick = workoutOnClick)
+                    ExerciseItem(
+                        exercise = workout.workoutName,
+                        showDialog = showDialog,
+                        workoutOnClick = workoutOnClick,
+                        isBlurActive = isBlurActive,
+                        removeBlur = removeBlur
+                    )
                     if (index != category.items.lastIndex) {
                         HorizontalDivider(
                             thickness = Spacing.spacing1,

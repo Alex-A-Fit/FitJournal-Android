@@ -25,9 +25,8 @@ import com.example.fitjournal.core.util.extensions.TwoDecimalOrNoDecimal
 @Composable
 fun WeightLiftingWorkoutSets(
     workout: WeightLiftingModel,
-    index: Int,
-    deleteSet: (Int) -> Unit,
-    editSet: (Int) -> Unit
+    deleteSet: () -> Unit,
+    editSet: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -43,7 +42,7 @@ fun WeightLiftingWorkoutSets(
         Icon(
             modifier = Modifier
                 .clickable {
-                    editSet(index)
+                    editSet()
                 }
                 .weight(0.5f, fill = true),
             imageVector = Icons.Filled.Create,
@@ -80,7 +79,7 @@ fun WeightLiftingWorkoutSets(
         Icon(
             modifier = Modifier
                 .clickable {
-                    deleteSet(index)
+                    deleteSet()
                 }
                 .weight(0.5f, fill = true),
             imageVector = Icons.Filled.Delete,

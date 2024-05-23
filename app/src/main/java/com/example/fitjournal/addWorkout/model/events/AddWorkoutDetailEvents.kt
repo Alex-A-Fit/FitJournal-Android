@@ -4,6 +4,8 @@ import com.example.fitjournal.core.data.model.results.Result
 import com.example.fitjournal.core.domain.model.CalisthenicsModel
 import com.example.fitjournal.core.domain.model.CardioModel
 import com.example.fitjournal.core.domain.model.WeightLiftingModel
+import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
@@ -39,10 +41,6 @@ sealed class AddWorkoutDetailEvents() {
 
     data class ClearWorkoutTextFields(
         val workoutTypeEnum: WorkoutTypeEnum
-    ) : AddWorkoutDetailEvents()
-
-    data class UpdateWorkoutListItem(
-        val index: Int
     ) : AddWorkoutDetailEvents()
 
     data class DeleteWorkoutSetItemInWorkoutModelList(
@@ -94,7 +92,21 @@ sealed class AddWorkoutDetailEvents() {
         val onAddErrorCallback: suspend () -> Unit
     ) : AddWorkoutDetailEvents()
 
+    data class CreateModelForEditWorkoutDialog(
+        val workoutTypeEnum: WorkoutTypeEnum,
+        val workoutPropertiesModel: WorkoutPropertiesModel,
+        val index: Int,
+        val getWorkoutSetCallback: (WorkoutTypeDialog) -> Unit
+    ) : AddWorkoutDetailEvents()
+
+    data class UpdateWorkoutProperties(
+        val workoutTypeDialog: WorkoutTypeDialog
+    ) : AddWorkoutDetailEvents()
+
     data object ClearViewModelState : AddWorkoutDetailEvents()
     data object StopAddWorkoutJob : AddWorkoutDetailEvents()
     data class AddWorkoutToRealm(val callback: (Result) -> Unit) : AddWorkoutDetailEvents()
+    data class SelectDateFromDatePicker(
+        val userSelectedDate: Long
+    ) : AddWorkoutDetailEvents()
 }

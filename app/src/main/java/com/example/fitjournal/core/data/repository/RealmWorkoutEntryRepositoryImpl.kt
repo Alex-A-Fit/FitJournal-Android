@@ -41,12 +41,16 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
     // query realm db and find values based on query
     // check if values exist
     override suspend fun getRealmWorkoutEntryList(): List<RealmWorkoutEntry> {
-        val query = realm.query<RealmWorkoutEntry>().find()
-        val list = query.toRealmList().toList()
-        if (list.isNotEmpty()) {
-            return list
+        val list: MutableList<RealmWorkoutEntry> = mutableListOf()
+        return realm.write {
+            val query = realm.query<RealmWorkoutEntry>().find()
+            list.addAll(query.toRealmList().toList())
+            if (list.isEmpty()) {
+                emptyList()
+            } else {
+                list.toList()
+            }
         }
-        return emptyList()
     }
 
     override suspend fun getSingleRealmWorkoutEntry(workoutId: String): RealmWorkoutEntry? {
@@ -87,6 +91,7 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
                 )
                 if (originalRealmWorkoutEntry != null) {
                     originalRealmWorkoutEntry.workout = updatedRealmWorkoutEntry.workout
+                    originalRealmWorkoutEntry.timeStamp = updatedRealmWorkoutEntry.timeStamp
                     copyToRealm(originalRealmWorkoutEntry, updatePolicy = UpdatePolicy.ALL)
                     wasUpdateSuccessful = true
                 } else {

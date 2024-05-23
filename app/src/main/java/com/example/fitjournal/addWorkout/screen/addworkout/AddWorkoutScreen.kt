@@ -1,4 +1,4 @@
-package com.example.fitjournal.addWorkout.screen.journalEntry
+package com.example.fitjournal.addWorkout.screen.addworkout
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

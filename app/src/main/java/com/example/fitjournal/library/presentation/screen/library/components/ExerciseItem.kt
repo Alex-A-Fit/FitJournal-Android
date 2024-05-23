@@ -1,17 +1,21 @@
 package com.example.fitjournal.library.presentation.screen.library.components
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
@@ -19,27 +23,39 @@ import com.example.fitjournal.library.presentation.screen.library.model.LibraryW
 @Composable
 fun ExerciseItem(
     exercise: String,
+    isBlurActive: Boolean,
+    removeBlur: (Boolean) -> Unit,
     showDialog: MutableState<Boolean>? = null,
     workoutOnClick: (LibraryWorkoutClickEvents) -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val indicator = LocalIndication.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = Spacing.spacing12)
-            .clickable {
-                showDialog?.value = true
-                workoutOnClick(
-                    LibraryWorkoutClickEvents.WorkoutItemClicked(
-                        workoutTitle = exercise
+            .clickable(
+                interactionSource = interactionSource,
+                indication = if (isBlurActive) null else indicator
+            ) {
+                if (isBlurActive) {
+                    removeBlur(true)
+                } else {
+                    showDialog?.value = true
+                    workoutOnClick(
+                        LibraryWorkoutClickEvents.WorkoutItemClicked(
+                            workoutTitle = exercise
+                        )
                     )
-                )
+                }
             },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ExerciseName(exercise = exercise)
-        Image(
+        Icon(
             painter = painterResource(id = R.drawable.ic_right_chevron),
-            contentDescription = "Navigate to exercise details"
+            contentDescription = stringResource(id = R.string.content_desc_navigate_to_exercise_details_icon),
+            tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }

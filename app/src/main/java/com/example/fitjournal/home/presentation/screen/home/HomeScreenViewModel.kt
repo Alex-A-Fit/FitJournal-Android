@@ -1,7 +1,5 @@
 package com.example.fitjournal.home.presentation.screen.home
 
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -40,9 +38,6 @@ class HomeScreenViewModel @Inject constructor(
         when (events) {
             is HomeScreenEvents.SelectDateFromDatePicker -> {
                 getSelectedDate(events.userSelectedDate)
-                // dismissing dialog on date selection
-                updateDatePickerDialog(isDatePickerShowing = false)
-                showSnackBar(snackBarHostState = events.snackBarHostState)
             }
 
             is HomeScreenEvents.UpdateFilterDialog -> updateFilterDialog(
@@ -124,12 +119,6 @@ class HomeScreenViewModel @Inject constructor(
         )
     }
 
-    private fun showSnackBar(snackBarHostState: SnackbarHostState) {
-        viewModelScope.launch {
-            snackBarHostState.showSnackbar("Date Updated", duration = SnackbarDuration.Short)
-        }
-    }
-
     private fun getSelectedDate(dateInMillis: Long) {
         val selectedDate = DateManager.getSelectedDate(
             dateInMillis
@@ -147,7 +136,8 @@ class HomeScreenViewModel @Inject constructor(
                     workoutList = filterListByDate,
                     filterList = homeScreenState.filterList
                 ),
-                currentDateListOfWorkouts = filterListByDate
+                currentDateListOfWorkouts = filterListByDate,
+                isDatePickerDialogShowing = false
             )
         )
     }
