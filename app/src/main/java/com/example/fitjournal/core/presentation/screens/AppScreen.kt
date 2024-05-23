@@ -31,8 +31,10 @@ import com.example.fitjournal.core.presentation.commoncomponents.floatingactionb
 import com.example.fitjournal.core.presentation.commoncomponents.floatingactionbutton.AnimatedFabColumn
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import com.example.fitjournal.library.domain.model.AddWorkoutToLibraryModel
 import com.skydoves.cloudy.Cloudy
+import java.time.LocalDate
 
 @Composable
 fun AppScreen(
@@ -174,7 +176,7 @@ fun AppScreen(
                         },
                         navigateToJournalEntry = {
                             displayChildFabs?.invoke(false)
-                            navigateToDestination(NavigationInterface.NavigateToAddWorkout)
+                            navigateToDestination(NavigationInterface.NavigateToAddWorkout(workoutDate = LocalDate.now().formatToCommonDate()))
                         }
                     )
                     AddWorkoutFab(

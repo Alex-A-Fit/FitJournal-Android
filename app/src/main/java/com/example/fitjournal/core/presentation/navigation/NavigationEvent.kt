@@ -19,8 +19,10 @@ fun navigationEvent(
             navController.navigate(Route.WORKOUT_STATISTICS_SCREEN)
         }
 
-        NavigationInterface.NavigateToAddWorkout -> {
-            navController.navigate(Route.ADD_WORKOUT_SCREEN)
+        is NavigationInterface.NavigateToAddWorkout -> {
+            navController.navigate(
+                "${Route.ADD_WORKOUT_SCREEN}/${navigationInterface.workoutDate}"
+            )
         }
 
         is NavigationInterface.NavigateToEditWorkout -> {
@@ -30,7 +32,7 @@ fun navigationEvent(
         }
 
         is NavigationInterface.NavigateToAddWorkoutDetails -> {
-            navController.navigate("${Route.ADD_WORKOUT_DETAILS_SCREEN}/${navigationInterface.workoutName}/${navigationInterface.workoutType}")
+            navController.navigate("${Route.ADD_WORKOUT_DETAILS_SCREEN}/${navigationInterface.workoutName}/${navigationInterface.workoutType}/${navigationInterface.workoutDate}")
         }
     }
 }

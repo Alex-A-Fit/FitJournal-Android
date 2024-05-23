@@ -296,7 +296,7 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
-                        composable(Route.ADD_WORKOUT_SCREEN) {
+                        composable("${Route.ADD_WORKOUT_SCREEN}${Arguments.WORKOUT_DATE}") { backStackEntry ->
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
                             }
@@ -307,14 +307,15 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainModifier ->
                                     AddWorkoutScreen(
                                         modifier = mainModifier,
-                                        journalEntryState = addWorkoutViewModel.journalEntryState,
+                                        addWorkoutUiState = addWorkoutViewModel.journalEntryState,
                                         navigateToDestination = {
                                             showChildFabs = false
                                             navigateToDestination(
                                                 navigationInterface = it,
                                                 navController = navController
                                             )
-                                        }
+                                        },
+                                        workoutDate = backStackEntry.arguments?.getString("workoutDate") ?: ""
                                     )
                                 },
                                 topAppBar = {
@@ -337,13 +338,15 @@ class MainActivity : ComponentActivity() {
                                 bottomBarVisibility = bottomBarVisibility.value
                             )
                         }
-                        composable("${Route.ADD_WORKOUT_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}") { backStackEntry ->
+                        composable("${Route.ADD_WORKOUT_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}${Arguments.WORKOUT_DATE}") { backStackEntry ->
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
-                                addWorkoutDetailViewModel.addWorkoutNameAndType(
+                                addWorkoutDetailViewModel.addNavigationArguments(
                                     workoutName = backStackEntry.arguments?.getString("workoutName")
                                         ?: "",
                                     workoutType = backStackEntry.arguments?.getString("workoutType")
+                                        ?: "",
+                                    workoutDate = backStackEntry.arguments?.getString("workoutDate")
                                         ?: ""
                                 )
                             }
@@ -495,7 +498,7 @@ fun navigateToDestination(
         )
     }
 
-    NavigationInterface.NavigateToAddWorkout -> {
+    is NavigationInterface.NavigateToAddWorkout -> {
         navigationEvent(
             navigationInterface = navigationInterface,
             navController = navController

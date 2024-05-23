@@ -116,7 +116,7 @@ fun HomeScreen(
                 HomeEmptyScreen(
                     modifier = Modifier.fillMaxSize(),
                     navigateToAddWorkoutScreen = {
-                        navigateToDestination(NavigationInterface.NavigateToAddWorkout)
+                        navigateToDestination(NavigationInterface.NavigateToAddWorkout(workoutDate = homeScreenState.currentDate))
                     }
                 )
             }
@@ -202,7 +202,7 @@ fun HomeScreen(
                     item {
                         AddToJournalButton(
                             navigateToAddWorkoutScreen = {
-                                navigateToDestination(NavigationInterface.NavigateToAddWorkout)
+                                navigateToDestination(NavigationInterface.NavigateToAddWorkout(workoutDate = homeScreenState.currentDate))
                             }
                         )
                         Spacer(modifier = Modifier.height(Spacing.spacing96))

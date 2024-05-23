@@ -6,8 +6,8 @@ import javax.inject.Inject
 class SyncDbWithViewModelUseCase @Inject constructor(
     private val realmWorkoutEntryRepository: RealmWorkoutEntryRepository
 ) {
-    // checking to see if we need to fetch new data and updating
-    // the respective boolean if we do fetch to not fetch again
+    // checking to see if we need to fetch new data and if so, updating
+    // the respective boolean on repo side to not fetch again until db changes
     operator fun invoke(): Boolean {
         val shouldSyncOccur = realmWorkoutEntryRepository.shouldViewModelFetchRealmData
         return if (shouldSyncOccur) {
