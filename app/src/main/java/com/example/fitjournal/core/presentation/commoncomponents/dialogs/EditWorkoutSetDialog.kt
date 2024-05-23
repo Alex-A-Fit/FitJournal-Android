@@ -90,8 +90,8 @@ fun EditWorkoutSetDialog(
                     workoutTypeDialog = workoutTypeDialog,
                     isWorkoutValid = { isValidWorkout, workout ->
                         isWorkoutValid = isValidWorkout
-                        if (workout != null) {
-                            newUpdatedWorkout = workout
+                        workout?.let {
+                            newUpdatedWorkout = it
                         }
                     }
                 )

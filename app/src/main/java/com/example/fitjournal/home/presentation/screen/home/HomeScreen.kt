@@ -111,7 +111,7 @@ fun HomeScreen(
             )
         }
         when (val workoutList = homeScreenState.listOfVisibleWorkoutsUiState) {
-            UiState.Loading -> {
+            UiState.Loading, UiState.None -> {
                 // need to provide loading animation of some sorts
                 Unit
             }
@@ -119,10 +119,6 @@ fun HomeScreen(
             UiState.Empty, is UiState.Error -> {
                 // need to provide empty state of some sorts for empty and error
                 Unit
-            }
-
-            UiState.None -> {
-                // none should be defaulted to loading
             }
 
             is UiState.Success -> {
