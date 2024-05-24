@@ -55,9 +55,15 @@ class HomeScreenViewModel @Inject constructor(
             HomeScreenEvents.DismissDatePicker -> updateDatePickerDialog(
                 isDatePickerShowing = false
             )
+
             HomeScreenEvents.ClearFilterExercisesDialog -> clearFilter()
             HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> getDataFromRealmDb()
-            HomeScreenEvents.SyncRealmWorkoutEntryFromDb -> getDataFromRealmDb()
+            HomeScreenEvents.SyncRealmWorkoutEntryFromDb -> {
+                val shouldSyncOccur = realmWorkoutEntryUseCase.SyncDbWithViewModelUseCase()
+                if (shouldSyncOccur) {
+                    getDataFromRealmDb()
+                }
+            }
         }
     }
 
@@ -202,6 +208,11 @@ class HomeScreenViewModel @Inject constructor(
 
     // should be call on load or when needed for loading screen
     private fun getDataFromRealmDb() {
+        updateHomeScreenState(
+            newHomeScreenState = homeScreenState.copy(
+                listOfVisibleWorkoutsUiState = UiState.Loading
+            )
+        )
         viewModelScope.launch {
             val masterWorkoutList = realmWorkoutEntryUseCase.getRealmWorkoutEntryList()
             if (masterWorkoutList.isNotEmpty()) {
@@ -229,14 +240,5 @@ class HomeScreenViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    fun clearUiState() {
-        updateHomeScreenState(
-            newHomeScreenState =
-            homeScreenState.copy(
-                listOfVisibleWorkoutsUiState = UiState.None
-            )
-        )
     }
 }

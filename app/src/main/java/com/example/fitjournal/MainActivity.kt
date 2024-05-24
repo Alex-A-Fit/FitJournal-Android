@@ -41,6 +41,7 @@ import com.example.fitjournal.core.presentation.screens.lottie.LottieHomeScreenA
 import com.example.fitjournal.core.presentation.theme.FitJournalTheme
 import com.example.fitjournal.home.presentation.components.appbar.EditWorkoutTopAppBar
 import com.example.fitjournal.home.presentation.components.appbar.HomeTopAppBar
+import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutScreen
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutViewModel
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
@@ -66,7 +67,13 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainViewModel.runSplashScreen()
+        mainViewModel.getDataFromRealm(
+            getDataFromRealmForHomeScreen = {
+                homeViewModel.homeScreenState.homeScreenEvents(
+                    HomeScreenEvents.CollectRealmWorkoutEntryFromDb
+                )
+            }
+        )
         setContent {
             FitJournalTheme {
                 val navController = rememberNavController()
@@ -159,7 +166,6 @@ class MainActivity : ComponentActivity() {
                         composable(Route.HOME_SCREEN) {
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = true
-                                homeViewModel.clearUiState()
                             }
                             AppScreen(
                                 showChildrenFabIcons = showChildFabs,
@@ -290,7 +296,7 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
-                        composable(Route.ADD_WORKOUT_SCREEN) {
+                        composable("${Route.ADD_WORKOUT_SCREEN}${Arguments.WORKOUT_DATE}") { backStackEntry ->
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
                             }
@@ -301,14 +307,15 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainModifier ->
                                     AddWorkoutScreen(
                                         modifier = mainModifier,
-                                        journalEntryState = addWorkoutViewModel.journalEntryState,
+                                        addWorkoutUiState = addWorkoutViewModel.journalEntryState,
                                         navigateToDestination = {
                                             showChildFabs = false
                                             navigateToDestination(
                                                 navigationInterface = it,
                                                 navController = navController
                                             )
-                                        }
+                                        },
+                                        workoutDate = backStackEntry.arguments?.getString("workoutDate") ?: ""
                                     )
                                 },
                                 topAppBar = {
@@ -331,13 +338,15 @@ class MainActivity : ComponentActivity() {
                                 bottomBarVisibility = bottomBarVisibility.value
                             )
                         }
-                        composable("${Route.ADD_WORKOUT_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}") { backStackEntry ->
+                        composable("${Route.ADD_WORKOUT_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}${Arguments.WORKOUT_DATE}") { backStackEntry ->
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
-                                addWorkoutDetailViewModel.addWorkoutNameAndType(
+                                addWorkoutDetailViewModel.addNavigationArguments(
                                     workoutName = backStackEntry.arguments?.getString("workoutName")
                                         ?: "",
                                     workoutType = backStackEntry.arguments?.getString("workoutType")
+                                        ?: "",
+                                    workoutDate = backStackEntry.arguments?.getString("workoutDate")
                                         ?: ""
                                 )
                             }
@@ -400,7 +409,6 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(LOTTIE_INTRO) {
                             LottieHomeScreenAnimation(
-                                mainActivityState = mainViewModel.appScreenState,
                                 navController = navController
                             )
                         }
@@ -490,14 +498,14 @@ fun navigateToDestination(
         )
     }
 
-    NavigationInterface.NavigateToJournalEntry -> {
+    is NavigationInterface.NavigateToAddWorkout -> {
         navigationEvent(
             navigationInterface = navigationInterface,
             navController = navController
         )
     }
 
-    is NavigationInterface.NavigateToJournalEntryDetails -> {
+    is NavigationInterface.NavigateToAddWorkoutDetails -> {
         navigationEvent(
             navigationInterface = navigationInterface,
             navController = navController

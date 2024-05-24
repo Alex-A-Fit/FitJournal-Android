@@ -1,16 +1,13 @@
 package com.example.fitjournal.addWorkout.screen.addworkout
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitjournal.addWorkout.model.JournalEntryUiModel
-import com.example.fitjournal.addWorkout.model.events.JournalEntryEvents
-import com.example.fitjournal.core.data.mockdata.MockData
-import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
+import com.example.fitjournal.addWorkout.model.AddWorkoutUiModel
+import com.example.fitjournal.addWorkout.model.events.AddWorkoutEvents
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
 import com.example.fitjournal.core.util.filter.searchForText
 import com.example.fitjournal.library.presentation.screen.library.utils.mapToLibraryUiList
@@ -22,12 +19,8 @@ import javax.inject.Inject
 class AddWorkoutViewModel @Inject constructor(
     private val realmWorkoutLibraryUseCase: RealmWorkoutLibraryUseCase
 ) : ViewModel() {
-
-    private val workoutList = MockData.mockLibraryList
-
-    var selectedWorkoutDetail: MutableState<RealmWorkoutLibrary?> = mutableStateOf(null)
     var journalEntryState by mutableStateOf(
-        JournalEntryUiModel(
+        AddWorkoutUiModel(
             handleJournalEntryClickEvents = ::journalClickEvents
         )
     )
@@ -37,9 +30,9 @@ class AddWorkoutViewModel @Inject constructor(
         getDataFromRealmDb()
     }
 
-    private fun journalClickEvents(event: JournalEntryEvents) {
+    private fun journalClickEvents(event: AddWorkoutEvents) {
         when (event) {
-            is JournalEntryEvents.FilterSearchByWorkout -> {
+            is AddWorkoutEvents.FilterSearchByWorkout -> {
                 val filteredList = searchForText(
                     event.workout,
                     journalEntryState.masterWorkoutList
@@ -52,7 +45,7 @@ class AddWorkoutViewModel @Inject constructor(
                 )
             }
 
-            JournalEntryEvents.ClearSearchBarFilter -> {
+            AddWorkoutEvents.ClearSearchBarFilter -> {
                 updateJournalEntryState(
                     newJournalEntryState = journalEntryState.copy(
                         listOfSearchedWorkouts = journalEntryState.masterWorkoutList.toMutableStateList(),
@@ -86,7 +79,7 @@ class AddWorkoutViewModel @Inject constructor(
         }
     }
 
-    private fun updateJournalEntryState(newJournalEntryState: JournalEntryUiModel) {
+    private fun updateJournalEntryState(newJournalEntryState: AddWorkoutUiModel) {
         journalEntryState = newJournalEntryState
     }
 }

@@ -8,14 +8,12 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.fitjournal.MainActivityUiState
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.navigation.navigationEvent
 
 @Composable
 fun LottieHomeScreenAnimation(
-    mainActivityState: MainActivityUiState,
     navController: NavController
 ) {
     val nightMode = isSystemInDarkTheme()
@@ -29,11 +27,10 @@ fun LottieHomeScreenAnimation(
         composition = composition,
         progress = { progress }
     )
-    when (mainActivityState) {
-        MainActivityUiState.Success -> navigationEvent(
+    if (progress == 1f) {
+        navigationEvent(
             navigationInterface = NavigationInterface.NavigateToHome,
             navController = navController
         )
-        else -> Unit
     }
 }
