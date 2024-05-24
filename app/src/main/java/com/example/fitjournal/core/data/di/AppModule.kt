@@ -10,6 +10,7 @@ import com.example.fitjournal.core.domain.usecase.realm.library.CreateMockDataOf
 import com.example.fitjournal.core.domain.usecase.realm.library.DeleteLibraryItemFromRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.library.GetRealmWorkoutLibraryList
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
+import com.example.fitjournal.core.domain.usecase.realm.library.SyncWorkoutLibraryDbWithViewModelUseCase
 import com.example.fitjournal.core.domain.usecase.realm.library.UpdateLibraryItemInRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.AddSingleWorkoutEntryToRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.CreateMockDataOfRealmWorkoutEntryUseCase
@@ -17,7 +18,7 @@ import com.example.fitjournal.core.domain.usecase.realm.workout.DeleteWorkoutEnt
 import com.example.fitjournal.core.domain.usecase.realm.workout.GetRealmWorkoutEntryList
 import com.example.fitjournal.core.domain.usecase.realm.workout.GetSingleRealmWorkoutEntry
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
-import com.example.fitjournal.core.domain.usecase.realm.workout.SyncDbWithViewModelUseCase
+import com.example.fitjournal.core.domain.usecase.realm.workout.SyncWorkoutEntryDbWithViewModelUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.UpdateSingleWorkoutEntryToRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.workout.AddOrSubtractDoublesUseCase
 import com.example.fitjournal.core.domain.usecase.workout.AddOrSubtractIntegersUseCase
@@ -73,7 +74,7 @@ object AppModule {
             getSingleRealmWorkoutEntry = GetSingleRealmWorkoutEntry(
                 realmWorkoutEntryRepository = realmWorkoutEntryRepository
             ),
-            SyncDbWithViewModelUseCase = SyncDbWithViewModelUseCase(
+            syncWorkoutEntryDbWithViewModelUseCase = SyncWorkoutEntryDbWithViewModelUseCase(
                 realmWorkoutEntryRepository = realmWorkoutEntryRepository
             )
         )
@@ -98,6 +99,9 @@ object AppModule {
                 realmWorkoutLibraryRepository = realmWorkoutLibraryRepository
             ),
             deleteLibraryItemFromRealmDbUseCase = DeleteLibraryItemFromRealmDbUseCase(
+                realmWorkoutLibraryRepository = realmWorkoutLibraryRepository
+            ),
+            syncRealmWorkoutLibraryUseCase = SyncWorkoutLibraryDbWithViewModelUseCase(
                 realmWorkoutLibraryRepository = realmWorkoutLibraryRepository
             )
         )

@@ -13,5 +13,8 @@ data class RealmWorkoutLibraryUseCase(
     val updateLibraryItemInRealmDbUseCase: UpdateLibraryItemInRealmDbUseCase,
 
     // DELETE
-    val deleteLibraryItemFromRealmDbUseCase: DeleteLibraryItemFromRealmDbUseCase
+    val deleteLibraryItemFromRealmDbUseCase: DeleteLibraryItemFromRealmDbUseCase,
+
+    // SYNC with ViewModel
+    val syncRealmWorkoutLibraryUseCase: SyncWorkoutLibraryDbWithViewModelUseCase
 )

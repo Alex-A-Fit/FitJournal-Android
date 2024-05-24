@@ -78,25 +78,26 @@ class LibraryScreenViewModel @Inject constructor(
                     val wasItemDeleted = realmWorkoutLibraryUseCase
                         .deleteLibraryItemFromRealmDbUseCase(workoutName)
                     if (wasItemDeleted) {
-                        val workoutCategoryList =
-                            libraryWorkoutState.masterWorkoutList.toMutableStateList()
-                        val workoutCategory = workoutCategoryList[categoryIndex]
-                        workoutCategory.items.remove(libraryWorkoutItem)
-                        workoutCategoryList[categoryIndex] = workoutCategory
-                        updateLibraryWorkoutState(
-                            newLibraryWorkoutState = libraryWorkoutState.copy(
-                                masterWorkoutList = workoutCategoryList,
-                                listOfSearchedWorkouts = if (libraryWorkoutState.searchedTerm.isEmpty()) {
-                                    workoutCategoryList.toMutableStateList()
-                                } else {
-                                    searchForText(
-                                        libraryWorkoutState.searchedTerm,
-                                        workoutCategoryList
-                                    ).toMutableStateList()
-                                },
-                                workoutItemDialogUiModel = WorkoutItemDialogUiModel()
-                            )
-                        )
+                        getDataFromRealmDb()
+//                        val workoutCategoryList =
+//                            libraryWorkoutState.masterWorkoutList.toMutableStateList()
+//                        val workoutCategory = workoutCategoryList[categoryIndex]
+//                        workoutCategory.items.remove(libraryWorkoutItem)
+//                        workoutCategoryList[categoryIndex] = workoutCategory
+//                        updateLibraryWorkoutState(
+//                            newLibraryWorkoutState = libraryWorkoutState.copy(
+//                                masterWorkoutList = workoutCategoryList,
+//                                listOfSearchedWorkouts = if (libraryWorkoutState.searchedTerm.isEmpty()) {
+//                                    workoutCategoryList.toMutableStateList()
+//                                } else {
+//                                    searchForText(
+//                                        libraryWorkoutState.searchedTerm,
+//                                        workoutCategoryList
+//                                    ).toMutableStateList()
+//                                },
+//                                workoutItemDialogUiModel = WorkoutItemDialogUiModel()
+//                            )
+//                        )
                         event.onSuccessCallback(
                             event.context.getString(
                                 R.string.text_workout_successfully_deleted_from_library,
@@ -115,6 +116,12 @@ class LibraryScreenViewModel @Inject constructor(
             }
 
             is LibraryWorkoutClickEvents.UpdateLibraryWorkout -> TODO()
+            LibraryWorkoutClickEvents.SyncRealmWorkoutEntryFromDb -> {
+                val shouldSyncOccur = realmWorkoutLibraryUseCase.syncRealmWorkoutLibraryUseCase()
+                if (shouldSyncOccur) {
+                    getDataFromRealmDb()
+                }
+            }
         }
     }
 

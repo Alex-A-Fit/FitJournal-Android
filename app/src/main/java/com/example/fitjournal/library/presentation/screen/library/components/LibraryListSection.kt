@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.core.presentation.commoncomponents.listHeader.CategoryHeader
@@ -23,6 +24,7 @@ import com.example.fitjournal.library.presentation.screen.library.model.LibraryW
 fun LibraryListSection(
     libraryWorkoutState: LibraryWorkoutUiModel,
     isBlurActive: Boolean,
+    updateUi: Boolean,
     libraryScreenListState: LazyListState,
     modifier: Modifier = Modifier,
     showEditLibraryWorkoutDialog: () -> Unit,
@@ -30,6 +32,11 @@ fun LibraryListSection(
 ) {
     val workoutLibraryList = remember(libraryWorkoutState.listOfSearchedWorkouts) {
         libraryWorkoutState.listOfSearchedWorkouts
+    }
+    LaunchedEffect(key1 = updateUi) {
+        if (updateUi){
+            workoutLibraryList[libraryWorkoutState.workoutItemDialogUiModel.workoutCategoryIndex].items.remove(libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem)
+        }
     }
 
     LazyColumn(

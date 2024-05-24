@@ -3,7 +3,7 @@ package com.example.fitjournal.core.domain.usecase.realm.workout
 import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
 import javax.inject.Inject
 
-class SyncDbWithViewModelUseCase @Inject constructor(
+class SyncWorkoutEntryDbWithViewModelUseCase @Inject constructor(
     private val realmWorkoutEntryRepository: RealmWorkoutEntryRepository
 ) {
     // checking to see if we need to fetch new data and if so, updating

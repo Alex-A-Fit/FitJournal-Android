@@ -3,6 +3,7 @@ package com.example.fitjournal.core.domain.repository
 import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
 
 interface RealmWorkoutLibraryRepository {
+    var shouldViewModelFetchRealmData: Boolean
     suspend fun addMockDataToRealm()
     suspend fun getRealmWorkoutLibraryList(): List<RealmWorkoutLibrary>
     suspend fun addWorkoutLibraryItemToRealmDb(
@@ -16,4 +17,5 @@ interface RealmWorkoutLibraryRepository {
     suspend fun deleteWorkoutEntryFromRealmDb(
         libraryWorkoutName: String
     ): Boolean
+    fun updateShouldViewModelFetchRealmData(shouldFetch: Boolean)
 }

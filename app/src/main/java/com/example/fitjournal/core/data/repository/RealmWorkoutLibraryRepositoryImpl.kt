@@ -12,6 +12,7 @@ import javax.inject.Inject
 
 class RealmWorkoutLibraryRepositoryImpl @Inject constructor() : RealmWorkoutLibraryRepository {
     private val realm = FitJournal.realm
+    override var shouldViewModelFetchRealmData: Boolean = false
 
     override suspend fun addMockDataToRealm() {
         // this is how we would write workout to realm db
@@ -48,6 +49,7 @@ class RealmWorkoutLibraryRepositoryImpl @Inject constructor() : RealmWorkoutLibr
                 )
                 if (originalRealmWorkoutEntry == null) {
                     copyToRealm(realmWorkoutLibraryItem, updatePolicy = UpdatePolicy.ALL)
+                    shouldViewModelFetchRealmData = true
                     true
                 } else {
                     false
@@ -77,6 +79,7 @@ class RealmWorkoutLibraryRepositoryImpl @Inject constructor() : RealmWorkoutLibr
                     originalRealmWorkoutEntry.name = updatedRealmWorkoutLibraryItem.name
                     originalRealmWorkoutEntry.type = updatedRealmWorkoutLibraryItem.type
                     copyToRealm(originalRealmWorkoutEntry, updatePolicy = UpdatePolicy.ALL)
+                    shouldViewModelFetchRealmData = true
                     wasUpdateSuccessful = true
                 } else {
                     wasUpdateSuccessful = false
@@ -105,6 +108,7 @@ class RealmWorkoutLibraryRepositoryImpl @Inject constructor() : RealmWorkoutLibr
                 ).also {
                     wasWorkoutDeleted = if (it != null) {
                         delete(it)
+                        shouldViewModelFetchRealmData = true
                         true
                     } else {
                         false
@@ -119,5 +123,9 @@ class RealmWorkoutLibraryRepositoryImpl @Inject constructor() : RealmWorkoutLibr
                 false
             }
         }
+    }
+
+    override fun updateShouldViewModelFetchRealmData(shouldFetch: Boolean) {
+        shouldViewModelFetchRealmData = shouldFetch
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +24,7 @@ import com.example.fitjournal.core.presentation.model.LibraryWorkoutItem
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.library.presentation.screen.library.components.EditWorkoutAlertDialog
 import com.example.fitjournal.library.presentation.screen.library.components.LibraryListSection
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
@@ -38,6 +40,9 @@ fun LibraryScreen(
     showSnackbar: suspend (String) -> Unit,
     navigateToDestination: (NavigationInterface) -> Unit
 ) {
+    LaunchedEffect(key1 = true) {
+        libraryWorkoutState.libraryWorkoutClickEvent(LibraryWorkoutClickEvents.SyncRealmWorkoutEntryFromDb)
+    }
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -46,6 +51,7 @@ fun LibraryScreen(
     var openEditLibraryWorkoutDialog by rememberSaveable { mutableStateOf(false) }
     var openDeleteWorkoutDialog by rememberSaveable { mutableStateOf(false) }
     var showLoadingDialog by rememberSaveable { mutableStateOf(false) }
+    var updateUi by rememberSaveable { mutableStateOf(false) }
 
 
     if (openEditLibraryWorkoutDialog) {
@@ -77,10 +83,12 @@ fun LibraryScreen(
                 libraryWorkoutState.libraryWorkoutClickEvent(
                     LibraryWorkoutClickEvents.DeleteLibraryWorkout(
                         onSuccessCallback = {
+                            updateUi = true
                             showLoadingDialog = false
                             showSnackbar(it)
                         },
                         onErrorCallback = {
+                            updateUi = false
                             showLoadingDialog = false
                             showSnackbar(it)
                         },
@@ -127,7 +135,8 @@ fun LibraryScreen(
             isBlurActive = isBlurActive,
             libraryScreenListState = libraryScreenListState,
             showEditLibraryWorkoutDialog = { openEditLibraryWorkoutDialog = true },
-            removeBlur = removeBlur
+            removeBlur = removeBlur,
+            updateUi = updateUi
         )
     }
 }
