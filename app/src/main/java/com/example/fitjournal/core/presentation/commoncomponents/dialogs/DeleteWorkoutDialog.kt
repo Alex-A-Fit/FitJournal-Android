@@ -23,7 +23,7 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 @Composable
 fun DeleteWorkoutDialog(
     workoutName: String,
-    workoutDate: String,
+    workoutDate: String?,
     onDismiss: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -40,7 +40,7 @@ fun DeleteWorkoutDialog(
 @Composable
 fun DeleteWorkoutSection(
     workoutName: String,
-    workoutDate: String,
+    workoutDate: String?,
     onDismiss: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -67,15 +67,17 @@ fun DeleteWorkoutSection(
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(Spacing.spacing8))
-        Text(
-            text = stringResource(
-                id = R.string.subtitle_delete_workout,
-                workoutDate
-            ),
-            color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.titleMedium
-        )
+        workoutDate?.let {
+            Spacer(modifier = Modifier.height(Spacing.spacing8))
+            Text(
+                text = stringResource(
+                    id = R.string.subtitle_delete_workout,
+                    it
+                ),
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
         Spacer(modifier = Modifier.height(Spacing.spacing24))
         CancelButton(
             modifier = Modifier.fillMaxWidth(),

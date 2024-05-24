@@ -14,6 +14,6 @@ interface RealmWorkoutLibraryRepository {
     ): Boolean
 
     suspend fun deleteWorkoutEntryFromRealmDb(
-        realmWorkoutLibraryItem: RealmWorkoutLibrary
+        libraryWorkoutName: String
     ): Boolean
 }

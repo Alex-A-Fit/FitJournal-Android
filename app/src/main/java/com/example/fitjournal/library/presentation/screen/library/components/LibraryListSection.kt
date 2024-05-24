@@ -11,28 +11,25 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.core.presentation.commoncomponents.listHeader.CategoryHeader
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategory
+import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LibraryListSection(
-    categories: SnapshotStateList<WorkoutCategory>,
+    libraryWorkoutState: LibraryWorkoutUiModel,
     isBlurActive: Boolean,
     libraryScreenListState: LazyListState,
-    showDialog: MutableState<Boolean>,
     modifier: Modifier = Modifier,
+    showEditLibraryWorkoutDialog: () -> Unit,
     removeBlur: (Boolean) -> Unit,
-    workoutOnClick: (LibraryWorkoutClickEvents) -> Unit
 ) {
-    val workoutLibraryList = remember(categories) {
-        categories
+    val workoutLibraryList = remember(libraryWorkoutState.listOfSearchedWorkouts) {
+        libraryWorkoutState.listOfSearchedWorkouts
     }
 
     LazyColumn(
@@ -40,21 +37,27 @@ fun LibraryListSection(
         userScrollEnabled = !isBlurActive,
         state = libraryScreenListState
     ) {
-        workoutLibraryList.forEach { category ->
+        workoutLibraryList.forEachIndexed { index, category ->
             stickyHeader {
                 CategoryHeader(text = category.name)
             }
-            itemsIndexed(category.items) { index, workout ->
+            itemsIndexed(category.items) { libraryIndex, workout ->
                 Column(modifier = modifier.padding(start = Spacing.spacing16)) {
                     ExerciseItem(
                         exercise = workout.workoutName,
-                        showDialog = showDialog,
-                        workoutOnClick = workoutOnClick,
+                        showEditLibraryWorkoutDialog = showEditLibraryWorkoutDialog,
+                        workoutOnClick = {
+                            libraryWorkoutState.libraryWorkoutClickEvent(
+                                LibraryWorkoutClickEvents.WorkoutItemClicked(
+                                    libraryWorkoutItem = workout,
+                                    workoutCategoryIndex = index
+                                )
+                            )
+                        },
                         isBlurActive = isBlurActive,
-                        removeBlur = removeBlur,
-                        workoutTypeEnum = workout.workoutTypeEnum
+                        removeBlur = removeBlur
                     )
-                    if (index != category.items.lastIndex) {
+                    if (libraryIndex != category.items.lastIndex) {
                         HorizontalDivider(
                             thickness = Spacing.spacing1,
                             color = MaterialTheme.colorScheme.primary

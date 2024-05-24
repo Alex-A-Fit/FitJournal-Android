@@ -24,11 +24,10 @@ import com.example.fitjournal.library.presentation.screen.library.model.LibraryW
 @Composable
 fun ExerciseItem(
     exercise: String,
-    workoutTypeEnum: WorkoutTypeEnum,
     isBlurActive: Boolean,
     removeBlur: (Boolean) -> Unit,
-    showDialog: MutableState<Boolean>? = null,
-    workoutOnClick: (LibraryWorkoutClickEvents) -> Unit
+    showEditLibraryWorkoutDialog: () -> Unit,
+    workoutOnClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val indicator = LocalIndication.current
@@ -43,13 +42,8 @@ fun ExerciseItem(
                 if (isBlurActive) {
                     removeBlur(true)
                 } else {
-                    showDialog?.value = true
-                    workoutOnClick(
-                        LibraryWorkoutClickEvents.WorkoutItemClicked(
-                            workoutName = exercise,
-                            workoutTypeEnum = workoutTypeEnum
-                        )
-                    )
+                    workoutOnClick()
+                    showEditLibraryWorkoutDialog()
                 }
             },
         horizontalArrangement = Arrangement.SpaceBetween

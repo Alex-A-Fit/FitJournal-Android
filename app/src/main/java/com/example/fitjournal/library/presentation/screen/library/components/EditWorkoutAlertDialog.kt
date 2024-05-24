@@ -50,15 +50,17 @@ import com.example.fitjournal.library.presentation.screen.library.model.WorkoutI
 @Composable
 fun EditWorkoutAlertDialog(
     onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
+    onUpdateButtonClick: () -> Unit,
+    onAddToJournalButtonClick: () -> Unit,
+    onDeleteButtonClick: () -> Unit,
     workoutItemDialogUiModel: WorkoutItemDialogUiModel
 ) {
-    var currentWorkoutName by rememberSaveable(workoutItemDialogUiModel.workoutName) {
-        mutableStateOf(workoutItemDialogUiModel.workoutName)
+    var currentWorkoutName by rememberSaveable(workoutItemDialogUiModel.libraryWorkoutItem.workoutName) {
+        mutableStateOf(workoutItemDialogUiModel.libraryWorkoutItem.workoutName)
     }
 
-    var workoutTypeChosen: WorkoutTypeEnum by rememberSaveable(workoutItemDialogUiModel.workoutType) {
-        mutableStateOf(workoutItemDialogUiModel.workoutType)
+    var workoutTypeChosen: WorkoutTypeEnum by rememberSaveable(workoutItemDialogUiModel.libraryWorkoutItem.workoutTypeEnum) {
+        mutableStateOf(workoutItemDialogUiModel.libraryWorkoutItem.workoutTypeEnum)
     }
 
     val gradient = Brush.linearGradient(
@@ -88,7 +90,7 @@ fun EditWorkoutAlertDialog(
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold,
-                    text = workoutItemDialogUiModel.workoutName,
+                    text = workoutItemDialogUiModel.libraryWorkoutItem.workoutName,
                     modifier = Modifier
                         .padding(Spacing.spacing16)
                         .align(alignment = Alignment.CenterHorizontally)
@@ -180,7 +182,7 @@ fun EditWorkoutAlertDialog(
                             horizontal = Spacing.spacing32,
                             vertical = Spacing.spacing4
                         ),
-                        onClick = {},
+                        onClick = onDeleteButtonClick,
                         text = stringResource(id = R.string.button_delete_workout)
                     )
                 }

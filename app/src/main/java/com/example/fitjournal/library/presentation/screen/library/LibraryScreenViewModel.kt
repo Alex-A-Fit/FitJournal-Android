@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fitjournal.R
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
 import com.example.fitjournal.core.util.filter.searchForText
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
@@ -22,7 +23,7 @@ class LibraryScreenViewModel @Inject constructor(
 ) : ViewModel() {
     var libraryWorkoutState by mutableStateOf(
         LibraryWorkoutUiModel(
-            handleLibraryWorkoutClickEvents = ::handleLibraryWorkoutEvents
+            libraryWorkoutClickEvent = ::handleLibraryWorkoutEvents
         )
     )
         private set
@@ -59,12 +60,61 @@ class LibraryScreenViewModel @Inject constructor(
                 updateLibraryWorkoutState(
                     newLibraryWorkoutState = libraryWorkoutState.copy(
                         workoutItemDialogUiModel = WorkoutItemDialogUiModel(
-                            workoutName = event.workoutName,
-                            workoutType = event.workoutTypeEnum
+                            libraryWorkoutItem = event.libraryWorkoutItem,
+                            workoutCategoryIndex = event.workoutCategoryIndex
                         )
                     )
                 )
             }
+
+            is LibraryWorkoutClickEvents.DeleteLibraryWorkout -> {
+                val workoutName =
+                    libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutName
+                val libraryWorkoutItem =
+                    libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem
+                val categoryIndex =
+                    libraryWorkoutState.workoutItemDialogUiModel.workoutCategoryIndex
+                viewModelScope.launch {
+                    val wasItemDeleted = realmWorkoutLibraryUseCase
+                        .deleteLibraryItemFromRealmDbUseCase(workoutName)
+                    if (wasItemDeleted) {
+                        val workoutCategoryList =
+                            libraryWorkoutState.masterWorkoutList.toMutableStateList()
+                        val workoutCategory = workoutCategoryList[categoryIndex]
+                        workoutCategory.items.remove(libraryWorkoutItem)
+                        workoutCategoryList[categoryIndex] = workoutCategory
+                        updateLibraryWorkoutState(
+                            newLibraryWorkoutState = libraryWorkoutState.copy(
+                                masterWorkoutList = workoutCategoryList,
+                                listOfSearchedWorkouts = if (libraryWorkoutState.searchedTerm.isEmpty()) {
+                                    workoutCategoryList.toMutableStateList()
+                                } else {
+                                    searchForText(
+                                        libraryWorkoutState.searchedTerm,
+                                        workoutCategoryList
+                                    ).toMutableStateList()
+                                },
+                                workoutItemDialogUiModel = WorkoutItemDialogUiModel()
+                            )
+                        )
+                        event.onSuccessCallback(
+                            event.context.getString(
+                                R.string.text_workout_successfully_deleted_from_library,
+                                workoutName
+                            )
+                        )
+                    } else {
+                        event.onErrorCallback(
+                            event.context.getString(
+                                R.string.error_with_workout_being_deleted,
+                                workoutName
+                            )
+                        )
+                    }
+                }
+            }
+
+            is LibraryWorkoutClickEvents.UpdateLibraryWorkout -> TODO()
         }
     }
 

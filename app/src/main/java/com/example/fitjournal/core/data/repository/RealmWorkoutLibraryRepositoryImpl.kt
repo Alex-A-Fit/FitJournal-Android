@@ -93,7 +93,7 @@ class RealmWorkoutLibraryRepositoryImpl @Inject constructor() : RealmWorkoutLibr
     }
 
     override suspend fun deleteWorkoutEntryFromRealmDb(
-        realmWorkoutLibraryItem: RealmWorkoutLibrary
+        libraryWorkoutName: String
     ): Boolean {
         return realm.write {
             return@write try {
@@ -101,7 +101,7 @@ class RealmWorkoutLibraryRepositoryImpl @Inject constructor() : RealmWorkoutLibr
                 this.getLatestResultViaQuery(
                     searchableClass = RealmWorkoutLibrary::class,
                     query = "name == $0",
-                    queryValue = realmWorkoutLibraryItem.name
+                    queryValue = libraryWorkoutName
                 ).also {
                     wasWorkoutDeleted = if (it != null) {
                         delete(it)

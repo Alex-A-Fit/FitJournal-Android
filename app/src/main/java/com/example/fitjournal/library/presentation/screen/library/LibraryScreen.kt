@@ -7,14 +7,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.DeleteWorkoutDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.TransparentLoadingScreenDialog
 import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
+import com.example.fitjournal.core.presentation.model.LibraryWorkoutItem
+import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.library.presentation.screen.library.components.EditWorkoutDialog
+import com.example.fitjournal.library.presentation.screen.library.components.EditWorkoutAlertDialog
 import com.example.fitjournal.library.presentation.screen.library.components.LibraryListSection
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
@@ -25,17 +34,66 @@ fun LibraryScreen(
     libraryWorkoutState: LibraryWorkoutUiModel,
     isBlurActive: Boolean,
     removeBlur: (Boolean) -> Unit,
-    libraryScreenListState: LazyListState
+    libraryScreenListState: LazyListState,
+    showSnackbar: suspend (String) -> Unit,
+    navigateToDestination: (NavigationInterface) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     val keyboardController = LocalSoftwareKeyboardController.current
-    val openAlertDialog = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
-    EditWorkoutDialog(
-        showDialog = openAlertDialog,
-        workoutItemDialogUiModel = libraryWorkoutState.workoutItemDialogUiModel
-    )
+    var openEditLibraryWorkoutDialog by rememberSaveable { mutableStateOf(false) }
+    var openDeleteWorkoutDialog by rememberSaveable { mutableStateOf(false) }
+    var showLoadingDialog by rememberSaveable { mutableStateOf(false) }
+
+
+    if (openEditLibraryWorkoutDialog) {
+        EditWorkoutAlertDialog(
+            onDismissRequest = { openEditLibraryWorkoutDialog = false },
+            workoutItemDialogUiModel = libraryWorkoutState.workoutItemDialogUiModel,
+            onUpdateButtonClick = {
+
+            },
+            onAddToJournalButtonClick = {
+
+            },
+            onDeleteButtonClick = {
+                openEditLibraryWorkoutDialog = false
+                openDeleteWorkoutDialog = true
+            }
+        )
+    }
+    if (openDeleteWorkoutDialog) {
+        DeleteWorkoutDialog(
+            workoutName = libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutName,
+            workoutDate = null,
+            onDismiss = {
+                openDeleteWorkoutDialog = false
+            },
+            onDelete = {
+                openDeleteWorkoutDialog = false
+                showLoadingDialog = true
+                libraryWorkoutState.libraryWorkoutClickEvent(
+                    LibraryWorkoutClickEvents.DeleteLibraryWorkout(
+                        onSuccessCallback = {
+                            showLoadingDialog = false
+                            showSnackbar(it)
+                        },
+                        onErrorCallback = {
+                            showLoadingDialog = false
+                            showSnackbar(it)
+                        },
+                        context = context
+                    )
+                )
+            }
+        )
+    }
+
+    if (showLoadingDialog) {
+        TransparentLoadingScreenDialog {}
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -46,18 +104,18 @@ fun LibraryScreen(
             ) {
                 keyboardController?.hide()
                 focusManager.clearFocus(true)
-                removeBlur(false)
+                removeBlur(true)
             }
     ) {
         SearchBar(
             searchedTerm = libraryWorkoutState.searchedTerm,
             updateSearch = { searchedText ->
-                libraryWorkoutState.handleLibraryWorkoutClickEvents(
+                libraryWorkoutState.libraryWorkoutClickEvent(
                     LibraryWorkoutClickEvents.UpdateSearch(searchedText)
                 )
             },
             clearSearch = {
-                libraryWorkoutState.handleLibraryWorkoutClickEvents(
+                libraryWorkoutState.libraryWorkoutClickEvent(
                     LibraryWorkoutClickEvents.ClearSearch
                 )
             },
@@ -65,11 +123,10 @@ fun LibraryScreen(
             focusManager = focusManager
         )
         LibraryListSection(
-            categories = libraryWorkoutState.listOfSearchedWorkouts,
+            libraryWorkoutState = libraryWorkoutState,
             isBlurActive = isBlurActive,
             libraryScreenListState = libraryScreenListState,
-            showDialog = openAlertDialog,
-            workoutOnClick = libraryWorkoutState.handleLibraryWorkoutClickEvents,
+            showEditLibraryWorkoutDialog = { openEditLibraryWorkoutDialog = true },
             removeBlur = removeBlur
         )
     }

@@ -111,6 +111,7 @@
     <string name="text_workout_successfully_added_to_library">\"%1$s\" was added to your Library!</string>
     <string name="text_workout_successfully_added_to_journal">\"%1$s\" was added to your Journal!</string>
     <string name="text_date_updated">Date Updated</string>
+    <string name="text_workout_successfully_deleted_from_library">"%1$s" was deleted from your Library!</string>
 
     // Error Strings
     <string name="error_with_workout_being_added_to_library">\"%1$s\" could not be added. Please Try Again.</string>

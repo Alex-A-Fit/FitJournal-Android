@@ -8,13 +8,8 @@ import javax.inject.Inject
 class DeleteLibraryItemFromRealmDbUseCase @Inject constructor(
     private val realmWorkoutLibraryRepository: RealmWorkoutLibraryRepository
 ) {
-    suspend operator fun invoke(libraryItem: WorkoutLibraryModel): Boolean {
-        val realmWorkoutLibraryItem = RealmWorkoutLibrary().apply {
-            name = libraryItem.name
-            type = libraryItem.workoutType
-        }
-        return realmWorkoutLibraryRepository.deleteWorkoutEntryFromRealmDb(
-            realmWorkoutLibraryItem = realmWorkoutLibraryItem
-        )
+    suspend operator fun invoke(libraryWorkoutName: String): Boolean {
+        return realmWorkoutLibraryRepository
+            .deleteWorkoutEntryFromRealmDb(libraryWorkoutName = libraryWorkoutName)
     }
 }
