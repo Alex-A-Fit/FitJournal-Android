@@ -59,7 +59,8 @@ class LibraryScreenViewModel @Inject constructor(
                 updateLibraryWorkoutState(
                     newLibraryWorkoutState = libraryWorkoutState.copy(
                         workoutItemDialogUiModel = WorkoutItemDialogUiModel(
-                            workoutTitle = event.workoutTitle
+                            workoutName = event.workoutName,
+                            workoutType = event.workoutTypeEnum
                         )
                     )
                 )

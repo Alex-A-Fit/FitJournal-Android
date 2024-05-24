@@ -9,12 +9,14 @@ import androidx.compose.ui.text.style.TextAlign
 @Composable
 fun CommonSubtitleText(
     subtitleText: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     Text(
         text = subtitleText,
         style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onPrimary,
         modifier = modifier,
-        textAlign = TextAlign.Start
+        textAlign = textAlign
     )
 }

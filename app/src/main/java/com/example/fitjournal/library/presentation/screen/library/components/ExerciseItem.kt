@@ -17,12 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
+import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 
 @Composable
 fun ExerciseItem(
     exercise: String,
+    workoutTypeEnum: WorkoutTypeEnum,
     isBlurActive: Boolean,
     removeBlur: (Boolean) -> Unit,
     showDialog: MutableState<Boolean>? = null,
@@ -44,7 +46,8 @@ fun ExerciseItem(
                     showDialog?.value = true
                     workoutOnClick(
                         LibraryWorkoutClickEvents.WorkoutItemClicked(
-                            workoutTitle = exercise
+                            workoutName = exercise,
+                            workoutTypeEnum = workoutTypeEnum
                         )
                     )
                 }

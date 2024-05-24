@@ -14,8 +14,7 @@ fun EditWorkoutDialog(showDialog: MutableState<Boolean>, workoutItemDialogUiMode
                     showDialog.value = false
                     println("Confirmation registered") // Add logic here to handle confirmation.
                 },
-                dialogTitle = workoutItemDialogUiModel.workoutTitle,
-                dialogText = "This is an example of an alert dialog with buttons."
+                workoutItemDialogUiModel = workoutItemDialogUiModel
             )
         }
     }

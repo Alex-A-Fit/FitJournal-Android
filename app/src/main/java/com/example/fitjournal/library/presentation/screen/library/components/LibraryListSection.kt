@@ -51,7 +51,8 @@ fun LibraryListSection(
                         showDialog = showDialog,
                         workoutOnClick = workoutOnClick,
                         isBlurActive = isBlurActive,
-                        removeBlur = removeBlur
+                        removeBlur = removeBlur,
+                        workoutTypeEnum = workout.workoutTypeEnum
                     )
                     if (index != category.items.lastIndex) {
                         HorizontalDivider(
