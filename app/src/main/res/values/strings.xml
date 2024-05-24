@@ -41,6 +41,7 @@
     <string name="title_edit_workout_error">Sorry, the workout you selected could not be found</string>
     <string name="title_add_workout_error">Sorry, the workout you selected can not be added to your journal. Please go back and try again.</string>
     <string name="title_delete_workout">Are you sure you want to delete \"%1$s\"</string>
+    <string name="title_no_workouts_added">No workouts added yet</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>

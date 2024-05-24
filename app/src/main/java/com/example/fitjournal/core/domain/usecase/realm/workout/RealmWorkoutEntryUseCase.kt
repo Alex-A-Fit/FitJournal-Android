@@ -16,5 +16,8 @@ data class RealmWorkoutEntryUseCase(
     val updateSingleWorkoutEntryToRealmDbUseCase: UpdateSingleWorkoutEntryToRealmDbUseCase,
 
     // DELETE
-    val deleteWorkoutEntryFromRealmDbUseCase: DeleteWorkoutEntryFromRealmDbUseCase
+    val deleteWorkoutEntryFromRealmDbUseCase: DeleteWorkoutEntryFromRealmDbUseCase,
+
+    // Verify if Sync is needed
+    val SyncDbWithViewModelUseCase: SyncDbWithViewModelUseCase
 )

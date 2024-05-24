@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,9 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
 import com.example.fitjournal.R
+import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.AddToJournalButton
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.FilterWorkoutTypeDialog
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
+import com.example.fitjournal.core.presentation.screens.LoadingScreen
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.home.presentation.components.card.CalisthenicsCard
@@ -50,14 +53,8 @@ fun HomeScreen(
     removeBlur: () -> Unit,
     showSnackBar: suspend (String) -> Unit
 ) {
-    LaunchedEffect(key1 = homeScreenState.listOfVisibleWorkoutsUiState) {
-        when (homeScreenState.listOfVisibleWorkoutsUiState) {
-            UiState.None -> {
-                homeScreenState.homeScreenEvents(HomeScreenEvents.CollectRealmWorkoutEntryFromDb)
-            }
-
-            else -> Unit
-        }
+    LaunchedEffect(key1 = true) {
+        homeScreenState.homeScreenEvents(HomeScreenEvents.SyncRealmWorkoutEntryFromDb)
     }
 
     val isDatePickerDialogShowing by rememberSaveable(homeScreenState.isDatePickerDialogShowing) {
@@ -112,13 +109,16 @@ fun HomeScreen(
         }
         when (val workoutList = homeScreenState.listOfVisibleWorkoutsUiState) {
             UiState.Loading, UiState.None -> {
-                // need to provide loading animation of some sorts
-                Unit
+                LoadingScreen()
             }
 
             UiState.Empty, is UiState.Error -> {
-                // need to provide empty state of some sorts for empty and error
-                Unit
+                HomeEmptyScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    navigateToAddWorkoutScreen = {
+                        navigateToDestination(NavigationInterface.NavigateToAddWorkout(workoutDate = homeScreenState.currentDate))
+                    }
+                )
             }
 
             is UiState.Success -> {
@@ -198,6 +198,14 @@ fun HomeScreen(
                             }
                         }
                         Spacer(modifier = Modifier.height(Spacing.spacing12))
+                    }
+                    item {
+                        AddToJournalButton(
+                            navigateToAddWorkoutScreen = {
+                                navigateToDestination(NavigationInterface.NavigateToAddWorkout(workoutDate = homeScreenState.currentDate))
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(Spacing.spacing96))
                     }
                 }
             }

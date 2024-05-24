@@ -38,6 +38,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
+import java.time.LocalDate
 import java.time.ZoneOffset
 import javax.inject.Inject
 
@@ -281,7 +282,9 @@ class AddWorkoutDetailViewModel @Inject constructor(
                     workoutName = addWorkoutDetailUiState.workoutName,
                     workoutType = addWorkoutDetailUiState.workoutType,
                     workoutTypeEnum = addWorkoutDetailUiState.workoutTypeEnum,
-                    addWorkoutDetailEvents = ::journalEntryDetailsEvents
+                    addWorkoutDetailEvents = ::journalEntryDetailsEvents,
+                    localDate = addWorkoutDetailUiState.localDate,
+                    localDateInMillis = addWorkoutDetailUiState.localDateInMillis
                 )
             }
 
@@ -689,12 +692,19 @@ class AddWorkoutDetailViewModel @Inject constructor(
         }
     }
 
-    fun addWorkoutNameAndType(workoutName: String, workoutType: String) {
+    fun addNavigationArguments(
+        workoutName: String,
+        workoutType: String,
+        workoutDate: String
+    ) {
+        val date = LocalDate.parse(workoutDate, DateManager.getCommonDateFormat())
         updateWorkoutState(
             newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 workoutName = workoutName,
                 workoutType = workoutType,
-                workoutTypeEnum = getWorkoutType(workoutType)
+                workoutTypeEnum = getWorkoutType(workoutType),
+                localDate = date.format(DateManager.getCommonDateFormat()),
+                localDateInMillis = (date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli())
             )
         )
     }
