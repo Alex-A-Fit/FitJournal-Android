@@ -42,15 +42,17 @@ import com.example.fitjournal.core.presentation.commoncomponents.buttons.standar
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.WorkoutNameTextField
 import com.example.fitjournal.core.presentation.commoncomponents.text.CommonSubtitleText
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.core.presentation.theme.DisabledBackgroundGray
+import com.example.fitjournal.core.presentation.theme.MediumGray
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.core.presentation.theme.SuccessGreen
-import com.example.fitjournal.core.presentation.theme.White
 import com.example.fitjournal.library.presentation.screen.library.model.WorkoutItemDialogUiModel
+
+typealias WorkoutName = String
 
 @Composable
 fun EditWorkoutAlertDialog(
     onDismissRequest: () -> Unit,
-    onUpdateButtonClick: () -> Unit,
+    onUpdateButtonClick: (WorkoutName, WorkoutTypeEnum) -> Unit,
     onAddToJournalButtonClick: () -> Unit,
     onDeleteButtonClick: () -> Unit,
     workoutItemDialogUiModel: WorkoutItemDialogUiModel
@@ -58,8 +60,14 @@ fun EditWorkoutAlertDialog(
     var currentWorkoutName by rememberSaveable(workoutItemDialogUiModel.libraryWorkoutItem.workoutName) {
         mutableStateOf(workoutItemDialogUiModel.libraryWorkoutItem.workoutName)
     }
+    val originalWorkoutName by rememberSaveable {
+        mutableStateOf(workoutItemDialogUiModel.libraryWorkoutItem.workoutName)
+    }
 
     var workoutTypeChosen: WorkoutTypeEnum by rememberSaveable(workoutItemDialogUiModel.libraryWorkoutItem.workoutTypeEnum) {
+        mutableStateOf(workoutItemDialogUiModel.libraryWorkoutItem.workoutTypeEnum)
+    }
+    val originalWorkoutType by rememberSaveable {
         mutableStateOf(workoutItemDialogUiModel.libraryWorkoutItem.workoutTypeEnum)
     }
 
@@ -143,13 +151,14 @@ fun EditWorkoutAlertDialog(
                             vertical = Spacing.spacing4
                         ),
                         text = stringResource(id = R.string.button_update_workout),
-                        onClick = {},
+                        onClick = { onUpdateButtonClick(currentWorkoutName, workoutTypeChosen) },
                         buttonColor = ButtonColors(
                             containerColor = MaterialTheme.colorScheme.inversePrimary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
-                            disabledContainerColor = SuccessGreen,
-                            disabledContentColor = MaterialTheme.colorScheme.onTertiary
-                        )
+                            disabledContainerColor = DisabledBackgroundGray,
+                            disabledContentColor = MediumGray
+                        ),
+                        isEnabled = !((originalWorkoutName == currentWorkoutName && originalWorkoutType == workoutTypeChosen) || currentWorkoutName.isEmpty())
                     )
                     SaveButton(
                         text = stringResource(id = R.string.button_add_to_journal),
@@ -163,13 +172,7 @@ fun EditWorkoutAlertDialog(
                             horizontal = Spacing.spacing32,
                             vertical = Spacing.spacing4
                         ),
-                        onClick = {},
-                        buttonColor = ButtonColors(
-                            containerColor = SuccessGreen,
-                            contentColor = White,
-                            disabledContainerColor = SuccessGreen,
-                            disabledContentColor = MaterialTheme.colorScheme.onTertiary
-                        )
+                        onClick = onAddToJournalButtonClick
                     )
                     DeleteButton(
                         modifier = Modifier

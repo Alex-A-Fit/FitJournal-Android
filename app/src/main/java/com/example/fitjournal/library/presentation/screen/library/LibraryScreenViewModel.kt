@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.R
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
 import com.example.fitjournal.core.util.filter.searchForText
+import com.example.fitjournal.library.domain.model.UpdateWorkoutLibraryModel
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
 import com.example.fitjournal.library.presentation.screen.library.model.WorkoutItemDialogUiModel
@@ -79,25 +80,6 @@ class LibraryScreenViewModel @Inject constructor(
                         .deleteLibraryItemFromRealmDbUseCase(workoutName)
                     if (wasItemDeleted) {
                         getDataFromRealmDb()
-//                        val workoutCategoryList =
-//                            libraryWorkoutState.masterWorkoutList.toMutableStateList()
-//                        val workoutCategory = workoutCategoryList[categoryIndex]
-//                        workoutCategory.items.remove(libraryWorkoutItem)
-//                        workoutCategoryList[categoryIndex] = workoutCategory
-//                        updateLibraryWorkoutState(
-//                            newLibraryWorkoutState = libraryWorkoutState.copy(
-//                                masterWorkoutList = workoutCategoryList,
-//                                listOfSearchedWorkouts = if (libraryWorkoutState.searchedTerm.isEmpty()) {
-//                                    workoutCategoryList.toMutableStateList()
-//                                } else {
-//                                    searchForText(
-//                                        libraryWorkoutState.searchedTerm,
-//                                        workoutCategoryList
-//                                    ).toMutableStateList()
-//                                },
-//                                workoutItemDialogUiModel = WorkoutItemDialogUiModel()
-//                            )
-//                        )
                         event.onSuccessCallback(
                             event.context.getString(
                                 R.string.text_workout_successfully_deleted_from_library,
@@ -115,7 +97,34 @@ class LibraryScreenViewModel @Inject constructor(
                 }
             }
 
-            is LibraryWorkoutClickEvents.UpdateLibraryWorkout -> TODO()
+            is LibraryWorkoutClickEvents.UpdateLibraryWorkout -> {
+                val realmModel = UpdateWorkoutLibraryModel(
+                    originalWorkoutName = libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutName,
+                    newName = event.workoutName,
+                    newWorkoutTypeEnum = event.context.getString(event.workoutTypeEnum.stringId)
+                )
+                viewModelScope.launch {
+                    val wasItemUpdated = realmWorkoutLibraryUseCase.updateLibraryItemInRealmDbUseCase(realmModel)
+                    if (wasItemUpdated) {
+                        updateLibraryWorkoutState(
+                            newLibraryWorkoutState = libraryWorkoutState.copy(
+                                workoutItemDialogUiModel = libraryWorkoutState.workoutItemDialogUiModel.copy(
+                                    newWorkoutName = event.workoutName,
+                                    newWorkoutType = event.workoutTypeEnum
+                                )
+                            )
+                        )
+                        event.onSuccessCallback(
+                            event.context.getString(R.string.text_workout_successfully_updated_in_library)
+                        )
+                        getDataFromRealmDb()
+                    } else {
+                        event.onErrorCallback(
+                            event.context.getString(R.string.error_library_workout_update_failed)
+                        )
+                    }
+                }
+            }
             LibraryWorkoutClickEvents.SyncRealmWorkoutEntryFromDb -> {
                 val shouldSyncOccur = realmWorkoutLibraryUseCase.syncRealmWorkoutLibraryUseCase()
                 if (shouldSyncOccur) {

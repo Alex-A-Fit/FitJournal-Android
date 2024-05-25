@@ -24,18 +24,23 @@ import com.example.fitjournal.library.presentation.screen.library.model.LibraryW
 fun LibraryListSection(
     libraryWorkoutState: LibraryWorkoutUiModel,
     isBlurActive: Boolean,
-    updateUi: Boolean,
+    updateLibraryListUi: Boolean,
+    updateLibraryListUiCallback: suspend () -> Unit,
     libraryScreenListState: LazyListState,
     modifier: Modifier = Modifier,
     showEditLibraryWorkoutDialog: () -> Unit,
-    removeBlur: (Boolean) -> Unit,
+    removeBlur: (Boolean) -> Unit
 ) {
     val workoutLibraryList = remember(libraryWorkoutState.listOfSearchedWorkouts) {
         libraryWorkoutState.listOfSearchedWorkouts
     }
-    LaunchedEffect(key1 = updateUi) {
-        if (updateUi){
-            workoutLibraryList[libraryWorkoutState.workoutItemDialogUiModel.workoutCategoryIndex].items.remove(libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem)
+
+    LaunchedEffect(key1 = updateLibraryListUi) {
+        if (updateLibraryListUi) {
+            workoutLibraryList[libraryWorkoutState.workoutItemDialogUiModel.workoutCategoryIndex].items.remove(
+                libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem
+            )
+            updateLibraryListUiCallback()
         }
     }
 

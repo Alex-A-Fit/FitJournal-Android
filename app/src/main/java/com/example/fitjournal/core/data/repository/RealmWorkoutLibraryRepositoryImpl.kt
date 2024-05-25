@@ -5,11 +5,13 @@ import com.example.fitjournal.core.data.mockdata.MockData
 import com.example.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
 import com.example.fitjournal.core.data.util.getLatestResultViaQuery
 import com.example.fitjournal.core.domain.repository.RealmWorkoutLibraryRepository
+import com.example.fitjournal.library.domain.model.UpdateWorkoutLibraryModel
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.ext.toRealmList
 import javax.inject.Inject
 
+typealias wasUpdateSuccess = Boolean
 class RealmWorkoutLibraryRepositoryImpl @Inject constructor() : RealmWorkoutLibraryRepository {
     private val realm = FitJournal.realm
     override var shouldViewModelFetchRealmData: Boolean = false
@@ -65,26 +67,34 @@ class RealmWorkoutLibraryRepositoryImpl @Inject constructor() : RealmWorkoutLibr
     }
 
     override suspend fun updateWorkoutLibraryItemToRealmDb(
-        updatedRealmWorkoutLibraryItem: RealmWorkoutLibrary
-    ): Boolean {
+        updatedRealmWorkoutLibraryItem: UpdateWorkoutLibraryModel
+    ): wasUpdateSuccess {
         return realm.write {
             return@write try {
-                val wasUpdateSuccessful: Boolean
-                val originalRealmWorkoutEntry = this.getLatestResultViaQuery(
+                val originalRealmWorkoutLibraryItem = this.getLatestResultViaQuery(
                     searchableClass = RealmWorkoutLibrary::class,
                     query = "name == $0",
-                    queryValue = updatedRealmWorkoutLibraryItem.name
+                    queryValue = updatedRealmWorkoutLibraryItem.originalWorkoutName
                 )
-                if (originalRealmWorkoutEntry != null) {
-                    originalRealmWorkoutEntry.name = updatedRealmWorkoutLibraryItem.name
-                    originalRealmWorkoutEntry.type = updatedRealmWorkoutLibraryItem.type
-                    copyToRealm(originalRealmWorkoutEntry, updatePolicy = UpdatePolicy.ALL)
-                    shouldViewModelFetchRealmData = true
-                    wasUpdateSuccessful = true
-                } else {
-                    wasUpdateSuccessful = false
+                // check if workout exists
+                // if not we cant update
+                if (originalRealmWorkoutLibraryItem == null) return@write false
+                // check if new workout name already exists
+                updatedRealmWorkoutLibraryItem.newName?.let { newWorkoutName ->
+                    val doesRealmWorkoutLibraryItemExist = this.getLatestResultViaQuery(
+                        searchableClass = RealmWorkoutLibrary::class,
+                        query = "name == $0",
+                        queryValue = newWorkoutName
+                    )
+                    if (doesRealmWorkoutLibraryItemExist == null) {
+                        // workout name already exists
+                        originalRealmWorkoutLibraryItem.name = newWorkoutName
+                    }
                 }
-                wasUpdateSuccessful
+                originalRealmWorkoutLibraryItem.type = updatedRealmWorkoutLibraryItem.newWorkoutTypeEnum
+                copyToRealm(originalRealmWorkoutLibraryItem, updatePolicy = UpdatePolicy.ALL)
+                shouldViewModelFetchRealmData = true
+                true
             } catch (e: IllegalArgumentException) {
                 // catch for copyToRealm() in case it throws error
                 false

@@ -110,6 +110,7 @@
 
     // Success Strings
     <string name="text_workout_successfully_added_to_library">\"%1$s\" was added to your Library!</string>
+    <string name="text_workout_successfully_updated_in_library">Workout successfully updated!</string>
     <string name="text_workout_successfully_added_to_journal">\"%1$s\" was added to your Journal!</string>
     <string name="text_date_updated">Date Updated</string>
     <string name="text_workout_successfully_deleted_from_library">"%1$s" was deleted from your Library!</string>
@@ -129,6 +130,7 @@
     <string name="error_no_details_found">No details found for this workout</string>
     <string name="error_add_workout_canceled">Adding workout to journal was cancelled</string>
     <string name="error_date_update_failed">Error, date failed to update</string>
+    <string name="error_library_workout_update_failed">Error, could not update workout</string>
 
 
     // Placeholder strings

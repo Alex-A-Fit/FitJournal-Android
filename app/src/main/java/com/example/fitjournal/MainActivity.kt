@@ -114,7 +114,9 @@ class MainActivity : ComponentActivity() {
                                                 message = it
                                             )
                                         },
-                                        navigateToDestination = {}
+                                        navigateToDestination = {
+                                            navigateToDestination(it, navController)
+                                        }
                                     )
                                 },
                                 snackBarHostState = snackBarState,
