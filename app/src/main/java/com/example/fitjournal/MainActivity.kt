@@ -107,6 +107,15 @@ class MainActivity : ComponentActivity() {
                                         libraryScreenListState = libraryScreenListState,
                                         removeBlur = {
                                             showChildFabs = !it
+                                        },
+                                        showSnackbar = {
+                                            showSnackBar(
+                                                snackBarHostState = snackBarState,
+                                                message = it
+                                            )
+                                        },
+                                        navigateToDestination = {
+                                            navigateToDestination(it, navController)
                                         }
                                     )
                                 },

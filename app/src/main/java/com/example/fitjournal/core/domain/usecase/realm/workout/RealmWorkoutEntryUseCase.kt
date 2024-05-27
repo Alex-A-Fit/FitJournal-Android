@@ -18,6 +18,6 @@ data class RealmWorkoutEntryUseCase(
     // DELETE
     val deleteWorkoutEntryFromRealmDbUseCase: DeleteWorkoutEntryFromRealmDbUseCase,
 
-    // Verify if Sync is needed
-    val SyncDbWithViewModelUseCase: SyncDbWithViewModelUseCase
+    // SYNC with ViewModel
+    val syncWorkoutEntryDbWithViewModelUseCase: SyncWorkoutEntryDbWithViewModelUseCase
 )

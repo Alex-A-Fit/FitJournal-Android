@@ -33,7 +33,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.text.CommonSubtitleText
 import com.example.fitjournal.core.presentation.commoncomponents.text.CommonTitleText
@@ -191,7 +190,8 @@ fun CreateWorkoutSubtitle() {
 @Composable
 fun WorkoutNameTextField(
     workoutNameValue: String,
-    updateWorkoutName: (String) -> Unit
+    updateWorkoutName: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val localKeyboard = LocalSoftwareKeyboardController.current
 
@@ -200,6 +200,7 @@ fun WorkoutNameTextField(
         onValueChange = { value ->
             updateWorkoutName(value)
         },
+        modifier = modifier,
         label = {
             Text(
                 text = stringResource(id = R.string.label_workout_name),
@@ -237,12 +238,9 @@ fun WorkoutNameTextField(
 
 @Composable
 fun WorkoutTypeSubtitle() {
-    Text(
-        text = stringResource(id = R.string.title_choose_workout_type),
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.onBackground,
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Start
+    CommonSubtitleText(
+        stringResource(id = R.string.title_choose_workout_type),
+        modifier = Modifier.fillMaxWidth()
     )
 }
 

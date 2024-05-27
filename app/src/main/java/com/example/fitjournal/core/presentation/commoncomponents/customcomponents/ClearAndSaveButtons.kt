@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,8 +15,6 @@ import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.ClearButton
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.SaveButton
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.core.presentation.theme.SuccessGreen
-import com.example.fitjournal.core.presentation.theme.White
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -48,13 +44,7 @@ fun ClearAndSaveButtons(
                     vertical = Spacing.spacing4
                 ),
                 text = stringResource(id = R.string.button_save_set),
-                onClick = saveBtnOnClick,
-                buttonColor = ButtonColors(
-                    containerColor = SuccessGreen,
-                    contentColor = White,
-                    disabledContainerColor = SuccessGreen,
-                    disabledContentColor = MaterialTheme.colorScheme.onTertiary
-                )
+                onClick = saveBtnOnClick
             )
         }
     } else {

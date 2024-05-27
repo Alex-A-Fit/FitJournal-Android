@@ -7,6 +7,6 @@ data class LibraryWorkoutUiModel(
     val masterWorkoutList: List<WorkoutCategory> = emptyList(),
     val listOfSearchedWorkouts: SnapshotStateList<WorkoutCategory> = mutableStateListOf(),
     val searchedTerm: String = "",
-    val handleLibraryWorkoutClickEvents: (LibraryWorkoutClickEvents) -> Unit,
+    val libraryWorkoutClickEvent: (LibraryWorkoutClickEvents) -> Unit,
     val workoutItemDialogUiModel: WorkoutItemDialogUiModel = WorkoutItemDialogUiModel()
 )

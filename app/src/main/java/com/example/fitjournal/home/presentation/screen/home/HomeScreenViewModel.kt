@@ -59,7 +59,7 @@ class HomeScreenViewModel @Inject constructor(
             HomeScreenEvents.ClearFilterExercisesDialog -> clearFilter()
             HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> getDataFromRealmDb()
             HomeScreenEvents.SyncRealmWorkoutEntryFromDb -> {
-                val shouldSyncOccur = realmWorkoutEntryUseCase.SyncDbWithViewModelUseCase()
+                val shouldSyncOccur = realmWorkoutEntryUseCase.syncWorkoutEntryDbWithViewModelUseCase()
                 if (shouldSyncOccur) {
                     getDataFromRealmDb()
                 }
