@@ -1,7 +1,6 @@
 package com.example.fitjournal.library.presentation.screen.library.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -132,19 +131,13 @@ fun EditWorkoutAlertDialog(
                 }
                 Spacer(modifier = Modifier.weight(1F))
 
-                // TODO Update Button Colors and Add functionality
                 Column {
                     SaveButton(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                horizontal = Spacing.spacing48,
+                                horizontal = Spacing.spacing24,
                                 vertical = Spacing.spacing8
-                            )
-                            .border(
-                                width = Spacing.spacing2,
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(Spacing.spacing18)
                             ),
                         textModifier = Modifier.padding(
                             horizontal = Spacing.spacing32,
@@ -165,7 +158,7 @@ fun EditWorkoutAlertDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                horizontal = Spacing.spacing48,
+                                horizontal = Spacing.spacing24,
                                 vertical = Spacing.spacing8
                             ),
                         textModifier = Modifier.padding(
@@ -178,7 +171,7 @@ fun EditWorkoutAlertDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                horizontal = Spacing.spacing48,
+                                horizontal = Spacing.spacing24,
                                 vertical = Spacing.spacing8
                             ),
                         textModifier = Modifier.padding(
