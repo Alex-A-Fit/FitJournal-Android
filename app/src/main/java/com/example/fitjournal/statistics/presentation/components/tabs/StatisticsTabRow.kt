@@ -21,11 +21,12 @@ import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatisticsTabRow(
+    timeRangeOfWorkouts: Int,
     getStatsBasedOnTimeSelected: (TimeRangeEnum) -> Unit
 ) {
     val tabTitles = TimeRangeEnum.entries
-    var state by remember {
-        mutableIntStateOf(0)
+    var state by remember(timeRangeOfWorkouts) {
+        mutableIntStateOf(timeRangeOfWorkouts)
     }
     Box(
         Modifier
@@ -36,7 +37,7 @@ fun StatisticsTabRow(
             selectedTabIndex = state,
             indicator = {
                 FancyIndicator(
-                    modifier = Modifier.tabIndicatorOffset(state),
+                    modifier = Modifier.tabIndicatorOffset(state)
                 )
             },
             containerColor = LightGray2,
@@ -50,7 +51,7 @@ fun StatisticsTabRow(
                         getStatsBasedOnTimeSelected(timeRange)
                     },
                     selected = (index == state),
-                    modifier = Modifier.zIndex(2f),
+                    modifier = Modifier.zIndex(2f)
                 )
             }
         }

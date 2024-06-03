@@ -23,7 +23,7 @@ sealed class WorkoutAnalytics {
 
     data class Calisthenics(
         val graphData: GraphAnalytics,
-        val personalRecord: PersonalRecordAnalytics,
+        val personalRecord: PersonalRecordAnalytics
     ) : WorkoutAnalytics()
 }
 
@@ -31,14 +31,14 @@ data class PersonalRecordAnalytics(
     val prByWeek: PersonalRecords?,
     val prByMonth: PersonalRecords?,
     val prByYear: PersonalRecords?,
-    val prByAllTime: PersonalRecords?,
+    val prByAllTime: PersonalRecords?
 )
 
 data class GraphAnalytics(
     val graphDataByWeek: GraphData,
     val graphDataByMonth: GraphData,
     val graphDataByYear: GraphData,
-    val graphDataAllTime: GraphData,
+    val graphDataAllTime: GraphData
 )
 
 sealed class PersonalRecords {
@@ -46,7 +46,7 @@ sealed class PersonalRecords {
         val weightLifted: String,
         val dateWeightLifted: String,
         val highestVolume: String,
-        val dateTotalVolume: String,
+        val dateTotalVolume: String
     ) : PersonalRecords()
 
     data class CardioPersonalRecord(
@@ -54,7 +54,7 @@ sealed class PersonalRecords {
         val dateFarthestDistance: String,
         val topSpeed: String,
         val dateTopSpeed: String
-        ) : PersonalRecords()
+    ) : PersonalRecords()
 
     data class CalisthenicsPersonalRecord(
         val mostReps: String,
@@ -71,20 +71,20 @@ sealed class GraphData {
         // looking at top set and highest weight
         val topWeightToDate: List<Point>,
         // compare total volume(reps * sets * weight) to date
-        val mostVolumeToDate: List<Point>,
+        val mostVolumeToDate: List<Point>
     ) : GraphData()
 
     data class Cardio(
         // compare distance to date
         val totalDistanceToDate: List<Point>,
         // compare speed (distance/ Time) to date
-        val averageSpeedToDate: List<Point>,
+        val averageSpeedToDate: List<Point>
     ) : GraphData()
 
     data class Calisthenics(
         val totalRepsToDate: List<Point>,
         val totalTimeToDate: List<Point>? = null,
-        val totalWeightUsedToDate: List<Point>? = null,
+        val totalWeightUsedToDate: List<Point>? = null
     ) : GraphData()
 }
 

@@ -10,12 +10,17 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
-fun WorkoutNameTitle(workoutName: String){
+fun WorkoutNameTitle(workoutName: String) {
     Text(
         text = workoutName,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = Spacing.spacing16, vertical = Spacing.spacing8),
+            .padding(
+                top = Spacing.spacing16,
+                start = Spacing.spacing16,
+                end = Spacing.spacing16,
+                bottom = Spacing.spacing8
+            ),
         style = MaterialTheme.typography.headlineLarge,
         textAlign = TextAlign.Center
     )

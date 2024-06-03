@@ -13,7 +13,7 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
 fun FancyIndicator(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier

@@ -11,7 +11,6 @@ import com.example.fitjournal.core.util.filter.searchForJournalEntry
 import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.library.presentation.screen.library.utils.mapToStatisticsUiList
 import com.example.fitjournal.statistics.domain.usecase.CreateWorkoutAnalyticsUseCase
-import com.example.fitjournal.statistics.domain.usecase.GetWorkoutsByTimeSelectedUseCase
 import com.example.fitjournal.statistics.presentation.model.StatisticsEvents
 import com.example.fitjournal.statistics.presentation.model.StatisticsUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
     private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase,
-    private  val createWorkoutAnalyticsUseCase: CreateWorkoutAnalyticsUseCase
+    private val createWorkoutAnalyticsUseCase: CreateWorkoutAnalyticsUseCase
 ) : ViewModel() {
     var statisticsUiState: StatisticsUiModel by mutableStateOf(
         StatisticsUiModel(
@@ -61,8 +60,7 @@ class StatisticsViewModel @Inject constructor(
                     newStatisticsState = statisticsUiState.copy(
                         workoutStatistics = if (workoutStatistics.isEmpty()) {
                             UiState.Empty
-                        }
-                        else {
+                        } else {
                             UiState.Success(workoutStatistics)
                         },
                         workoutAnalytics = workoutAnalytics
@@ -73,7 +71,7 @@ class StatisticsViewModel @Inject constructor(
             is StatisticsEvents.UpdateTimeRange -> {
                 updateStatisticsState(
                     newStatisticsState = statisticsUiState.copy(
-                        timeRangeEnum = event.timeRangeEnum,
+                        timeRangeEnum = event.timeRangeEnum
                     )
                 )
             }

@@ -28,7 +28,7 @@ class GetWorkoutsByTimeSelectedUseCase @Inject constructor() {
             allTime = getListOfWorkoutsByTimeRange(
                 timeRangeEnum = TimeRangeEnum.ALL_TIME,
                 workoutList = workoutList
-            ),
+            )
         )
     }
 
@@ -59,4 +59,3 @@ class GetWorkoutsByTimeSelectedUseCase @Inject constructor() {
         }
     }
 }
-

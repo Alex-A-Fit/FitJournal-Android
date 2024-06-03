@@ -8,7 +8,6 @@ sealed class StatisticsEvents {
     data class FilterSearchByWorkout(val workout: String) : StatisticsEvents()
     data class GetWorkoutStats(val workoutName: String) : StatisticsEvents()
     data class UpdateTimeRange(
-        val timeRangeEnum: TimeRangeEnum,
-        val workoutStats: List<WorkoutModel>
+        val timeRangeEnum: TimeRangeEnum
     ) : StatisticsEvents()
 }

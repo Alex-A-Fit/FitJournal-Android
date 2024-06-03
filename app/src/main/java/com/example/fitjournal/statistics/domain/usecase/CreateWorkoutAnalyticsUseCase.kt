@@ -51,7 +51,7 @@ fun getWeightTrainingAnalytics(workouts: WorkoutsByTimeRange): WorkoutAnalytics 
         graphDataByWeek = getGraphDataForWeightTraining(workouts.week),
         graphDataByMonth = getGraphDataForWeightTraining(workouts.month),
         graphDataByYear = getGraphDataForWeightTraining(workouts.year),
-        graphDataAllTime = getGraphDataForWeightTraining(workouts.allTime),
+        graphDataAllTime = getGraphDataForWeightTraining(workouts.allTime)
     )
     val pr = getPersonalRecords(graphData)
     return WorkoutAnalytics.WeightTraining(
@@ -66,7 +66,7 @@ fun getCardioAnalytics(workouts: WorkoutsByTimeRange): WorkoutAnalytics {
         graphDataByWeek = getGraphDataForCardio(workouts.week),
         graphDataByMonth = getGraphDataForCardio(workouts.month),
         graphDataByYear = getGraphDataForCardio(workouts.year),
-        graphDataAllTime = getGraphDataForCardio(workouts.allTime),
+        graphDataAllTime = getGraphDataForCardio(workouts.allTime)
     )
     val pr = getPersonalRecords(graphData)
     return WorkoutAnalytics.Cardio(
@@ -130,7 +130,9 @@ fun getDistinctDistanceOverTime(workoutList: List<WorkoutModel>): List<DistinctD
             val totalSeconds = time.y
             listOfWorkoutProps.add(
                 DistinctDistanceForTime(
-                    distance = it.distance, time = totalSeconds.toDouble(), date = workout.date
+                    distance = it.distance,
+                    time = totalSeconds.toDouble(),
+                    date = workout.date
                 )
             )
         }
@@ -146,7 +148,6 @@ fun getDistinctDistanceOverTime(workoutList: List<WorkoutModel>): List<DistinctD
     }
     return singularGroupByDistance.sortedBy { it.distance }
 }
-
 
 fun getPersonalRecords(graphData: GraphAnalytics): PersonalRecordAnalytics {
     return PersonalRecordAnalytics(
@@ -175,13 +176,21 @@ fun determinePR(graphData: GraphData): PersonalRecords? {
                 mostReps = mostReps,
                 dateMostReps = HelperFunctions.getDateStringFromEpochDays(dateMostReps),
                 mostWeightUsed = mostWeightUsed,
-                dateMostWeightUsed = if (dateMostWeightUsed != null) HelperFunctions.getDateStringFromEpochDays(
-                    dateMostWeightUsed
-                ) else null,
+                dateMostWeightUsed = if (dateMostWeightUsed != null) {
+                    HelperFunctions.getDateStringFromEpochDays(
+                        dateMostWeightUsed
+                    )
+                } else {
+                    null
+                },
                 bestTime = bestTime,
-                dateBestTime = if (dateBestTime != null) HelperFunctions.getDateStringFromEpochDays(
-                    dateBestTime
-                ) else null
+                dateBestTime = if (dateBestTime != null) {
+                    HelperFunctions.getDateStringFromEpochDays(
+                        dateBestTime
+                    )
+                } else {
+                    null
+                }
             )
         }
 
@@ -240,7 +249,7 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
         val totalTime = TimeModel(
             hours = if (totalHours == 0.0) "" else totalHours.toString(),
             minutes = if (totalMinutes == 0.0) "" else totalMinutes.toString(),
-            seconds = if (totalSeconds == 0.0) "" else totalSeconds.toString(),
+            seconds = if (totalSeconds == 0.0) "" else totalSeconds.toString()
         )
         workout.workoutDetailsModel.workoutPropertiesModel =
             WorkoutPropertiesModel.CardioProps(
@@ -275,7 +284,7 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
                 dateFloat = dateFloat,
                 totalSeconds = cardioModel?.time?.seconds?.toIntOrZero()?.toString() ?: "0",
                 totalMinutes = cardioModel?.time?.minutes?.toIntOrZero()?.toString() ?: "0",
-                totalHours = cardioModel?.time?.hours?.toIntOrZero()?.toString() ?: "0",
+                totalHours = cardioModel?.time?.hours?.toIntOrZero()?.toString() ?: "0"
             )
             val totalSeconds = time.y
             val totalHours = totalSeconds.toDouble() / 3600.0
@@ -311,7 +320,7 @@ private fun getGraphDataForCalisthenics(workoutList: List<WorkoutModel>): GraphD
         val totalTime = TimeModel(
             hours = if (totalHours == 0.0) "" else totalHours.toString(),
             minutes = if (totalMinutes == 0.0) "" else totalMinutes.toString(),
-            seconds = if (totalSeconds == 0.0) "" else totalSeconds.toString(),
+            seconds = if (totalSeconds == 0.0) "" else totalSeconds.toString()
         )
         val mostWeightUsed = workoutSets.maxByOrNull {
             val weight = if (it.weightType == WeightLiftingWeightType.KILOGRAMS) {
@@ -360,7 +369,8 @@ private fun getGraphDataForCalisthenics(workoutList: List<WorkoutModel>): GraphD
                         sets = 0,
                         weight = highestWeight.weight ?: 0.0,
                         weightType = highestWeight.weightType
-                    ), dateFloat
+                    ),
+                    dateFloat
                 )
             )
         }
@@ -378,7 +388,7 @@ private fun getGraphDataForCalisthenics(workoutList: List<WorkoutModel>): GraphD
                 }.toString(),
                 totalHours = listOfPairDateAndWorkouts.sumOf {
                     it.second?.time?.hours?.toIntOrZero() ?: 0
-                }.toString(),
+                }.toString()
             )
         )
     }
@@ -405,7 +415,8 @@ private fun getGraphDataForWeightTraining(workoutList: List<WorkoutModel>): Grap
             Pair(
                 workout.date,
                 workout.workoutDetailsModel.workoutPropertiesModel.getWeightLiftingProps()
-                    .maxByOrNull { it.weight })
+                    .maxByOrNull { it.weight }
+            )
         }
     val groupedByDates = pairOfWeightsAndDates.groupBy { it.first }
     val topWeightToDate: MutableList<Point> = mutableListOf()
@@ -491,5 +502,4 @@ private fun getTotalVolumeToDate(
         x = dateFloat,
         y = (listOfVolumes.max()).toFloat()
     )
-
 }

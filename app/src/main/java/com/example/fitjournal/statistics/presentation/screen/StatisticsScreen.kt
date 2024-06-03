@@ -53,11 +53,14 @@ fun StatisticsScreen(
         }
 
         is UiState.Success -> {
+            val workout = uiState.data.first().workoutDetailsModel
             StatisticsSuccessScreen(
                 modifier = modifier,
-                workoutStatistics = uiState.data,
+                workoutName = workout.name,
+                timeRangeEnum = statisticsUiState.timeRangeEnum,
                 currentlyViewedWorkoutStats = statisticsUiState.workoutAnalytics,
-                statisticsClickEvents = statisticsUiState.handleStatisticsClickEvents
+                statisticsClickEvents = statisticsUiState.handleStatisticsClickEvents,
+                workoutTypeEnum = workout.workoutTypeEnum
             )
         }
     }
