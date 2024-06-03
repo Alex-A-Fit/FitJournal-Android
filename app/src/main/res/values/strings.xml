@@ -28,6 +28,7 @@
     <string name="title_edit_workout">Edit Workout</string>
     <string name="title_weight_training">Weight Training</string>
     <string name="title_calisthenics">Calisthenics</string>
+    <string name="title_statistics">Statistics</string>
     <string name="title_cardio">Cardio</string>
     <string name="title_top_set">Top Set Summary</string>
     <string name="title_edit_set">Edit Set</string>
@@ -38,8 +39,6 @@
     <string name="title_create_new_workout">Add New Workout</string>
     <string name="title_add_to_journal">Add To Journal</string>
     <string name="text_edit_workout_title">%1$s (%2$s)</string>
-    <string name="title_edit_workout_error">Sorry, the workout you selected could not be found</string>
-    <string name="title_add_workout_error">Sorry, the workout you selected can not be added to your journal. Please go back and try again.</string>
     <string name="title_delete_workout">Are you sure you want to delete \"%1$s\"</string>
     <string name="title_no_workouts_added">No workouts added yet</string>
 
@@ -131,6 +130,10 @@
     <string name="error_add_workout_canceled">Adding workout to journal was cancelled</string>
     <string name="error_date_update_failed">Error, date failed to update</string>
     <string name="error_library_workout_update_failed">Error, could not update workout</string>
+    <string name="error_add_workout_title">Sorry, the workout you selected can not be added to your journal. Please go back and try again.</string>
+    <string name="error_edit_workout_title">Sorry, the workout you selected could not be found</string>
+    <string name="error_statistics_title">To see statistics, start by entering workouts to your Journal</string>
+
 
 
     // Placeholder strings

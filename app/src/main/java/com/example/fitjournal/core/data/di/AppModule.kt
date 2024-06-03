@@ -28,6 +28,7 @@ import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
 import com.example.fitjournal.core.domain.usecase.workout.IsDoubleValidUseCase
 import com.example.fitjournal.core.domain.usecase.workout.IsIntegerValidUseCase
 import com.example.fitjournal.core.domain.usecase.workout.IsTimeValidUseCase
+import com.example.fitjournal.statistics.domain.usecase.GetWorkoutsByTimeSelectedUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -125,4 +126,7 @@ object AppModule {
     fun provideCreateModelForEditWorkoutDialogUseCase(): CreateModelForEditWorkoutDialogUseCase {
         return CreateModelForEditWorkoutDialogUseCase()
     }
+
+    @Provides
+    fun provideGetWorkoutsByTimeUseCase(): GetWorkoutsByTimeSelectedUseCase = GetWorkoutsByTimeSelectedUseCase()
 }

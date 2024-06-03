@@ -19,26 +19,22 @@ import javax.inject.Inject
 class AddWorkoutViewModel @Inject constructor(
     private val realmWorkoutLibraryUseCase: RealmWorkoutLibraryUseCase
 ) : ViewModel() {
-    var journalEntryState by mutableStateOf(
+    var addWorkoutUiState by mutableStateOf(
         AddWorkoutUiModel(
             handleJournalEntryClickEvents = ::journalClickEvents
         )
     )
         private set
 
-    init {
-        getDataFromRealmDb()
-    }
-
     private fun journalClickEvents(event: AddWorkoutEvents) {
         when (event) {
             is AddWorkoutEvents.FilterSearchByWorkout -> {
                 val filteredList = searchForText(
                     event.workout,
-                    journalEntryState.masterWorkoutList
+                    addWorkoutUiState.masterWorkoutList
                 )
                 updateJournalEntryState(
-                    newJournalEntryState = journalEntryState.copy(
+                    newJournalEntryState = addWorkoutUiState.copy(
                         listOfSearchedWorkouts = filteredList.toMutableStateList(),
                         searchedTerm = event.workout
                     )
@@ -47,8 +43,8 @@ class AddWorkoutViewModel @Inject constructor(
 
             AddWorkoutEvents.ClearSearchBarFilter -> {
                 updateJournalEntryState(
-                    newJournalEntryState = journalEntryState.copy(
-                        listOfSearchedWorkouts = journalEntryState.masterWorkoutList.toMutableStateList(),
+                    newJournalEntryState = addWorkoutUiState.copy(
+                        listOfSearchedWorkouts = addWorkoutUiState.masterWorkoutList.toMutableStateList(),
                         searchedTerm = ""
                     )
                 )
@@ -56,21 +52,21 @@ class AddWorkoutViewModel @Inject constructor(
         }
     }
 
-    private fun getDataFromRealmDb() {
+    fun getDataFromRealmDb() {
         viewModelScope.launch {
             val workoutList = realmWorkoutLibraryUseCase.getRealmWorkoutLibraryList()
             if (workoutList.isNotEmpty()) {
                 val libraryList = workoutList.groupBy { it.workoutType }.toSortedMap()
                 val masterWorkoutList = mapToLibraryUiList(libraryList)
                 updateJournalEntryState(
-                    newJournalEntryState = journalEntryState.copy(
+                    newJournalEntryState = addWorkoutUiState.copy(
                         masterWorkoutList = masterWorkoutList,
-                        listOfSearchedWorkouts = if (journalEntryState.searchedTerm.isEmpty()) {
+                        listOfSearchedWorkouts = if (addWorkoutUiState.searchedTerm.isEmpty()) {
                             masterWorkoutList.toMutableStateList()
                         } else {
                             searchForText(
-                                journalEntryState.searchedTerm,
-                                journalEntryState.masterWorkoutList
+                                addWorkoutUiState.searchedTerm,
+                                addWorkoutUiState.masterWorkoutList
                             ).toMutableStateList()
                         }
                     )
@@ -80,6 +76,6 @@ class AddWorkoutViewModel @Inject constructor(
     }
 
     private fun updateJournalEntryState(newJournalEntryState: AddWorkoutUiModel) {
-        journalEntryState = newJournalEntryState
+        addWorkoutUiState = newJournalEntryState
     }
 }

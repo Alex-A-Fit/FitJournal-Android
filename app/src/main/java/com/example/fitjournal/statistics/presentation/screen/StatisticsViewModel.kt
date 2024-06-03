@@ -1,41 +1,82 @@
 package com.example.fitjournal.statistics.presentation.screen
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitjournal.core.data.mockdata.MockData
-import com.example.fitjournal.core.domain.mapper.mapToWorkoutUiModel
-import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
-import com.example.fitjournal.core.presentation.model.WorkoutUiModel
+import com.example.fitjournal.core.util.filter.searchForJournalEntry
 import com.example.fitjournal.core.util.state.UiState
-import com.example.fitjournal.statistics.domain.mapper.toRealmWorkoutEntry
-import com.example.fitjournal.statistics.domain.model.StatisticsScreenState
+import com.example.fitjournal.library.presentation.screen.library.utils.mapToStatisticsUiList
+import com.example.fitjournal.statistics.domain.usecase.CreateWorkoutAnalyticsUseCase
+import com.example.fitjournal.statistics.domain.usecase.GetWorkoutsByTimeSelectedUseCase
+import com.example.fitjournal.statistics.presentation.model.StatisticsEvents
+import com.example.fitjournal.statistics.presentation.model.StatisticsUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
-
-// note: Using statistics screen to manual test crud functions
-// until i can create junit tests for them in actual impl
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase
+    private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase,
+    private  val createWorkoutAnalyticsUseCase: CreateWorkoutAnalyticsUseCase
 ) : ViewModel() {
-    var statisticsScreenState: StatisticsScreenState by mutableStateOf(StatisticsScreenState())
+    var statisticsUiState: StatisticsUiModel by mutableStateOf(
+        StatisticsUiModel(
+            handleStatisticsClickEvents = ::statisticsClickEvents
+        )
+    )
         private set
 
-    fun addSingleObjectToDb() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val didUpdateWork = realmWorkoutEntryUseCase.addSingleWorkoutEntryToRealmDbUseCase(
-                realmWorkoutEntry = MockData.weightTraining1(ObjectId().toHexString())
-            )
-            Log.d("Realm Updates", "Realm Added new entry $didUpdateWork")
+    private fun statisticsClickEvents(event: StatisticsEvents) {
+        when (event) {
+            is StatisticsEvents.FilterSearchByWorkout -> {
+                val filteredList = searchForJournalEntry(
+                    event.workout,
+                    statisticsUiState.masterWorkoutList
+                )
+                updateStatisticsState(
+                    newStatisticsState = statisticsUiState.copy(
+                        listOfSearchedWorkouts = filteredList.toMutableStateList(),
+                        searchedTerm = event.workout
+                    )
+                )
+            }
+
+            StatisticsEvents.ClearSearchBarFilter -> {
+                updateStatisticsState(
+                    newStatisticsState = statisticsUiState.copy(
+                        listOfSearchedWorkouts = statisticsUiState.masterWorkoutList.toMutableStateList(),
+                        searchedTerm = ""
+                    )
+                )
+            }
+
+            is StatisticsEvents.GetWorkoutStats -> {
+                val workoutStatistics = statisticsUiState.realmList.filter { it.workoutDetailsModel.name == event.workoutName }
+                val workoutAnalytics = createWorkoutAnalyticsUseCase(workoutStatistics)
+                updateStatisticsState(
+                    newStatisticsState = statisticsUiState.copy(
+                        workoutStatistics = if (workoutStatistics.isEmpty()) {
+                            UiState.Empty
+                        }
+                        else {
+                            UiState.Success(workoutStatistics)
+                        },
+                        workoutAnalytics = workoutAnalytics
+                    )
+                )
+            }
+
+            is StatisticsEvents.UpdateTimeRange -> {
+                updateStatisticsState(
+                    newStatisticsState = statisticsUiState.copy(
+                        timeRangeEnum = event.timeRangeEnum,
+                    )
+                )
+            }
         }
     }
 
@@ -43,79 +84,27 @@ class StatisticsViewModel @Inject constructor(
         viewModelScope.launch {
             val workoutList = realmWorkoutEntryUseCase.getRealmWorkoutEntryList()
             if (workoutList.isNotEmpty()) {
-                updateStatisticsScreenState(
-                    newStatisticsScreenState = statisticsScreenState.copy(
-                        workoutModelList = workoutList,
-                        workoutList = createWorkoutUiModel(listOfWorkouts = workoutList)
+                val libraryList = workoutList.groupBy { it.workoutDetailsModel.name.first().toString() }.toSortedMap()
+                val masterWorkoutList = mapToStatisticsUiList(libraryList)
+                updateStatisticsState(
+                    newStatisticsState = statisticsUiState.copy(
+                        realmList = workoutList,
+                        masterWorkoutList = masterWorkoutList,
+                        listOfSearchedWorkouts = if (statisticsUiState.searchedTerm.isEmpty()) {
+                            masterWorkoutList.toMutableStateList()
+                        } else {
+                            searchForJournalEntry(
+                                statisticsUiState.searchedTerm,
+                                statisticsUiState.masterWorkoutList
+                            ).toMutableStateList()
+                        }
                     )
                 )
             }
         }
     }
 
-    private fun createWorkoutUiModel(listOfWorkouts: List<WorkoutModel>): UiState<List<WorkoutUiModel>> {
-        if (listOfWorkouts.isEmpty()) return UiState.Empty
-        val workoutsMapped = listOfWorkouts.map {
-            it.mapToWorkoutUiModel()
-        }
-        return UiState.Success(workoutsMapped)
-    }
-
-    private fun updateStatisticsScreenState(newStatisticsScreenState: StatisticsScreenState) {
-        statisticsScreenState = newStatisticsScreenState
-    }
-
-    fun clearUiState() {
-        updateStatisticsScreenState(
-            newStatisticsScreenState = statisticsScreenState.copy(
-                workoutList = UiState.None
-            )
-        )
-    }
-
-    fun updateSingleObjectToDb(
-        updatedItemIndex: Int,
-        workoutType: String
-    ) {
-        if (statisticsScreenState.workoutModelList.isNotEmpty()) {
-            val updatedRealmEntry =
-                statisticsScreenState.workoutModelList[updatedItemIndex].toRealmWorkoutEntry(
-                    workoutType
-                )
-            updatedRealmEntry.workout?.name = "Alex Is Awesome"
-            viewModelScope.launch {
-                val didUpdateWork = realmWorkoutEntryUseCase.updateSingleWorkoutEntryToRealmDbUseCase(
-                    updatedRealmWorkoutEntry = updatedRealmEntry
-                )
-                if (didUpdateWork) {
-                    getDataFromRealmDb()
-                }
-                Log.d("Realm Updates", "Realm Added new entry $didUpdateWork")
-            }
-        } else {
-            Log.d("Realm Updates", "Realm did NOT update index $updatedItemIndex")
-        }
-    }
-
-    fun deleteWorkoutEntry(
-        getString: (Int) -> String
-    ) {
-        if (statisticsScreenState.workoutModelList.isNotEmpty()) {
-            val workoutEntryToBeDeleted = statisticsScreenState.workoutModelList[0]
-            val realmEntryToDelete = workoutEntryToBeDeleted.toRealmWorkoutEntry(
-                workoutType = getString(workoutEntryToBeDeleted.workoutDetailsModel.workoutTypeEnum.stringId)
-            )
-            viewModelScope.launch {
-                val wasDeleteSuccessful = realmWorkoutEntryUseCase.deleteWorkoutEntryFromRealmDbUseCase(
-                    workoutId = realmEntryToDelete.workoutId
-                )
-                if (wasDeleteSuccessful) {
-                    getDataFromRealmDb()
-                }
-                Log.d("Realm Updates", "Realm entry $realmEntryToDelete was deleted")
-            }
-        } else {
-            Log.d("Realm Updates", "Realm did NOT delete realm entry")
-        }
+    private fun updateStatisticsState(newStatisticsState: StatisticsUiModel) {
+        statisticsUiState = newStatisticsState
     }
 }

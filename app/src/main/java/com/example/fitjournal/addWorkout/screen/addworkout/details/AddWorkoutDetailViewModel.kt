@@ -21,6 +21,7 @@ import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.domain.usecase.editworkoutdialog.CreateModelForEditWorkoutDialogUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
+import com.example.fitjournal.core.domain.util.HelperFunctions
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.toCalisthenicsModel
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.toCardioModel
@@ -38,7 +39,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
-import java.time.LocalDate
 import java.time.ZoneOffset
 import javax.inject.Inject
 
@@ -697,7 +697,7 @@ class AddWorkoutDetailViewModel @Inject constructor(
         workoutType: String,
         workoutDate: String
     ) {
-        val date = LocalDate.parse(workoutDate, DateManager.getCommonDateFormat())
+        val date = HelperFunctions.parseDate(workoutDate)
         updateWorkoutState(
             newAddWorkoutDetailUiState = addWorkoutDetailUiState.copy(
                 workoutName = workoutName,

@@ -107,4 +107,7 @@ dependencies {
     /* Realm Db */
     implementation("io.realm.kotlin:library-base:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3") // If using coroutines with the SDK
+
+    // YCharts for graphing data
+    implementation("co.yml:ycharts:2.1.0")
 }

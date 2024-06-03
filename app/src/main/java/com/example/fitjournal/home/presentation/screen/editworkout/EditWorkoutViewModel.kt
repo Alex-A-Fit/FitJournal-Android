@@ -17,6 +17,7 @@ import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.domain.usecase.editworkoutdialog.CreateModelForEditWorkoutDialogUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
+import com.example.fitjournal.core.domain.util.HelperFunctions
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.toCalisthenicsModel
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.toCardioModel
@@ -34,7 +35,6 @@ import com.example.fitjournal.home.presentation.model.ui.WeightLiftingValidator
 import com.example.fitjournal.statistics.domain.mapper.toRealmWorkoutEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.ZoneOffset
 import javax.inject.Inject
 
@@ -468,7 +468,7 @@ class EditWorkoutViewModel @Inject constructor(
             }
 
             is EditWorkoutEvents.UpdateDate -> {
-                val date = LocalDate.parse(event.date, DateManager.getCommonDateFormat())
+                val date = HelperFunctions.parseDate(event.date)
                 updateWorkoutState(
                     newEditWorkoutUiState =
                     editWorkoutUiState.copy(
