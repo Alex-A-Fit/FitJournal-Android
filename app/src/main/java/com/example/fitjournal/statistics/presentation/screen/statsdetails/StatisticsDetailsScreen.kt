@@ -1,36 +1,21 @@
-package com.example.fitjournal.statistics.presentation.screen
+package com.example.fitjournal.statistics.presentation.screen.statsdetails
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.screens.LoadingScreen
 import com.example.fitjournal.core.util.state.UiState
+import com.example.fitjournal.statistics.presentation.components.uistate.StatisticsDetailsSuccessScreen
 import com.example.fitjournal.statistics.presentation.components.uistate.StatisticsErrorScreen
-import com.example.fitjournal.statistics.presentation.components.uistate.StatisticsNoneState
-import com.example.fitjournal.statistics.presentation.components.uistate.StatisticsSuccessScreen
-import com.example.fitjournal.statistics.presentation.model.StatisticsUiModel
+import com.example.fitjournal.statistics.presentation.model.StatisticsDetailsUiModel
 
 @Composable
-fun StatisticsScreen(
+fun StatisticsDetailsScreen(
     modifier: Modifier,
-    statisticsUiState: StatisticsUiModel,
+    statisticsUiState: StatisticsDetailsUiModel,
     navigateToDestination: (NavigationInterface) -> Unit
 ) {
-    val searchText = rememberSaveable(statisticsUiState.searchedTerm) {
-        mutableStateOf(statisticsUiState.searchedTerm)
-    }
-
-    val focusManager = LocalFocusManager.current
-    val interactionSource = remember { MutableInteractionSource() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    when (val uiState = statisticsUiState.workoutStatistics) {
+    when (val uiState = statisticsUiState.workoutStatisticsDetailsUiState) {
         UiState.Empty -> {
             StatisticsErrorScreen()
         }
@@ -44,22 +29,17 @@ fun StatisticsScreen(
         }
 
         UiState.None -> {
-            StatisticsNoneState(
-                modifier = modifier,
-                searchedTerm = statisticsUiState.searchedTerm,
-                statisticsClickEvents = statisticsUiState.handleStatisticsClickEvents,
-                listOfSearchedWorkouts = statisticsUiState.listOfSearchedWorkouts
-            )
+            LoadingScreen()
         }
 
         is UiState.Success -> {
-            val workout = uiState.data.first().workoutDetailsModel
-            StatisticsSuccessScreen(
+            val workout = statisticsUiState.realmList.first().workoutDetailsModel
+            StatisticsDetailsSuccessScreen(
                 modifier = modifier,
                 workoutName = workout.name,
                 timeRangeEnum = statisticsUiState.timeRangeEnum,
-                currentlyViewedWorkoutStats = statisticsUiState.workoutAnalytics,
-                statisticsClickEvents = statisticsUiState.handleStatisticsClickEvents,
+                currentlyViewedWorkoutStats = uiState.data,
+                statisticsClickEvents = statisticsUiState.handleStatisticsDetailsClickEvents,
                 workoutTypeEnum = workout.workoutTypeEnum
             )
         }

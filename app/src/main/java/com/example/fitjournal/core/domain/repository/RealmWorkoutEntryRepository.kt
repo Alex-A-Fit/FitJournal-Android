@@ -6,6 +6,7 @@ interface RealmWorkoutEntryRepository {
     var shouldViewModelFetchRealmData: Boolean
     suspend fun addMockDataToRealm()
     suspend fun getRealmWorkoutEntryList(): List<RealmWorkoutEntry>
+    suspend fun getRealmWorkoutEntryListWithName(workoutName: String): List<RealmWorkoutEntry>
     suspend fun getSingleRealmWorkoutEntry(workoutId: String): RealmWorkoutEntry?
     suspend fun addSingleWorkoutEntryToRealmDb(
         realmWorkoutEntry: RealmWorkoutEntry

@@ -55,6 +55,22 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
         }
     }
 
+    override suspend fun getRealmWorkoutEntryListWithName(workoutName: String): List<RealmWorkoutEntry> {
+        val list: MutableList<RealmWorkoutEntry> = mutableListOf()
+        return realm.write {
+            val query = realm.query<RealmWorkoutEntry>().find()
+            val filteredListByName = query.filter {
+                it.workout?.name == workoutName
+            }
+            list.addAll(filteredListByName)
+            if (list.isEmpty()) {
+                emptyList()
+            } else {
+                list.toList()
+            }
+        }
+    }
+
     override suspend fun getSingleRealmWorkoutEntry(workoutId: String): RealmWorkoutEntry? {
         return realm.query<RealmWorkoutEntry>(
             RealmWorkoutEntry::class,

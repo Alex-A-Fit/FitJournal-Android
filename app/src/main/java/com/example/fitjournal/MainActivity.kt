@@ -49,8 +49,10 @@ import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
-import com.example.fitjournal.statistics.presentation.screen.StatisticsScreen
-import com.example.fitjournal.statistics.presentation.screen.StatisticsViewModel
+import com.example.fitjournal.statistics.presentation.screen.stats.StatisticsScreen
+import com.example.fitjournal.statistics.presentation.screen.stats.StatisticsViewModel
+import com.example.fitjournal.statistics.presentation.screen.statsdetails.StatisticsDetailsScreen
+import com.example.fitjournal.statistics.presentation.screen.statsdetails.StatisticsDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -271,9 +273,63 @@ class MainActivity : ComponentActivity() {
                                     TopAppBar(
                                         appBarTitle = {
                                             Text(
-                                                text = stringResource(id = R.string.title_statistics),
+                                                text = stringResource(id = R.string.title_workout_statistics),
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
+                                            )
+                                        },
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                },
+                                navigateToDestination = { navigation ->
+                                    showChildFabs = false
+                                    navigateToDestination(
+                                        navigationInterface = navigation,
+                                        navController = navController
+                                    )
+                                },
+                                navController = navController
+                            )
+                        }
+                        composable("${Route.WORKOUT_STATISTICS_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}") { backStackEntry ->
+                            val workoutName =
+                                backStackEntry.arguments?.getString("workoutName", "") ?: ""
+                            val statisticsDetailsViewModel =
+                                hiltViewModel<StatisticsDetailsViewModel>()
+                            LaunchedEffect(Unit) {
+                                bottomBarVisibility.value = false
+                                statisticsDetailsViewModel.getDataFromRealmDb(
+                                    workoutName = workoutName
+                                )
+                            }
+                            AppScreen(
+                                showMainFabIcon = false,
+                                modifier = Modifier,
+                                snackBarHostState = snackBarState,
+                                mainScreen = { mainScreenModifier ->
+                                    StatisticsDetailsScreen(
+                                        statisticsUiState = statisticsDetailsViewModel.statisticsDetailsUiState,
+                                        modifier = mainScreenModifier.fillMaxSize(),
+                                        navigateToDestination = {
+                                            navigateToDestination(
+                                                navigationInterface = it,
+                                                navController = navController
+                                            )
+                                        }
+                                    )
+                                },
+                                topAppBar = {
+                                    TopAppBar(
+                                        appBarTitle = {
+                                            Text(
+                                                text = stringResource(id = R.string.title_workout_statistics),
+                                                style = MaterialTheme.typography.titleLarge,
+                                                color = MaterialTheme.colorScheme.onPrimary
+                                            )
+                                        },
+                                        navigationIcon = {
+                                            NavigateUpIconButton(
+                                                navigateUp = { navController.navigateUp() }
                                             )
                                         },
                                         modifier = Modifier.fillMaxWidth()
@@ -475,46 +531,7 @@ class MainActivity : ComponentActivity() {
 fun navigateToDestination(
     navigationInterface: NavigationInterface,
     navController: NavController
-) = when (navigationInterface) {
-    NavigationInterface.NavigateToHome -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-
-    NavigationInterface.NavigateToWorkoutLibrary -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-
-    NavigationInterface.NavigateToWorkoutStatistics -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-
-    is NavigationInterface.NavigateToAddWorkout -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-
-    is NavigationInterface.NavigateToAddWorkoutDetails -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-
-    is NavigationInterface.NavigateToEditWorkout -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-}
+) = navigationEvent(
+    navigationInterface = navigationInterface,
+    navController = navController
+)

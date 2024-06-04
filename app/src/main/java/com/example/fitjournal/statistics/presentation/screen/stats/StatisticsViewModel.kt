@@ -1,4 +1,4 @@
-package com.example.fitjournal.statistics.presentation.screen
+package com.example.fitjournal.statistics.presentation.screen.stats
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.util.filter.searchForJournalEntry
 import com.example.fitjournal.core.util.state.UiState
-import com.example.fitjournal.library.presentation.screen.library.utils.mapToStatisticsUiList
+import com.example.fitjournal.statistics.domain.mapper.mapToStatisticsUiList
 import com.example.fitjournal.statistics.domain.usecase.CreateWorkoutAnalyticsUseCase
 import com.example.fitjournal.statistics.presentation.model.StatisticsEvents
 import com.example.fitjournal.statistics.presentation.model.StatisticsUiModel
@@ -52,29 +52,6 @@ class StatisticsViewModel @Inject constructor(
                     )
                 )
             }
-
-            is StatisticsEvents.GetWorkoutStats -> {
-                val workoutStatistics = statisticsUiState.realmList.filter { it.workoutDetailsModel.name == event.workoutName }
-                val workoutAnalytics = createWorkoutAnalyticsUseCase(workoutStatistics)
-                updateStatisticsState(
-                    newStatisticsState = statisticsUiState.copy(
-                        workoutStatistics = if (workoutStatistics.isEmpty()) {
-                            UiState.Empty
-                        } else {
-                            UiState.Success(workoutStatistics)
-                        },
-                        workoutAnalytics = workoutAnalytics
-                    )
-                )
-            }
-
-            is StatisticsEvents.UpdateTimeRange -> {
-                updateStatisticsState(
-                    newStatisticsState = statisticsUiState.copy(
-                        timeRangeEnum = event.timeRangeEnum
-                    )
-                )
-            }
         }
     }
 
@@ -82,7 +59,9 @@ class StatisticsViewModel @Inject constructor(
         viewModelScope.launch {
             val workoutList = realmWorkoutEntryUseCase.getRealmWorkoutEntryList()
             if (workoutList.isNotEmpty()) {
-                val libraryList = workoutList.groupBy { it.workoutDetailsModel.name.first().toString() }.toSortedMap()
+                val libraryList =
+                    workoutList.groupBy { it.workoutDetailsModel.name.first().toString() }
+                        .toSortedMap()
                 val masterWorkoutList = mapToStatisticsUiList(libraryList)
                 updateStatisticsState(
                     newStatisticsState = statisticsUiState.copy(
@@ -95,7 +74,8 @@ class StatisticsViewModel @Inject constructor(
                                 statisticsUiState.searchedTerm,
                                 statisticsUiState.masterWorkoutList
                             ).toMutableStateList()
-                        }
+                        },
+                        workoutStatisticsUiState = UiState.Success(Unit)
                     )
                 )
             }

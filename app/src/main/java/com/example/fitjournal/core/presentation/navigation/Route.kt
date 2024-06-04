@@ -5,6 +5,7 @@ object Route {
     const val EDIT_JOURNAL_SCREEN = "editJournalScreen"
     const val WORKOUT_LIBRARY_SCREEN = "workoutLibraryScreen"
     const val WORKOUT_STATISTICS_SCREEN = "workoutStatisticsScreen"
+    const val WORKOUT_STATISTICS_DETAILS_SCREEN = "workoutStatisticsDetailsScreen"
     const val LOTTIE_INTRO = "lottieIntroAnimation"
     const val ADD_WORKOUT_SCREEN = "addWorkoutScreen"
     const val ADD_WORKOUT_DETAILS_SCREEN = "addWorkoutDetailsScreen"

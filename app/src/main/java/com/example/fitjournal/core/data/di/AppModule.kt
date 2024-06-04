@@ -16,6 +16,7 @@ import com.example.fitjournal.core.domain.usecase.realm.workout.AddSingleWorkout
 import com.example.fitjournal.core.domain.usecase.realm.workout.CreateMockDataOfRealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.DeleteWorkoutEntryFromRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.GetRealmWorkoutEntryList
+import com.example.fitjournal.core.domain.usecase.realm.workout.GetRealmWorkoutEntryListWithNameUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.GetSingleRealmWorkoutEntry
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.SyncWorkoutEntryDbWithViewModelUseCase
@@ -76,6 +77,9 @@ object AppModule {
                 realmWorkoutEntryRepository = realmWorkoutEntryRepository
             ),
             syncWorkoutEntryDbWithViewModelUseCase = SyncWorkoutEntryDbWithViewModelUseCase(
+                realmWorkoutEntryRepository = realmWorkoutEntryRepository
+            ),
+            getRealmWorkoutEntryListWithName = GetRealmWorkoutEntryListWithNameUseCase(
                 realmWorkoutEntryRepository = realmWorkoutEntryRepository
             )
         )

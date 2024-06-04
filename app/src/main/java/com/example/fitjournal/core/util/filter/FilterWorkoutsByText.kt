@@ -23,8 +23,8 @@ fun searchForJournalEntry(text: String, list: List<WorkoutCategoryByJournal>): L
         WorkoutCategoryByJournal(
             name = category.name,
             items =
-            category.items.filter { workout ->
-                val lowercaseWorkout = workout.workoutDetailsModel.name.lowercase()
+            category.items.filter { workoutName ->
+                val lowercaseWorkout = workoutName.lowercase()
                 lowercaseWorkout.contains(text.lowercase())
             }.toMutableStateList()
         )

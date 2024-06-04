@@ -2,9 +2,7 @@ package com.example.fitjournal.library.presentation.screen.library.utils
 
 import androidx.compose.runtime.toMutableStateList
 import com.example.fitjournal.core.domain.model.WorkoutLibraryModel
-import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.presentation.model.LibraryWorkoutItem
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategoryByJournal
 import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategoryByLibrary
 import java.util.SortedMap
 
@@ -18,15 +16,6 @@ fun mapToLibraryUiList(workoutMap: SortedMap<String, List<WorkoutLibraryModel>>)
                     workoutTypeEnum = workout.workoutTypeEnum
                 )
             }.toMutableStateList()
-        )
-    }
-}
-
-fun mapToStatisticsUiList(workoutMap: SortedMap<String, List<WorkoutModel>>): List<WorkoutCategoryByJournal> {
-    return workoutMap.map { workouts ->
-        WorkoutCategoryByJournal(
-            name = workouts.key.toString(),
-            items = workouts.value.distinctBy { it.workoutDetailsModel.name }.toMutableStateList()
         )
     }
 }

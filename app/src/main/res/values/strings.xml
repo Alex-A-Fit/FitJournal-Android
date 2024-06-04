@@ -28,7 +28,7 @@
     <string name="title_edit_workout">Edit Workout</string>
     <string name="title_weight_training">Weight Training</string>
     <string name="title_calisthenics">Calisthenics</string>
-    <string name="title_statistics">Statistics</string>
+    <string name="title_workout_statistics">Workout Statistics</string>
     <string name="title_cardio">Cardio</string>
     <string name="title_top_set">Top Set Summary</string>
     <string name="title_edit_set">Edit Set</string>
