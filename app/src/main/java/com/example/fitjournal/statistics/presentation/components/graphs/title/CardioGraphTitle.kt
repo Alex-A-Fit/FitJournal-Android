@@ -1,4 +1,4 @@
-package com.example.fitjournal.statistics.presentation.components.graphs
+package com.example.fitjournal.statistics.presentation.components.graphs.title
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,18 +14,20 @@ import com.example.fitjournal.statistics.presentation.components.text.GraphTitle
 import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
 
 @Composable
-fun CalisthenicsGraphTitle(
-    timeRangeEnum: TimeRangeEnum
+fun CardioGraphTitle(
+    timeRangeEnum: TimeRangeEnum,
+    graphDisplayedEnum: GraphUiTypes.CardioGraphs,
+    updateGraphDisplayed: (GraphUiTypes.CardioGraphs) -> Unit
 ) {
-    var graphDisplayed by rememberSaveable {
-        mutableStateOf(GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE)
+    val graphDisplayed by rememberSaveable(graphDisplayedEnum) {
+        mutableStateOf(graphDisplayedEnum)
     }
 
     when (graphDisplayed) {
-        GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> {
+        GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE -> {
             GraphTitle(
                 timeRange = timeRangeEnum,
-                text = "Reps Vs Date",
+                text = "Total Distance",
                 showBackArrow = false,
                 showNextArrow = true,
                 modifier = Modifier
@@ -35,36 +37,15 @@ fun CalisthenicsGraphTitle(
                         vertical = Spacing.spacing8
                     ),
                 onNextArrowClicked = {
-                    graphDisplayed = GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE
+                    updateGraphDisplayed(GraphUiTypes.CardioGraphs.AVERAGE_SPEED_OVER_DATE)
                 }
             )
         }
 
-        GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE -> {
+        GraphUiTypes.CardioGraphs.AVERAGE_SPEED_OVER_DATE -> {
             GraphTitle(
                 timeRange = timeRangeEnum,
-                text = "Time Vs Date",
-                showBackArrow = true,
-                showNextArrow = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = Spacing.spacing16,
-                        vertical = Spacing.spacing8
-                    ),
-                onBackArrowClicked = {
-                    graphDisplayed = GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE
-                },
-                onNextArrowClicked = {
-                    graphDisplayed = GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE
-                }
-            )
-        }
-
-        GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> {
-            GraphTitle(
-                timeRange = timeRangeEnum,
-                text = "Weight Vs Date",
+                text = "Average Speed",
                 showBackArrow = true,
                 showNextArrow = false,
                 modifier = Modifier
@@ -74,7 +55,7 @@ fun CalisthenicsGraphTitle(
                         vertical = Spacing.spacing8
                     ),
                 onBackArrowClicked = {
-                    graphDisplayed = GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE
+                    updateGraphDisplayed(GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE)
                 }
             )
         }

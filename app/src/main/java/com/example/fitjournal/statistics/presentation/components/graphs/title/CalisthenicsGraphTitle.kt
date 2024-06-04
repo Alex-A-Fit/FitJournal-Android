@@ -1,4 +1,4 @@
-package com.example.fitjournal.statistics.presentation.components.graphs
+package com.example.fitjournal.statistics.presentation.components.graphs.title
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,18 +14,21 @@ import com.example.fitjournal.statistics.presentation.components.text.GraphTitle
 import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
 
 @Composable
-fun WeightTrainingGraphTitle(
-    timeRangeEnum: TimeRangeEnum
+fun CalisthenicsGraphTitle(
+    timeRangeEnum: TimeRangeEnum,
+    graphDisplayedEnum: GraphUiTypes.CalisthenicsGraphs,
+    updateGraphDisplayed: (GraphUiTypes.CalisthenicsGraphs) -> Unit
+
 ) {
-    var graphDisplayed by rememberSaveable {
-        mutableStateOf(GraphUiTypes.WeightTrainingGraphs.WEIGHT_OVER_DATE)
+    val graphDisplayed by rememberSaveable(graphDisplayedEnum) {
+        mutableStateOf(graphDisplayedEnum)
     }
 
     when (graphDisplayed) {
-        GraphUiTypes.WeightTrainingGraphs.WEIGHT_OVER_DATE -> {
+        GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> {
             GraphTitle(
                 timeRange = timeRangeEnum,
-                text = "Weight Lifted",
+                text = "Reps Vs Date",
                 showBackArrow = false,
                 showNextArrow = true,
                 modifier = Modifier
@@ -35,15 +38,36 @@ fun WeightTrainingGraphTitle(
                         vertical = Spacing.spacing8
                     ),
                 onNextArrowClicked = {
-                    graphDisplayed = GraphUiTypes.WeightTrainingGraphs.VOLUME_OVER_DATE
+                    updateGraphDisplayed(GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE)
                 }
             )
         }
 
-        GraphUiTypes.WeightTrainingGraphs.VOLUME_OVER_DATE -> {
+        GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE -> {
             GraphTitle(
                 timeRange = timeRangeEnum,
-                text = "Total Volume",
+                text = "Time Vs Date",
+                showBackArrow = true,
+                showNextArrow = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = Spacing.spacing16,
+                        vertical = Spacing.spacing8
+                    ),
+                onBackArrowClicked = {
+                    updateGraphDisplayed(GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE)
+                },
+                onNextArrowClicked = {
+                    updateGraphDisplayed(GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE)
+                }
+            )
+        }
+
+        GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> {
+            GraphTitle(
+                timeRange = timeRangeEnum,
+                text = "Weight Vs Date",
                 showBackArrow = true,
                 showNextArrow = false,
                 modifier = Modifier
@@ -53,7 +77,7 @@ fun WeightTrainingGraphTitle(
                         vertical = Spacing.spacing8
                     ),
                 onBackArrowClicked = {
-                    graphDisplayed = GraphUiTypes.WeightTrainingGraphs.WEIGHT_OVER_DATE
+                    updateGraphDisplayed(GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE)
                 }
             )
         }

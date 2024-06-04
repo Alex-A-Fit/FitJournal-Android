@@ -12,10 +12,10 @@ import com.example.fitjournal.statistics.presentation.model.StatisticsDetailsUiM
 @Composable
 fun StatisticsDetailsScreen(
     modifier: Modifier,
-    statisticsUiState: StatisticsDetailsUiModel,
+    statisticsDetailsUiState: StatisticsDetailsUiModel,
     navigateToDestination: (NavigationInterface) -> Unit
 ) {
-    when (val uiState = statisticsUiState.workoutStatisticsDetailsUiState) {
+    when (val uiState = statisticsDetailsUiState.workoutStatisticsDetailsUiState) {
         UiState.Empty -> {
             StatisticsErrorScreen()
         }
@@ -33,14 +33,10 @@ fun StatisticsDetailsScreen(
         }
 
         is UiState.Success -> {
-            val workout = statisticsUiState.realmList.first().workoutDetailsModel
             StatisticsDetailsSuccessScreen(
                 modifier = modifier,
-                workoutName = workout.name,
-                timeRangeEnum = statisticsUiState.timeRangeEnum,
                 currentlyViewedWorkoutStats = uiState.data,
-                statisticsClickEvents = statisticsUiState.handleStatisticsDetailsClickEvents,
-                workoutTypeEnum = workout.workoutTypeEnum
+                statisticsDetailsUiState = statisticsDetailsUiState
             )
         }
     }

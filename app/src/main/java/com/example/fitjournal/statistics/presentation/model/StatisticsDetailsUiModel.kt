@@ -15,5 +15,9 @@ data class StatisticsDetailsUiModel(
     // click events
     val handleStatisticsDetailsClickEvents: (StatisticsDetailsEvents) -> Unit,
 
+    val weightTrainingGraphs: GraphUiTypes.WeightTrainingGraphs = GraphUiTypes.WeightTrainingGraphs.WEIGHT_OVER_DATE,
+    val calisthenicGraphs: GraphUiTypes.CalisthenicsGraphs = GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE,
+    val cardioGraphs: GraphUiTypes.CardioGraphs = GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE,
+
     val timeRangeEnum: TimeRangeEnum = TimeRangeEnum.WEEK
 )

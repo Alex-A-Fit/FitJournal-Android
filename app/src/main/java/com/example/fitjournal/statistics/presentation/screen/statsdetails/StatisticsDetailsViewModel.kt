@@ -29,13 +29,32 @@ class StatisticsDetailsViewModel @Inject constructor(
 
     private fun statisticsDetailsClickEvents(event: StatisticsDetailsEvents) {
         when (event) {
-            is StatisticsDetailsEvents.GetWorkoutStats -> {
-            }
-
             is StatisticsDetailsEvents.UpdateTimeRange -> {
                 updateStatisticsDetailsState(
                     newStatisticsDetailsState = statisticsDetailsUiState.copy(
                         timeRangeEnum = event.timeRangeEnum
+                    )
+                )
+            }
+
+            is StatisticsDetailsEvents.UpdateCalisthenicsGraphShown -> {
+                updateStatisticsDetailsState(
+                    newStatisticsDetailsState = statisticsDetailsUiState.copy(
+                        calisthenicGraphs = event.graphToShow
+                    )
+                )
+            }
+            is StatisticsDetailsEvents.UpdateCardioGraphShown -> {
+                updateStatisticsDetailsState(
+                    newStatisticsDetailsState = statisticsDetailsUiState.copy(
+                        cardioGraphs = event.graphToShow
+                    )
+                )
+            }
+            is StatisticsDetailsEvents.UpdateWeightTrainingGraphShown -> {
+                updateStatisticsDetailsState(
+                    newStatisticsDetailsState = statisticsDetailsUiState.copy(
+                        weightTrainingGraphs = event.graphToShow
                     )
                 )
             }

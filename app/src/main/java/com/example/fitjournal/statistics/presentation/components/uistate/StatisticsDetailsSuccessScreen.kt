@@ -7,39 +7,107 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
-import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
+import com.example.fitjournal.statistics.domain.model.GraphData
 import com.example.fitjournal.statistics.domain.model.WorkoutAnalytics
-import com.example.fitjournal.statistics.presentation.components.graphs.CalisthenicsGraphTitle
-import com.example.fitjournal.statistics.presentation.components.graphs.CardioGraphTitle
-import com.example.fitjournal.statistics.presentation.components.graphs.WeightTrainingGraphTitle
+import com.example.fitjournal.statistics.presentation.components.graphs.title.CalisthenicsGraphTitle
+import com.example.fitjournal.statistics.presentation.components.graphs.title.CardioGraphTitle
+import com.example.fitjournal.statistics.presentation.components.graphs.title.WeightTrainingGraphTitle
+import com.example.fitjournal.statistics.presentation.components.graphs.ui.GraphSection
 import com.example.fitjournal.statistics.presentation.components.tabs.StatisticsTabRow
 import com.example.fitjournal.statistics.presentation.components.text.WorkoutNameTitle
+import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
 import com.example.fitjournal.statistics.presentation.model.StatisticsDetailsEvents
+import com.example.fitjournal.statistics.presentation.model.StatisticsDetailsUiModel
+import com.example.fitjournal.statistics.presentation.util.getGraphData
 
 @Composable
 fun StatisticsDetailsSuccessScreen(
     modifier: Modifier = Modifier,
-    workoutName: String,
-    workoutTypeEnum: WorkoutTypeEnum,
-    timeRangeEnum: TimeRangeEnum,
     currentlyViewedWorkoutStats: WorkoutAnalytics?,
-    statisticsClickEvents: (StatisticsDetailsEvents) -> Unit
+    statisticsDetailsUiState: StatisticsDetailsUiModel,
 ) {
-    val timeRangeOfWorkouts by rememberSaveable(timeRangeEnum) {
-        mutableStateOf(timeRangeEnum)
+    val workout = statisticsDetailsUiState.realmList.first().workoutDetailsModel
+
+    val timeRangeOfWorkouts by rememberSaveable(statisticsDetailsUiState.timeRangeEnum) {
+        mutableStateOf(statisticsDetailsUiState.timeRangeEnum)
     }
     Column(modifier = modifier) {
-        WorkoutNameTitle(workoutName = workoutName)
+        WorkoutNameTitle(workoutName = workout.name)
         StatisticsTabRow(
             timeRangeOfWorkouts = timeRangeOfWorkouts.ordinal,
             getStatsBasedOnTimeSelected = {
-                statisticsClickEvents(StatisticsDetailsEvents.UpdateTimeRange(it))
+                statisticsDetailsUiState.handleStatisticsDetailsClickEvents(
+                    StatisticsDetailsEvents.UpdateTimeRange(
+                        it
+                    )
+                )
             }
         )
-        when (workoutTypeEnum) {
-            WorkoutTypeEnum.WEIGHT_TRAINING -> WeightTrainingGraphTitle(timeRangeEnum = timeRangeEnum)
-            WorkoutTypeEnum.CALISTHENICS -> CalisthenicsGraphTitle(timeRangeEnum = timeRangeEnum)
-            WorkoutTypeEnum.CARDIO -> CardioGraphTitle(timeRangeEnum = timeRangeEnum)
+        when (val workoutType = workout.workoutTypeEnum) {
+            WorkoutTypeEnum.WEIGHT_TRAINING -> {
+                WeightTrainingGraphTitle(
+                    timeRangeEnum = timeRangeOfWorkouts,
+                    graphDisplayedEnum = statisticsDetailsUiState.weightTrainingGraphs,
+                    updateGraphDisplayed = { graphToShow ->
+                        statisticsDetailsUiState.handleStatisticsDetailsClickEvents(
+                            StatisticsDetailsEvents.UpdateWeightTrainingGraphShown(graphToShow)
+                        )
+                    }
+                )
+            }
+
+            WorkoutTypeEnum.CALISTHENICS -> {
+                CalisthenicsGraphTitle(
+                    timeRangeEnum = timeRangeOfWorkouts,
+                    graphDisplayedEnum = statisticsDetailsUiState.calisthenicGraphs,
+                    updateGraphDisplayed = { graphToShow ->
+                        statisticsDetailsUiState.handleStatisticsDetailsClickEvents(
+                            StatisticsDetailsEvents.UpdateCalisthenicsGraphShown(graphToShow)
+                        )
+                    }
+                )
+            }
+
+            WorkoutTypeEnum.CARDIO -> {
+                CardioGraphTitle(
+                    timeRangeEnum = timeRangeOfWorkouts,
+                    graphDisplayedEnum = statisticsDetailsUiState.cardioGraphs,
+                    updateGraphDisplayed = { graphToShow ->
+                        statisticsDetailsUiState.handleStatisticsDetailsClickEvents(
+                            StatisticsDetailsEvents.UpdateCardioGraphShown(graphToShow)
+                        )
+                    }
+                )
+            }
+        }
+        currentlyViewedWorkoutStats?.let { workoutStats ->
+            val graphData = getGraphData(
+                workoutStats = workoutStats,
+                timeRangeOfWorkouts = timeRangeOfWorkouts
+            )
+            GraphSection(
+                graphData = when (graphData) {
+                    is GraphData.Calisthenics -> {
+                        when (statisticsDetailsUiState.calisthenicGraphs){
+                            GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> graphData.totalRepsToDate
+                            GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE -> graphData.totalTimeToDate
+                            GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> graphData.totalWeightUsedToDate
+                        }
+                    }
+                    is GraphData.Cardio -> {
+                        when(statisticsDetailsUiState.cardioGraphs){
+                            GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE -> graphData.totalDistanceToDate
+                            GraphUiTypes.CardioGraphs.AVERAGE_SPEED_OVER_DATE -> graphData.averageSpeedToDate
+                        }
+                    }
+                    is GraphData.WeightTraining -> {
+                        when (statisticsDetailsUiState.weightTrainingGraphs){
+                            GraphUiTypes.WeightTrainingGraphs.WEIGHT_OVER_DATE -> graphData.topWeightToDate
+                            GraphUiTypes.WeightTrainingGraphs.VOLUME_OVER_DATE -> graphData.mostVolumeToDate
+                        }
+                    }
+                }
+            )
         }
     }
 }

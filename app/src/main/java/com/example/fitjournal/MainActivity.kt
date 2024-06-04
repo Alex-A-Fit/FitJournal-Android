@@ -308,7 +308,7 @@ class MainActivity : ComponentActivity() {
                                 snackBarHostState = snackBarState,
                                 mainScreen = { mainScreenModifier ->
                                     StatisticsDetailsScreen(
-                                        statisticsUiState = statisticsDetailsViewModel.statisticsDetailsUiState,
+                                        statisticsDetailsUiState = statisticsDetailsViewModel.statisticsDetailsUiState,
                                         modifier = mainScreenModifier.fillMaxSize(),
                                         navigateToDestination = {
                                             navigateToDestination(
