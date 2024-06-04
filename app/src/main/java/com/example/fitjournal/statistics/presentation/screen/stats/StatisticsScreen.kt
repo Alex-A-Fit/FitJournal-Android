@@ -15,7 +15,7 @@ fun StatisticsScreen(
     statisticsUiState: StatisticsUiModel,
     navigateToDestination: (NavigationInterface) -> Unit
 ) {
-    when (val uiState = statisticsUiState.workoutStatisticsUiState) {
+    when (statisticsUiState.workoutStatisticsUiState) {
         UiState.Empty -> {
             StatisticsErrorScreen()
         }

@@ -10,7 +10,6 @@ import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntr
 import com.example.fitjournal.core.util.filter.searchForJournalEntry
 import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.statistics.domain.mapper.mapToStatisticsUiList
-import com.example.fitjournal.statistics.domain.usecase.CreateWorkoutAnalyticsUseCase
 import com.example.fitjournal.statistics.presentation.model.StatisticsEvents
 import com.example.fitjournal.statistics.presentation.model.StatisticsUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase,
-    private val createWorkoutAnalyticsUseCase: CreateWorkoutAnalyticsUseCase
+    private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase
 ) : ViewModel() {
     var statisticsUiState: StatisticsUiModel by mutableStateOf(
         StatisticsUiModel(
