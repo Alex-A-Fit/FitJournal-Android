@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
 import com.example.fitjournal.statistics.presentation.components.text.GraphTitle
 import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
 
