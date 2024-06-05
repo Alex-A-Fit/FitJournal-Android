@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
@@ -26,8 +25,7 @@ fun CardioGraphTitle(
     when (graphDisplayed) {
         GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE -> {
             GraphTitle(
-                timeRange = timeRangeEnum,
-                text = "Total Distance",
+                text = "Date vs Total Distance Traveled",
                 showBackArrow = false,
                 showNextArrow = true,
                 modifier = Modifier
@@ -44,8 +42,7 @@ fun CardioGraphTitle(
 
         GraphUiTypes.CardioGraphs.AVERAGE_SPEED_OVER_DATE -> {
             GraphTitle(
-                timeRange = timeRangeEnum,
-                text = "Average Speed",
+                text = "Date vs Average Speed per Workout",
                 showBackArrow = true,
                 showNextArrow = false,
                 modifier = Modifier

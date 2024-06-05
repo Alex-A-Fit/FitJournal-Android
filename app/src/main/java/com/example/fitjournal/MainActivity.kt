@@ -322,7 +322,7 @@ class MainActivity : ComponentActivity() {
                                     TopAppBar(
                                         appBarTitle = {
                                             Text(
-                                                text = stringResource(id = R.string.title_workout_statistics),
+                                                text = stringResource(id = R.string.title_workout_statistics_details),
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )

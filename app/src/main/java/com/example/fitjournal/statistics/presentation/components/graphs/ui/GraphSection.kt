@@ -14,9 +14,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import co.yml.charts.axis.AxisData
-import co.yml.charts.common.model.Point
 import co.yml.charts.ui.linechart.LineChart
-import co.yml.charts.ui.linechart.model.GridLines
 import co.yml.charts.ui.linechart.model.IntersectionPoint
 import co.yml.charts.ui.linechart.model.Line
 import co.yml.charts.ui.linechart.model.LineChartData
@@ -27,24 +25,32 @@ import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.statistics.domain.model.GraphValues
+import kotlin.math.roundToInt
 
 @Composable
 fun GraphSection(
-    graphData: List<Point>?
+    graphData: List<GraphValues>?,
+    stringForGraphPopUp: (String, Float) -> String
 ) {
     if (graphData == null) {
         GraphError()
         return
     }
-    val steps = graphData.size
-    val pointsData: List<Point> = graphData
     val xAxisData = AxisData.Builder()
-        //the distance between each x axis point
-        .axisStepSize(Spacing.spacing75)
+        // the distance between each x axis point
+        .axisStepSize(Spacing.spacing128)
         .backgroundColor(Color.Transparent)
-        .steps(pointsData.size - 1)
-        .labelData { i -> i.toString() }
-        //padding between the label and the x axis line
+        .steps(graphData.size - 1)
+        .shouldDrawAxisLineTillEnd(true)
+        .labelData { i ->
+            if (i == 0 && graphData.first().date.isEmpty()) {
+                ""
+            } else {
+                graphData[i].date
+            }
+        }
+        // padding between the label and the x axis line
         .labelAndAxisLinePadding(Spacing.spacing16)
         .axisLineColor(MaterialTheme.colorScheme.onPrimary)
         .axisLabelColor(MaterialTheme.colorScheme.primary)
@@ -52,20 +58,26 @@ fun GraphSection(
         .build()
 
     val yAxisData = AxisData.Builder()
-        .steps(steps)
+        .steps(graphData.size)
         .backgroundColor(Color.Transparent)
-        .labelAndAxisLinePadding(Spacing.spacing24)
+        .labelAndAxisLinePadding(Spacing.spacing32)
         .labelData { i ->
-            val yScale = 900 / steps
-            (i * yScale).toString()
+            val highestPoint = graphData.maxByOrNull { it.point.y }?.point?.y
+            if (highestPoint == null) {
+                return@labelData "0"
+            }
+            val scale = (highestPoint.toDouble() / graphData.size.toDouble())
+            (i * scale).roundToInt().toString()
         }
         .axisLineColor(MaterialTheme.colorScheme.onPrimary)
-        .axisLabelColor(MaterialTheme.colorScheme.primary).build()
+        .axisLabelColor(MaterialTheme.colorScheme.primary)
+        .startDrawPadding(Spacing.spacing8)
+        .build()
     val lineChartData = LineChartData(
         linePlotData = LinePlotData(
             lines = listOf(
                 Line(
-                    dataPoints = pointsData,
+                    dataPoints = graphData.map { it.point },
                     LineStyle(
                         color = MaterialTheme.colorScheme.primary,
                         lineType = LineType.SmoothCurve(isDotted = false)
@@ -85,24 +97,24 @@ fun GraphSection(
                             )
                         )
                     ),
-                    SelectionHighlightPopUp()
+                    SelectionHighlightPopUp(
+                        popUpLabel = { x, y ->
+                            stringForGraphPopUp("| Date: ${graphData[x.toInt()].date}", y)
+                        }
+                    )
                 )
-            ),
+            )
         ),
         xAxisData = xAxisData,
         yAxisData = yAxisData,
-        gridLines = GridLines(
-            color = MaterialTheme.colorScheme.secondary
-        ),
-        backgroundColor = MaterialTheme.colorScheme.background
+        backgroundColor = MaterialTheme.colorScheme.background,
+        containerPaddingEnd = Spacing.spacing128
     )
-
     Spacer(modifier = Modifier.height(Spacing.spacing16))
     LineChart(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 300.dp, max = 500.dp)
-            .padding(horizontal = Spacing.spacing8),
+            .heightIn(min = 300.dp, max = 500.dp),
         lineChartData = lineChartData
     )
 }
@@ -112,7 +124,8 @@ fun GraphError() {
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = Spacing.spacing16)) {
+            .padding(horizontal = Spacing.spacing16)
+    ) {
         Text(text = "No Data found,")
         Text(text = "Unable to display graph")
     }

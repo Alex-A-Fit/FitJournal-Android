@@ -69,22 +69,22 @@ sealed class PersonalRecords {
 sealed class GraphData {
     data class WeightTraining(
         // looking at top set and highest weight
-        val topWeightToDate: List<Point>,
+        val topWeightToDate: List<GraphValues>?,
         // compare total volume(reps * sets * weight) to date
-        val mostVolumeToDate: List<Point>
+        val mostVolumeToDate: List<GraphValues>?
     ) : GraphData()
 
     data class Cardio(
         // compare distance to date
-        val totalDistanceToDate: List<Point>,
+        val totalDistanceToDate: List<GraphValues>?,
         // compare speed (distance/ Time) to date
-        val averageSpeedToDate: List<Point>
+        val averageSpeedToDate: List<GraphValues>?
     ) : GraphData()
 
     data class Calisthenics(
-        val totalRepsToDate: List<Point>,
-        val totalTimeToDate: List<Point>? = null,
-        val totalWeightUsedToDate: List<Point>? = null
+        val totalRepsToDate: List<GraphValues>?,
+        val totalTimeToDate: List<GraphValues>? = null,
+        val totalWeightUsedToDate: List<GraphValues>? = null
     ) : GraphData()
 }
 
@@ -97,5 +97,10 @@ data class DistinctWeightForReps(
 data class DistinctDistanceForTime(
     val distance: Double,
     val time: Double,
+    val date: String
+)
+
+data class GraphValues(
+    val point: Point,
     val date: String
 )

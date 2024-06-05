@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
@@ -27,8 +26,7 @@ fun CalisthenicsGraphTitle(
     when (graphDisplayed) {
         GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> {
             GraphTitle(
-                timeRange = timeRangeEnum,
-                text = "Reps Vs Date",
+                text = "Date vs Total Reps per Workout",
                 showBackArrow = false,
                 showNextArrow = true,
                 modifier = Modifier
@@ -45,8 +43,7 @@ fun CalisthenicsGraphTitle(
 
         GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE -> {
             GraphTitle(
-                timeRange = timeRangeEnum,
-                text = "Time Vs Date",
+                text = "Date vs Total Time per Workout",
                 showBackArrow = true,
                 showNextArrow = true,
                 modifier = Modifier
@@ -66,8 +63,7 @@ fun CalisthenicsGraphTitle(
 
         GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> {
             GraphTitle(
-                timeRange = timeRangeEnum,
-                text = "Weight Vs Date",
+                text = "Date vs Total Weight Used per Workout",
                 showBackArrow = true,
                 showNextArrow = false,
                 modifier = Modifier

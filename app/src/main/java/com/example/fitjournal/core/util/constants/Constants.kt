@@ -1,7 +1,10 @@
 package com.example.fitjournal.core.util.constants
 
+import java.time.format.DateTimeFormatter
+
 object Constants {
     const val STANDARD_DATE_PATTERN = "MMM dd, yyyy"
+    val STANDARD_DATE_FORMATTER = DateTimeFormatter.ofPattern(STANDARD_DATE_PATTERN)
     const val EMPTY_SPACE = " "
     const val KILOGRAMS_TO_POUNDS_CONVERSION_FACTOR = 2.20462
     const val POUNDS_TO_KILOGRAMS_CONVERSION_FACTOR = 0.453592

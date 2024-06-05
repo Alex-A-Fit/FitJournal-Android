@@ -7,11 +7,11 @@ import com.example.fitjournal.statistics.domain.model.WorkoutAnalytics
 fun getGraphData(
     workoutStats: WorkoutAnalytics,
     timeRangeOfWorkouts: TimeRangeEnum
-    ): GraphData {
-    return when(workoutStats){
+): GraphData {
+    return when (workoutStats) {
         is WorkoutAnalytics.Calisthenics -> {
             val data = workoutStats.graphData
-            when(timeRangeOfWorkouts){
+            when (timeRangeOfWorkouts) {
                 TimeRangeEnum.WEEK -> data.graphDataByWeek
                 TimeRangeEnum.MONTH -> data.graphDataByMonth
                 TimeRangeEnum.YEAR -> data.graphDataByYear
@@ -20,7 +20,7 @@ fun getGraphData(
         }
         is WorkoutAnalytics.Cardio -> {
             val data = workoutStats.graphData
-            when(timeRangeOfWorkouts){
+            when (timeRangeOfWorkouts) {
                 TimeRangeEnum.WEEK -> data.graphDataByWeek
                 TimeRangeEnum.MONTH -> data.graphDataByMonth
                 TimeRangeEnum.YEAR -> data.graphDataByYear
@@ -29,7 +29,7 @@ fun getGraphData(
         }
         is WorkoutAnalytics.WeightTraining -> {
             val data = workoutStats.graphData
-            when(timeRangeOfWorkouts){
+            when (timeRangeOfWorkouts) {
                 TimeRangeEnum.WEEK -> data.graphDataByWeek
                 TimeRangeEnum.MONTH -> data.graphDataByMonth
                 TimeRangeEnum.YEAR -> data.graphDataByYear

@@ -13,11 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.R
-import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
 
 @Composable
 fun GraphTitle(
-    timeRange: TimeRangeEnum,
     text: String,
     showBackArrow: Boolean,
     onBackArrowClicked: () -> Unit = {},
@@ -25,12 +23,6 @@ fun GraphTitle(
     showNextArrow: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val timeRangeText = when (timeRange) {
-        TimeRangeEnum.WEEK -> "the Past Week"
-        TimeRangeEnum.MONTH -> "the Past Month"
-        TimeRangeEnum.YEAR -> "the Past Year"
-        TimeRangeEnum.ALL_TIME -> "All Time"
-    }
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.Center,
@@ -49,7 +41,7 @@ fun GraphTitle(
             }
         )
         Text(
-            text = "$text for $timeRangeText",
+            text = text,
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,

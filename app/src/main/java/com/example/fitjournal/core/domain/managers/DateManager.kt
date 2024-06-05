@@ -1,5 +1,6 @@
 package com.example.fitjournal.core.domain.managers
 
+import com.example.fitjournal.core.util.constants.Constants
 import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import java.time.Instant
 import java.time.LocalDate
@@ -10,7 +11,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 object DateManager {
-    private val dateFormat = DateTimeFormatter.ofPattern("MMM dd, yyyy")
     fun getNextDate(
         currentDate: LocalDateTime
     ): UserSelectedDate {
@@ -52,14 +52,14 @@ object DateManager {
     }
 
     private fun formatDate(dateString: String): String {
-        return LocalDate.parse(dateString).format(dateFormat).toString()
+        return LocalDate.parse(dateString).format(Constants.STANDARD_DATE_FORMATTER).toString()
     }
 
     fun getTimeInMilliseconds(currentDate: LocalDateTime): Long {
         return currentDate.toEpochSecond(ZoneOffset.UTC) * 1000
     }
     fun getCommonDateFormat(): DateTimeFormatter {
-        return dateFormat
+        return Constants.STANDARD_DATE_FORMATTER
     }
 }
 
