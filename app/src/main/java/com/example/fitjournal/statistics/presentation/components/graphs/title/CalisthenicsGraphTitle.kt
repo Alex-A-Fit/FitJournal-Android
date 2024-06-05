@@ -14,7 +14,6 @@ import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
 
 @Composable
 fun CalisthenicsGraphTitle(
-    timeRangeEnum: TimeRangeEnum,
     graphDisplayedEnum: GraphUiTypes.CalisthenicsGraphs,
     updateGraphDisplayed: (GraphUiTypes.CalisthenicsGraphs) -> Unit
 

@@ -57,6 +57,7 @@ object HelperFunctions {
         }
         if (filteredList.isNullOrEmpty()) return null
         var count = 0
+        var lastKnownDate: String = ""
         return filteredList.sortedWith(
             compareBy(
                 { it.date },

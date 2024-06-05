@@ -1,17 +1,28 @@
 package com.example.fitjournal.statistics.presentation.components.graphs.ui
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import co.yml.charts.axis.AxisData
 import co.yml.charts.ui.linechart.LineChart
@@ -24,6 +35,7 @@ import co.yml.charts.ui.linechart.model.LineType
 import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.GraphValues
 import kotlin.math.roundToInt
@@ -31,8 +43,13 @@ import kotlin.math.roundToInt
 @Composable
 fun GraphSection(
     graphData: List<GraphValues>?,
-    stringForGraphPopUp: (String, Float) -> String
+    stringForGraphPopUp: (String, Float) -> String,
+    yAxisSuffixLabel: String,
+    convertYaxisValue: (Double) -> Int = { it.roundToInt() }
 ) {
+    var lastKnownXaxisDate by remember {
+        mutableStateOf("")
+    }
     if (graphData == null) {
         GraphError()
         return
@@ -67,7 +84,9 @@ fun GraphSection(
                 return@labelData "0"
             }
             val scale = (highestPoint.toDouble() / graphData.size.toDouble())
-            (i * scale).roundToInt().toString()
+            val iValue = (i * scale)
+            val convertedValue = convertYaxisValue(iValue)
+            "$convertedValue $yAxisSuffixLabel"
         }
         .axisLineColor(MaterialTheme.colorScheme.onPrimary)
         .axisLabelColor(MaterialTheme.colorScheme.primary)
@@ -86,7 +105,7 @@ fun GraphSection(
                         color = MaterialTheme.colorScheme.primary
                     ),
                     SelectionHighlightPoint(
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.onPrimary
                     ),
                     ShadowUnderLine(
                         alpha = 0.5f,
@@ -99,7 +118,7 @@ fun GraphSection(
                     ),
                     SelectionHighlightPopUp(
                         popUpLabel = { x, y ->
-                            stringForGraphPopUp("| Date: ${graphData[x.toInt()].date}", y)
+                            stringForGraphPopUp("| Date: ${graphData.find { it.point.x == x }?.date ?: "N/A"}", y)
                         }
                     )
                 )
@@ -124,9 +143,23 @@ fun GraphError() {
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = Spacing.spacing16)
+            .padding(
+                horizontal = Spacing.spacing16,
+                vertical = Spacing.spacing16
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "No Data found,")
-        Text(text = "Unable to display graph")
+        Image(
+            painter = painterResource(id = R.drawable.icon_error),
+            contentDescription = "Error icon",
+            modifier = Modifier.size(Spacing.spacing75)
+        )
+        Text(
+            text = "No Data found \n To display graph \n Add/edit your workouts into your Journal!",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
     }
 }

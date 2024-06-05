@@ -14,7 +14,6 @@ import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
 
 @Composable
 fun CardioGraphTitle(
-    timeRangeEnum: TimeRangeEnum,
     graphDisplayedEnum: GraphUiTypes.CardioGraphs,
     updateGraphDisplayed: (GraphUiTypes.CardioGraphs) -> Unit
 ) {

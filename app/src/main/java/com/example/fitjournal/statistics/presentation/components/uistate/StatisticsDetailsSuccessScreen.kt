@@ -14,10 +14,11 @@ import com.example.fitjournal.statistics.domain.model.WorkoutAnalytics
 import com.example.fitjournal.statistics.presentation.components.graphs.title.CalisthenicsGraphTitle
 import com.example.fitjournal.statistics.presentation.components.graphs.title.CardioGraphTitle
 import com.example.fitjournal.statistics.presentation.components.graphs.title.WeightTrainingGraphTitle
-import com.example.fitjournal.statistics.presentation.components.graphs.ui.GraphSection
+import com.example.fitjournal.statistics.presentation.components.graphs.ui.GraphSectionForCalisthenics
+import com.example.fitjournal.statistics.presentation.components.graphs.ui.GraphSectionForCardio
+import com.example.fitjournal.statistics.presentation.components.graphs.ui.GraphSectionForWeightLifting
 import com.example.fitjournal.statistics.presentation.components.tabs.StatisticsTabRow
 import com.example.fitjournal.statistics.presentation.components.text.WorkoutNameTitle
-import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
 import com.example.fitjournal.statistics.presentation.model.StatisticsDetailsEvents
 import com.example.fitjournal.statistics.presentation.model.StatisticsDetailsUiModel
 import com.example.fitjournal.statistics.presentation.util.getGraphData
@@ -59,7 +60,6 @@ fun StatisticsDetailsSuccessScreen(
 
             WorkoutTypeEnum.CALISTHENICS -> {
                 CalisthenicsGraphTitle(
-                    timeRangeEnum = timeRangeOfWorkouts,
                     graphDisplayedEnum = statisticsDetailsUiState.calisthenicGraphs,
                     updateGraphDisplayed = { graphToShow ->
                         statisticsDetailsUiState.handleStatisticsDetailsClickEvents(
@@ -71,7 +71,6 @@ fun StatisticsDetailsSuccessScreen(
 
             WorkoutTypeEnum.CARDIO -> {
                 CardioGraphTitle(
-                    timeRangeEnum = timeRangeOfWorkouts,
                     graphDisplayedEnum = statisticsDetailsUiState.cardioGraphs,
                     updateGraphDisplayed = { graphToShow ->
                         statisticsDetailsUiState.handleStatisticsDetailsClickEvents(
@@ -87,56 +86,26 @@ fun StatisticsDetailsSuccessScreen(
                 timeRangeOfWorkouts = timeRangeOfWorkouts
             )
             Column(modifier = Modifier.padding(start = Spacing.spacing8)) {
-                GraphSection(
-                    graphData = when (graphData) {
-                        is GraphData.Calisthenics -> {
-                            when (statisticsDetailsUiState.calisthenicGraphs) {
-                                GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> graphData.totalRepsToDate
-                                GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE -> graphData.totalTimeToDate
-                                GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> graphData.totalWeightUsedToDate
-                            }
-                        }
+                when (graphData) {
+                    is GraphData.Calisthenics -> GraphSectionForCalisthenics(
+                        graphData = graphData,
+                        calisthenicGraphs = statisticsDetailsUiState.calisthenicGraphs
+                    )
 
-                        is GraphData.Cardio -> {
-                            when (statisticsDetailsUiState.cardioGraphs) {
-                                GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE -> graphData.totalDistanceToDate
-                                GraphUiTypes.CardioGraphs.AVERAGE_SPEED_OVER_DATE -> graphData.averageSpeedToDate
-                            }
-                        }
-
-                        is GraphData.WeightTraining -> {
-                            when (statisticsDetailsUiState.weightTrainingGraphs) {
-                                GraphUiTypes.WeightTrainingGraphs.WEIGHT_OVER_DATE -> graphData.topWeightToDate
-                                GraphUiTypes.WeightTrainingGraphs.VOLUME_OVER_DATE -> graphData.mostVolumeToDate
-                            }
-                        }
-                    },
-                    stringForGraphPopUp = { x, y ->
-                        when (graphData) {
-                            is GraphData.Calisthenics -> {
-                                when (statisticsDetailsUiState.calisthenicGraphs) {
-                                    GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> "Total Reps: $y $x"
-                                    GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE -> "Total Time: $y $x"
-                                    GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> "Weight Used: $y $x"
-                                }
-                            }
-
-                            is GraphData.Cardio -> {
-                                when (statisticsDetailsUiState.cardioGraphs) {
-                                    GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE -> "Distance Traveled: $y $x"
-                                    GraphUiTypes.CardioGraphs.AVERAGE_SPEED_OVER_DATE -> "Average Speed: $y $x"
-                                }
-                            }
-
-                            is GraphData.WeightTraining -> {
-                                when (statisticsDetailsUiState.weightTrainingGraphs) {
-                                    GraphUiTypes.WeightTrainingGraphs.WEIGHT_OVER_DATE -> "Weight Lifted: $y $x"
-                                    GraphUiTypes.WeightTrainingGraphs.VOLUME_OVER_DATE -> "Workout Volume: $y $x"
-                                }
-                            }
-                        }
+                    is GraphData.Cardio -> {
+                        GraphSectionForCardio(
+                            graphData = graphData,
+                            cardioGraphs = statisticsDetailsUiState.cardioGraphs
+                        )
                     }
-                )
+
+                    is GraphData.WeightTraining -> {
+                        GraphSectionForWeightLifting(
+                            graphData = graphData,
+                            weightTrainingGraphs = statisticsDetailsUiState.weightTrainingGraphs
+                        )
+                    }
+                }
             }
         }
     }

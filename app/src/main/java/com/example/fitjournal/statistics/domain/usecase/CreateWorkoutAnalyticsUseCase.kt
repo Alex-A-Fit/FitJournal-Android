@@ -277,7 +277,6 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
     val averageSpeedToDate: MutableList<GraphValues> = mutableListOf()
     groupedByDates.forEach { (workoutDate, listOfPairDateAndWorkouts) ->
         val date = HelperFunctions.parseDate(workoutDate)
-        val dateFloat = date.toEpochDay().toFloat()
         val distance = listOfPairDateAndWorkouts.sumOf { it.second?.distance ?: 0.0 }
         val averageSpeedsForAllWorkoutsForToday: MutableList<Double> = mutableListOf()
         listOfPairDateAndWorkouts.forEach {
