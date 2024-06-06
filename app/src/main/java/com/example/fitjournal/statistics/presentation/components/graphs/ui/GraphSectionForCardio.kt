@@ -16,8 +16,8 @@ fun GraphSectionForCardio(
         },
         stringForGraphPopUp = { x, y ->
             when (cardioGraphs) {
-                GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE -> "Distance Traveled: ${y}mi $x"
-                GraphUiTypes.CardioGraphs.AVERAGE_SPEED_OVER_DATE -> "Average Speed: ${y}mi/hr $x"
+                GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE -> "Distance Traveled: $y mi $x"
+                GraphUiTypes.CardioGraphs.AVERAGE_SPEED_OVER_DATE -> "Average Speed: $y mi/hr $x"
             }
         },
         yAxisSuffixLabel = when (cardioGraphs) {

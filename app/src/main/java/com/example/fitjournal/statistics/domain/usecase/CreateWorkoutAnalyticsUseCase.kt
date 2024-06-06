@@ -47,7 +47,11 @@ class CreateWorkoutAnalyticsUseCase @Inject constructor(
                 getWorkoutsByTimeSelectedUseCase(workouts)
             )
 
-            WorkoutTypeEnum.CARDIO -> getCardioAnalytics(getWorkoutsByTimeSelectedUseCase(workouts))
+            WorkoutTypeEnum.CARDIO -> {
+                getCardioAnalytics(
+                    getWorkoutsByTimeSelectedUseCase(workouts)
+                )
+            }
         }
     }
 }
@@ -68,11 +72,12 @@ fun getWeightTrainingAnalytics(workouts: WorkoutsByTimeRange): WorkoutAnalytics 
 }
 
 fun getCardioAnalytics(workouts: WorkoutsByTimeRange): WorkoutAnalytics {
+    val originalData = workouts.allTime
     val graphData = GraphAnalytics(
         graphDataByWeek = getGraphDataForCardio(workouts.week),
         graphDataByMonth = getGraphDataForCardio(workouts.month),
         graphDataByYear = getGraphDataForCardio(workouts.year),
-        graphDataAllTime = getGraphDataForCardio(workouts.allTime)
+        graphDataAllTime = getGraphDataForCardio(originalData)
     )
     val pr = getPersonalRecords(graphData)
     return WorkoutAnalytics.Cardio(
@@ -164,8 +169,10 @@ fun getDistinctDistanceOverTime(workoutList: List<WorkoutModel>): List<DistinctD
 
 fun getPersonalRecords(graphData: GraphAnalytics): PersonalRecordAnalytics {
     val allTimePr = determinePR(graphData.graphDataAllTime)
-    val calisthenicsAllTimePr = if (allTimePr is PersonalRecordType.Calisthenics) allTimePr else null
-    val weightTrainingAllTimePr = if (allTimePr is PersonalRecordType.WeightTraining) allTimePr else null
+    val calisthenicsAllTimePr =
+        if (allTimePr is PersonalRecordType.Calisthenics) allTimePr else null
+    val weightTrainingAllTimePr =
+        if (allTimePr is PersonalRecordType.WeightTraining) allTimePr else null
     val cardioAllTimePr = if (allTimePr is PersonalRecordType.Cardio) allTimePr else null
     val prByMonth = determinePR(
         graphData = graphData.graphDataByMonth,
@@ -215,7 +222,8 @@ fun determinePR(
                 personalRecord = "$mostReps reps",
                 personalRecordDate = dateMostReps,
                 allTimePr = calisthenicsAllTimePr?.totalRepsPr?.personalRecord ?: "$mostReps reps",
-                allTimePrDate = calisthenicsAllTimePr?.totalRepsPr?.personalRecordDate ?: dateMostReps
+                allTimePrDate = calisthenicsAllTimePr?.totalRepsPr?.personalRecordDate
+                    ?: dateMostReps
             )
             val weightPr = if (mostWeightUsed != null && dateMostWeightUsed != null) {
                 PersonalRecord(
@@ -248,8 +256,10 @@ fun determinePR(
             val longestDistancePr = PersonalRecord(
                 personalRecord = "${dropDecimalValue(farthestDistance)} mi",
                 personalRecordDate = dateFarthestDistance,
-                allTimePr = cardioAllTimePr?.totalDistancePr?.personalRecord ?: "${farthestDistance}mi",
-                allTimePrDate = cardioAllTimePr?.totalDistancePr?.personalRecordDate ?: dateFarthestDistance
+                allTimePr = cardioAllTimePr?.totalDistancePr?.personalRecord
+                    ?: "${farthestDistance}mi",
+                allTimePrDate = cardioAllTimePr?.totalDistancePr?.personalRecordDate
+                    ?: dateFarthestDistance
             )
             val bestSpeedPr = PersonalRecord(
                 personalRecord = "${dropDecimalValue(topSpeed)} mi/hr",
@@ -275,14 +285,18 @@ fun determinePR(
             val mostWeightLiftedPr = PersonalRecord(
                 personalRecord = "${dropDecimalValue(highestWeight)} lbs",
                 personalRecordDate = dateOfHighestWeight,
-                allTimePr = weightTrainingAllTimePr?.mostWeightPr?.personalRecord ?: "${highestWeight}lbs",
-                allTimePrDate = weightTrainingAllTimePr?.mostWeightPr?.personalRecordDate ?: dateOfHighestWeight
+                allTimePr = weightTrainingAllTimePr?.mostWeightPr?.personalRecord
+                    ?: "${highestWeight}lbs",
+                allTimePrDate = weightTrainingAllTimePr?.mostWeightPr?.personalRecordDate
+                    ?: dateOfHighestWeight
             )
             val mostVolumePr = PersonalRecord(
                 personalRecord = "${dropDecimalValue(highestVolume)} lbs moved/workout",
                 personalRecordDate = dateOfHighestVolume,
-                allTimePr = weightTrainingAllTimePr?.mostVolumePr?.personalRecord ?: "$highestVolume lbs moved/workout",
-                allTimePrDate = weightTrainingAllTimePr?.mostVolumePr?.personalRecordDate ?: dateOfHighestVolume
+                allTimePr = weightTrainingAllTimePr?.mostVolumePr?.personalRecord
+                    ?: "$highestVolume lbs moved/workout",
+                allTimePrDate = weightTrainingAllTimePr?.mostVolumePr?.personalRecordDate
+                    ?: dateOfHighestVolume
             )
             PersonalRecordType.WeightTraining(
                 mostWeightPr = mostWeightLiftedPr,
@@ -293,6 +307,7 @@ fun determinePR(
 }
 
 private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
+    val cardioList: MutableList<Pair<String, CardioModel>> = mutableListOf()
     workoutList.forEach { workout ->
         val workoutSets = workout.workoutDetailsModel.workoutPropertiesModel.getCardioProps()
         val totalLaps = workoutSets.sumOf { it.laps ?: 0.0 }
@@ -311,39 +326,30 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
             minutes = if (totalMinutes == 0.0) "" else totalMinutes.toString(),
             seconds = if (totalSeconds == 0.0) "" else totalSeconds.toString()
         )
-        workout.workoutDetailsModel.workoutPropertiesModel =
-            WorkoutPropertiesModel.CardioProps(
-                listOf(
-                    CardioModel(
-                        distance = totalDistanceInWorkout,
-                        distanceType = CardioDistanceType.MILES,
-                        time = totalTime,
-                        laps = totalLaps
-                    )
-                )
-            )
-    }
-    val pairOfCardioAndDates: List<Pair<WorkoutDate, CardioModel?>> =
-        workoutList.map { workout ->
+        cardioList.add(
             Pair(
                 workout.date,
-                workout.workoutDetailsModel.workoutPropertiesModel.getCardioProps().first()
+                CardioModel(
+                    distance = totalDistanceInWorkout,
+                    distanceType = CardioDistanceType.MILES,
+                    time = totalTime,
+                    laps = totalLaps
+                )
             )
-        }
-    val groupedByDates = pairOfCardioAndDates.groupBy { it.first }
+        )
+    }
+    val groupedByDates = cardioList.groupBy { it.first }
     val totalDistanceToDate: MutableList<GraphValues> = mutableListOf()
     val averageSpeedToDate: MutableList<GraphValues> = mutableListOf()
     groupedByDates.forEach { (workoutDate, listOfPairDateAndWorkouts) ->
-        val distance = listOfPairDateAndWorkouts.sumOf { it.second?.distance ?: 0.0 }
+        val totalDistance = listOfPairDateAndWorkouts.sumOf { it.second.distance }
         val averageSpeedsForAllWorkoutsForToday: MutableList<Double> = mutableListOf()
         listOfPairDateAndWorkouts.forEach {
             val cardioModel = it.second
             val time = getTotalTimeToDate(
-                totalSeconds = cardioModel?.time?.seconds?.toDoubleOrZero()?.toInt()?.toString()
-                    ?: "0",
-                totalMinutes = cardioModel?.time?.minutes?.toDoubleOrZero()?.toInt()?.toString()
-                    ?: "0",
-                totalHours = cardioModel?.time?.hours?.toDoubleOrZero()?.toInt()?.toString() ?: "0"
+                totalSeconds = cardioModel.time.seconds.toDoubleOrZero().toInt().toString(),
+                totalMinutes = cardioModel.time.minutes.toDoubleOrZero().toInt().toString(),
+                totalHours = cardioModel.time.hours.toDoubleOrZero().toInt().toString()
             )
             val totalSeconds = time.y
             val totalHours = totalSeconds.toDouble() / 3600.0
@@ -368,7 +374,7 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
         )
         totalDistanceToDate.add(
             GraphValues(
-                point = Point(x = 0f, y = distance.toFloat()),
+                point = Point(x = 0f, y = totalDistance.toFloat()),
                 date = workoutDate
             )
         )

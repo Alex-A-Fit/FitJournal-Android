@@ -125,7 +125,7 @@ fun GraphSection(
         xAxisData = xAxisData,
         yAxisData = yAxisData,
         backgroundColor = MaterialTheme.colorScheme.background,
-        containerPaddingEnd = Spacing.spacing128
+        containerPaddingEnd = Spacing.spacing200
     )
     Spacer(modifier = Modifier.height(Spacing.spacing16))
     LineChart(

@@ -18,7 +18,7 @@ fun GraphSectionForCalisthenics(
         stringForGraphPopUp = { x, y ->
             when (calisthenicGraphs) {
                 GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> "Total Reps: ${y.roundToInt()} $x"
-                GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> "Weight Used: $y $x"
+                GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> "Weight Used: $y lbs $x"
             }
         },
         yAxisSuffixLabel = when (calisthenicGraphs) {

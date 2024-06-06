@@ -16,8 +16,8 @@ fun GraphSectionForWeightLifting(
         },
         stringForGraphPopUp = { x, y ->
             when (weightTrainingGraphs) {
-                GraphUiTypes.WeightTrainingGraphs.WEIGHT_OVER_DATE -> "Weight Lifted: ${y}lbs $x"
-                GraphUiTypes.WeightTrainingGraphs.VOLUME_OVER_DATE -> "Workout Volume: ${y}lbs $x"
+                GraphUiTypes.WeightTrainingGraphs.WEIGHT_OVER_DATE -> "Weight Lifted: $y lbs $x"
+                GraphUiTypes.WeightTrainingGraphs.VOLUME_OVER_DATE -> "Workout Volume: $y lbs $x"
             }
         },
         yAxisSuffixLabel = when (weightTrainingGraphs) {
