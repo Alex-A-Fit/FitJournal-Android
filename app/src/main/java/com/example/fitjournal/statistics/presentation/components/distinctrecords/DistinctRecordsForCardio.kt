@@ -65,7 +65,7 @@ fun DistinctRecordsForCardio(
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                     Text(
-                        text = "${it.time}",
+                        text = it.time,
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onPrimary
                     )

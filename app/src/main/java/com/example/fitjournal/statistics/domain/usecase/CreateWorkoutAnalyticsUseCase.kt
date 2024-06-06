@@ -334,7 +334,6 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
     val totalDistanceToDate: MutableList<GraphValues> = mutableListOf()
     val averageSpeedToDate: MutableList<GraphValues> = mutableListOf()
     groupedByDates.forEach { (workoutDate, listOfPairDateAndWorkouts) ->
-        val date = HelperFunctions.parseDate(workoutDate)
         val distance = listOfPairDateAndWorkouts.sumOf { it.second?.distance ?: 0.0 }
         val averageSpeedsForAllWorkoutsForToday: MutableList<Double> = mutableListOf()
         listOfPairDateAndWorkouts.forEach {
@@ -432,7 +431,6 @@ private fun getGraphDataForCalisthenics(workoutList: List<WorkoutModel>): GraphD
     val heaviestWeightUsedToDate: MutableList<GraphValues> = mutableListOf()
 
     groupedByDates.forEach { (workoutDate, listOfPairDateAndWorkouts) ->
-        val date = HelperFunctions.parseDate(workoutDate)
         val reps = listOfPairDateAndWorkouts.sumOf { it.second?.reps ?: 0 }.toFloat()
         val highestPoint = listOfPairDateAndWorkouts.maxByOrNull { it.second?.weight ?: 0.0 }
         val highestWeight = highestPoint?.second
@@ -566,6 +564,6 @@ private fun dropDecimalValue(value: String): String {
     return if (value.toDouble().isInteger()) {
         value.toDouble().toInt().toString()
     } else {
-        value.toString()
+        value
     }
 }

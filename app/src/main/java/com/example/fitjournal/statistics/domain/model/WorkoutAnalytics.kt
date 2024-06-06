@@ -2,12 +2,7 @@ package com.example.fitjournal.statistics.domain.model
 
 import co.yml.charts.common.model.Point
 
-typealias Reps = String
 typealias Weight = String
-typealias Distance = String
-typealias Time = String
-typealias Date = String
-
 sealed class WorkoutAnalytics {
     data class WeightTraining(
         val graphData: GraphAnalytics,
