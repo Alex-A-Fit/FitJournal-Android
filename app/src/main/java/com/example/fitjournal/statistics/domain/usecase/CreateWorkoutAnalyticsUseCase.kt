@@ -29,6 +29,7 @@ import com.example.fitjournal.statistics.domain.model.WorkoutAnalytics
 import com.example.fitjournal.statistics.domain.model.WorkoutsByTimeRange
 import javax.inject.Inject
 import kotlin.math.roundToInt
+import kotlin.text.Typography.nbsp
 
 typealias WorkoutDate = String
 
@@ -103,7 +104,7 @@ fun getDistinctWeightForReps(workoutList: List<WorkoutModel>): List<DistinctWeig
             listOfWorkoutProps.add(
                 DistinctWeightForReps(
                     reps = it.reps,
-                    weight = it.weight,
+                    weight = it.weight.toString(),
                     date = workout.date
                 )
             )
@@ -111,9 +112,10 @@ fun getDistinctWeightForReps(workoutList: List<WorkoutModel>): List<DistinctWeig
     }
     val groupedByReps = listOfWorkoutProps.groupBy { it.reps }
     val singularGroupByReps = groupedByReps.map { groupedValues ->
-        val sortedValues = groupedValues.value.sortedByDescending { it.weight }
+        val sortedValues = groupedValues.value.sortedByDescending { it.weight.toDoubleOrZero() }
+        val weight = sortedValues.first().weight
         DistinctWeightForReps(
-            weight = sortedValues.first().weight,
+            weight = dropDecimalValue(weight),
             reps = groupedValues.key,
             date = groupedValues.value.first().date
         )
@@ -125,16 +127,24 @@ fun getDistinctDistanceOverTime(workoutList: List<WorkoutModel>): List<DistinctD
     val listOfWorkoutProps: MutableList<DistinctDistanceForTime> = mutableListOf()
     workoutList.forEach { workout ->
         workout.workoutDetailsModel.workoutPropertiesModel.getCardioProps().forEach {
-            val time = getTotalTimeToDate(
-                totalSeconds = it.time.seconds.toIntOrZero().toString(),
-                totalMinutes = it.time.minutes.toIntOrZero().toString(),
-                totalHours = it.time.hours.toIntOrZero().toString()
-            )
-            val totalSeconds = time.y
+            val totalSeconds = it.time.seconds.toDoubleOrNull()?.toInt()
+            val totalMinutes = it.time.minutes.toDoubleOrNull()?.toInt()
+            val totalHours = it.time.hours.toDoubleOrNull()?.toInt()
+
+            var totalTime = ""
+            if (totalHours != null && totalHours != 0) {
+                totalTime += "$totalHours hrs$nbsp"
+            }
+            if (totalMinutes != null && totalMinutes != 0) {
+                totalTime += "$totalMinutes min$nbsp"
+            }
+            if (totalSeconds != null && totalSeconds != 0) {
+                totalTime += "$totalSeconds sec"
+            }
             listOfWorkoutProps.add(
                 DistinctDistanceForTime(
                     distance = it.distance,
-                    time = totalSeconds.toDouble(),
+                    time = totalTime,
                     date = workout.date
                 )
             )
@@ -145,7 +155,7 @@ fun getDistinctDistanceOverTime(workoutList: List<WorkoutModel>): List<DistinctD
         val sortedValues = groupedValues.value.sortedByDescending { it.time }
         DistinctDistanceForTime(
             distance = groupedValues.value.first().distance,
-            time = sortedValues.first().distance,
+            time = sortedValues.first().time,
             date = groupedValues.value.first().date
         )
     }
@@ -195,15 +205,11 @@ fun determinePR(
             val sortedGraphByReps = graphData.totalRepsToDate?.sortedByDescending { it.point.y }
             val sortedGraphByWeight =
                 graphData.totalWeightUsedToDate?.sortedByDescending { it.point.y }
-            val sortedGraphByTime = graphData.totalTimeToDate?.sortedByDescending { it.point.y }
             if (sortedGraphByReps.isNullOrEmpty()) return null
             val mostReps = sortedGraphByReps.first().point.y.roundToInt().toString()
             val dateMostReps = sortedGraphByReps.first().date
             val mostWeightUsed = sortedGraphByWeight?.first()?.point?.y?.toString()
             val dateMostWeightUsed = sortedGraphByWeight?.first()?.date
-            val bestTime = sortedGraphByTime?.first()?.point?.y?.toString()
-            val reducedBestTime = if (!bestTime.isNullOrEmpty())reduceTimeValues(TimeModel(seconds = bestTime, minutes = "0", hours = "0")) else null
-            val dateBestTime = sortedGraphByTime?.first()?.date
 
             val repPr = PersonalRecord(
                 personalRecord = "$mostReps reps",
@@ -223,21 +229,8 @@ fun determinePR(
             } else {
                 null
             }
-            val mostTime = if (reducedBestTime != null && dateBestTime != null) {
-                val bestTimeValue = "${reducedBestTime.hours}hrs ${reducedBestTime.minutes}mins ${reducedBestTime.seconds}secs"
-
-                PersonalRecord(
-                    personalRecord = bestTimeValue,
-                    personalRecordDate = dateBestTime,
-                    allTimePr = calisthenicsAllTimePr?.mostTimePr?.personalRecord ?: bestTimeValue,
-                    allTimePrDate = calisthenicsAllTimePr?.mostTimePr?.personalRecordDate ?: dateBestTime
-                )
-            } else {
-                null
-            }
             PersonalRecordType.Calisthenics(
                 totalRepsPr = repPr,
-                mostTimePr = mostTime,
                 totalWeightUsedPr = weightPr
             )
         }
@@ -437,7 +430,6 @@ private fun getGraphDataForCalisthenics(workoutList: List<WorkoutModel>): GraphD
     val groupedByDates = pairOfRepsAndDates.groupBy { it.first }
     val repsToDate: MutableList<GraphValues> = mutableListOf()
     val heaviestWeightUsedToDate: MutableList<GraphValues> = mutableListOf()
-    val totalTimeForWorkoutToDate: MutableList<GraphValues> = mutableListOf()
 
     groupedByDates.forEach { (workoutDate, listOfPairDateAndWorkouts) ->
         val date = HelperFunctions.parseDate(workoutDate)
@@ -470,27 +462,11 @@ private fun getGraphDataForCalisthenics(workoutList: List<WorkoutModel>): GraphD
                 )
             )
         }
-        val time = getTotalTimeToDate(
-            totalSeconds = listOfPairDateAndWorkouts.sumOf {
-                it.second?.time?.seconds?.toDoubleOrZero()?.toInt() ?: 0
-            }.toString(),
-            totalMinutes = listOfPairDateAndWorkouts.sumOf {
-                it.second?.time?.minutes?.toDoubleOrZero()?.toInt() ?: 0
-            }.toString(),
-            totalHours = listOfPairDateAndWorkouts.sumOf {
-                it.second?.time?.hours?.toDoubleOrZero()?.toInt() ?: 0
-            }.toString()
-        )
-        if (time.y != 0f) {
-            totalTimeForWorkoutToDate.add(
-                GraphValues(point = time, date = workoutDate)
-            )
-        }
+
     }
 
     return GraphData.Calisthenics(
         totalRepsToDate = HelperFunctions.filterPoints(repsToDate),
-        totalTimeToDate = HelperFunctions.filterPoints(totalTimeForWorkoutToDate),
         totalWeightUsedToDate = HelperFunctions.filterPoints(heaviestWeightUsedToDate)
     )
 }

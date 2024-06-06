@@ -13,7 +13,6 @@ sealed class GraphUiTypes {
 
     enum class CalisthenicsGraphs {
         REPS_OVER_DATE,
-        TOTAL_TIME_OVER_DATE,
         TOTAL_WEIGHT_OVER_DATE
     }
 }

@@ -47,20 +47,5 @@ fun CalisthenicsPrBadges(
 
             )
         }
-        calisthenicsPrData.mostTimePr?.let {
-            if (timeRangeEnum != TimeRangeEnum.ALL_TIME) {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(Spacing.spacing24)
-                )
-            }
-            PersonalRecordBadges(
-                timeRangeOfWorkouts = timeRangeEnum,
-                prDataForTimeRange = it,
-                modifier = Modifier.weight(1f),
-                personalRecordTitleText = "Most Time Spent"
-            )
-        }
     }
 }

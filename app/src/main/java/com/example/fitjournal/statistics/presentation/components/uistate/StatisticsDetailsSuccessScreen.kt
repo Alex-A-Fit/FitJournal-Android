@@ -1,6 +1,9 @@
 package com.example.fitjournal.statistics.presentation.components.uistate
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,6 +15,8 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.GraphData
 import com.example.fitjournal.statistics.domain.model.WorkoutAnalytics
 import com.example.fitjournal.statistics.presentation.components.badges.PersonalRecordSection
+import com.example.fitjournal.statistics.presentation.components.distinctrecords.DistinctRecordsForCardio
+import com.example.fitjournal.statistics.presentation.components.distinctrecords.DistinctRecordsForWeightTraining
 import com.example.fitjournal.statistics.presentation.components.graphs.title.CalisthenicsGraphTitle
 import com.example.fitjournal.statistics.presentation.components.graphs.title.CardioGraphTitle
 import com.example.fitjournal.statistics.presentation.components.graphs.title.WeightTrainingGraphTitle
@@ -28,7 +33,7 @@ import com.example.fitjournal.statistics.presentation.util.getPersonalRecordAnal
 @Composable
 fun StatisticsDetailsSuccessScreen(
     modifier: Modifier = Modifier,
-    currentlyViewedWorkoutStats: WorkoutAnalytics?,
+    currentlyViewedWorkoutStats: WorkoutAnalytics,
     statisticsDetailsUiState: StatisticsDetailsUiModel
 ) {
     val workout = statisticsDetailsUiState.realmList.first().workoutDetailsModel
@@ -82,38 +87,60 @@ fun StatisticsDetailsSuccessScreen(
                 )
             }
         }
-        currentlyViewedWorkoutStats?.let { workoutStats ->
-            val graphData = getGraphData(
-                workoutStats = workoutStats,
-                timeRangeOfWorkouts = timeRangeOfWorkouts
-            )
-            val prData = getPersonalRecordAnalytics(workoutStats)
-            Column(modifier = Modifier.padding(start = Spacing.spacing8)) {
-                when (graphData) {
-                    is GraphData.Calisthenics -> GraphSectionForCalisthenics(
+
+        val graphData = getGraphData(
+            workoutStats = currentlyViewedWorkoutStats,
+            timeRangeOfWorkouts = timeRangeOfWorkouts
+        )
+        val prData = getPersonalRecordAnalytics(currentlyViewedWorkoutStats)
+        Column(modifier = Modifier.padding(start = Spacing.spacing8)) {
+            when (graphData) {
+                is GraphData.Calisthenics -> GraphSectionForCalisthenics(
+                    graphData = graphData,
+                    calisthenicGraphs = statisticsDetailsUiState.calisthenicGraphs
+                )
+
+                is GraphData.Cardio -> {
+                    GraphSectionForCardio(
                         graphData = graphData,
-                        calisthenicGraphs = statisticsDetailsUiState.calisthenicGraphs
+                        cardioGraphs = statisticsDetailsUiState.cardioGraphs
                     )
+                }
 
-                    is GraphData.Cardio -> {
-                        GraphSectionForCardio(
-                            graphData = graphData,
-                            cardioGraphs = statisticsDetailsUiState.cardioGraphs
-                        )
-                    }
-
-                    is GraphData.WeightTraining -> {
-                        GraphSectionForWeightLifting(
-                            graphData = graphData,
-                            weightTrainingGraphs = statisticsDetailsUiState.weightTrainingGraphs
-                        )
-                    }
+                is GraphData.WeightTraining -> {
+                    GraphSectionForWeightLifting(
+                        graphData = graphData,
+                        weightTrainingGraphs = statisticsDetailsUiState.weightTrainingGraphs
+                    )
                 }
             }
-            PersonalRecordSection(
-                timeRangeOfWorkouts = timeRangeOfWorkouts,
-                personalRecordData = prData
-            )
+        }
+        PersonalRecordSection(
+            timeRangeOfWorkouts = timeRangeOfWorkouts,
+            personalRecordData = prData
+        )
+        Spacer(modifier = Modifier.height(Spacing.spacing24))
+        when (currentlyViewedWorkoutStats) {
+            is WorkoutAnalytics.Calisthenics -> Spacer(modifier = Modifier.height(Spacing.spacing24))
+            is WorkoutAnalytics.Cardio -> {
+                DistinctRecordsForCardio(
+                    currentlyViewedWorkoutStats.bestDistinctDistanceForTime,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Spacing.spacing16)
+                )
+                Spacer(modifier = Modifier.height(Spacing.spacing64))
+            }
+
+            is WorkoutAnalytics.WeightTraining -> {
+                DistinctRecordsForWeightTraining(
+                    currentlyViewedWorkoutStats.bestDistinctWeightForReps,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Spacing.spacing16)
+                )
+                Spacer(modifier = Modifier.height(Spacing.spacing64))
+            }
         }
     }
 }

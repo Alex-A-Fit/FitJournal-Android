@@ -23,7 +23,7 @@ sealed class WorkoutAnalytics {
 
     data class Calisthenics(
         val graphData: GraphAnalytics,
-        val personalRecord: PersonalRecordAnalytics
+        val personalRecord: PersonalRecordAnalytics,
     ) : WorkoutAnalytics()
 }
 
@@ -54,7 +54,6 @@ sealed class PersonalRecordType {
 
     data class Calisthenics(
         val totalRepsPr: PersonalRecord?,
-        val mostTimePr: PersonalRecord?,
         val totalWeightUsedPr: PersonalRecord?
     ) : PersonalRecordType()
 }
@@ -83,20 +82,19 @@ sealed class GraphData {
 
     data class Calisthenics(
         val totalRepsToDate: List<GraphValues>?,
-        val totalTimeToDate: List<GraphValues>? = null,
         val totalWeightUsedToDate: List<GraphValues>? = null
     ) : GraphData()
 }
 
 data class DistinctWeightForReps(
-    val weight: Double,
+    val weight: String,
     val reps: Int,
     val date: String
 )
 
 data class DistinctDistanceForTime(
     val distance: Double,
-    val time: Double,
+    val time: String,
     val date: String
 )
 

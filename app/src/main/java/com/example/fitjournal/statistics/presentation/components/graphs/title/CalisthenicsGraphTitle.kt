@@ -34,26 +34,6 @@ fun CalisthenicsGraphTitle(
                         vertical = Spacing.spacing8
                     ),
                 onNextArrowClicked = {
-                    updateGraphDisplayed(GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE)
-                }
-            )
-        }
-
-        GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE -> {
-            GraphTitle(
-                text = "Date vs Total Time",
-                showBackArrow = true,
-                showNextArrow = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = Spacing.spacing16,
-                        vertical = Spacing.spacing8
-                    ),
-                onBackArrowClicked = {
-                    updateGraphDisplayed(GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE)
-                },
-                onNextArrowClicked = {
                     updateGraphDisplayed(GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE)
                 }
             )
@@ -71,7 +51,7 @@ fun CalisthenicsGraphTitle(
                         vertical = Spacing.spacing8
                     ),
                 onBackArrowClicked = {
-                    updateGraphDisplayed(GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE)
+                    updateGraphDisplayed(GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE)
                 }
             )
         }

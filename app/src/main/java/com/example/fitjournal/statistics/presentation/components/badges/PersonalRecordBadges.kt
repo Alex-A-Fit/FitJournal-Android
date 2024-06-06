@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.BlueVariant
+import com.example.fitjournal.core.presentation.theme.ComplimentaryOrange
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.PersonalRecord
 import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
