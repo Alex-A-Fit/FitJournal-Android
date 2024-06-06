@@ -462,7 +462,6 @@ private fun getGraphDataForCalisthenics(workoutList: List<WorkoutModel>): GraphD
                 )
             )
         }
-
     }
 
     return GraphData.Calisthenics(

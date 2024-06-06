@@ -23,7 +23,7 @@ sealed class WorkoutAnalytics {
 
     data class Calisthenics(
         val graphData: GraphAnalytics,
-        val personalRecord: PersonalRecordAnalytics,
+        val personalRecord: PersonalRecordAnalytics
     ) : WorkoutAnalytics()
 }
 

@@ -62,17 +62,16 @@ fun DistinctRecordsForCardio(
                     Text(
                         text = "${it.distance} miles",
                         style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     Text(
                         text = "${it.time}",
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
             Spacer(modifier = Modifier.height(Spacing.spacing8))
         }
     }
-
 }

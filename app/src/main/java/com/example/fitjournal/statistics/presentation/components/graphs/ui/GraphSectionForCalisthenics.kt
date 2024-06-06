@@ -26,7 +26,7 @@ fun GraphSectionForCalisthenics(
             GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> "lbs"
         },
         convertYaxisValue = {
-                return@GraphSection it.roundToInt()
+            return@GraphSection it.roundToInt()
         }
     )
 }

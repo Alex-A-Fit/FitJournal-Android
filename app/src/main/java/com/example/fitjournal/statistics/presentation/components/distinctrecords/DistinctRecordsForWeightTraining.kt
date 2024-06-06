@@ -62,17 +62,16 @@ fun DistinctRecordsForWeightTraining(
                     Text(
                         text = "${it.reps} Rep Max",
                         style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     Text(
                         text = "${it.weight} lbs",
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
             Spacer(modifier = Modifier.height(Spacing.spacing8))
         }
     }
-
 }
