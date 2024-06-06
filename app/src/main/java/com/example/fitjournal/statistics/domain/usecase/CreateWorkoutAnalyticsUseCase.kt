@@ -10,6 +10,7 @@ import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.domain.util.HelperFunctions
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.constants.Constants
+import com.example.fitjournal.core.util.extensions.isInteger
 import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
 import com.example.fitjournal.core.util.extensions.toDoubleOrZero
 import com.example.fitjournal.core.util.extensions.toIntOrZero
@@ -21,11 +22,13 @@ import com.example.fitjournal.statistics.domain.model.DistinctWeightForReps
 import com.example.fitjournal.statistics.domain.model.GraphAnalytics
 import com.example.fitjournal.statistics.domain.model.GraphData
 import com.example.fitjournal.statistics.domain.model.GraphValues
+import com.example.fitjournal.statistics.domain.model.PersonalRecord
 import com.example.fitjournal.statistics.domain.model.PersonalRecordAnalytics
-import com.example.fitjournal.statistics.domain.model.PersonalRecords
+import com.example.fitjournal.statistics.domain.model.PersonalRecordType
 import com.example.fitjournal.statistics.domain.model.WorkoutAnalytics
 import com.example.fitjournal.statistics.domain.model.WorkoutsByTimeRange
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 typealias WorkoutDate = String
 
@@ -150,15 +153,43 @@ fun getDistinctDistanceOverTime(workoutList: List<WorkoutModel>): List<DistinctD
 }
 
 fun getPersonalRecords(graphData: GraphAnalytics): PersonalRecordAnalytics {
+    val allTimePr = determinePR(graphData.graphDataAllTime)
+    val calisthenicsAllTimePr = if (allTimePr is PersonalRecordType.Calisthenics) allTimePr else null
+    val weightTrainingAllTimePr = if (allTimePr is PersonalRecordType.WeightTraining) allTimePr else null
+    val cardioAllTimePr = if (allTimePr is PersonalRecordType.Cardio) allTimePr else null
+    val prByMonth = determinePR(
+        graphData = graphData.graphDataByMonth,
+        calisthenicsAllTimePr = calisthenicsAllTimePr,
+        weightTrainingAllTimePr = weightTrainingAllTimePr,
+        cardioAllTimePr = cardioAllTimePr
+
+    )
+    val prByYear = determinePR(
+        graphData = graphData.graphDataByYear,
+        calisthenicsAllTimePr = calisthenicsAllTimePr,
+        weightTrainingAllTimePr = weightTrainingAllTimePr,
+        cardioAllTimePr = cardioAllTimePr
+    )
+    val prByWeek = determinePR(
+        graphData = graphData.graphDataByWeek,
+        calisthenicsAllTimePr = calisthenicsAllTimePr,
+        weightTrainingAllTimePr = weightTrainingAllTimePr,
+        cardioAllTimePr = cardioAllTimePr
+    )
     return PersonalRecordAnalytics(
-        prByWeek = determinePR(graphData.graphDataByWeek),
-        prByMonth = determinePR(graphData.graphDataByMonth),
-        prByYear = determinePR(graphData.graphDataByYear),
-        prByAllTime = determinePR(graphData.graphDataAllTime)
+        prByWeek = prByWeek,
+        prByMonth = prByMonth,
+        prByYear = prByYear,
+        prByAllTime = allTimePr
     )
 }
 
-fun determinePR(graphData: GraphData): PersonalRecords? {
+fun determinePR(
+    graphData: GraphData,
+    calisthenicsAllTimePr: PersonalRecordType.Calisthenics? = null,
+    weightTrainingAllTimePr: PersonalRecordType.WeightTraining? = null,
+    cardioAllTimePr: PersonalRecordType.Cardio? = null
+): PersonalRecordType? {
     return when (graphData) {
         is GraphData.Calisthenics -> {
             val sortedGraphByReps = graphData.totalRepsToDate?.sortedByDescending { it.point.y }
@@ -166,32 +197,48 @@ fun determinePR(graphData: GraphData): PersonalRecords? {
                 graphData.totalWeightUsedToDate?.sortedByDescending { it.point.y }
             val sortedGraphByTime = graphData.totalTimeToDate?.sortedByDescending { it.point.y }
             if (sortedGraphByReps.isNullOrEmpty()) return null
-            val mostReps = sortedGraphByReps.first().point.y.toString()
-            val dateMostReps = sortedGraphByReps.first().point.x
+            val mostReps = sortedGraphByReps.first().point.y.roundToInt().toString()
+            val dateMostReps = sortedGraphByReps.first().date
             val mostWeightUsed = sortedGraphByWeight?.first()?.point?.y?.toString()
-            val dateMostWeightUsed = sortedGraphByWeight?.first()?.point?.x
+            val dateMostWeightUsed = sortedGraphByWeight?.first()?.date
             val bestTime = sortedGraphByTime?.first()?.point?.y?.toString()
-            val dateBestTime = sortedGraphByTime?.first()?.point?.x
+            val reducedBestTime = if (!bestTime.isNullOrEmpty())reduceTimeValues(TimeModel(seconds = bestTime, minutes = "0", hours = "0")) else null
+            val dateBestTime = sortedGraphByTime?.first()?.date
 
-            PersonalRecords.CalisthenicsPersonalRecord(
-                mostReps = mostReps,
-                dateMostReps = HelperFunctions.getDateStringFromEpochDays(dateMostReps),
-                mostWeightUsed = mostWeightUsed,
-                dateMostWeightUsed = if (dateMostWeightUsed != null) {
-                    HelperFunctions.getDateStringFromEpochDays(
-                        dateMostWeightUsed
-                    )
-                } else {
-                    null
-                },
-                bestTime = bestTime,
-                dateBestTime = if (dateBestTime != null) {
-                    HelperFunctions.getDateStringFromEpochDays(
-                        dateBestTime
-                    )
-                } else {
-                    null
-                }
+            val repPr = PersonalRecord(
+                personalRecord = "$mostReps reps",
+                personalRecordDate = dateMostReps,
+                allTimePr = calisthenicsAllTimePr?.totalRepsPr?.personalRecord ?: "$mostReps reps",
+                allTimePrDate = calisthenicsAllTimePr?.totalRepsPr?.personalRecordDate ?: dateMostReps
+            )
+            val weightPr = if (mostWeightUsed != null && dateMostWeightUsed != null) {
+                PersonalRecord(
+                    personalRecord = "${dropDecimalValue(mostWeightUsed)} lbs",
+                    personalRecordDate = dateMostWeightUsed,
+                    allTimePr = calisthenicsAllTimePr?.totalWeightUsedPr?.personalRecord
+                        ?: "${dropDecimalValue(mostWeightUsed)}lbs",
+                    allTimePrDate = calisthenicsAllTimePr?.totalWeightUsedPr?.personalRecordDate
+                        ?: dateMostWeightUsed
+                )
+            } else {
+                null
+            }
+            val mostTime = if (reducedBestTime != null && dateBestTime != null) {
+                val bestTimeValue = "${reducedBestTime.hours}hrs ${reducedBestTime.minutes}mins ${reducedBestTime.seconds}secs"
+
+                PersonalRecord(
+                    personalRecord = bestTimeValue,
+                    personalRecordDate = dateBestTime,
+                    allTimePr = calisthenicsAllTimePr?.mostTimePr?.personalRecord ?: bestTimeValue,
+                    allTimePrDate = calisthenicsAllTimePr?.mostTimePr?.personalRecordDate ?: dateBestTime
+                )
+            } else {
+                null
+            }
+            PersonalRecordType.Calisthenics(
+                totalRepsPr = repPr,
+                mostTimePr = mostTime,
+                totalWeightUsedPr = weightPr
             )
         }
 
@@ -201,17 +248,25 @@ fun determinePR(graphData: GraphData): PersonalRecords? {
             val sortedGraphBySpeed = graphData.averageSpeedToDate?.sortedByDescending { it.point.y }
             if (sortedGraphByDistance.isNullOrEmpty() || sortedGraphBySpeed.isNullOrEmpty()) return null
             val farthestDistance = sortedGraphByDistance.first().point.y.toString()
-            val dateFarthestDistance = sortedGraphByDistance.first().point.x
+            val dateFarthestDistance = sortedGraphByDistance.first().date
             val topSpeed = sortedGraphBySpeed.first().point.y.toString()
-            val dateTopSpeed = sortedGraphBySpeed.first().point.x
+            val dateTopSpeed = sortedGraphBySpeed.first().date
 
-            PersonalRecords.CardioPersonalRecord(
-                farthestDistance = farthestDistance,
-                dateFarthestDistance = HelperFunctions.getDateStringFromEpochDays(
-                    dateFarthestDistance
-                ),
-                topSpeed = topSpeed,
-                dateTopSpeed = HelperFunctions.getDateStringFromEpochDays(dateTopSpeed)
+            val longestDistancePr = PersonalRecord(
+                personalRecord = "${dropDecimalValue(farthestDistance)} mi",
+                personalRecordDate = dateFarthestDistance,
+                allTimePr = cardioAllTimePr?.totalDistancePr?.personalRecord ?: "${farthestDistance}mi",
+                allTimePrDate = cardioAllTimePr?.totalDistancePr?.personalRecordDate ?: dateFarthestDistance
+            )
+            val bestSpeedPr = PersonalRecord(
+                personalRecord = "${dropDecimalValue(topSpeed)} mi/hr",
+                personalRecordDate = dateTopSpeed,
+                allTimePr = cardioAllTimePr?.bestSpeedPr?.personalRecord ?: "$topSpeed mi/hr",
+                allTimePrDate = cardioAllTimePr?.bestSpeedPr?.personalRecordDate ?: dateTopSpeed
+            )
+            PersonalRecordType.Cardio(
+                totalDistancePr = longestDistancePr,
+                bestSpeedPr = bestSpeedPr
             )
         }
 
@@ -220,15 +275,25 @@ fun determinePR(graphData: GraphData): PersonalRecords? {
             val sortedGraphByVolume = graphData.mostVolumeToDate?.sortedByDescending { it.point.y }
             if (sortedGraphByWeight.isNullOrEmpty() || sortedGraphByVolume.isNullOrEmpty()) return null
             val highestWeight = sortedGraphByWeight.first().point.y.toString()
-            val dateOfHighestWeight = sortedGraphByWeight.first().point.x
+            val dateOfHighestWeight = sortedGraphByWeight.first().date
             val highestVolume = sortedGraphByVolume.first().point.y.toString()
-            val dateOfHighestVolume = sortedGraphByVolume.first().point.x
+            val dateOfHighestVolume = sortedGraphByVolume.first().date
 
-            PersonalRecords.WeightTrainingPersonalRecord(
-                weightLifted = highestWeight,
-                dateWeightLifted = HelperFunctions.getDateStringFromEpochDays(dateOfHighestWeight),
-                highestVolume = highestVolume,
-                dateTotalVolume = HelperFunctions.getDateStringFromEpochDays(dateOfHighestVolume)
+            val mostWeightLiftedPr = PersonalRecord(
+                personalRecord = "${dropDecimalValue(highestWeight)} lbs",
+                personalRecordDate = dateOfHighestWeight,
+                allTimePr = weightTrainingAllTimePr?.mostWeightPr?.personalRecord ?: "${highestWeight}lbs",
+                allTimePrDate = weightTrainingAllTimePr?.mostWeightPr?.personalRecordDate ?: dateOfHighestWeight
+            )
+            val mostVolumePr = PersonalRecord(
+                personalRecord = "${dropDecimalValue(highestVolume)} lbs moved/workout",
+                personalRecordDate = dateOfHighestVolume,
+                allTimePr = weightTrainingAllTimePr?.mostVolumePr?.personalRecord ?: "$highestVolume lbs moved/workout",
+                allTimePrDate = weightTrainingAllTimePr?.mostVolumePr?.personalRecordDate ?: dateOfHighestVolume
+            )
+            PersonalRecordType.WeightTraining(
+                mostWeightPr = mostWeightLiftedPr,
+                mostVolumePr = mostVolumePr
             )
         }
     }
@@ -520,4 +585,12 @@ private fun getTotalVolumeToDate(
         reps * sets * weight
     }
     return (listOfVolumes.max()).toFloat()
+}
+
+private fun dropDecimalValue(value: String): String {
+    return if (value.toDouble().isInteger()) {
+        value.toDouble().toInt().toString()
+    } else {
+        value.toString()
+    }
 }

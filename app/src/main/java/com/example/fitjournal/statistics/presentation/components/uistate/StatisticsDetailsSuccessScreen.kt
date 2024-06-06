@@ -11,6 +11,7 @@ import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.GraphData
 import com.example.fitjournal.statistics.domain.model.WorkoutAnalytics
+import com.example.fitjournal.statistics.presentation.components.badges.PersonalRecordSection
 import com.example.fitjournal.statistics.presentation.components.graphs.title.CalisthenicsGraphTitle
 import com.example.fitjournal.statistics.presentation.components.graphs.title.CardioGraphTitle
 import com.example.fitjournal.statistics.presentation.components.graphs.title.WeightTrainingGraphTitle
@@ -22,6 +23,7 @@ import com.example.fitjournal.statistics.presentation.components.text.WorkoutNam
 import com.example.fitjournal.statistics.presentation.model.StatisticsDetailsEvents
 import com.example.fitjournal.statistics.presentation.model.StatisticsDetailsUiModel
 import com.example.fitjournal.statistics.presentation.util.getGraphData
+import com.example.fitjournal.statistics.presentation.util.getPersonalRecordAnalytics
 
 @Composable
 fun StatisticsDetailsSuccessScreen(
@@ -85,6 +87,7 @@ fun StatisticsDetailsSuccessScreen(
                 workoutStats = workoutStats,
                 timeRangeOfWorkouts = timeRangeOfWorkouts
             )
+            val prData = getPersonalRecordAnalytics(workoutStats)
             Column(modifier = Modifier.padding(start = Spacing.spacing8)) {
                 when (graphData) {
                     is GraphData.Calisthenics -> GraphSectionForCalisthenics(
@@ -107,6 +110,10 @@ fun StatisticsDetailsSuccessScreen(
                     }
                 }
             }
+            PersonalRecordSection(
+                timeRangeOfWorkouts = timeRangeOfWorkouts,
+                personalRecordData = prData
+            )
         }
     }
 }

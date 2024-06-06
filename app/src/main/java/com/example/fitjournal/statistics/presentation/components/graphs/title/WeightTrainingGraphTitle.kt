@@ -29,7 +29,7 @@ fun WeightTrainingGraphTitle(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = Spacing.spacing16,
+                        horizontal = Spacing.spacing32,
                         vertical = Spacing.spacing8
                     ),
                 onNextArrowClicked = {
@@ -40,7 +40,7 @@ fun WeightTrainingGraphTitle(
 
         GraphUiTypes.WeightTrainingGraphs.VOLUME_OVER_DATE -> {
             GraphTitle(
-                text = "Date Vs Total Volume Lifted",
+                text = "Date Vs Total Volume",
                 showBackArrow = true,
                 showNextArrow = false,
                 modifier = Modifier

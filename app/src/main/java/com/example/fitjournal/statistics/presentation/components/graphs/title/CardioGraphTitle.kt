@@ -23,13 +23,13 @@ fun CardioGraphTitle(
     when (graphDisplayed) {
         GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE -> {
             GraphTitle(
-                text = "Date vs Total Distance Traveled",
+                text = "Date vs Total Distance",
                 showBackArrow = false,
                 showNextArrow = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = Spacing.spacing16,
+                        horizontal = Spacing.spacing32,
                         vertical = Spacing.spacing8
                     ),
                 onNextArrowClicked = {
@@ -40,7 +40,7 @@ fun CardioGraphTitle(
 
         GraphUiTypes.CardioGraphs.AVERAGE_SPEED_OVER_DATE -> {
             GraphTitle(
-                text = "Date vs Average Speed per Workout",
+                text = "Date vs Average Speed",
                 showBackArrow = true,
                 showNextArrow = false,
                 modifier = Modifier

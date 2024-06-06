@@ -24,13 +24,13 @@ fun CalisthenicsGraphTitle(
     when (graphDisplayed) {
         GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> {
             GraphTitle(
-                text = "Date vs Total Reps per Workout",
+                text = "Date vs Total Reps",
                 showBackArrow = false,
                 showNextArrow = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = Spacing.spacing16,
+                        horizontal = Spacing.spacing32,
                         vertical = Spacing.spacing8
                     ),
                 onNextArrowClicked = {
@@ -41,7 +41,7 @@ fun CalisthenicsGraphTitle(
 
         GraphUiTypes.CalisthenicsGraphs.TOTAL_TIME_OVER_DATE -> {
             GraphTitle(
-                text = "Date vs Total Time per Workout",
+                text = "Date vs Total Time",
                 showBackArrow = true,
                 showNextArrow = true,
                 modifier = Modifier
@@ -61,7 +61,7 @@ fun CalisthenicsGraphTitle(
 
         GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> {
             GraphTitle(
-                text = "Date vs Total Weight Used per Workout",
+                text = "Date vs Total Weight Used",
                 showBackArrow = true,
                 showNextArrow = false,
                 modifier = Modifier

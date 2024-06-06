@@ -28,10 +28,10 @@ sealed class WorkoutAnalytics {
 }
 
 data class PersonalRecordAnalytics(
-    val prByWeek: PersonalRecords?,
-    val prByMonth: PersonalRecords?,
-    val prByYear: PersonalRecords?,
-    val prByAllTime: PersonalRecords?
+    val prByWeek: PersonalRecordType?,
+    val prByMonth: PersonalRecordType?,
+    val prByYear: PersonalRecordType?,
+    val prByAllTime: PersonalRecordType?
 )
 
 data class GraphAnalytics(
@@ -41,30 +41,30 @@ data class GraphAnalytics(
     val graphDataAllTime: GraphData
 )
 
-sealed class PersonalRecords {
-    data class WeightTrainingPersonalRecord(
-        val weightLifted: String,
-        val dateWeightLifted: String,
-        val highestVolume: String,
-        val dateTotalVolume: String
-    ) : PersonalRecords()
+sealed class PersonalRecordType {
+    data class WeightTraining(
+        val mostWeightPr: PersonalRecord?,
+        val mostVolumePr: PersonalRecord?
+    ) : PersonalRecordType()
 
-    data class CardioPersonalRecord(
-        val farthestDistance: String,
-        val dateFarthestDistance: String,
-        val topSpeed: String,
-        val dateTopSpeed: String
-    ) : PersonalRecords()
+    data class Cardio(
+        val totalDistancePr: PersonalRecord?,
+        val bestSpeedPr: PersonalRecord?
+    ) : PersonalRecordType()
 
-    data class CalisthenicsPersonalRecord(
-        val mostReps: String,
-        val dateMostReps: String,
-        val mostWeightUsed: String?,
-        val dateMostWeightUsed: String?,
-        val bestTime: String?,
-        val dateBestTime: String?
-    ) : PersonalRecords()
+    data class Calisthenics(
+        val totalRepsPr: PersonalRecord?,
+        val mostTimePr: PersonalRecord?,
+        val totalWeightUsedPr: PersonalRecord?
+    ) : PersonalRecordType()
 }
+
+data class PersonalRecord(
+    val personalRecord: String,
+    val personalRecordDate: String,
+    val allTimePr: String = "",
+    val allTimePrDate: String = ""
+)
 
 sealed class GraphData {
     data class WeightTraining(
