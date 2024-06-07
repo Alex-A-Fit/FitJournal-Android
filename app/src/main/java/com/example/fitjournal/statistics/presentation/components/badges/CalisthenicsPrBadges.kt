@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.PersonalRecordType
 import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
@@ -28,7 +30,7 @@ fun CalisthenicsPrBadges(
                 timeRangeOfWorkouts = timeRangeEnum,
                 prDataForTimeRange = it,
                 modifier = Modifier.weight(1f),
-                personalRecordTitleText = "Total Reps"
+                personalRecordTitleText = stringResource(id = R.string.title_total_reps)
             )
         }
         calisthenicsPrData.totalWeightUsedPr?.let {
@@ -43,7 +45,7 @@ fun CalisthenicsPrBadges(
                 timeRangeOfWorkouts = timeRangeEnum,
                 prDataForTimeRange = it,
                 modifier = Modifier.weight(1f),
-                personalRecordTitleText = "Weight Used"
+                personalRecordTitleText = stringResource(R.string.title_weight_used)
 
             )
         }

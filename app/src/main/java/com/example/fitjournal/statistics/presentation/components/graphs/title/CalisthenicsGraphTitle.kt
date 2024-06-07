@@ -7,6 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.presentation.components.text.GraphTitle
 import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
@@ -24,7 +26,7 @@ fun CalisthenicsGraphTitle(
     when (graphDisplayed) {
         GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> {
             GraphTitle(
-                text = "Date vs Total Reps",
+                text = stringResource(id = R.string.title_date_vs_total_reps),
                 showBackArrow = false,
                 showNextArrow = true,
                 modifier = Modifier
@@ -41,7 +43,7 @@ fun CalisthenicsGraphTitle(
 
         GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> {
             GraphTitle(
-                text = "Date vs Total Weight Used",
+                text = stringResource(id = R.string.title_date_vs_total_weight),
                 showBackArrow = true,
                 showNextArrow = false,
                 modifier = Modifier

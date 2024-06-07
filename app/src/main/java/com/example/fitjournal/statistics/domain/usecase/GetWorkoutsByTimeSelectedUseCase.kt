@@ -8,6 +8,9 @@ import java.time.Duration
 import java.time.LocalDate
 import javax.inject.Inject
 
+private const val TOTAL_DAYS_IN_WEEK = 7
+private const val TOTAL_DAYS_IN_MONTH = 30
+private const val TOTAL_DAYS_IN_YEAR = 365
 class GetWorkoutsByTimeSelectedUseCase @Inject constructor() {
     operator fun invoke(
         workoutList: List<WorkoutModel>
@@ -45,14 +48,14 @@ class GetWorkoutsByTimeSelectedUseCase @Inject constructor() {
             )
             when (timeRangeEnum) {
                 TimeRangeEnum.WEEK -> {
-                    daysBetween.toDays() <= 7
+                    daysBetween.toDays() <= TOTAL_DAYS_IN_WEEK
                 }
 
                 TimeRangeEnum.MONTH -> {
-                    daysBetween.toDays() <= 30
+                    daysBetween.toDays() <= TOTAL_DAYS_IN_MONTH
                 }
 
-                TimeRangeEnum.YEAR -> daysBetween.toDays() <= 365
+                TimeRangeEnum.YEAR -> daysBetween.toDays() <= TOTAL_DAYS_IN_YEAR
 
                 TimeRangeEnum.ALL_TIME -> true
             }

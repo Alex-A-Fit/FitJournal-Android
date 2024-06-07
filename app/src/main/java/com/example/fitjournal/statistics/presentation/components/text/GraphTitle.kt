@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.R
 
@@ -30,7 +31,7 @@ fun GraphTitle(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.icon_arrow_back),
-            contentDescription = "Arrow Back",
+            contentDescription = stringResource(id = R.string.content_desc_graph_title_back_arrow),
             tint = if (showBackArrow) MaterialTheme.colorScheme.onPrimary else Color.Transparent,
             modifier = if (showBackArrow) {
                 Modifier.clickable {
@@ -49,7 +50,7 @@ fun GraphTitle(
         )
         Icon(
             painter = painterResource(id = R.drawable.icon_arrow_forward),
-            contentDescription = "Arrow Forward",
+            contentDescription = stringResource(id = R.string.content_desc_graph_title_forward_arrow),
             tint = if (showNextArrow) MaterialTheme.colorScheme.onPrimary else Color.Transparent,
             modifier = if (showNextArrow) {
                 Modifier.clickable {

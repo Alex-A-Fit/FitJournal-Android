@@ -103,21 +103,13 @@ private fun UserWorkoutList(
                 stickyHeader {
                     CategoryHeader(text = workoutInitial)
                 }
-
-                itemsIndexed(workouts) { index, exerciseName ->
-                    TextButton(
-                        onClick = {
-                            selectedWorkout(exerciseName)
-                        }
-                    ) {
-                        ExerciseItem(exercise = exerciseName)
-                    }
-                    if (index != workouts.lastIndex) {
-                        HorizontalDivider(
-                            thickness = Spacing.spacing1,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                itemsIndexed(workouts) { index, workoutName ->
+                    WorkoutItem(
+                        selectedWorkout = selectedWorkout,
+                        workoutName = workoutName,
+                        index = index,
+                        lastWorkoutIndex = workouts.lastIndex
+                    )
                 }
             }
         }
@@ -125,26 +117,43 @@ private fun UserWorkoutList(
 }
 
 @Composable
-private fun ExerciseItem(exercise: String) {
+fun WorkoutItem(
+    selectedWorkout: (WorkoutName) -> Unit,
+    workoutName: WorkoutName,
+    index: Int,
+    lastWorkoutIndex: Int
+) {
+    TextButton(
+        onClick = {
+            selectedWorkout(workoutName)
+        }
+    ) {
+        WorkoutName(name = workoutName)
+    }
+    if (index != lastWorkoutIndex) {
+        HorizontalDivider(
+            thickness = Spacing.spacing1,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+private fun WorkoutName(name: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = Spacing.spacing12),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        ExerciseName(exercise = exercise)
+        Text(
+            text = name,
+            color = MaterialTheme.colorScheme.onPrimary,
+            style = MaterialTheme.typography.bodyLarge
+        )
         Image(
             painter = painterResource(id = R.drawable.ic_right_chevron),
             contentDescription = stringResource(id = R.string.content_desc_navigate_to_add_workout_icon)
         )
     }
-}
-
-@Composable
-private fun ExerciseName(exercise: String) {
-    Text(
-        text = exercise,
-        color = MaterialTheme.colorScheme.onPrimary,
-        style = MaterialTheme.typography.bodyLarge
-    )
 }

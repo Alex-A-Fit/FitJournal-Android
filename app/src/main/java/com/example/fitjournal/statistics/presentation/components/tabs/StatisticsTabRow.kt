@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.zIndex
 import com.example.fitjournal.core.presentation.theme.LightGray2
 import com.example.fitjournal.core.presentation.theme.Spacing
@@ -45,7 +46,7 @@ fun StatisticsTabRow(
         ) {
             tabTitles.forEachIndexed { index, timeRange ->
                 FancyTab(
-                    title = timeRange.stringValue,
+                    title = stringResource(id = timeRange.stringIdValue),
                     onClick = {
                         state = index
                         getStatsBasedOnTimeSelected(timeRange)

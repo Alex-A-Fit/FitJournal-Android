@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.PersonalRecordType
 import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
@@ -28,7 +30,7 @@ fun WeightTrainingPrBadges(
                 timeRangeOfWorkouts = timeRangeEnum,
                 prDataForTimeRange = it,
                 modifier = Modifier.weight(1f),
-                personalRecordTitleText = "Most Weight Lifted"
+                personalRecordTitleText = stringResource(id = R.string.title_most_weight_lifted)
             )
         }
         if (timeRangeEnum != TimeRangeEnum.ALL_TIME) {
@@ -43,7 +45,7 @@ fun WeightTrainingPrBadges(
                 timeRangeOfWorkouts = timeRangeEnum,
                 prDataForTimeRange = it,
                 modifier = Modifier.weight(1f),
-                personalRecordTitleText = "Most Volume in a Given Workout"
+                personalRecordTitleText = stringResource(id = R.string.title_most_volume_lifted)
             )
         }
     }

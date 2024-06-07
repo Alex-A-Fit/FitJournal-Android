@@ -10,6 +10,9 @@ import com.example.fitjournal.core.domain.model.WorkoutPropertiesModel
 import com.example.fitjournal.core.domain.util.HelperFunctions
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.constants.Constants
+import com.example.fitjournal.core.util.constants.Constants.HOUR_TO_SECONDS_CONVERSION_FACTOR
+import com.example.fitjournal.core.util.constants.Constants.MINUTE_TO_SECONDS_CONVERSION_FACTOR
+import com.example.fitjournal.core.util.constants.Zero
 import com.example.fitjournal.core.util.extensions.isInteger
 import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
 import com.example.fitjournal.core.util.extensions.toDoubleOrZero
@@ -137,13 +140,13 @@ fun getDistinctDistanceOverTime(workoutList: List<WorkoutModel>): List<DistinctD
             val totalHours = it.time.hours.toDoubleOrNull()?.toInt()
 
             var totalTime = ""
-            if (totalHours != null && totalHours != 0) {
+            if (totalHours != null && totalHours != Zero.INT) {
                 totalTime += "$totalHours hrs$nbsp"
             }
-            if (totalMinutes != null && totalMinutes != 0) {
+            if (totalMinutes != null && totalMinutes != Zero.INT) {
                 totalTime += "$totalMinutes min$nbsp"
             }
-            if (totalSeconds != null && totalSeconds != 0) {
+            if (totalSeconds != null && totalSeconds != Zero.INT) {
                 totalTime += "$totalSeconds sec"
             }
             listOfWorkoutProps.add(
@@ -310,7 +313,7 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
     val cardioList: MutableList<Pair<String, CardioModel>> = mutableListOf()
     workoutList.forEach { workout ->
         val workoutSets = workout.workoutDetailsModel.workoutPropertiesModel.getCardioProps()
-        val totalLaps = workoutSets.sumOf { it.laps ?: 0.0 }
+        val totalLaps = workoutSets.sumOf { it.laps ?: Zero.DOUBLE }
         val totalDistanceInWorkout = workoutSets.sumOf {
             if (it.distanceType == CardioDistanceType.KILOMETERS) {
                 it.distance.times(Constants.KILOMETERS_TO_MILES_CONVERSION_FACTOR)
@@ -322,9 +325,9 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
         val totalMinutes = workoutSets.sumOf { it.time.minutes.toDoubleOrZero() }
         val totalSeconds = workoutSets.sumOf { it.time.seconds.toDoubleOrZero() }
         val totalTime = TimeModel(
-            hours = if (totalHours == 0.0) "" else totalHours.toString(),
-            minutes = if (totalMinutes == 0.0) "" else totalMinutes.toString(),
-            seconds = if (totalSeconds == 0.0) "" else totalSeconds.toString()
+            hours = if (totalHours == Zero.DOUBLE) "" else totalHours.toString(),
+            minutes = if (totalMinutes == Zero.DOUBLE) "" else totalMinutes.toString(),
+            seconds = if (totalSeconds == Zero.DOUBLE) "" else totalSeconds.toString()
         )
         cardioList.add(
             Pair(
@@ -352,9 +355,9 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
                 totalHours = cardioModel.time.hours.toDoubleOrZero().toInt().toString()
             )
             val totalSeconds = time.y
-            val totalHours = totalSeconds.toDouble() / 3600.0
+            val totalHours = totalSeconds.toDouble() / HOUR_TO_SECONDS_CONVERSION_FACTOR
             val averageSpeed =
-                if (totalHours == 0.0) {
+                if (totalHours == Zero.DOUBLE) {
                     null
                 } else {
                     cardioModel?.distance?.div(totalHours)
@@ -367,14 +370,14 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
         val averageSpeed = averageSpeedsForAllWorkoutsForToday.average().roundToTwoDecimalPlaces()
         averageSpeedToDate.add(
             GraphValues(
-                point = Point(x = 0f, y = averageSpeed.toFloat()),
+                point = Point(x = Zero.FLOAT, y = averageSpeed.toFloat()),
                 date = workoutDate
             )
 
         )
         totalDistanceToDate.add(
             GraphValues(
-                point = Point(x = 0f, y = totalDistance.toFloat()),
+                point = Point(x = Zero.FLOAT, y = totalDistance.toFloat()),
                 date = workoutDate
             )
         )
@@ -390,19 +393,19 @@ private fun getGraphDataForCalisthenics(workoutList: List<WorkoutModel>): GraphD
     workoutList.forEach { workout ->
         val workoutSets = workout.workoutDetailsModel.workoutPropertiesModel.getCalisthenicsProps()
         val totalRepsInWorkout = workoutSets.sumOf {
-            if (it.sets != 0) {
+            if (it.sets != Zero.INT) {
                 it.reps * it.sets
             } else {
                 it.reps
             }
         }
-        val totalHours = workoutSets.sumOf { it.time?.hours?.toDoubleOrZero() ?: 0.0 }
-        val totalMinutes = workoutSets.sumOf { it.time?.minutes?.toDoubleOrZero() ?: 0.0 }
-        val totalSeconds = workoutSets.sumOf { it.time?.seconds?.toDoubleOrZero() ?: 0.0 }
+        val totalHours = workoutSets.sumOf { it.time?.hours?.toDoubleOrZero() ?: Zero.DOUBLE }
+        val totalMinutes = workoutSets.sumOf { it.time?.minutes?.toDoubleOrZero() ?: Zero.DOUBLE }
+        val totalSeconds = workoutSets.sumOf { it.time?.seconds?.toDoubleOrZero() ?: Zero.DOUBLE }
         val totalTime = TimeModel(
-            hours = if (totalHours == 0.0) "" else totalHours.toString(),
-            minutes = if (totalMinutes == 0.0) "" else totalMinutes.toString(),
-            seconds = if (totalSeconds == 0.0) "" else totalSeconds.toString()
+            hours = if (totalHours == Zero.DOUBLE) "" else totalHours.toString(),
+            minutes = if (totalMinutes == Zero.DOUBLE) "" else totalMinutes.toString(),
+            seconds = if (totalSeconds == Zero.DOUBLE) "" else totalSeconds.toString()
         )
         val mostWeightUsed = workoutSets.maxByOrNull {
             val weight = if (it.weightType == WeightLiftingWeightType.KILOGRAMS) {
@@ -410,16 +413,16 @@ private fun getGraphDataForCalisthenics(workoutList: List<WorkoutModel>): GraphD
             } else {
                 it.weight
             }
-            weight ?: 0.0
+            weight ?: Zero.DOUBLE
         }?.weight
         workout.workoutDetailsModel.workoutPropertiesModel =
             WorkoutPropertiesModel.CalisthenicsProps(
                 listOf(
                     CalisthenicsModel(
                         reps = totalRepsInWorkout,
-                        sets = 0,
+                        sets = Zero.INT,
                         time = totalTime,
-                        weight = if (mostWeightUsed == null || mostWeightUsed == 0.0) null else mostWeightUsed,
+                        weight = if (mostWeightUsed == null || mostWeightUsed == Zero.DOUBLE) null else mostWeightUsed,
                         weightType = WeightLiftingWeightType.POUNDS
                     )
                 )
@@ -437,31 +440,32 @@ private fun getGraphDataForCalisthenics(workoutList: List<WorkoutModel>): GraphD
     val heaviestWeightUsedToDate: MutableList<GraphValues> = mutableListOf()
 
     groupedByDates.forEach { (workoutDate, listOfPairDateAndWorkouts) ->
-        val reps = listOfPairDateAndWorkouts.sumOf { it.second?.reps ?: 0 }.toFloat()
-        val highestPoint = listOfPairDateAndWorkouts.maxByOrNull { it.second?.weight ?: 0.0 }
+        val reps = listOfPairDateAndWorkouts.sumOf { it.second?.reps ?: Zero.INT }.toFloat()
+        val highestPoint =
+            listOfPairDateAndWorkouts.maxByOrNull { it.second?.weight ?: Zero.DOUBLE }
         val highestWeight = highestPoint?.second
         if (highestWeight != null) {
             val weight = calculateWeightLiftedInPounds(
                 WeightLiftingModel(
-                    reps = 0,
-                    sets = 0,
-                    weight = highestWeight.weight ?: 0.0,
+                    reps = Zero.INT,
+                    sets = Zero.INT,
+                    weight = highestWeight.weight ?: Zero.DOUBLE,
                     weightType = highestWeight.weightType
                 )
             )
-            if (weight != 0f) {
+            if (weight != Zero.FLOAT) {
                 heaviestWeightUsedToDate.add(
                     GraphValues(
-                        point = Point(x = 0f, y = weight),
+                        point = Point(x = Zero.FLOAT, y = weight),
                         date = workoutDate
                     )
                 )
             }
         }
-        if (reps != 0f) {
+        if (reps != Zero.FLOAT) {
             repsToDate.add(
                 GraphValues(
-                    point = Point(x = 0f, y = reps),
+                    point = Point(x = Zero.FLOAT, y = reps),
                     date = workoutDate
                 )
             )
@@ -499,11 +503,11 @@ private fun getGraphDataForWeightTraining(workoutList: List<WorkoutModel>): Grap
             pair.second.forEach { weight ->
                 val calculatedWeight = calculateWeightLiftedInPounds(weight)
                 weightLiftedToDate.add(
-                    GraphValues(point = Point(0f, calculatedWeight), date = workoutDate)
+                    GraphValues(point = Point(Zero.FLOAT, calculatedWeight), date = workoutDate)
                 )
                 val volume = getTotalVolumeToDate(weightLiftingModel = pair.second)
                 mostVolumeToDate.add(
-                    GraphValues(point = Point(0f, volume), date = workoutDate)
+                    GraphValues(point = Point(Zero.FLOAT, volume), date = workoutDate)
                 )
             }
         }
@@ -519,22 +523,26 @@ private fun getTotalTimeToDate(
     totalMinutes: String,
     totalHours: String
 ): Point {
-    val timeModel = if (totalSeconds == "0" && totalMinutes == "0" && totalHours == "0") {
-        null
-    } else {
-        TimeModel(
-            hours = totalHours,
-            minutes = totalMinutes,
-            seconds = totalSeconds
-        )
-    }
+    val timeModel =
+        if (totalSeconds == Zero.STRING &&
+            totalMinutes == Zero.STRING &&
+            totalHours == Zero.STRING
+        ) {
+            null
+        } else {
+            TimeModel(
+                hours = totalHours,
+                minutes = totalMinutes,
+                seconds = totalSeconds
+            )
+        }
     val time = reduceTimeValues(timeModel)
-    val hours = time?.hours?.toIntOrZero() ?: 0
-    val minutes = time?.minutes?.toIntOrZero() ?: 0
-    val seconds = time?.seconds?.toIntOrZero() ?: 0
+    val hours = time?.hours?.toIntOrZero() ?: Zero.INT
+    val minutes = time?.minutes?.toIntOrZero() ?: Zero.INT
+    val seconds = time?.seconds?.toIntOrZero() ?: Zero.INT
     return Point(
-        x = 0f,
-        y = (hours * 3600 + minutes * 60 + seconds).toFloat()
+        x = Zero.FLOAT,
+        y = (hours * HOUR_TO_SECONDS_CONVERSION_FACTOR + minutes * MINUTE_TO_SECONDS_CONVERSION_FACTOR + seconds).toFloat()
     )
 }
 

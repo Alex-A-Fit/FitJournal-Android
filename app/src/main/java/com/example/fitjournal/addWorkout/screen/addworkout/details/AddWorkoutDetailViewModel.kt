@@ -29,11 +29,11 @@ import com.example.fitjournal.core.presentation.commoncomponents.dialogs.compone
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutFunction
 import com.example.fitjournal.core.presentation.model.enums.EditWorkoutTimeDeterminate
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
+import com.example.fitjournal.home.presentation.mapper.toRealmWorkoutEntry
 import com.example.fitjournal.home.presentation.model.enum.EditWorkoutListFunctions
 import com.example.fitjournal.home.presentation.model.ui.CalisthenicsValidator
 import com.example.fitjournal.home.presentation.model.ui.CardioValidator
 import com.example.fitjournal.home.presentation.model.ui.WeightLiftingValidator
-import com.example.fitjournal.statistics.domain.mapper.toRealmWorkoutEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel

@@ -20,9 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.BlueVariant
 import com.example.fitjournal.core.presentation.theme.Spacing
@@ -47,10 +47,10 @@ fun PersonalRecordBadges(
         if (timeRangeOfWorkouts != TimeRangeEnum.ALL_TIME) {
             CurrentTimePrBadge(
                 personalRecord = prDataForTimeRange,
-                personalRecordDescriptionText = when (timeRangeOfWorkouts) {
-                    TimeRangeEnum.WEEK -> "Past Week PR"
-                    TimeRangeEnum.MONTH -> "Past Month PR"
-                    else -> "Past Year PR"
+                personalRecordTimeRangeTitleText = when (timeRangeOfWorkouts) {
+                    TimeRangeEnum.WEEK -> stringResource(id = R.string.title_past_week_pr)
+                    TimeRangeEnum.MONTH -> stringResource(id = R.string.title_past_month_pr)
+                    else -> stringResource(id = R.string.title_past_year_pr)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -60,8 +60,7 @@ fun PersonalRecordBadges(
                         RoundedCornerShape(Spacing.spacing16)
                     )
                     .weight(1f)
-                    .heightIn(min = 100.dp, max = 200.dp)
-                    .weight(1f),
+                    .heightIn(min = Spacing.spacing150, max = Spacing.spacing250),
                 personalRecordTitleText = personalRecordTitleText
             )
             AllTimePrBadge(
@@ -73,7 +72,10 @@ fun PersonalRecordBadges(
                         color = MaterialTheme.colorScheme.tertiary,
                         RoundedCornerShape(Spacing.spacing16)
                     )
-                    .heightIn(min = 150.dp, max = 250.dp)
+                    .heightIn(
+                        min = Spacing.spacing150,
+                        max = Spacing.spacing250
+                    )
                     .weight(1f),
                 personalRecordTitleText = personalRecordTitleText
             )
@@ -81,13 +83,16 @@ fun PersonalRecordBadges(
             AllTimePrBadge(
                 personalRecord = prDataForTimeRange,
                 modifier = Modifier
-                    .width(200.dp)
+                    .width(Spacing.spacing200)
                     .padding(horizontal = Spacing.spacing8)
                     .background(
                         color = MaterialTheme.colorScheme.tertiary,
-                        RoundedCornerShape(Spacing.spacing16)
+                        shape = RoundedCornerShape(Spacing.spacing16)
                     )
-                    .heightIn(min = 150.dp, max = 250.dp),
+                    .heightIn(
+                        min = Spacing.spacing150,
+                        Spacing.spacing250
+                    ),
                 personalRecordTitleText = personalRecordTitleText
             )
         }
@@ -98,7 +103,7 @@ fun PersonalRecordBadges(
 private fun CurrentTimePrBadge(
     personalRecord: PersonalRecord,
     personalRecordTitleText: String,
-    personalRecordDescriptionText: String,
+    personalRecordTimeRangeTitleText: String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -107,7 +112,7 @@ private fun CurrentTimePrBadge(
         if (personalRecord.personalRecord == personalRecord.allTimePr) {
             Image(
                 painter = painterResource(id = R.drawable.icon_all_time_pr),
-                contentDescription = "icon to signify all time pr",
+                contentDescription = stringResource(id = R.string.content_desc_all_time_pr_icon),
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .size(Spacing.spacing48)
@@ -116,7 +121,7 @@ private fun CurrentTimePrBadge(
         Column(modifier = Modifier.padding(Spacing.spacing16)) {
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             Text(
-                text = personalRecordDescriptionText,
+                text = personalRecordTimeRangeTitleText,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimary,
                 textAlign = TextAlign.Center,
@@ -162,7 +167,7 @@ private fun AllTimePrBadge(
     ) {
         Image(
             painter = painterResource(id = R.drawable.icon_all_time_pr),
-            contentDescription = "icon to signify all time pr",
+            contentDescription = stringResource(id = R.string.content_desc_all_time_pr_icon),
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .size(Spacing.spacing48)
@@ -170,7 +175,7 @@ private fun AllTimePrBadge(
         Column(modifier = Modifier.padding(Spacing.spacing16)) {
             Spacer(modifier = Modifier.height(Spacing.spacing8))
             Text(
-                text = "All Time PR",
+                text = stringResource(id = R.string.title_all_time_pr),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimary,
                 textAlign = TextAlign.Center,

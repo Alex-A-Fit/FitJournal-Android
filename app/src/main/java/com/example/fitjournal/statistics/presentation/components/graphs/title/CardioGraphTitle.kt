@@ -7,6 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.presentation.components.text.GraphTitle
 import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
@@ -23,7 +25,7 @@ fun CardioGraphTitle(
     when (graphDisplayed) {
         GraphUiTypes.CardioGraphs.DISTANCE_OVER_DATE -> {
             GraphTitle(
-                text = "Date vs Total Distance",
+                text = stringResource(id = R.string.title_date_vs_total_distance),
                 showBackArrow = false,
                 showNextArrow = true,
                 modifier = Modifier
@@ -40,7 +42,7 @@ fun CardioGraphTitle(
 
         GraphUiTypes.CardioGraphs.AVERAGE_SPEED_OVER_DATE -> {
             GraphTitle(
-                text = "Date vs Average Speed",
+                text = stringResource(id = R.string.title_date_vs_average_speed),
                 showBackArrow = true,
                 showNextArrow = false,
                 modifier = Modifier

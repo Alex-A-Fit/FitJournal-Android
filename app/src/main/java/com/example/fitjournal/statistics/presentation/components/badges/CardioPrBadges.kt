@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.PersonalRecordType
 import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
@@ -28,7 +30,7 @@ fun CardioPrBadges(
                 timeRangeOfWorkouts = timeRangeEnum,
                 prDataForTimeRange = it,
                 modifier = Modifier.weight(1f),
-                personalRecordTitleText = "Total Distance"
+                personalRecordTitleText = stringResource(id = R.string.title_total_distance)
             )
         }
         cardioPrData.bestSpeedPr?.let {
@@ -43,7 +45,7 @@ fun CardioPrBadges(
                 timeRangeOfWorkouts = timeRangeEnum,
                 prDataForTimeRange = it,
                 modifier = Modifier.weight(1f),
-                personalRecordTitleText = "Best Speed"
+                personalRecordTitleText = stringResource(id = R.string.title_best_speed)
             )
         }
     }

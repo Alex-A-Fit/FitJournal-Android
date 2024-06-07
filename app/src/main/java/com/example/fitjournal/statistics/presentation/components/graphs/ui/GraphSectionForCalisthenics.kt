@@ -1,6 +1,8 @@
 package com.example.fitjournal.statistics.presentation.components.graphs.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.R
 import com.example.fitjournal.statistics.domain.model.GraphData
 import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
 import kotlin.math.roundToInt
@@ -10,7 +12,7 @@ fun GraphSectionForCalisthenics(
     graphData: GraphData.Calisthenics,
     calisthenicGraphs: GraphUiTypes.CalisthenicsGraphs
 ) {
-    GraphSection(
+    LineChartGraph(
         graphData = when (calisthenicGraphs) {
             GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> graphData.totalRepsToDate
             GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> graphData.totalWeightUsedToDate
@@ -22,11 +24,11 @@ fun GraphSectionForCalisthenics(
             }
         },
         yAxisSuffixLabel = when (calisthenicGraphs) {
-            GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> "reps"
-            GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> "lbs"
+            GraphUiTypes.CalisthenicsGraphs.REPS_OVER_DATE -> stringResource(id = R.string.label_reps).lowercase()
+            GraphUiTypes.CalisthenicsGraphs.TOTAL_WEIGHT_OVER_DATE -> stringResource(id = R.string.label_pounds_acronym)
         },
         convertYaxisValue = {
-            return@GraphSection it.roundToInt()
+            return@LineChartGraph it.roundToInt()
         }
     )
 }

@@ -12,16 +12,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import co.yml.charts.axis.AxisData
 import co.yml.charts.ui.linechart.LineChart
 import co.yml.charts.ui.linechart.model.IntersectionPoint
@@ -35,21 +33,19 @@ import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.core.util.constants.Zero
 import com.example.fitjournal.statistics.domain.model.GraphValues
 import kotlin.math.roundToInt
 
 @Composable
-fun GraphSection(
+fun LineChartGraph(
     graphData: List<GraphValues>?,
     stringForGraphPopUp: (String, Float) -> String,
     yAxisSuffixLabel: String,
     convertYaxisValue: (Double) -> Int = { it.roundToInt() }
 ) {
-    var lastKnownXaxisDate by remember {
-        mutableStateOf("")
-    }
     if (graphData == null) {
-        GraphError()
+        GraphErrorSection()
         return
     }
     val xAxisData = AxisData.Builder()
@@ -79,7 +75,7 @@ fun GraphSection(
         .labelData { i ->
             val highestPoint = graphData.maxByOrNull { it.point.y }?.point?.y
             if (highestPoint == null) {
-                return@labelData "0"
+                return@labelData Zero.STRING
             }
             val scale = (highestPoint.toDouble() / graphData.size.toDouble())
             val iValue = (i * scale)
@@ -116,7 +112,10 @@ fun GraphSection(
                     ),
                     SelectionHighlightPopUp(
                         popUpLabel = { x, y ->
-                            stringForGraphPopUp("| Date: ${graphData.find { it.point.x == x }?.date ?: "N/A"}", y)
+                            stringForGraphPopUp(
+                                "| Date: ${graphData.find { it.point.x == x }?.date ?: "N/A"}",
+                                y
+                            )
                         }
                     )
                 )
@@ -131,13 +130,16 @@ fun GraphSection(
     LineChart(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 300.dp, max = 500.dp),
+            .heightIn(
+                min = Spacing.spacing300,
+                max = Spacing.spacing500
+            ),
         lineChartData = lineChartData
     )
 }
 
 @Composable
-fun GraphError() {
+fun GraphErrorSection() {
     Column(
         Modifier
             .fillMaxWidth()
@@ -149,11 +151,11 @@ fun GraphError() {
     ) {
         Image(
             painter = painterResource(id = R.drawable.icon_error),
-            contentDescription = "Error icon",
+            contentDescription = stringResource(id = R.string.content_desc_error_icon),
             modifier = Modifier.size(Spacing.spacing75)
         )
         Text(
-            text = "No Data found \n To display graph \n Add/edit your workouts into your Journal!",
+            text = stringResource(id = R.string.error_statistics_graph_not_available),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.fillMaxWidth(),

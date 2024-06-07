@@ -1,4 +1,4 @@
-package com.example.fitjournal.statistics.domain.mapper
+package com.example.fitjournal.home.presentation.mapper
 
 import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkout
 import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry

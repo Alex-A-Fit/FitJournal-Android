@@ -1,8 +1,10 @@
 package com.example.fitjournal.statistics.domain.model
 
-enum class TimeRangeEnum(val stringValue: String) {
-    WEEK("Week"),
-    MONTH("Month"),
-    YEAR("Year"),
-    ALL_TIME("All Time")
+import com.example.fitjournal.R
+
+enum class TimeRangeEnum(val stringIdValue: Int) {
+    WEEK(R.string.label_week),
+    MONTH(R.string.label_month),
+    YEAR(R.string.label_year),
+    ALL_TIME(R.string.label_all_time)
 }

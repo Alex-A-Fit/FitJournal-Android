@@ -7,6 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.presentation.components.text.GraphTitle
 import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
@@ -23,7 +25,7 @@ fun WeightTrainingGraphTitle(
     when (graphDisplayed) {
         GraphUiTypes.WeightTrainingGraphs.WEIGHT_OVER_DATE -> {
             GraphTitle(
-                text = "Date vs Weight Lifted",
+                text = stringResource(id = R.string.title_date_vs_weight_lifted),
                 showBackArrow = false,
                 showNextArrow = true,
                 modifier = Modifier
@@ -40,7 +42,7 @@ fun WeightTrainingGraphTitle(
 
         GraphUiTypes.WeightTrainingGraphs.VOLUME_OVER_DATE -> {
             GraphTitle(
-                text = "Date Vs Total Volume",
+                text = stringResource(id = R.string.title_date_vs_total_volume),
                 showBackArrow = true,
                 showNextArrow = false,
                 modifier = Modifier

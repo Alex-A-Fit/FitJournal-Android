@@ -14,8 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.DistinctDistanceForTime
 
@@ -26,7 +28,7 @@ fun DistinctRecordsForCardio(
 ) {
     Column(modifier = modifier) {
         Text(
-            text = "Best Distance Traveled",
+            text = stringResource(id = R.string.title_best_mile_times),
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.fillMaxWidth()
@@ -60,7 +62,10 @@ fun DistinctRecordsForCardio(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "${it.distance} miles",
+                        text = stringResource(
+                            id = R.string.text_best_mile_with_label,
+                            it.distance
+                        ),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onPrimary
                     )

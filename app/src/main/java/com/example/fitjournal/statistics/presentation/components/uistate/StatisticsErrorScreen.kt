@@ -27,11 +27,11 @@ import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.DarkGray
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.presentation.theme.White
-
+import com.example.fitjournal.core.util.constants.Zero
 @Composable
 fun StatisticsErrorScreen() {
     val gradient = Brush.linearGradient(
-        0.0f to MaterialTheme.colorScheme.primary,
+        Zero.FLOAT to MaterialTheme.colorScheme.primary,
         1.0f to White,
         start = Offset.Zero,
         end = Offset.Infinite

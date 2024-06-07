@@ -22,6 +22,9 @@
     <string name="content_desc_navigate_to_add_workout_icon">Right chevron to signify adding workout to journal</string>
     <string name="content_desc_distance_type_switch_icon">Icon to flip between miles and kilometers when entering distance</string>
     <string name="content_desc_navigate_to_exercise_details_icon">Navigate to exercise details</string>
+    <string name="content_desc_all_time_pr_icon">Icon to signify all time pr</string>
+    <string name="content_desc_graph_title_back_arrow">A left facing arrow to navigate between different graphs</string>
+    <string name="content_desc_graph_title_forward_arrow">A right facing arrow to navigate between different graphs</string>
 
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
@@ -33,6 +36,15 @@
     <string name="title_cardio">Cardio</string>
     <string name="title_top_set">Top Set Summary</string>
     <string name="title_edit_set">Edit Set</string>
+    <string name="title_total_reps">Total Reps</string>
+    <string name="title_weight_used">Weight Used</string>
+    <string name="title_total_distance">Total Distance</string>
+    <string name="title_best_speed">Best Speed</string>
+    <string name="title_most_weight_lifted">Most Weight Lifted</string>
+    <string name="title_most_volume_lifted">Most Volume in a Given Workout</string>
+    <string name="title_past_week_pr">Past Week PR</string>
+    <string name="title_past_month_pr">Past Month PR</string>
+    <string name="title_past_year_pr">Past Year PR</string>
     <string name="title_calisthenics_session_summary">Calisthenics Session Summary</string>
     <string name="title_cardio_session_summary">Cardio Session Summary</string>
     <string name="title_choose_workout_type">Choose a workout type</string>
@@ -42,6 +54,15 @@
     <string name="text_edit_workout_title">%1$s (%2$s)</string>
     <string name="title_delete_workout">Are you sure you want to delete \"%1$s\"</string>
     <string name="title_no_workouts_added">No workouts added yet</string>
+    <string name="title_all_time_pr">All Time PR</string>
+    <string name="title_best_mile_times">Best Mile Times</string>
+    <string name="title_rep_maxes">Rep Maxes</string>
+    <string name="title_date_vs_total_reps">Date vs Total Reps</string>
+    <string name="title_date_vs_total_weight">Total Weight Used</string>
+    <string name="title_date_vs_total_distance">Date vs Total Distance</string>
+    <string name="title_date_vs_average_speed">Date vs Average Speed</string>
+    <string name="title_date_vs_weight_lifted">Date vs Weight Lifted</string>
+    <string name="title_date_vs_total_volume">Date Vs Total Volume</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>
@@ -74,6 +95,10 @@
     <string name="text_back_to_journal">Go back to Journal</string>
     <string name="text_back_to_add_workout_list">Go back to Workout List</string>
     <string name="text_not_applicable">N/A</string>
+    <string name="text_best_mile_with_label">%1$s miles</string>
+    <string name="text_total_reps_with_label">%1$s Rep Max</string>
+    <string name="text_total_weight_with_label">%1$s lbs</string>
+
 
     // labels
     <string name="label_rotate_icon">Rotate main fab icon</string>
@@ -94,6 +119,13 @@
     <string name="label_hour">Hour</string>
     <string name="label_minute">Minute</string>
     <string name="label_second">Second</string>
+    <string name="label_week">Week</string>
+    <string name="label_month">Month</string>
+    <string name="label_year">Year</string>
+    <string name="label_all_time">All Time</string>
+    <string name="label_pounds_acronym">lbs</string>
+    <string name="label_miles_acronym">mi</string>
+    <string name="label_miles_per_hour_acronym">mi/hr</string>
 
     // Button Strings
     <string name="button_cancel">Cancel</string>
@@ -134,8 +166,7 @@
     <string name="error_add_workout_title">Sorry, the workout you selected can not be added to your journal. Please go back and try again.</string>
     <string name="error_edit_workout_title">Sorry, the workout you selected could not be found</string>
     <string name="error_statistics_title">To see statistics, start by entering workouts to your Journal</string>
-
-
+    <string name="error_statistics_graph_not_available">No data found.\nTo display graph,\nPlease add workouts to your Journal</string>
 
     // Placeholder strings
     <string name="text_library_searchbar_placeholder">Search for workout</string>

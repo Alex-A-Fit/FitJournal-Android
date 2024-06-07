@@ -76,7 +76,9 @@ sealed class GraphData {
     ) : GraphData()
 
     data class Calisthenics(
+        // compare total reps to date
         val totalRepsToDate: List<GraphValues>?,
+        // compare total weight used to date
         val totalWeightUsedToDate: List<GraphValues>? = null
     ) : GraphData()
 }
