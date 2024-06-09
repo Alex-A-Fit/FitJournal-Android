@@ -367,7 +367,13 @@ class MainActivity : ComponentActivity() {
                                             )
                                         },
                                         workoutDate = backStackEntry.arguments?.getString("workoutDate")
-                                            ?: ""
+                                            ?: "",
+                                        showSnackBar = {
+                                            showSnackBar(
+                                                snackBarHostState = snackBarState,
+                                                message = it
+                                            )
+                                        }
                                     )
                                 },
                                 topAppBar = {

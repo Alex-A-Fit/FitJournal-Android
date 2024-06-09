@@ -44,7 +44,7 @@ fun HomeEmptyScreen(
         )
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         AddToJournalButton(
-            navigateToAddWorkoutScreen = navigateToAddWorkoutScreen
+            navigate = navigateToAddWorkoutScreen
         )
     }
 }

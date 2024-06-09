@@ -201,7 +201,7 @@ fun HomeScreen(
                     }
                     item {
                         AddToJournalButton(
-                            navigateToAddWorkoutScreen = {
+                            navigate = {
                                 navigateToDestination(NavigationInterface.NavigateToAddWorkout(workoutDate = homeScreenState.currentDate))
                             }
                         )

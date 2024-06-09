@@ -55,6 +55,7 @@
     <string name="text_edit_workout_title">%1$s (%2$s)</string>
     <string name="title_delete_workout">Are you sure you want to delete \"%1$s\"</string>
     <string name="title_no_workouts_added">No workouts added yet</string>
+    <string name="title_no_workouts_in_library_for_add_workout">No workouts found in your library.\n Create a new workout below</string>
     <string name="title_no_statistics_added">When you add to your Journal,\nYou will see your statistics here</string>
     <string name="title_all_time_pr">All Time PR</string>
     <string name="title_best_mile_times">Best Mile Times</string>

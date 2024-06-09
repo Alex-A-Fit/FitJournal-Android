@@ -1,4 +1,4 @@
-package com.example.fitjournal.statistics.presentation.components.uistate
+package com.example.fitjournal.addWorkout.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,9 +20,9 @@ import com.example.fitjournal.core.presentation.commoncomponents.buttons.standar
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
-fun StatisticsNoneScreen(
+fun AddWorkoutNoneScreen(
     modifier: Modifier,
-    navigateToAddWorkoutScreen: () -> Unit
+    openAddWorkoutToLibraryDialog: () -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -30,21 +30,22 @@ fun StatisticsNoneScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.icon_bar_chart),
-            contentDescription = stringResource(id = R.string.content_desc_bar_chart_icon),
+            painter = painterResource(id = R.drawable.icon_journal),
+            contentDescription = stringResource(id = R.string.content_desc_journal_filled_icon),
             modifier = Modifier.size(Spacing.spacing128),
             tint = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         Text(
-            text = stringResource(id = R.string.title_no_statistics_added),
+            text = stringResource(id = R.string.title_no_workouts_in_library_for_add_workout),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         AddToJournalButton(
-            navigate = navigateToAddWorkoutScreen
+            textId = R.string.text_add_to_library,
+            navigate = openAddWorkoutToLibraryDialog
         )
     }
 }
