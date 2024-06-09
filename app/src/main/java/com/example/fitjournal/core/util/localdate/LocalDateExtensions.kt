@@ -1,8 +1,7 @@
 package com.example.fitjournal.core.util.localdate
 
-import com.example.fitjournal.core.util.constants.Constants.STANDARD_DATE_PATTERN
+import com.example.fitjournal.core.util.constants.Constants.STANDARD_DATE_FORMATTER
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 // common date will mean MMM dd, yyyy
@@ -10,8 +9,7 @@ import java.time.format.DateTimeParseException
 fun LocalDate.formatToCommonDate(): String {
     return try {
         if (this.toString().isEmpty() || this.toString() == "null") return ""
-        val dateFormat = DateTimeFormatter.ofPattern(STANDARD_DATE_PATTERN)
-        this.format(dateFormat)
+        this.format(STANDARD_DATE_FORMATTER)
     } catch (e: IllegalArgumentException) {
         ""
     } catch (e: DateTimeParseException) {

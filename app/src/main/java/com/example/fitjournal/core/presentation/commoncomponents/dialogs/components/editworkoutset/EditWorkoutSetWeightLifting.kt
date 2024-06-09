@@ -92,7 +92,7 @@ fun EditWorkoutSetWeightLifting(
                 repsOrSetsValue = sets
             )
             isSetErrorVisible = showError
-            setValue = value ?: ""
+            setValue = value
         },
         setsValue = setValue,
         onSetValueChange = {

@@ -57,7 +57,7 @@ fun EditWorkoutErrorScreen(
                 contentDescription = stringResource(id = R.string.content_desc_error_icon)
             )
             Text(
-                text = stringResource(id = R.string.title_edit_workout_error),
+                text = stringResource(id = R.string.error_edit_workout_title),
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.fillMaxWidth(),

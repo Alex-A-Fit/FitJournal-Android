@@ -6,6 +6,9 @@ data class RealmWorkoutEntryUseCase(
     // GET ALL ENTRIES AS LIST
     val getRealmWorkoutEntryList: GetRealmWorkoutEntryList,
 
+    // GET ALL ENTRIES AS LIST BASED ON WORKOUT NAME
+    val getRealmWorkoutEntryListWithName: GetRealmWorkoutEntryListWithNameUseCase,
+
     // GET SINGLE ENTRY
     val getSingleRealmWorkoutEntry: GetSingleRealmWorkoutEntry,
 

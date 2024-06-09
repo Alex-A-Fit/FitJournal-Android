@@ -41,7 +41,7 @@ object EditWorkoutSetUtilFunctions {
         isValueOptional: Boolean
     ): Pair<ShowError, NewValue> {
         return try {
-            var newValue: NewValue = ""
+            val newValue: NewValue
             when {
                 value.isEmpty() || value.toDoubleOrZero() == 0.0 -> {
                     newValue = when (editWorkoutFunction) {

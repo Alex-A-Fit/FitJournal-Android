@@ -3,12 +3,13 @@ package com.example.fitjournal.core.presentation.theme
 import androidx.compose.ui.graphics.Color
 
 val BluePrimary = Color(0xFF72B3F9)
-val BlueVariant = Color(0xFF5B8FC7)
+val BlueVariant = Color(0xFF69AFFA)
 val BlueLight = Color(0xFFBFDCFB)
 val BlueSecondary = Color(0xFF38587A)
 val SuccessGreen = Color(0xFF4CAF50)
 val ComplimentaryOrange = Color(0xFFAD7E2D)
 val LightGray = Color(0xFFF2F3F7)
+val LightGray2 = Color(0xFFE0E0E2)
 val DisabledBackgroundGray = Color(0xFFC8C8CA)
 val MediumGray = Color(0xFF9396A3)
 val DarkGray = Color(0xFF202020)

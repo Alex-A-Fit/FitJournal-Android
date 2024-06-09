@@ -26,7 +26,7 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
                     if (workoutSets.props.isEmpty()) {
                         null
                     } else {
-                        var weight = 0.0
+                        var weight: Double
                         workoutSets.props.maxByOrNull { liftingModel ->
                             weight = if (liftingModel.weightType.stringConcatenatedValue == "kgs") {
                                 liftingModel.weight.times(KILOGRAMS_TO_POUNDS_CONVERSION_FACTOR)

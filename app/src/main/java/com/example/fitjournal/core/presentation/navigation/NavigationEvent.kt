@@ -34,5 +34,9 @@ fun navigationEvent(
         is NavigationInterface.NavigateToAddWorkoutDetails -> {
             navController.navigate("${Route.ADD_WORKOUT_DETAILS_SCREEN}/${navigationInterface.workoutName}/${navigationInterface.workoutType}/${navigationInterface.workoutDate}")
         }
+
+        is NavigationInterface.NavigateToStatisticsDetails -> {
+            navController.navigate("${Route.WORKOUT_STATISTICS_DETAILS_SCREEN}/${navigationInterface.workoutName}")
+        }
     }
 }

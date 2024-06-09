@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -48,8 +49,10 @@ import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
-import com.example.fitjournal.statistics.presentation.screen.StatisticsScreen
-import com.example.fitjournal.statistics.presentation.screen.StatisticsViewModel
+import com.example.fitjournal.statistics.presentation.screen.stats.StatisticsScreen
+import com.example.fitjournal.statistics.presentation.screen.stats.StatisticsViewModel
+import com.example.fitjournal.statistics.presentation.screen.statsdetails.StatisticsDetailsScreen
+import com.example.fitjournal.statistics.presentation.screen.statsdetails.StatisticsDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -58,11 +61,6 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
     private val homeViewModel: HomeScreenViewModel by viewModels()
-    private val libraryScreenViewModel: LibraryScreenViewModel by viewModels()
-    private val statisticsViewModel: StatisticsViewModel by viewModels()
-    private val editWorkoutViewModel: EditWorkoutViewModel by viewModels()
-    private val addWorkoutViewModel: AddWorkoutViewModel by viewModels()
-    private val addWorkoutDetailViewModel: AddWorkoutDetailViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +94,7 @@ class MainActivity : ComponentActivity() {
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = true
                             }
+                            val libraryScreenViewModel = hiltViewModel<LibraryScreenViewModel>()
                             AppScreen(
                                 showChildrenFabIcons = showChildFabs,
                                 modifier = Modifier,
@@ -231,7 +230,6 @@ class MainActivity : ComponentActivity() {
                                                     addWorkoutToDbModel.workoutName
                                                 )
                                             )
-                                            libraryScreenViewModel.getDataFromRealmDb()
                                         },
                                         errorCallback = {
                                             showSnackBar(
@@ -250,9 +248,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(Route.WORKOUT_STATISTICS_SCREEN) {
+                            val statisticsViewModel = hiltViewModel<StatisticsViewModel>()
                             LaunchedEffect(Unit) {
-                                statisticsViewModel.clearUiState()
                                 bottomBarVisibility.value = true
+                                statisticsViewModel.getDataFromRealmDb()
                             }
                             AppScreen(
                                 showMainFabIcon = false,
@@ -260,25 +259,12 @@ class MainActivity : ComponentActivity() {
                                 snackBarHostState = snackBarState,
                                 mainScreen = { mainScreenModifier ->
                                     StatisticsScreen(
-                                        addSingleRealmObj = {
-                                            statisticsViewModel.addSingleObjectToDb()
-                                        },
-                                        updateSingleRealmObj = {
-                                            // Dummy values for now.
-                                            // Actual impl we would need to get correct index
-                                            // and associated workout type for the given workout
-                                            statisticsViewModel.updateSingleObjectToDb(
-                                                updatedItemIndex = 0,
-                                                workoutType = "Weight Training"
-                                            )
-                                        },
-                                        statisticsScreenState = statisticsViewModel.statisticsScreenState,
-                                        getWorkoutEntryList = { statisticsViewModel.getDataFromRealmDb() },
-                                        deleteWorkoutEntry = {
-                                            statisticsViewModel.deleteWorkoutEntry(
-                                                getString = { stringId ->
-                                                    getString(stringId)
-                                                }
+                                        statisticsUiState = statisticsViewModel.statisticsUiState,
+                                        modifier = mainScreenModifier.fillMaxSize(),
+                                        navigateToDestination = {
+                                            navigateToDestination(
+                                                navigationInterface = it,
+                                                navController = navController
                                             )
                                         }
                                     )
@@ -287,7 +273,7 @@ class MainActivity : ComponentActivity() {
                                     TopAppBar(
                                         appBarTitle = {
                                             Text(
-                                                text = "Journal",
+                                                text = stringResource(id = R.string.title_workout_statistics),
                                                 style = MaterialTheme.typography.titleLarge,
                                                 color = MaterialTheme.colorScheme.onPrimary
                                             )
@@ -305,9 +291,65 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
-                        composable("${Route.ADD_WORKOUT_SCREEN}${Arguments.WORKOUT_DATE}") { backStackEntry ->
+                        composable("${Route.WORKOUT_STATISTICS_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}") { backStackEntry ->
+                            val workoutName =
+                                backStackEntry.arguments?.getString("workoutName", "") ?: ""
+                            val statisticsDetailsViewModel =
+                                hiltViewModel<StatisticsDetailsViewModel>()
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
+                                statisticsDetailsViewModel.getDataFromRealmDb(
+                                    workoutName = workoutName
+                                )
+                            }
+                            AppScreen(
+                                showMainFabIcon = false,
+                                modifier = Modifier,
+                                snackBarHostState = snackBarState,
+                                mainScreen = { mainScreenModifier ->
+                                    StatisticsDetailsScreen(
+                                        statisticsDetailsUiState = statisticsDetailsViewModel.statisticsDetailsUiState,
+                                        modifier = mainScreenModifier.fillMaxSize(),
+                                        navigateToDestination = {
+                                            navigateToDestination(
+                                                navigationInterface = it,
+                                                navController = navController
+                                            )
+                                        }
+                                    )
+                                },
+                                topAppBar = {
+                                    TopAppBar(
+                                        appBarTitle = {
+                                            Text(
+                                                text = stringResource(id = R.string.title_workout_statistics_details),
+                                                style = MaterialTheme.typography.titleLarge,
+                                                color = MaterialTheme.colorScheme.onPrimary
+                                            )
+                                        },
+                                        navigationIcon = {
+                                            NavigateUpIconButton(
+                                                navigateUp = { navController.navigateUp() }
+                                            )
+                                        },
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                },
+                                navigateToDestination = { navigation ->
+                                    showChildFabs = false
+                                    navigateToDestination(
+                                        navigationInterface = navigation,
+                                        navController = navController
+                                    )
+                                },
+                                navController = navController
+                            )
+                        }
+                        composable("${Route.ADD_WORKOUT_SCREEN}${Arguments.WORKOUT_DATE}") { backStackEntry ->
+                            val addWorkoutViewModel = hiltViewModel<AddWorkoutViewModel>()
+                            LaunchedEffect(Unit) {
+                                bottomBarVisibility.value = false
+                                addWorkoutViewModel.getDataFromRealmDb()
                             }
                             AppScreen(
                                 showMainFabIcon = false,
@@ -316,7 +358,7 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainModifier ->
                                     AddWorkoutScreen(
                                         modifier = mainModifier,
-                                        addWorkoutUiState = addWorkoutViewModel.journalEntryState,
+                                        addWorkoutUiState = addWorkoutViewModel.addWorkoutUiState,
                                         navigateToDestination = {
                                             showChildFabs = false
                                             navigateToDestination(
@@ -324,7 +366,8 @@ class MainActivity : ComponentActivity() {
                                                 navController = navController
                                             )
                                         },
-                                        workoutDate = backStackEntry.arguments?.getString("workoutDate") ?: ""
+                                        workoutDate = backStackEntry.arguments?.getString("workoutDate")
+                                            ?: ""
                                     )
                                 },
                                 topAppBar = {
@@ -348,6 +391,8 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("${Route.ADD_WORKOUT_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}${Arguments.WORKOUT_DATE}") { backStackEntry ->
+                            val addWorkoutDetailViewModel =
+                                hiltViewModel<AddWorkoutDetailViewModel>()
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
                                 addWorkoutDetailViewModel.addNavigationArguments(
@@ -422,6 +467,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("${Route.EDIT_JOURNAL_SCREEN}${Arguments.WORKOUT_ID}") { backStackEntry ->
+                            val editWorkoutViewModel = hiltViewModel<EditWorkoutViewModel>()
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = false
                                 editWorkoutViewModel.getSingleWorkout(
@@ -485,46 +531,7 @@ class MainActivity : ComponentActivity() {
 fun navigateToDestination(
     navigationInterface: NavigationInterface,
     navController: NavController
-) = when (navigationInterface) {
-    NavigationInterface.NavigateToHome -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-
-    NavigationInterface.NavigateToWorkoutLibrary -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-
-    NavigationInterface.NavigateToWorkoutStatistics -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-
-    is NavigationInterface.NavigateToAddWorkout -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-
-    is NavigationInterface.NavigateToAddWorkoutDetails -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-
-    is NavigationInterface.NavigateToEditWorkout -> {
-        navigationEvent(
-            navigationInterface = navigationInterface,
-            navController = navController
-        )
-    }
-}
+) = navigationEvent(
+    navigationInterface = navigationInterface,
+    navController = navController
+)

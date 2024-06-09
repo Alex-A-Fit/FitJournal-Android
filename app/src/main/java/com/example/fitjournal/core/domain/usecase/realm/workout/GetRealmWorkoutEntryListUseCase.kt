@@ -68,7 +68,7 @@ fun convertRealmWorkoutEntryToWorkoutModelUseCase(databaseEntry: List<RealmWorko
     return filterNullOrMissingInfoWorkouts(databaseWorkouts)
 }
 
-private fun filterNullOrMissingInfoWorkouts(workouts: List<WorkoutModel>): List<WorkoutModel> {
+fun filterNullOrMissingInfoWorkouts(workouts: List<WorkoutModel>): List<WorkoutModel> {
     return workouts.filterNot {
         it.workoutDetailsModel.name.isEmpty()
     }

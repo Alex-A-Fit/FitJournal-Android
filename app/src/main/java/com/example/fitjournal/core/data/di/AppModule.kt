@@ -16,6 +16,7 @@ import com.example.fitjournal.core.domain.usecase.realm.workout.AddSingleWorkout
 import com.example.fitjournal.core.domain.usecase.realm.workout.CreateMockDataOfRealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.DeleteWorkoutEntryFromRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.GetRealmWorkoutEntryList
+import com.example.fitjournal.core.domain.usecase.realm.workout.GetRealmWorkoutEntryListWithNameUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.GetSingleRealmWorkoutEntry
 import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.SyncWorkoutEntryDbWithViewModelUseCase
@@ -28,6 +29,7 @@ import com.example.fitjournal.core.domain.usecase.workout.EditWorkoutUseCase
 import com.example.fitjournal.core.domain.usecase.workout.IsDoubleValidUseCase
 import com.example.fitjournal.core.domain.usecase.workout.IsIntegerValidUseCase
 import com.example.fitjournal.core.domain.usecase.workout.IsTimeValidUseCase
+import com.example.fitjournal.statistics.domain.usecase.GetWorkoutsByTimeSelectedUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -75,6 +77,9 @@ object AppModule {
                 realmWorkoutEntryRepository = realmWorkoutEntryRepository
             ),
             syncWorkoutEntryDbWithViewModelUseCase = SyncWorkoutEntryDbWithViewModelUseCase(
+                realmWorkoutEntryRepository = realmWorkoutEntryRepository
+            ),
+            getRealmWorkoutEntryListWithName = GetRealmWorkoutEntryListWithNameUseCase(
                 realmWorkoutEntryRepository = realmWorkoutEntryRepository
             )
         )
@@ -125,4 +130,7 @@ object AppModule {
     fun provideCreateModelForEditWorkoutDialogUseCase(): CreateModelForEditWorkoutDialogUseCase {
         return CreateModelForEditWorkoutDialogUseCase()
     }
+
+    @Provides
+    fun provideGetWorkoutsByTimeUseCase(): GetWorkoutsByTimeSelectedUseCase = GetWorkoutsByTimeSelectedUseCase()
 }

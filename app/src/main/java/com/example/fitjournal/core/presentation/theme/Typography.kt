@@ -34,7 +34,7 @@ val typography = Typography(
     ),
     headlineSmall = TextStyle(
         fontSize = 22.sp,
-        lineHeight = 22.sp,
+        lineHeight = 28.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.bold
     ),
@@ -58,13 +58,13 @@ val typography = Typography(
     ),
     bodyMedium = TextStyle(
         fontSize = 14.sp,
-        lineHeight = 12.sp,
+        lineHeight = 18.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.regular
     ),
     labelSmall = TextStyle(
         fontSize = 10.sp,
-        lineHeight = 12.sp,
+        lineHeight = 14.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.regular
     )

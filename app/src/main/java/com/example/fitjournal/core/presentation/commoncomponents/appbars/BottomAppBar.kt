@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.fitjournal.R
+import com.example.fitjournal.core.presentation.navigation.Arguments
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.navigation.Route
 import com.example.fitjournal.core.presentation.theme.Spacing
@@ -82,13 +83,13 @@ fun BottomAppBar(
                     Icon(
                         painter = painterResource(id = R.drawable.icon_bar_chart),
                         contentDescription = stringResource(id = R.string.content_desc_bottom_app_bar_stats_icon),
-                        tint = if (currentDestination?.route == Route.WORKOUT_STATISTICS_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
+                        tint = if (currentDestination?.route == Route.WORKOUT_STATISTICS_SCREEN || currentDestination?.route == "${Route.WORKOUT_STATISTICS_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}") MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 label = {
                     Text(
                         text = stringResource(id = R.string.text_statistics_tab_bar_icon),
-                        color = if (currentDestination?.route == Route.WORKOUT_STATISTICS_SCREEN) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
+                        color = if (currentDestination?.route == Route.WORKOUT_STATISTICS_SCREEN || currentDestination?.route == "${Route.WORKOUT_STATISTICS_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}") MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
                     )
                 }
             )
