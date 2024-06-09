@@ -98,6 +98,7 @@
     <string name="text_best_mile_with_label">%1$s miles</string>
     <string name="text_total_reps_with_label">%1$s Rep Max</string>
     <string name="text_total_weight_with_label">%1$s lbs</string>
+    <string name="text_add_to_workout">+Add a new workout</string>
 
 
     // labels

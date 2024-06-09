@@ -1,5 +1,6 @@
 package com.example.fitjournal.library.presentation.screen.library
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.DeleteWorkoutDialog
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.TransparentLoadingScreenDialog
 import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
@@ -28,6 +32,7 @@ import com.example.fitjournal.library.presentation.screen.library.components.Edi
 import com.example.fitjournal.library.presentation.screen.library.components.LibraryListSection
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
+import com.example.fitjournal.library.presentation.screen.library.utils.createAnnotatedString
 import java.time.LocalDate
 
 @Composable
@@ -53,6 +58,7 @@ fun LibraryScreen(
     var showLoadingDialog by rememberSaveable { mutableStateOf(false) }
     var updateUi: Boolean by rememberSaveable { mutableStateOf(false) }
     var snackbarMessage: String by rememberSaveable { mutableStateOf("") }
+    val annotatedString = createAnnotatedString(text = stringResource(id = R.string.text_add_to_workout))
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (openEditLibraryWorkoutDialog) {
@@ -152,6 +158,12 @@ fun LibraryScreen(
                 },
                 keyboardController = keyboardController,
                 focusManager = focusManager
+            )
+            ClickableText(
+                text = annotatedString,
+                onClick = {
+                    Log.d("LibraryScreen: ", "THE CLICKABLE TEXT WAS CLICKED")
+                }
             )
             LibraryListSection(
                 libraryWorkoutState = libraryWorkoutState,
