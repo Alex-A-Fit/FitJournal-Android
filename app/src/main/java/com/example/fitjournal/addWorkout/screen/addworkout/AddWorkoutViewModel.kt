@@ -24,7 +24,7 @@ class AddWorkoutViewModel @Inject constructor(
 ) : ViewModel() {
     var addWorkoutUiState by mutableStateOf(
         AddWorkoutUiModel(
-            handleJournalEntryClickEvents = ::journalClickEvents
+            handleAddWorkoutClickEvents = ::journalClickEvents
         )
     )
         private set
@@ -59,8 +59,14 @@ class AddWorkoutViewModel @Inject constructor(
                     workoutType = event.context.getString(event.workout.workoutType.stringId),
                     workoutTypeEnum = event.workout.workoutType,
                     successCallback = {
+                        getDataFromRealmDb()
                         viewModelScope.launch {
-                            event.showSnackBar(event.context.getString(event.workout.snackBarMessageId))
+                            event.showSnackBar(
+                                event.context.getString(
+                                    event.workout.snackBarMessageId,
+                                    event.workout.workoutName
+                                )
+                            )
                         }
                     },
                     errorCallback = {
@@ -74,6 +80,13 @@ class AddWorkoutViewModel @Inject constructor(
                         }
                     }
                 )
+            }
+
+            AddWorkoutEvents.SyncRealmWorkoutEntryFromDb -> {
+                val shouldSyncOccur = realmWorkoutLibraryUseCase.syncRealmWorkoutLibraryUseCase()
+                if (shouldSyncOccur) {
+                    getDataFromRealmDb()
+                }
             }
         }
     }

@@ -12,4 +12,6 @@ sealed class AddWorkoutEvents {
         val showSnackBar: suspend (String) -> Unit,
         val context: Context
     ) : AddWorkoutEvents()
+
+    data object SyncRealmWorkoutEntryFromDb : AddWorkoutEvents()
 }

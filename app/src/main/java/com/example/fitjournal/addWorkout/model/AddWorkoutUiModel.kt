@@ -9,5 +9,5 @@ data class AddWorkoutUiModel(
     val masterWorkoutList: List<WorkoutCategoryByLibrary> = emptyList(),
     val listOfSearchedWorkouts: SnapshotStateList<WorkoutCategoryByLibrary> = mutableStateListOf(),
     val searchedTerm: String = "",
-    val handleJournalEntryClickEvents: (AddWorkoutEvents) -> Unit
+    val handleAddWorkoutClickEvents: (AddWorkoutEvents) -> Unit
 )

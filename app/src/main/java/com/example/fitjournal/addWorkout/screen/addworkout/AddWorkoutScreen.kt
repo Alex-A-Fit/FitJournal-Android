@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +26,7 @@ import com.example.fitjournal.core.presentation.commoncomponents.textField.Searc
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.library.domain.model.AddWorkoutToLibraryModel
+import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 
 @Composable
 fun AddWorkoutScreen(
@@ -34,6 +36,10 @@ fun AddWorkoutScreen(
     showSnackBar: suspend (String) -> Unit,
     navigateToDestination: (NavigationInterface) -> Unit
 ) {
+    LaunchedEffect(key1 = true) {
+        addWorkoutUiState.handleAddWorkoutClickEvents(AddWorkoutEvents.SyncRealmWorkoutEntryFromDb)
+    }
+
     val searchText = rememberSaveable(addWorkoutUiState.searchedTerm) {
         mutableStateOf(addWorkoutUiState.searchedTerm)
     }
@@ -55,7 +61,7 @@ fun AddWorkoutScreen(
                 showAddWorkoutToLibraryDialog = false
             },
             addNewWorkoutToLibrary = { workoutName, workoutType ->
-                addWorkoutUiState.handleJournalEntryClickEvents(
+                addWorkoutUiState.handleAddWorkoutClickEvents(
                     AddWorkoutEvents.AddWorkoutToLibrary(
                         AddWorkoutToLibraryModel(
                         workoutName = workoutName,
@@ -97,14 +103,14 @@ fun AddWorkoutScreen(
             SearchBar(
                 searchedTerm = searchText.value,
                 updateSearch = { searchedText ->
-                    addWorkoutUiState.handleJournalEntryClickEvents(
+                    addWorkoutUiState.handleAddWorkoutClickEvents(
                         AddWorkoutEvents.FilterSearchByWorkout(
                             searchedText
                         )
                     )
                 },
                 clearSearch = {
-                    addWorkoutUiState.handleJournalEntryClickEvents(AddWorkoutEvents.ClearSearchBarFilter)
+                    addWorkoutUiState.handleAddWorkoutClickEvents(AddWorkoutEvents.ClearSearchBarFilter)
                 },
                 keyboardController = keyboardController,
                 focusManager = focusManager
