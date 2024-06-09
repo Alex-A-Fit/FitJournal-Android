@@ -6,7 +6,7 @@ import com.example.fitjournal.core.presentation.model.LibraryWorkoutItem
 import com.example.fitjournal.library.presentation.model.WorkoutCategoryByLibrary
 import java.util.SortedMap
 
-fun mapToLibraryUiList(workoutMap: SortedMap<String, List<WorkoutLibraryModel>>): List<WorkoutCategoryByLibrary> {
+fun mapToLibraryUiList(workoutMap: SortedMap<String, List<WorkoutLibraryModel>>): MutableList<WorkoutCategoryByLibrary> {
     return workoutMap.map { workouts ->
         WorkoutCategoryByLibrary(
             name = workouts.key.toString(),
@@ -17,5 +17,5 @@ fun mapToLibraryUiList(workoutMap: SortedMap<String, List<WorkoutLibraryModel>>)
                 )
             }.toMutableStateList()
         )
-    }
+    }.toMutableStateList()
 }

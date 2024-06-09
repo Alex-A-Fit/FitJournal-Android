@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
 data class LibraryWorkoutUiModel(
-    val masterWorkoutList: List<WorkoutCategoryByLibrary> = emptyList(),
+    val masterWorkoutList: MutableList<WorkoutCategoryByLibrary> = mutableListOf(),
     val listOfSearchedWorkouts: SnapshotStateList<WorkoutCategoryByLibrary> = mutableStateListOf(),
     val searchedTerm: String = "",
     val libraryWorkoutClickEvent: (LibraryWorkoutClickEvents) -> Unit,

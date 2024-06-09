@@ -60,6 +60,10 @@ fun LibraryScreen(
     var snackbarMessage: String by rememberSaveable { mutableStateOf("") }
     var showAddWorkoutToLibraryDialog by rememberSaveable { mutableStateOf(false) }
 
+    val libraryWorkoutList by remember(libraryWorkoutState.masterWorkoutList) {
+        mutableStateOf(libraryWorkoutState.masterWorkoutList)
+    }
+
     if (showAddWorkoutToLibraryDialog) {
         AddWorkoutToLibraryDialog(
             dismissDialog = {
@@ -83,79 +87,80 @@ fun LibraryScreen(
             }
         )
     }
+    if (openEditLibraryWorkoutDialog) {
+        EditWorkoutAlertDialog(
+            onDismissRequest = { openEditLibraryWorkoutDialog = false },
+            workoutItemDialogUiModel = libraryWorkoutState.workoutItemDialogUiModel,
+            onUpdateButtonClick = { workoutName, type ->
+                openEditLibraryWorkoutDialog = false
+                showLoadingDialog = true
+                libraryWorkoutState.libraryWorkoutClickEvent(
+                    LibraryWorkoutClickEvents.UpdateLibraryWorkout(
+                        workoutName = workoutName,
+                        workoutTypeEnum = type,
+                        context = context,
+                        onSuccessCallback = {
+                            updateUi = true
+                            snackbarMessage = it
+                        },
+                        onErrorCallback = {
+                            updateUi = false
+                            showLoadingDialog = false
+                            showSnackbar(it)
+                        }
+                    )
+                )
+            },
+            onAddToJournalButtonClick = {
+                openEditLibraryWorkoutDialog = false
+                navigateToDestination(
+                    NavigationInterface.NavigateToAddWorkoutDetails(
+                        workoutName = libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutName,
+                        workoutType = context.getString(libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutTypeEnum.stringId),
+                        workoutDate = LocalDate.now().formatToCommonDate()
+                    )
+                )
+            },
+            onDeleteButtonClick = {
+                openEditLibraryWorkoutDialog = false
+                openDeleteWorkoutDialog = true
+            }
+        )
+    }
+    if (openDeleteWorkoutDialog) {
+        DeleteWorkoutDialog(
+            workoutName = libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutName,
+            workoutDate = null,
+            onDismiss = {
+                openDeleteWorkoutDialog = false
+            },
+            onDelete = {
+                openDeleteWorkoutDialog = false
+                showLoadingDialog = true
+                libraryWorkoutState.libraryWorkoutClickEvent(
+                    LibraryWorkoutClickEvents.DeleteLibraryWorkout(
+                        onSuccessCallback = {
+                            updateUi = true
+                            showLoadingDialog = false
+                        },
+                        onErrorCallback = {
+                            updateUi = false
+                            showLoadingDialog = false
+                            showSnackbar(it)
+                        },
+                        context = context
+                    )
+                )
+            }
+        )
+    }
+
+    if (showLoadingDialog) {
+        TransparentLoadingScreenDialog {}
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if (openEditLibraryWorkoutDialog) {
-            EditWorkoutAlertDialog(
-                onDismissRequest = { openEditLibraryWorkoutDialog = false },
-                workoutItemDialogUiModel = libraryWorkoutState.workoutItemDialogUiModel,
-                onUpdateButtonClick = { workoutName, type ->
-                    openEditLibraryWorkoutDialog = false
-                    showLoadingDialog = true
-                    libraryWorkoutState.libraryWorkoutClickEvent(
-                        LibraryWorkoutClickEvents.UpdateLibraryWorkout(
-                            workoutName = workoutName,
-                            workoutTypeEnum = type,
-                            context = context,
-                            onSuccessCallback = {
-                                updateUi = true
-                                snackbarMessage = it
-                            },
-                            onErrorCallback = {
-                                updateUi = false
-                                showLoadingDialog = false
-                                showSnackbar(it)
-                            }
-                        )
-                    )
-                },
-                onAddToJournalButtonClick = {
-                    openEditLibraryWorkoutDialog = false
-                    navigateToDestination(
-                        NavigationInterface.NavigateToAddWorkoutDetails(
-                            workoutName = libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutName,
-                            workoutType = context.getString(libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutTypeEnum.stringId),
-                            workoutDate = LocalDate.now().formatToCommonDate()
-                        )
-                    )
-                },
-                onDeleteButtonClick = {
-                    openEditLibraryWorkoutDialog = false
-                    openDeleteWorkoutDialog = true
-                }
-            )
-        }
-        if (openDeleteWorkoutDialog) {
-            DeleteWorkoutDialog(
-                workoutName = libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutName,
-                workoutDate = null,
-                onDismiss = {
-                    openDeleteWorkoutDialog = false
-                },
-                onDelete = {
-                    openDeleteWorkoutDialog = false
-                    showLoadingDialog = true
-                    libraryWorkoutState.libraryWorkoutClickEvent(
-                        LibraryWorkoutClickEvents.DeleteLibraryWorkout(
-                            onSuccessCallback = {
-                                updateUi = true
-                            },
-                            onErrorCallback = {
-                                updateUi = false
-                                showLoadingDialog = false
-                                showSnackbar(it)
-                            },
-                            context = context
-                        )
-                    )
-                }
-            )
-        }
-
-        if (showLoadingDialog) {
-            TransparentLoadingScreenDialog {}
-        }
-        if (libraryWorkoutState.masterWorkoutList.isEmpty()) {
+        if (libraryWorkoutList.isEmpty()) {
             LibraryNoneScreen(
                 modifier = Modifier.fillMaxSize(),
                 openAddWorkoutToLibraryDialog = {
@@ -163,7 +168,7 @@ fun LibraryScreen(
                 }
             )
         }
-        if (libraryWorkoutState.masterWorkoutList.isNotEmpty()) {
+        if (libraryWorkoutList.isNotEmpty()) {
             Column(
                 modifier = modifier
                     .fillMaxSize()

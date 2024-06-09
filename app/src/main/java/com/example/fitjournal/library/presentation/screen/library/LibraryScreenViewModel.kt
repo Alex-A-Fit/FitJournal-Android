@@ -81,6 +81,7 @@ class LibraryScreenViewModel @Inject constructor(
                     val wasItemDeleted = realmWorkoutLibraryUseCase
                         .deleteLibraryItemFromRealmDbUseCase(workoutName)
                     if (wasItemDeleted) {
+                        libraryWorkoutState.masterWorkoutList.removeAt(categoryIndex)
                         getDataFromRealmDb()
                         event.onSuccessCallback(
                             event.context.getString(
