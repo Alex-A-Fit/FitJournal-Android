@@ -24,6 +24,7 @@ import com.example.fitjournal.core.presentation.commoncomponents.textField.Searc
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.localdate.formatToCommonDate
+import com.example.fitjournal.library.presentation.screen.library.components.AddNewWorkoutText
 import com.example.fitjournal.library.presentation.screen.library.components.EditWorkoutAlertDialog
 import com.example.fitjournal.library.presentation.screen.library.components.LibraryListSection
 import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
@@ -153,6 +154,7 @@ fun LibraryScreen(
                 keyboardController = keyboardController,
                 focusManager = focusManager
             )
+            AddNewWorkoutText()
             LibraryListSection(
                 libraryWorkoutState = libraryWorkoutState,
                 isBlurActive = isBlurActive,
