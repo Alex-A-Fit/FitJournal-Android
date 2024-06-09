@@ -26,7 +26,6 @@ import com.example.fitjournal.core.presentation.commoncomponents.textField.Searc
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.library.domain.model.AddWorkoutToLibraryModel
-import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
 
 @Composable
 fun AddWorkoutScreen(
@@ -64,9 +63,9 @@ fun AddWorkoutScreen(
                 addWorkoutUiState.handleAddWorkoutClickEvents(
                     AddWorkoutEvents.AddWorkoutToLibrary(
                         AddWorkoutToLibraryModel(
-                        workoutName = workoutName,
-                        workoutType = workoutType,
-                        snackBarMessageId = R.string.text_workout_successfully_added_to_library
+                            workoutName = workoutName,
+                            workoutType = workoutType,
+                            snackBarMessageId = R.string.text_workout_successfully_added_to_library
                         ),
                         context = context,
                         showSnackBar = {
@@ -91,7 +90,7 @@ fun AddWorkoutScreen(
                 focusManager.clearFocus(true)
             }
     ) {
-        if (addWorkoutUiState.masterWorkoutList.isEmpty()){
+        if (addWorkoutUiState.masterWorkoutList.isEmpty()) {
             AddWorkoutNoneScreen(
                 modifier = Modifier.fillMaxSize(),
                 openAddWorkoutToLibraryDialog = {
@@ -99,7 +98,7 @@ fun AddWorkoutScreen(
                 }
             )
         }
-        if (addWorkoutUiState.masterWorkoutList.isNotEmpty()){
+        if (addWorkoutUiState.masterWorkoutList.isNotEmpty()) {
             SearchBar(
                 searchedTerm = searchText.value,
                 updateSearch = { searchedText ->
