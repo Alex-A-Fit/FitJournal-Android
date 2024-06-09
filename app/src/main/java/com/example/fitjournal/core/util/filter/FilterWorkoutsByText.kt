@@ -1,8 +1,8 @@
 package com.example.fitjournal.core.util.filter
 
 import androidx.compose.runtime.toMutableStateList
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategoryByJournal
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategoryByLibrary
+import com.example.fitjournal.library.presentation.model.WorkoutCategoryByJournal
+import com.example.fitjournal.library.presentation.model.WorkoutCategoryByLibrary
 
 fun searchForText(text: String, list: List<WorkoutCategoryByLibrary>): List<WorkoutCategoryByLibrary> {
     val filteredList = list.map { category ->

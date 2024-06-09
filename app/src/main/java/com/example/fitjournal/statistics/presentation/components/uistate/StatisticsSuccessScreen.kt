@@ -30,7 +30,7 @@ import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.listHeader.CategoryHeader
 import com.example.fitjournal.core.presentation.commoncomponents.textField.SearchBar
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategoryByJournal
+import com.example.fitjournal.library.presentation.model.WorkoutCategoryByJournal
 import com.example.fitjournal.statistics.presentation.model.StatisticsEvents
 
 typealias WorkoutName = String

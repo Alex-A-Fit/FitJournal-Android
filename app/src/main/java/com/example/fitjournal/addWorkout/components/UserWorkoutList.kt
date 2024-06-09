@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.listHeader.CategoryHeader
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategoryByLibrary
+import com.example.fitjournal.library.presentation.model.WorkoutCategoryByLibrary
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

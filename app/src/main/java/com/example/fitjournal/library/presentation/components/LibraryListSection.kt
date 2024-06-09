@@ -1,4 +1,4 @@
-package com.example.fitjournal.library.presentation.screen.library.components
+package com.example.fitjournal.library.presentation.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -16,8 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.example.fitjournal.core.presentation.commoncomponents.listHeader.CategoryHeader
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
-import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
+import com.example.fitjournal.library.presentation.model.LibraryWorkoutClickEvents
+import com.example.fitjournal.library.presentation.model.LibraryWorkoutUiModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

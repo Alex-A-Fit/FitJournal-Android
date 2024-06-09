@@ -7,13 +7,15 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.R
+import com.example.fitjournal.core.domain.model.WorkoutLibraryModel
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
+import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.filter.searchForText
 import com.example.fitjournal.library.domain.model.UpdateWorkoutLibraryModel
-import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutClickEvents
-import com.example.fitjournal.library.presentation.screen.library.model.LibraryWorkoutUiModel
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutItemDialogUiModel
-import com.example.fitjournal.library.presentation.screen.library.utils.mapToLibraryUiList
+import com.example.fitjournal.library.presentation.model.LibraryWorkoutClickEvents
+import com.example.fitjournal.library.presentation.model.LibraryWorkoutUiModel
+import com.example.fitjournal.library.presentation.model.WorkoutItemDialogUiModel
+import com.example.fitjournal.library.presentation.utils.mapToLibraryUiList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -79,6 +81,7 @@ class LibraryScreenViewModel @Inject constructor(
                     val wasItemDeleted = realmWorkoutLibraryUseCase
                         .deleteLibraryItemFromRealmDbUseCase(workoutName)
                     if (wasItemDeleted) {
+                        libraryWorkoutState.masterWorkoutList.removeAt(categoryIndex)
                         getDataFromRealmDb()
                         event.onSuccessCallback(
                             event.context.getString(
@@ -131,6 +134,35 @@ class LibraryScreenViewModel @Inject constructor(
                     getDataFromRealmDb()
                 }
             }
+
+            is LibraryWorkoutClickEvents.AddWorkoutToLibrary -> {
+                addWorkoutToLibraryDatabase(
+                    workoutName = event.workout.workoutName,
+                    workoutType = event.context.getString(event.workout.workoutType.stringId),
+                    workoutTypeEnum = event.workout.workoutType,
+                    successCallback = {
+                        getDataFromRealmDb()
+                        viewModelScope.launch {
+                            event.showSnackBar(
+                                event.context.getString(
+                                    event.workout.snackBarMessageId,
+                                    event.workout.workoutName
+                                )
+                            )
+                        }
+                    },
+                    errorCallback = {
+                        viewModelScope.launch {
+                            event.showSnackBar(
+                                event.context.getString(
+                                    R.string.error_with_workout_being_added_to_library,
+                                    event.workout.workoutName
+                                )
+                            )
+                        }
+                    }
+                )
+            }
         }
     }
 
@@ -157,6 +189,30 @@ class LibraryScreenViewModel @Inject constructor(
                         }
                     )
                 )
+            }
+        }
+    }
+
+    private fun addWorkoutToLibraryDatabase(
+        workoutName: String,
+        workoutType: String,
+        workoutTypeEnum: WorkoutTypeEnum,
+        successCallback: suspend () -> Unit,
+        errorCallback: suspend () -> Unit
+    ) {
+        viewModelScope.launch {
+            val wasLibraryItemAdded =
+                realmWorkoutLibraryUseCase.addSingleLibraryItemToRealmDbUseCase(
+                    workoutLibraryModel = WorkoutLibraryModel(
+                        name = workoutName,
+                        workoutType = workoutType,
+                        workoutTypeEnum = workoutTypeEnum
+                    )
+                )
+            if (wasLibraryItemAdded) {
+                successCallback()
+            } else {
+                errorCallback()
             }
         }
     }

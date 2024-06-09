@@ -1,4 +1,4 @@
-package com.example.fitjournal.library.presentation.screen.library.components
+package com.example.fitjournal.library.presentation.components
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable

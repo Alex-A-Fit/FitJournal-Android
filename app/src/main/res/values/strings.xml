@@ -18,6 +18,7 @@
     <string name="content_desc_edit_workout_pencil_icon">Pencil icon to edit workout entry</string>
     <string name="content_desc_error_icon">Error icon to signify an error has occurred</string>d
     <string name="content_desc_journal_filled_icon">Journal Icon</string>
+    <string name="content_desc_library_filled_icon">Library Icon</string>
     <string name="content_desc_bar_chart_icon">Bar Chart</string>
     <string name="content_desc_close_dialog_icon">X symbol to cancel dialog</string>
     <string name="content_desc_navigate_to_add_workout_icon">Right chevron to signify adding workout to journal</string>
@@ -101,7 +102,8 @@
     <string name="text_best_mile_with_label">%1$s miles</string>
     <string name="text_total_reps_with_label">%1$s Rep Max</string>
     <string name="text_total_weight_with_label">%1$s lbs</string>
-    <string name="text_add_to_workout">+Add a new workout</string>
+    <string name="text_add_to_workout">Can\'t find a workout? Create one here</string>
+    <string name="text_add_to_workout_custom_highlight">here</string>
 
 
     // labels

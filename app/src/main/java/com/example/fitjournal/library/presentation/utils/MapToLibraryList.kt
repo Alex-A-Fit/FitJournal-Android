@@ -1,12 +1,12 @@
-package com.example.fitjournal.library.presentation.screen.library.utils
+package com.example.fitjournal.library.presentation.utils
 
 import androidx.compose.runtime.toMutableStateList
 import com.example.fitjournal.core.domain.model.WorkoutLibraryModel
 import com.example.fitjournal.core.presentation.model.LibraryWorkoutItem
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategoryByLibrary
+import com.example.fitjournal.library.presentation.model.WorkoutCategoryByLibrary
 import java.util.SortedMap
 
-fun mapToLibraryUiList(workoutMap: SortedMap<String, List<WorkoutLibraryModel>>): List<WorkoutCategoryByLibrary> {
+fun mapToLibraryUiList(workoutMap: SortedMap<String, List<WorkoutLibraryModel>>): MutableList<WorkoutCategoryByLibrary> {
     return workoutMap.map { workouts ->
         WorkoutCategoryByLibrary(
             name = workouts.key.toString(),
@@ -17,5 +17,5 @@ fun mapToLibraryUiList(workoutMap: SortedMap<String, List<WorkoutLibraryModel>>)
                 )
             }.toMutableStateList()
         )
-    }
+    }.toMutableStateList()
 }
