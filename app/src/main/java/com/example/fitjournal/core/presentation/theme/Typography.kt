@@ -28,19 +28,19 @@ val typography = Typography(
     ),
     headlineMedium = TextStyle(
         fontSize = 26.sp,
-        lineHeight = 36.sp,
+        lineHeight = 38.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.bold
     ),
     headlineSmall = TextStyle(
         fontSize = 22.sp,
-        lineHeight = 28.sp,
+        lineHeight = 32.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.bold
     ),
     titleLarge = TextStyle(
         fontSize = 20.sp,
-        lineHeight = 28.sp,
+        lineHeight = 30.sp,
         letterSpacing = 0.sp,
         fontFamily = Inter.bold
     ),

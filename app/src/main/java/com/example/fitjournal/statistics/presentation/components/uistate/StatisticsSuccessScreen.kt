@@ -1,7 +1,6 @@
 package com.example.fitjournal.statistics.presentation.components.uistate
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -151,9 +151,10 @@ private fun WorkoutName(name: String) {
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.bodyLarge
         )
-        Image(
+        Icon(
             painter = painterResource(id = R.drawable.ic_right_chevron),
-            contentDescription = stringResource(id = R.string.content_desc_navigate_to_add_workout_icon)
+            contentDescription = stringResource(id = R.string.content_desc_navigate_to_add_workout_icon),
+            tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }
