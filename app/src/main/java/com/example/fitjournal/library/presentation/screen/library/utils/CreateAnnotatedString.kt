@@ -8,7 +8,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 
 @Composable
-fun createAnnotatedString(
+fun CreateAnnotatedString(
     text: String,
     startIndex: Int = 0,
     endIndex: Int = text.length,
@@ -29,14 +29,7 @@ fun createAnnotatedString(
         )
 
         /**
-         * if customHighlighted word is not null then this is how you access the position of the highlighted substring
-         * inside the ClickableText Composable
-         * onClick = {offset ->
-         *                val item = annotatedString.getStringAnnotations("customHighlight", offset, offset).firstOrNull()?.item
-         *                if (item != null){
-         *                    Log.d("TAG: ", "THE CLICKABLE TEXT WAS CLICKED")
-         *                }
-         *            }
+         * Leaving annotation parameter empty as it is not used for now
          */
         if (customHighlightedText != null) {
             addStringAnnotation(
