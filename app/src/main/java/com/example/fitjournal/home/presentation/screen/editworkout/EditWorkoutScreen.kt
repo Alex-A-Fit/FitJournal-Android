@@ -305,6 +305,27 @@ fun EditWorkoutScreen(
                                     )
                                 }
                             }
+                        },
+                        showSaveButton = when (uiState.data.workoutDetailsModel.workoutTypeEnum) {
+                            WorkoutTypeEnum.WEIGHT_TRAINING -> {
+                                editWorkoutUiState.reps.isNotEmpty() &&
+                                    editWorkoutUiState.sets.isNotEmpty() &&
+                                    editWorkoutUiState.weight.isNotEmpty()
+                            }
+
+                            WorkoutTypeEnum.CALISTHENICS -> {
+                                editWorkoutUiState.reps.isNotEmpty() &&
+                                    editWorkoutUiState.sets.isNotEmpty()
+                            }
+
+                            WorkoutTypeEnum.CARDIO -> {
+                                editWorkoutUiState.distance.isNotEmpty() &&
+                                    (
+                                        editWorkoutUiState.hour.isNotEmpty() ||
+                                            editWorkoutUiState.minute.isNotEmpty() ||
+                                            editWorkoutUiState.second.isNotEmpty()
+                                        )
+                            }
                         }
                     )
                 }
