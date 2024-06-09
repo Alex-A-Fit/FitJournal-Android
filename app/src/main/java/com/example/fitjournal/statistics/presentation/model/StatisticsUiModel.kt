@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.fitjournal.core.domain.model.WorkoutModel
 import com.example.fitjournal.core.util.state.UiState
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategoryByJournal
+import com.example.fitjournal.library.presentation.model.WorkoutCategoryByJournal
 import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
 
 data class StatisticsUiModel(

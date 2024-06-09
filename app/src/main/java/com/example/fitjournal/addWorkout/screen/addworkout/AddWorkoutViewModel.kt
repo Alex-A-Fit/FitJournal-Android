@@ -13,7 +13,7 @@ import com.example.fitjournal.core.domain.model.WorkoutLibraryModel
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.util.filter.searchForText
-import com.example.fitjournal.library.presentation.screen.library.utils.mapToLibraryUiList
+import com.example.fitjournal.library.presentation.utils.mapToLibraryUiList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

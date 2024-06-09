@@ -1,4 +1,4 @@
-package com.example.fitjournal.library.presentation.screen.library.model
+package com.example.fitjournal.library.presentation.model
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.fitjournal.core.presentation.model.LibraryWorkoutItem

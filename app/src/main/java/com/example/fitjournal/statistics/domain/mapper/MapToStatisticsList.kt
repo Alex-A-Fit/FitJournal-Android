@@ -2,7 +2,7 @@ package com.example.fitjournal.statistics.domain.mapper
 
 import androidx.compose.runtime.toMutableStateList
 import com.example.fitjournal.core.domain.model.WorkoutModel
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutCategoryByJournal
+import com.example.fitjournal.library.presentation.model.WorkoutCategoryByJournal
 import java.util.SortedMap
 
 fun mapToStatisticsUiList(workoutMap: SortedMap<String, List<WorkoutModel>>): List<WorkoutCategoryByJournal> {

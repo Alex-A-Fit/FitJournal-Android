@@ -1,4 +1,4 @@
-package com.example.fitjournal.library.presentation.screen.library.components
+package com.example.fitjournal.library.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +44,7 @@ import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.theme.DisabledBackgroundGray
 import com.example.fitjournal.core.presentation.theme.MediumGray
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.library.presentation.screen.library.model.WorkoutItemDialogUiModel
+import com.example.fitjournal.library.presentation.model.WorkoutItemDialogUiModel
 
 typealias WorkoutName = String
 
