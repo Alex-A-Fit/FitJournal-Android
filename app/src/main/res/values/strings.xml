@@ -18,6 +18,7 @@
     <string name="content_desc_edit_workout_pencil_icon">Pencil icon to edit workout entry</string>
     <string name="content_desc_error_icon">Error icon to signify an error has occurred</string>d
     <string name="content_desc_journal_filled_icon">Journal Icon</string>
+    <string name="content_desc_bar_chart_icon">Bar Chart</string>
     <string name="content_desc_close_dialog_icon">X symbol to cancel dialog</string>
     <string name="content_desc_navigate_to_add_workout_icon">Right chevron to signify adding workout to journal</string>
     <string name="content_desc_distance_type_switch_icon">Icon to flip between miles and kilometers when entering distance</string>
@@ -54,6 +55,8 @@
     <string name="text_edit_workout_title">%1$s (%2$s)</string>
     <string name="title_delete_workout">Are you sure you want to delete \"%1$s\"</string>
     <string name="title_no_workouts_added">No workouts added yet</string>
+    <string name="title_no_workouts_in_library_for_add_workout">No workouts found in your library.\n Create a new workout below</string>
+    <string name="title_no_statistics_added">When you add to your Journal,\nYou will see your statistics here</string>
     <string name="title_all_time_pr">All Time PR</string>
     <string name="title_best_mile_times">Best Mile Times</string>
     <string name="title_rep_maxes">Rep Maxes</string>
@@ -134,7 +137,7 @@
     <string name="button_confirm">Confirm</string>
     <string name="button_create_workout">Create Workout</string>
     <string name="button_clear">Clear</string>
-    <string name="button_save_set">Save Set</string>
+    <string name="button_save_set">Save</string>
     <string name="button_save_workout">Save Workout</string>
     <string name="button_update_workout">Update Workout</string>
     <string name="button_delete">Delete</string>

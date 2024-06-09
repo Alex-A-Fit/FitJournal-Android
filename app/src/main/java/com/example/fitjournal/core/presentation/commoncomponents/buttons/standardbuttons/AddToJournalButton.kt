@@ -15,7 +15,8 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
 fun AddToJournalButton(
-    navigateToAddWorkoutScreen: () -> Unit
+    textId: Int = R.string.text_add_to_journal,
+    navigate: () -> Unit
 ) {
     Button(
         modifier = Modifier
@@ -25,10 +26,10 @@ fun AddToJournalButton(
                 color = MaterialTheme.colorScheme.primary,
                 shape = MaterialTheme.shapes.large
             ),
-        onClick = { navigateToAddWorkoutScreen() }
+        onClick = { navigate() }
     ) {
         Text(
-            text = stringResource(id = R.string.text_add_to_journal),
+            text = stringResource(id = textId),
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .fillMaxWidth()

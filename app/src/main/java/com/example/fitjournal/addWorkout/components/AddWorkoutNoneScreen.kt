@@ -1,4 +1,4 @@
-package com.example.fitjournal.home.presentation.screen.home
+package com.example.fitjournal.addWorkout.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,9 +20,9 @@ import com.example.fitjournal.core.presentation.commoncomponents.buttons.standar
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
-fun HomeEmptyScreen(
+fun AddWorkoutNoneScreen(
     modifier: Modifier,
-    navigateToAddWorkoutScreen: () -> Unit
+    openAddWorkoutToLibraryDialog: () -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -37,14 +37,15 @@ fun HomeEmptyScreen(
         )
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         Text(
-            text = stringResource(id = R.string.title_no_workouts_added),
+            text = stringResource(id = R.string.title_no_workouts_in_library_for_add_workout),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         AddToJournalButton(
-            navigate = navigateToAddWorkoutScreen
+            textId = R.string.text_add_to_library,
+            navigate = openAddWorkoutToLibraryDialog
         )
     }
 }

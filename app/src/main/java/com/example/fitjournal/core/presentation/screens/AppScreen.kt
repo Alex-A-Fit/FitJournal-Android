@@ -72,7 +72,6 @@ fun AppScreen(
                 )
                 showWorkoutDialog = false
             }
-
         )
     }
     Scaffold(

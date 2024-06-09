@@ -1,4 +1,4 @@
-package com.example.fitjournal.home.presentation.screen.home
+package com.example.fitjournal.statistics.presentation.components.uistate
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,7 @@ import com.example.fitjournal.core.presentation.commoncomponents.buttons.standar
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
-fun HomeEmptyScreen(
+fun StatisticsNoneScreen(
     modifier: Modifier,
     navigateToAddWorkoutScreen: () -> Unit
 ) {
@@ -30,14 +30,14 @@ fun HomeEmptyScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.icon_journal),
-            contentDescription = stringResource(id = R.string.content_desc_journal_filled_icon),
+            painter = painterResource(id = R.drawable.icon_bar_chart),
+            contentDescription = stringResource(id = R.string.content_desc_bar_chart_icon),
             modifier = Modifier.size(Spacing.spacing128),
             tint = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         Text(
-            text = stringResource(id = R.string.title_no_workouts_added),
+            text = stringResource(id = R.string.title_no_statistics_added),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
