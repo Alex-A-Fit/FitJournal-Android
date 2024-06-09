@@ -160,6 +160,7 @@ fun LibraryScreen(
                 focusManager = focusManager
             )
             ClickableText(
+                modifier = Modifier.padding(vertical = Spacing.spacing4),
                 text = annotatedString,
                 onClick = {
                     Log.d("LibraryScreen: ", "THE CLICKABLE TEXT WAS CLICKED")
