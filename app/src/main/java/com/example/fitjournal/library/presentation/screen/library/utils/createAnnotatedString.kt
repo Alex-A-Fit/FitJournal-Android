@@ -8,7 +8,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 
 @Composable
-fun CreateAnnotatedString(
+fun createAnnotatedString(
     text: String,
     startIndex: Int = 0,
     endIndex: Int = text.length,

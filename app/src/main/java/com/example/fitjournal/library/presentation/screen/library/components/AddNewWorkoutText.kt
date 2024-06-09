@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.theme.Spacing
-import com.example.fitjournal.library.presentation.screen.library.utils.CreateAnnotatedString
+import com.example.fitjournal.library.presentation.screen.library.utils.createAnnotatedString
 
 @Composable
 fun AddNewWorkoutText() {
@@ -22,7 +22,7 @@ fun AddNewWorkoutText() {
      *                }
      *            }
      */
-    val annotatedString = CreateAnnotatedString(text = stringResource(id = R.string.text_add_to_workout))
+    val annotatedString = createAnnotatedString(text = stringResource(id = R.string.text_add_to_workout))
 
     ClickableText(
         modifier = Modifier.padding(bottom = Spacing.spacing8),
