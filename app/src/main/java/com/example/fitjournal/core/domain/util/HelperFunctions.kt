@@ -4,9 +4,7 @@ import co.yml.charts.common.model.Point
 import com.example.fitjournal.core.util.constants.Constants.STANDARD_DATE_FORMATTER
 import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
 import com.example.fitjournal.statistics.domain.model.GraphValues
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 
 object HelperFunctions {
     fun parseDate(date: String): LocalDate {
