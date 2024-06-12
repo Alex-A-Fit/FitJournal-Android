@@ -13,13 +13,6 @@ object HelperFunctions {
         return LocalDate.parse(date, STANDARD_DATE_FORMATTER)
     }
 
-    fun getDateStringFromEpochDays(epochDays: Float): String {
-        val epochMillis = epochDays * 24F * 60F * 60F * 1000F
-        val localDate =
-            Instant.ofEpochMilli(epochMillis.toLong()).atZone(ZoneId.systemDefault()).toLocalDate()
-        return localDate.format(STANDARD_DATE_FORMATTER)
-    }
-
     // filtering graph points to get a total of 7 points to not have too many points in the graph
     // if less than 7 points, return all points
     // if only one point exists, return 2 points, one of em being 0,0
@@ -57,7 +50,6 @@ object HelperFunctions {
         }
         if (filteredList.isNullOrEmpty()) return null
         var count = 0
-        var lastKnownDate: String = ""
         return filteredList.sortedWith(
             compareBy(
                 { if (it.date.isNotEmpty()) parseDate(it.date) else LocalDate.of(1900, 1, 1) },
