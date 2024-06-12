@@ -60,7 +60,7 @@ object HelperFunctions {
         var lastKnownDate: String = ""
         return filteredList.sortedWith(
             compareBy(
-                { it.date },
+                { if (it.date.isNotEmpty()) parseDate(it.date) else LocalDate.of(1900, 1, 1) },
                 { it.point.y }
             )
         ).map {
