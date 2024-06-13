@@ -4,20 +4,11 @@ import co.yml.charts.common.model.Point
 import com.example.fitjournal.core.util.constants.Constants.STANDARD_DATE_FORMATTER
 import com.example.fitjournal.core.util.extensions.roundToTwoDecimalPlaces
 import com.example.fitjournal.statistics.domain.model.GraphValues
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 
 object HelperFunctions {
     fun parseDate(date: String): LocalDate {
         return LocalDate.parse(date, STANDARD_DATE_FORMATTER)
-    }
-
-    fun getDateStringFromEpochDays(epochDays: Float): String {
-        val epochMillis = epochDays * 24F * 60F * 60F * 1000F
-        val localDate =
-            Instant.ofEpochMilli(epochMillis.toLong()).atZone(ZoneId.systemDefault()).toLocalDate()
-        return localDate.format(STANDARD_DATE_FORMATTER)
     }
 
     // filtering graph points to get a total of 7 points to not have too many points in the graph
@@ -57,10 +48,9 @@ object HelperFunctions {
         }
         if (filteredList.isNullOrEmpty()) return null
         var count = 0
-        var lastKnownDate: String = ""
         return filteredList.sortedWith(
             compareBy(
-                { it.date },
+                { if (it.date.isNotEmpty()) parseDate(it.date) else LocalDate.of(1900, 1, 1) },
                 { it.point.y }
             )
         ).map {
