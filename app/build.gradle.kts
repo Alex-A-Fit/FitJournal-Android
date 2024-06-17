@@ -101,5 +101,4 @@ dependencies {
 
     // Google Ads (AdMob)
     implementation("com.google.android.gms:play-services-ads:23.1.0")
-
 }
