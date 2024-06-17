@@ -36,7 +36,7 @@ import com.example.fitjournal.addWorkout.screen.addworkout.details.AddWorkoutDet
 import com.example.fitjournal.addWorkout.screen.addworkout.details.AddWorkoutDetailViewModel
 import com.example.fitjournal.core.presentation.commoncomponents.appbars.TopAppBar
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.iconbuttons.NavigateUpIconButton
-import com.example.fitjournal.core.presentation.commoncomponents.icons.FilterIcon
+import com.example.fitjournal.core.presentation.commoncomponents.icons.HelpIcon
 import com.example.fitjournal.core.presentation.navigation.Arguments
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.navigation.Route
@@ -147,9 +147,9 @@ class MainActivity : ComponentActivity() {
                                                 },
                                                 modifier = Modifier.fillMaxWidth(),
                                                 endAlignedActionIcon = {
-                                                    FilterIcon(
+                                                    HelpIcon(
                                                         modifier = Modifier.size(Spacing.spacing32),
-                                                        contentDescription = stringResource(id = R.string.content_desc_home_screen_filter_icon),
+                                                        contentDescription = stringResource(id = R.string.content_desc_home_screen_help_icon),
                                                         onClick = {}
                                                     )
                                                 }

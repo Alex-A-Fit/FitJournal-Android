@@ -16,7 +16,7 @@ data class HomeScreenUiState(
     val currentDate: String = GeneralConstants.todayDate,
     val currentDateInMillis: Long = GeneralConstants.todayDateTimeInMilli,
     val isDatePickerDialogShowing: Boolean = false,
-    val isFilterDialogShowing: Boolean = false,
+    val isHelpDialogShowing: Boolean = false,
     val filterList: SnapshotStateList<FilterWorkoutUiModel> = HomeScreenFilter.filterList,
     // all workouts ever inputted
     val masterListOfWorkouts: List<WorkoutModel>? = null,

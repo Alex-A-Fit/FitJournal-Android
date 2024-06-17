@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.appbars.TopAppBar
-import com.example.fitjournal.core.presentation.commoncomponents.icons.FilterIcon
+import com.example.fitjournal.core.presentation.commoncomponents.icons.HelpIcon
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.datepicker.FitJournalDatePicker
 import com.example.fitjournal.home.presentation.model.events.HomeAppBarEvents
@@ -28,10 +28,10 @@ fun HomeTopAppBar(
         },
         modifier = Modifier.fillMaxWidth(),
         endAlignedActionIcon = {
-            FilterIcon(
+            HelpIcon(
                 modifier = Modifier.size(Spacing.spacing32),
-                contentDescription = stringResource(id = R.string.content_desc_home_screen_filter_icon),
-                onClick = { homeAppBarEvents(HomeAppBarEvents.ShowFilterDialog()) }
+                contentDescription = stringResource(id = R.string.content_desc_home_screen_help_icon),
+                onClick = { homeAppBarEvents(HomeAppBarEvents.ShowHelpDialog()) }
             )
         }
     )

@@ -40,17 +40,12 @@ class HomeScreenViewModel @Inject constructor(
                 getSelectedDate(events.userSelectedDate)
             }
 
-            is HomeScreenEvents.UpdateFilterDialog -> updateFilterDialog(
-                isFilterDialogShowing = events.isDialogShowing
-            )
-
-            is HomeScreenEvents.OnConfirmFilterExercisesDialog -> filterWorkouts(
-                events.filterList
-            )
-
-            HomeScreenEvents.DismissFilterExercisesDialog -> updateFilterDialog(
-                isFilterDialogShowing = false
-            )
+            is HomeScreenEvents.UpdateHelpDialog -> {
+                updateHelpDialog(
+                    showHelpDialog = events.isDialogShowing
+                )
+                events.onCallback.invoke()
+            }
 
             HomeScreenEvents.DismissDatePicker -> updateDatePickerDialog(
                 isDatePickerShowing = false
@@ -59,7 +54,8 @@ class HomeScreenViewModel @Inject constructor(
             HomeScreenEvents.ClearFilterExercisesDialog -> clearFilter()
             HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> getDataFromRealmDb()
             HomeScreenEvents.SyncRealmWorkoutEntryFromDb -> {
-                val shouldSyncOccur = realmWorkoutEntryUseCase.syncWorkoutEntryDbWithViewModelUseCase()
+                val shouldSyncOccur =
+                    realmWorkoutEntryUseCase.syncWorkoutEntryDbWithViewModelUseCase()
                 if (shouldSyncOccur) {
                     getDataFromRealmDb()
                 }
@@ -75,8 +71,8 @@ class HomeScreenViewModel @Inject constructor(
                 isDatePickerShowing = events.showDialog
             )
 
-            is HomeAppBarEvents.ShowFilterDialog -> updateFilterDialog(
-                isFilterDialogShowing = events.showDialog
+            is HomeAppBarEvents.ShowHelpDialog -> updateHelpDialog(
+                showHelpDialog = events.showDialog
             )
         }
     }
@@ -152,8 +148,8 @@ class HomeScreenViewModel @Inject constructor(
         updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isDatePickerDialogShowing = isDatePickerShowing))
     }
 
-    private fun updateFilterDialog(isFilterDialogShowing: Boolean) {
-        updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isFilterDialogShowing = isFilterDialogShowing))
+    private fun updateHelpDialog(showHelpDialog: Boolean) {
+        updateHomeScreenState(newHomeScreenState = homeScreenState.copy(isHelpDialogShowing = showHelpDialog))
     }
 
     private fun updateHomeScreenState(newHomeScreenState: HomeScreenUiState) {
