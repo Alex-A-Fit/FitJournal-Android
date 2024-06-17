@@ -21,13 +21,14 @@ import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.home.presentation.components.card.WeightLiftingCard
 import com.example.fitjournal.home.presentation.model.ui.WeightLiftingUi
 import com.example.fitjournal.onboarding.presentation.component.TypewriterText
+import com.example.fitjournal.onboarding.presentation.component.carouselcircles.CarouselCircles
+import com.example.fitjournal.onboarding.presentation.model.OnboardingSections
 
 @Composable
 fun JournalSection(
     modifier: Modifier = Modifier,
     navigateToLibrary: () -> Unit
 ) {
-
     var showButton by rememberSaveable {
         mutableStateOf(false)
     }
@@ -75,6 +76,18 @@ fun JournalSection(
             ) {
                 navigateToLibrary()
             }
+        }
+        Spacer(modifier = Modifier.height(Spacing.spacing48))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CarouselCircles(
+                currentOnboardingSection = OnboardingSections.JournalSection,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(Spacing.spacing64))
         }
     }
 }

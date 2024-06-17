@@ -399,13 +399,7 @@ class MainActivity : ComponentActivity() {
                                 mainScreen = { mainScreenModifier ->
                                     StatisticsDetailsScreen(
                                         statisticsDetailsUiState = statisticsDetailsViewModel.statisticsDetailsUiState,
-                                        modifier = mainScreenModifier.fillMaxSize(),
-                                        navigateToDestination = {
-                                            navigateToDestination(
-                                                navigationInterface = it,
-                                                navController = navController
-                                            )
-                                        }
+                                        modifier = mainScreenModifier.fillMaxSize()
                                     )
                                 },
                                 topAppBar = {

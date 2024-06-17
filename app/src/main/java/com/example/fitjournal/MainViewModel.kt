@@ -1,8 +1,5 @@
 package com.example.fitjournal
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.data.repository.OnboardingTutorialRepositoryImpl
@@ -60,13 +57,14 @@ class MainViewModel @Inject constructor(
         errorCallback: suspend () -> Unit
     ) {
         viewModelScope.launch {
-            val wasLibraryItemAdded = realmWorkoutLibraryUseCase.addSingleLibraryItemToRealmDbUseCase(
-                workoutLibraryModel = WorkoutLibraryModel(
-                    name = workoutName,
-                    workoutType = workoutType,
-                    workoutTypeEnum = workoutTypeEnum
+            val wasLibraryItemAdded =
+                realmWorkoutLibraryUseCase.addSingleLibraryItemToRealmDbUseCase(
+                    workoutLibraryModel = WorkoutLibraryModel(
+                        name = workoutName,
+                        workoutType = workoutType,
+                        workoutTypeEnum = workoutTypeEnum
+                    )
                 )
-            )
             if (wasLibraryItemAdded) {
                 successCallback()
             } else {
@@ -74,9 +72,4 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-}
-
-sealed interface MainActivityUiState {
-    data object Loading : MainActivityUiState
-    data object Success : MainActivityUiState
 }

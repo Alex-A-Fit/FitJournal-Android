@@ -360,8 +360,7 @@ private fun getGraphDataForCardio(workoutList: List<WorkoutModel>): GraphData {
                 if (totalHours == Zero.DOUBLE) {
                     null
                 } else {
-                    cardioModel?.distance?.div(totalHours)
-                        ?.roundToTwoDecimalPlaces()
+                    cardioModel.distance.div(totalHours).roundToTwoDecimalPlaces()
                 }
             if (averageSpeed != null) {
                 averageSpeedsForAllWorkoutsForToday.add(averageSpeed)

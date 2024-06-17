@@ -73,8 +73,8 @@ fun StatisticsSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(
-                    min = Spacing.spacing300,
-                    max = Spacing.spacing400
+                    min = Spacing.spacing200,
+                    max = Spacing.spacing300
                 )
         )
         Spacer(modifier = Modifier.height(Spacing.spacing32))
@@ -85,7 +85,8 @@ fun StatisticsSection(
         if (showButton) {
             SaveButton(
                 text = stringResource(id = R.string.button_proceed_to_outro),
-                textModifier = Modifier.padding(
+                textModifier = Modifier
+                    .padding(
                     horizontal = Spacing.spacing32,
                     vertical = Spacing.spacing4
                 ),
@@ -94,7 +95,7 @@ fun StatisticsSection(
                 navigateToEndOfTutorial()
             }
         }
-        Spacer(modifier = Modifier.height(Spacing.spacing32))
+        Spacer(modifier = Modifier.height(Spacing.spacing48))
         Column(
             modifier = Modifier
                 .fillMaxWidth(),

@@ -14,8 +14,7 @@ import com.example.fitjournal.statistics.presentation.model.StatisticsDetailsUiM
 @Composable
 fun StatisticsDetailsScreen(
     modifier: Modifier,
-    statisticsDetailsUiState: StatisticsDetailsUiModel,
-    navigateToDestination: (NavigationInterface) -> Unit
+    statisticsDetailsUiState: StatisticsDetailsUiModel
 ) {
     val rememberScrollState = rememberScrollState()
     when (val uiState = statisticsDetailsUiState.workoutStatisticsDetailsUiState) {

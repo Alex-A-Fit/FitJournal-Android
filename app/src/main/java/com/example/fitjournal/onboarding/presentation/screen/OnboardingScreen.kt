@@ -1,7 +1,6 @@
 package com.example.fitjournal.onboarding.presentation.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,7 +35,7 @@ fun OnboardingScreen(
 ) {
     val gradient = Brush.linearGradient(
         0.0f to MaterialTheme.colorScheme.primary,
-        0.8f to White,
+        0.9f to White,
         1.0f to White,
         start = Offset.Zero,
         end = Offset.Infinite
@@ -46,6 +45,7 @@ fun OnboardingScreen(
         modifier = if (onboardSectionToDisplay == OnboardingSections.Intro || onboardSectionToDisplay == OnboardingSections.End) {
             modifier
                 .background(gradient)
+                .fillMaxSize()
         } else {
             modifier
         }
@@ -105,20 +105,19 @@ fun OnboardingScreen(
                 )
             }
         }
-        if (onboardSectionToDisplay != OnboardingSections.StatsSection) {
+        if (onboardSectionToDisplay == OnboardingSections.Intro || onboardSectionToDisplay == OnboardingSections.End) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
-                verticalArrangement = Arrangement.Center
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth(),
             ) {
                 CarouselCircles(
-                    currentOnboardingSection = onboardSectionToDisplay,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    currentOnboardingSection = OnboardingSections.Intro,
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(Spacing.spacing64))
             }
         }
     }
+
 }

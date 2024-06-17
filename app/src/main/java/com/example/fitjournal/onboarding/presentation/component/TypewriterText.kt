@@ -25,7 +25,7 @@ fun TypewriterText(
     LaunchedEffect(key1 = Unit) {
         for (i in 1..text.length) {
             displayText = text.substring(0, i)
-            delay(30)
+            delay(20)
         }
         delay(2000)
         onTextEffectComplete()

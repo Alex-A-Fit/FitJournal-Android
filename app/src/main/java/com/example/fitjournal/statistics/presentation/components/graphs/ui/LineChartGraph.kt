@@ -39,8 +39,8 @@ fun LineChartGraph(
     graphData: List<GraphValues>?,
     stringForGraphPopUp: (String, Float) -> String,
     yAxisSuffixLabel: String,
+    modifier: Modifier = Modifier,
     convertYaxisValue: (Double) -> Int = { it.roundToInt() },
-    modifier: Modifier = Modifier
 ) {
     if (graphData == null) {
         GraphErrorSection()

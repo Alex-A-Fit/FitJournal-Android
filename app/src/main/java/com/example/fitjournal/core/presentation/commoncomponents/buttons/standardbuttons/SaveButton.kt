@@ -7,6 +7,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.core.presentation.theme.SuccessGreen
 import com.example.fitjournal.core.presentation.theme.White
 
@@ -34,7 +35,8 @@ fun SaveButton(
         Text(
             text = text,
             style = textStyle,
-            modifier = textModifier
+            modifier = textModifier,
+            textAlign = TextAlign.Center
         )
     }
 }

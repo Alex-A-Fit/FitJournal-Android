@@ -11,8 +11,6 @@ object Spacing {
     val spacing8 = 8.dp
     val spacing12 = 12.dp
     val spacing16 = 16.dp
-    val spacing18 = 18.dp
-    val spacing20 = 20.dp
     val spacing24 = 24.dp
     val spacing32 = 32.dp
     val spacing48 = 48.dp
@@ -24,7 +22,6 @@ object Spacing {
     val spacing200 = 200.dp
     val spacing250 = 250.dp
     val spacing300 = 300.dp
-    val spacing400 = 400.dp
     val spacing500 = 500.dp
     val blurDensity0 = 0.dp
     val blurDensity10 = 10.dp

@@ -73,8 +73,6 @@ class LibraryScreenViewModel @Inject constructor(
             is LibraryWorkoutClickEvents.DeleteLibraryWorkout -> {
                 val workoutName =
                     libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutName
-                val libraryWorkoutItem =
-                    libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem
                 val categoryIndex =
                     libraryWorkoutState.workoutItemDialogUiModel.workoutCategoryIndex
                 viewModelScope.launch {

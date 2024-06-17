@@ -33,6 +33,8 @@ import com.example.fitjournal.core.presentation.utils.determineFocusColor
 import com.example.fitjournal.library.presentation.components.AddNewWorkoutText
 import com.example.fitjournal.library.presentation.components.ExerciseItem
 import com.example.fitjournal.onboarding.presentation.component.TypewriterText
+import com.example.fitjournal.onboarding.presentation.component.carouselcircles.CarouselCircles
+import com.example.fitjournal.onboarding.presentation.model.OnboardingSections
 
 @Composable
 fun LibrarySection(
@@ -110,6 +112,18 @@ fun LibrarySection(
                     navigateToStatistics()
                 }
             }
+        }
+        Spacer(modifier = Modifier.height(Spacing.spacing48))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CarouselCircles(
+                currentOnboardingSection = OnboardingSections.LibrarySection,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(Spacing.spacing64))
         }
     }
 }
