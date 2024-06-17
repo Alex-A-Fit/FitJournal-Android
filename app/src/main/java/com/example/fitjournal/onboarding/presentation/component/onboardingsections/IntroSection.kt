@@ -11,8 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.SaveButton
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.onboarding.presentation.model.OnboardingSections
@@ -29,7 +31,7 @@ fun IntroSection(
     ) {
         Spacer(modifier = Modifier.height(Spacing.spacing64))
         Text(
-            text = "Welcome to Fit Journal!",
+            text = stringResource(id = R.string.title_onboarding_intro),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
@@ -37,7 +39,7 @@ fun IntroSection(
         )
         Spacer(modifier = Modifier.height(Spacing.spacing24))
         Text(
-            text = "Let's quickly go through how to track your workouts and crush your goals.",
+            text = stringResource(id = R.string.subtitle_onboarding_intro),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
@@ -45,7 +47,7 @@ fun IntroSection(
         )
         Spacer(modifier = Modifier.height(Spacing.spacing32))
         Text(
-            text = "Click 'Start' to begin!",
+            text = stringResource(id = R.string.text_onboarding_intro),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
@@ -53,7 +55,7 @@ fun IntroSection(
         )
         Spacer(modifier = Modifier.height(Spacing.spacing32))
         SaveButton(
-            text = "Start",
+            text = stringResource(id = R.string.button_start),
             textModifier = Modifier.padding(
                 horizontal = Spacing.spacing32,
                 vertical = Spacing.spacing4

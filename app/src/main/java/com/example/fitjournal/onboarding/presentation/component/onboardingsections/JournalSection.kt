@@ -13,6 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.AddToJournalButton
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.SaveButton
@@ -26,11 +27,9 @@ fun JournalSection(
     modifier: Modifier = Modifier,
     navigateToLibrary: () -> Unit
 ) {
-    val journalSummaryText =
-        "This is your personal workout log, providing a comprehensive overview of your exercise activity. You have full control to add, modify, or remove entries as needed."
 
     var showButton by rememberSaveable {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     Column(
@@ -43,7 +42,7 @@ fun JournalSection(
                 sets = 2,
                 weight = 100.0,
                 weightInKgs = 220.0,
-                name = "Squats",
+                name = stringResource(id = R.string.text_squats),
                 icon = R.drawable.icon_dumbell
             ),
             modifier = Modifier
@@ -56,7 +55,7 @@ fun JournalSection(
             isEnabled = false
         )
         TypewriterText(
-            text = journalSummaryText,
+            text = stringResource(id = R.string.text_onboarding_typewriter_text_journal),
             onTextEffectComplete = {
                 showButton = true
             },
@@ -67,7 +66,7 @@ fun JournalSection(
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         if (showButton) {
             SaveButton(
-                text = "View Library",
+                text = stringResource(id = R.string.button_view_library),
                 textModifier = Modifier.padding(
                     horizontal = Spacing.spacing32,
                     vertical = Spacing.spacing4

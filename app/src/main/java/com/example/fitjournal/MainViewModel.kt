@@ -24,9 +24,6 @@ class MainViewModel @Inject constructor(
     private val onboardingTutorialRepository: OnboardingTutorialRepositoryImpl
 ) : ViewModel() {
 
-    var appScreenState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
-        private set
-
     val isThisUserFirstTimeUsingApp: MutableStateFlow<Boolean> = MutableStateFlow(true)
 
     // For now until we create check for fetching realm,

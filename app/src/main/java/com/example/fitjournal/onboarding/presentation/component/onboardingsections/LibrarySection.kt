@@ -38,10 +38,8 @@ import com.example.fitjournal.onboarding.presentation.component.TypewriterText
 fun LibrarySection(
     navigateToStatistics: () -> Unit
 ) {
-    val libraryText =
-        "This is your Workout Library. Here You can create, edit, or delete workouts that can later be added to your journal. You need to have workouts in your library in order to add them to your journal."
     var showButton by rememberSaveable {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     Column(
@@ -85,14 +83,16 @@ fun LibrarySection(
         )
         CategoryHeader(text = "S")
         ExerciseItem(
-            exercise = "Squats",
+            exercise = stringResource(id = R.string.text_squats),
             showEditLibraryWorkoutDialog = {},
             workoutOnClick = {},
             isBlurActive = false,
             removeBlur = {}
         )
         Spacer(modifier = Modifier.height(Spacing.spacing32))
-        TypewriterText(text = libraryText, onTextEffectComplete = { /*TODO*/ })
+        TypewriterText(
+            text = stringResource(id = R.string.text_onboarding_typewriter_text_library),
+            onTextEffectComplete = { showButton = true })
         Spacer(modifier = Modifier.height(Spacing.spacing32))
         if (showButton) {
             Column(
@@ -100,7 +100,7 @@ fun LibrarySection(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SaveButton(
-                    text = "View Statistics",
+                    text = stringResource(id = R.string.button_view_statistics),
                     textModifier = Modifier.padding(
                         horizontal = Spacing.spacing32,
                         vertical = Spacing.spacing4

@@ -15,7 +15,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import co.yml.charts.common.model.Point
+import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.SaveButton
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.localdate.formatToCommonDate
@@ -37,16 +39,14 @@ fun StatisticsSection(
     modifier: Modifier = Modifier,
     navigateToEndOfTutorial: () -> Unit
 ) {
-    val statsText =
-        "On the Statistics Screen, you can view your overall progress on your fitness journey. Different workout types will show different data!"
     var showButton by rememberSaveable {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        WorkoutNameTitle(workoutName = "Squats")
+        WorkoutNameTitle(workoutName = stringResource(id = R.string.text_squats))
         StatisticsTabRow(
             timeRangeOfWorkouts = TimeRangeEnum.WEEK.ordinal,
             getStatsBasedOnTimeSelected = {}
@@ -73,16 +73,18 @@ fun StatisticsSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(
-                    min = Spacing.spacing200,
-                    max = Spacing.spacing300
+                    min = Spacing.spacing300,
+                    max = Spacing.spacing400
                 )
         )
         Spacer(modifier = Modifier.height(Spacing.spacing32))
-        TypewriterText(text = statsText, onTextEffectComplete = { /*TODO*/ })
+        TypewriterText(
+            text = stringResource(id = R.string.text_onboarding_typewriter_text_statistics),
+            onTextEffectComplete = { showButton = true })
         Spacer(modifier = Modifier.height(Spacing.spacing32))
         if (showButton) {
             SaveButton(
-                text = "Proceed to End of Tutorial",
+                text = stringResource(id = R.string.button_proceed_to_outro),
                 textModifier = Modifier.padding(
                     horizontal = Spacing.spacing32,
                     vertical = Spacing.spacing4

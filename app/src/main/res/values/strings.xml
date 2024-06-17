@@ -68,12 +68,17 @@
     <string name="title_date_vs_average_speed">Date vs Average Speed</string>
     <string name="title_date_vs_weight_lifted">Date vs Weight Lifted</string>
     <string name="title_date_vs_total_volume">Date Vs Total Volume</string>
+    <string name="title_onboarding_intro">Welcome to Fit Journal!</string>
+    <string name="title_onboarding_outro">End of Tutorial</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>
     <string name="subtitle_create_new_workout">Create a new workout to add to your library</string>
     <string name="subtitle_update_workout">Update your workout below</string>
     <string name="subtitle_workout_type">Current Workout Type:</string>
+    <string name="subtitle_onboarding_intro">Let\'s quickly go through how to track your workouts and crush your goals.</string>
+    <string name="subtitle_onboarding_outro_part_1">Take control of your fitness journey with Fit Journal, the simple and effective way to track your daily workouts.</string>
+    <string name="subtitle_onboarding_outro_part_2">For further assistance, refer to the help icon in the top-right corner of your Journal.</string>
     <string name="subtitle_delete_workout">on %1$s?</string>
 
     // General Strings
@@ -105,6 +110,11 @@
     <string name="text_total_weight_with_label">%1$s lbs</string>
     <string name="text_add_to_workout">Can\'t find a workout? Create one here</string>
     <string name="text_add_to_workout_custom_highlight">here</string>
+    <string name="text_squats">Squats</string>
+    <string name="text_onboarding_intro">Click \'Start\' to begin!</string>
+    <string name="text_onboarding_typewriter_text_journal">This is your personal workout journal, providing a comprehensive overview of your exercise activity. You have full control to add, modify, or remove entries as needed.</string>
+    <string name="text_onboarding_typewriter_text_library">Your workout journal is powered by your Workout Library. Create and customize your workouts here, then seamlessly add them to your journal for tracking.</string>
+    <string name="text_onboarding_typewriter_text_statistics">The Statistics screen provides a comprehensive overview of your fitness progress, with tailored insights for each type of workout you log.</string>
 
 
     // labels
@@ -146,6 +156,11 @@
     <string name="button_delete">Delete</string>
     <string name="button_delete_workout">Delete Workout</string>
     <string name="button_add_to_journal">Add to Journal</string>
+    <string name="button_start">Start</string>
+    <string name="button_view_library">View Library</string>
+    <string name="button_view_statistics">View Statistics</string>
+    <string name="button_proceed_to_outro">Proceed to End of Tutorial</string>
+    <string name="button_onboarding_outro">Proceed to Fit Journal</string>
 
     // Success Strings
     <string name="text_workout_successfully_added_to_library">\"%1$s\" was added to your Library!</string>

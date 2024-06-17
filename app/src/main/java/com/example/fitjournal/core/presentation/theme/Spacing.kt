@@ -24,6 +24,7 @@ object Spacing {
     val spacing200 = 200.dp
     val spacing250 = 250.dp
     val spacing300 = 300.dp
+    val spacing400 = 400.dp
     val spacing500 = 500.dp
     val blurDensity0 = 0.dp
     val blurDensity10 = 10.dp
