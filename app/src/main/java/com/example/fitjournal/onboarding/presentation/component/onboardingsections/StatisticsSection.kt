@@ -80,16 +80,17 @@ fun StatisticsSection(
         Spacer(modifier = Modifier.height(Spacing.spacing32))
         TypewriterText(
             text = stringResource(id = R.string.text_onboarding_typewriter_text_statistics),
-            onTextEffectComplete = { showButton = true })
+            onTextEffectComplete = { showButton = true }
+        )
         Spacer(modifier = Modifier.height(Spacing.spacing32))
         if (showButton) {
             SaveButton(
                 text = stringResource(id = R.string.button_proceed_to_outro),
                 textModifier = Modifier
                     .padding(
-                    horizontal = Spacing.spacing32,
-                    vertical = Spacing.spacing4
-                ),
+                        horizontal = Spacing.spacing32,
+                        vertical = Spacing.spacing4
+                    ),
                 textStyle = MaterialTheme.typography.headlineMedium
             ) {
                 navigateToEndOfTutorial()

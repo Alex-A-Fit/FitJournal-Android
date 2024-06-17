@@ -109,7 +109,7 @@ fun OnboardingScreen(
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             ) {
                 CarouselCircles(
                     currentOnboardingSection = OnboardingSections.Intro,
@@ -119,5 +119,4 @@ fun OnboardingScreen(
             }
         }
     }
-
 }

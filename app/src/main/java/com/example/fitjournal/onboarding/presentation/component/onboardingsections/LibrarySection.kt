@@ -94,7 +94,8 @@ fun LibrarySection(
         Spacer(modifier = Modifier.height(Spacing.spacing32))
         TypewriterText(
             text = stringResource(id = R.string.text_onboarding_typewriter_text_library),
-            onTextEffectComplete = { showButton = true })
+            onTextEffectComplete = { showButton = true }
+        )
         Spacer(modifier = Modifier.height(Spacing.spacing32))
         if (showButton) {
             Column(

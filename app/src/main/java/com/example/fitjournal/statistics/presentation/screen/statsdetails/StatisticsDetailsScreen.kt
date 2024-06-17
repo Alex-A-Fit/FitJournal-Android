@@ -4,7 +4,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.screens.LoadingScreen
 import com.example.fitjournal.core.util.state.UiState
 import com.example.fitjournal.statistics.presentation.components.uistate.StatisticsDetailsSuccessScreen
