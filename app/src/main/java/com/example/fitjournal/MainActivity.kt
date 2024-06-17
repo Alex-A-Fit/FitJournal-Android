@@ -186,7 +186,8 @@ class MainActivity : ComponentActivity() {
                                 },
                                 navController = navController,
                                 bottomBarVisibility = bottomBarVisibility.value,
-                                showMainFabIcon = false
+                                showMainFabIcon = false,
+                                showAds = false
                             )
                         }
                         composable(Route.WORKOUT_LIBRARY_SCREEN) {

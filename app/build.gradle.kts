@@ -78,6 +78,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.6.8")
     implementation("androidx.compose.ui:ui-graphics:1.6.8")
     implementation("androidx.compose.ui:ui-tooling-preview:1.6.8")
+    implementation("androidx.window:window:1.3.0")
 
     /* Material */
     implementation("androidx.compose.animation:animation:1.6.8")
@@ -97,4 +98,8 @@ dependencies {
 
     // YCharts for graphing data
     implementation("co.yml:ycharts:2.1.0")
+
+    // Google Ads (AdMob)
+    implementation("com.google.android.gms:play-services-ads:23.1.0")
+
 }
