@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.fitjournal.core.data.repository.OnboardingTutorialRepositoryImpl
 import com.example.fitjournal.core.domain.model.WorkoutLibraryModel
 import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibraryUseCase
-import com.example.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,22 +15,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val realmWorkoutEntryUseCase: RealmWorkoutEntryUseCase,
     private val realmWorkoutLibraryUseCase: RealmWorkoutLibraryUseCase,
     private val onboardingTutorialRepository: OnboardingTutorialRepositoryImpl
 ) : ViewModel() {
 
     val isThisUserFirstTimeUsingApp: MutableStateFlow<Boolean> = MutableStateFlow(true)
 
-    // For now until we create check for fetching realm,
-    // flip boolean to true to create mock data and fetch from realm
-    // flip boolean to false to ONLY fetch mock data from realm
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            realmWorkoutLibraryUseCase.createMockDataOfRealmWorkoutLibraryUseCase()
-
             onboardingTutorialRepository.getHasUserSeenTutorial().collectLatest {
                 val hasUserSeenTutorial = it ?: false
+                if (!hasUserSeenTutorial) {
+                    realmWorkoutLibraryUseCase.createMockDataOfRealmWorkoutLibraryUseCase()
+                }
                 isThisUserFirstTimeUsingApp.value = !hasUserSeenTutorial
             }
         }
