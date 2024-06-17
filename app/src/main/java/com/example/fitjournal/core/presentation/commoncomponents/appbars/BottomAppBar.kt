@@ -42,7 +42,11 @@ fun BottomAppBar(
 
             NavigationBarItem(
                 selected = false,
-                onClick = { navigate(NavigationInterface.NavigateToWorkoutLibrary) },
+                onClick = {
+                    if (currentDestination?.route != Route.ONBOARDING_SCREEN) {
+                        navigate(NavigationInterface.NavigateToWorkoutLibrary)
+                    }
+                },
                 icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.icon_search_primary_alt),
@@ -60,7 +64,11 @@ fun BottomAppBar(
 
             NavigationBarItem(
                 selected = false,
-                onClick = { navigate(NavigationInterface.NavigateToHome) },
+                onClick = {
+                    if (currentDestination?.route != Route.ONBOARDING_SCREEN) {
+                        navigate(NavigationInterface.NavigateToHome)
+                    }
+                },
                 icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.icon_journal_primary_alt),
@@ -78,7 +86,11 @@ fun BottomAppBar(
 
             NavigationBarItem(
                 selected = false,
-                onClick = { navigate(NavigationInterface.NavigateToWorkoutStatistics) },
+                onClick = {
+                    if (currentDestination?.route != Route.ONBOARDING_SCREEN) {
+                        navigate(NavigationInterface.NavigateToWorkoutStatistics)
+                    }
+                },
                 icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.icon_bar_chart),

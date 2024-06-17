@@ -1,0 +1,81 @@
+package com.example.fitjournal.onboarding.presentation.component.onboardingsections
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import com.example.fitjournal.R
+import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.AddToJournalButton
+import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.SaveButton
+import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.home.presentation.components.card.WeightLiftingCard
+import com.example.fitjournal.home.presentation.model.ui.WeightLiftingUi
+import com.example.fitjournal.onboarding.presentation.component.TypewriterText
+
+@Composable
+fun JournalSection(
+    modifier: Modifier = Modifier,
+    navigateToLibrary: () -> Unit
+) {
+    val journalSummaryText =
+        "This is your personal workout log, providing a comprehensive overview of your exercise activity. You have full control to add, modify, or remove entries as needed."
+
+    var showButton by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        WeightLiftingCard(
+            weightLiftingUi = WeightLiftingUi(
+                reps = 6,
+                sets = 2,
+                weight = 100.0,
+                weightInKgs = 220.0,
+                name = "Squats",
+                icon = R.drawable.icon_dumbell
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Spacing.spacing16)
+        )
+        Spacer(modifier = Modifier.height(Spacing.spacing32))
+        AddToJournalButton(
+            navigate = {},
+            isEnabled = false
+        )
+        TypewriterText(
+            text = journalSummaryText,
+            onTextEffectComplete = {
+                showButton = true
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Spacing.spacing16)
+        )
+        Spacer(modifier = Modifier.height(Spacing.spacing16))
+        if (showButton) {
+            SaveButton(
+                text = "View Library",
+                textModifier = Modifier.padding(
+                    horizontal = Spacing.spacing32,
+                    vertical = Spacing.spacing4
+                ),
+                textStyle = MaterialTheme.typography.headlineMedium
+            ) {
+                navigateToLibrary()
+            }
+        }
+    }
+}

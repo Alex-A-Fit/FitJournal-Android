@@ -6,7 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
@@ -14,6 +17,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +36,7 @@ import com.example.fitjournal.addWorkout.screen.addworkout.details.AddWorkoutDet
 import com.example.fitjournal.addWorkout.screen.addworkout.details.AddWorkoutDetailViewModel
 import com.example.fitjournal.core.presentation.commoncomponents.appbars.TopAppBar
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.iconbuttons.NavigateUpIconButton
+import com.example.fitjournal.core.presentation.commoncomponents.icons.FilterIcon
 import com.example.fitjournal.core.presentation.navigation.Arguments
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.navigation.Route
@@ -40,21 +45,29 @@ import com.example.fitjournal.core.presentation.navigation.navigationEvent
 import com.example.fitjournal.core.presentation.screens.AppScreen
 import com.example.fitjournal.core.presentation.screens.lottie.LottieHomeScreenAnimation
 import com.example.fitjournal.core.presentation.theme.FitJournalTheme
+import com.example.fitjournal.core.presentation.theme.Spacing
+import com.example.fitjournal.core.util.localdate.formatToCommonDate
 import com.example.fitjournal.home.presentation.components.appbar.EditWorkoutTopAppBar
 import com.example.fitjournal.home.presentation.components.appbar.HomeTopAppBar
+import com.example.fitjournal.home.presentation.components.datepicker.FitJournalDatePicker
 import com.example.fitjournal.home.presentation.model.events.HomeScreenEvents
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutScreen
 import com.example.fitjournal.home.presentation.screen.editworkout.EditWorkoutViewModel
 import com.example.fitjournal.home.presentation.screen.home.HomeScreen
 import com.example.fitjournal.home.presentation.screen.home.HomeScreenViewModel
+import com.example.fitjournal.library.presentation.components.LibraryTopAppBar
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreen
 import com.example.fitjournal.library.presentation.screen.library.LibraryScreenViewModel
+import com.example.fitjournal.onboarding.presentation.model.OnboardingSections
+import com.example.fitjournal.onboarding.presentation.screen.OnboardingScreen
+import com.example.fitjournal.onboarding.presentation.screen.OnboardingViewModel
 import com.example.fitjournal.statistics.presentation.screen.stats.StatisticsScreen
 import com.example.fitjournal.statistics.presentation.screen.stats.StatisticsViewModel
 import com.example.fitjournal.statistics.presentation.screen.statsdetails.StatisticsDetailsScreen
 import com.example.fitjournal.statistics.presentation.screen.statsdetails.StatisticsDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -80,6 +93,7 @@ class MainActivity : ComponentActivity() {
                 val bottomBarVisibility = remember { (mutableStateOf(true)) }
                 val homeScreenListState = rememberLazyListState()
                 val libraryScreenListState = rememberLazyListState()
+                val isThisUserFirstTime by mainViewModel.isThisUserFirstTimeUsingApp.collectAsState()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -90,6 +104,91 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         startDestination = LOTTIE_INTRO
                     ) {
+                        composable(Route.ONBOARDING_SCREEN) {
+                            val onboardingViewModel = hiltViewModel<OnboardingViewModel>()
+                            AppScreen(
+                                modifier = Modifier,
+                                mainScreen = { mainScreenModifier ->
+                                    OnboardingScreen(
+                                        modifier = mainScreenModifier
+                                            .fillMaxSize()
+                                            .verticalScroll(rememberScrollState()),
+                                        setUserCompletedOnboarding = {
+                                            onboardingViewModel.setUserHasOnboarded()
+                                            navigateToDestination(
+                                                navigationInterface = NavigationInterface.NavigateToHome,
+                                                navController = navController
+                                            )
+                                        },
+                                        navigateOnboarding = {
+                                            onboardingViewModel.setOnboardingSection(it)
+                                        },
+                                        onboardSectionToDisplay = onboardingViewModel.onboardingSection.value,
+                                        bottomBarVisibility = {
+                                            bottomBarVisibility.value = it
+                                        }
+                                    )
+                                },
+                                snackBarHostState = snackBarState,
+                                topAppBar = {
+                                    when (onboardingViewModel.onboardingSection.value) {
+                                        OnboardingSections.Intro -> {}
+                                        OnboardingSections.JournalSection -> {
+                                            TopAppBar(
+                                                appBarTitle = {
+                                                    FitJournalDatePicker(
+                                                        modifier = Modifier,
+                                                        getPreviousDate = {},
+                                                        getNextDate = {},
+                                                        currentDate = LocalDate.now()
+                                                            .formatToCommonDate(),
+                                                        showDatePickerDialog = {}
+                                                    )
+                                                },
+                                                modifier = Modifier.fillMaxWidth(),
+                                                endAlignedActionIcon = {
+                                                    FilterIcon(
+                                                        modifier = Modifier.size(Spacing.spacing32),
+                                                        contentDescription = stringResource(id = R.string.content_desc_home_screen_filter_icon),
+                                                        onClick = {}
+                                                    )
+                                                }
+                                            )
+                                        }
+
+                                        OnboardingSections.LibrarySection -> {
+                                            LibraryTopAppBar()
+                                        }
+                                        OnboardingSections.StatsSection -> {
+                                            TopAppBar(
+                                                appBarTitle = {
+                                                    Text(
+                                                        text = stringResource(id = R.string.title_workout_statistics),
+                                                        style = MaterialTheme.typography.titleLarge,
+                                                        color = MaterialTheme.colorScheme.onPrimary
+                                                    )
+                                                },
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+                                        OnboardingSections.End -> {}
+                                    }
+                                },
+                                navigateToDestination = { navigation ->
+                                    showChildFabs = false
+                                    navigateToDestination(
+                                        navigationInterface = navigation,
+                                        navController = navController
+                                    )
+                                },
+                                displayChildFabs = {
+                                    showChildFabs = it
+                                },
+                                navController = navController,
+                                bottomBarVisibility = bottomBarVisibility.value,
+                                showMainFabIcon = false
+                            )
+                        }
                         composable(Route.WORKOUT_LIBRARY_SCREEN) {
                             LaunchedEffect(Unit) {
                                 bottomBarVisibility.value = true
@@ -120,16 +219,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 snackBarHostState = snackBarState,
                                 topAppBar = {
-                                    TopAppBar(
-                                        appBarTitle = {
-                                            Text(
-                                                text = "Workout Library",
-                                                style = MaterialTheme.typography.titleLarge,
-                                                color = MaterialTheme.colorScheme.onPrimary
-                                            )
-                                        },
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
+                                    LibraryTopAppBar()
                                 },
                                 navigateToDestination = { navigation ->
                                     showChildFabs = false
@@ -469,7 +559,8 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(LOTTIE_INTRO) {
                             LottieHomeScreenAnimation(
-                                navController = navController
+                                navController = navController,
+                                isThisUserFirstTime = isThisUserFirstTime
                             )
                         }
                         composable("${Route.EDIT_JOURNAL_SCREEN}${Arguments.WORKOUT_ID}") { backStackEntry ->

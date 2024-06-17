@@ -31,6 +31,7 @@
     // Title Strings
     <string name="title_filter_workouts">Filter Your Workouts</string>
     <string name="title_edit_workout">Edit Workout</string>
+    <string name="title_workout_library">Workout Library</string>
     <string name="title_weight_training">Weight Training</string>
     <string name="title_calisthenics">Calisthenics</string>
     <string name="title_workout_statistics">Statistics</string>

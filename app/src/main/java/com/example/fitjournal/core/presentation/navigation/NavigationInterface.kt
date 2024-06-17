@@ -4,6 +4,7 @@ sealed interface NavigationInterface {
     data object NavigateToHome : NavigationInterface
     data object NavigateToWorkoutLibrary : NavigationInterface
     data object NavigateToWorkoutStatistics : NavigationInterface
+    data object NavigateToOnboarding : NavigationInterface
     data class NavigateToEditWorkout(val workoutId: String) : NavigationInterface
     data class NavigateToAddWorkout(val workoutDate: String) : NavigationInterface
     data class NavigateToStatisticsDetails(val workoutName: String) : NavigationInterface
