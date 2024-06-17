@@ -112,7 +112,7 @@ fun OnboardingScreen(
                     .fillMaxWidth()
             ) {
                 CarouselCircles(
-                    currentOnboardingSection = OnboardingSections.Intro,
+                    currentOnboardingSection = onboardSectionToDisplay,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(Spacing.spacing64))

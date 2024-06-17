@@ -1,136 +1,27 @@
 package com.example.fitjournal.core.data.mockdata
 
 import com.example.fitjournal.core.data.mockdata.helper.CreateMockDataSample
-import com.example.fitjournal.core.data.model.realmdb.workout.CalisthenicsSet
-import com.example.fitjournal.core.data.model.realmdb.workout.CardioSet
-import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
-import com.example.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
-import com.example.fitjournal.home.presentation.model.enum.CardioDistanceType
-import com.example.fitjournal.home.presentation.model.enum.WeightLiftingWeightType
 
-// mock data variables that are generic functions
-// are meant so we can create copies with different Ids
 object MockData {
-    val weightTraining1 = fun(id: String): RealmWorkoutEntry {
-        return CreateMockDataSample.weightTrainingSample(
-            workoutName = "Bench Press",
-            workoutType = "Weight Training",
-            workoutSet = arrayOf(
-                StrengthTrainingSet().apply {
-                    reps = 10
-                    sets = 2
-                    weight = 365.0
-                    weightType = WeightLiftingWeightType.POUNDS.stringConcatenatedValue
-                }
-            ),
-            id = id
-        )
-    }
-
-    val weightTraining2 = fun(id: String): RealmWorkoutEntry {
-        return CreateMockDataSample.weightTrainingSample(
-            workoutName = "Squats",
-            workoutType = "Weight Training",
-            workoutSet = arrayOf(
-                StrengthTrainingSet().apply {
-                    reps = 8
-                    sets = 3
-                    weight = 220.0
-                    weightType = WeightLiftingWeightType.POUNDS.stringConcatenatedValue
-                },
-                StrengthTrainingSet().apply {
-                    reps = 5
-                    sets = 1
-                    weight = 110.0
-                    weightType = WeightLiftingWeightType.POUNDS.stringConcatenatedValue
-                }
-            ),
-            id = id
-        )
-    }
-
-    val calisthenics1 = fun(id: String): RealmWorkoutEntry {
-        return CreateMockDataSample.calisthenicsSample(
-            workoutName = "Push Ups",
-            workoutType = "Calisthenics",
-            workoutSet = arrayOf(
-                CalisthenicsSet().apply {
-                    reps = 25
-                    sets = 2
-                    weight = 10.0
-                    weightType = WeightLiftingWeightType.POUNDS.stringConcatenatedValue
-                    time = "00:03:00"
-                }
-            ),
-            id = id
-        )
-    }
-
-    val calisthenics2 = fun(id: String): RealmWorkoutEntry {
-        return CreateMockDataSample.calisthenicsSample(
-            workoutName = "Mountain Climbers",
-            workoutType = "Calisthenics",
-            workoutSet = arrayOf(
-                CalisthenicsSet().apply {
-                    reps = 12
-                    sets = 2
-                },
-                CalisthenicsSet().apply {
-                    reps = 6
-                    sets = 2
-                }
-            ),
-            id = id
-        )
-    }
-
-    val calisthenics3 = fun(id: String): RealmWorkoutEntry {
-        return CreateMockDataSample.calisthenicsSample(
-            workoutName = "Medicine Ball Slams",
-            workoutType = "Calisthenics",
-            workoutSet = arrayOf(
-                CalisthenicsSet().apply {
-                    reps = 10
-                    sets = 4
-                }
-            ),
-            id = id
-        )
-    }
-
-    val cardio1 = fun(id: String): RealmWorkoutEntry {
-        return CreateMockDataSample.cardioSample(
-            workoutName = "Running",
-            workoutType = "Cardio",
-            workoutSet = arrayOf(
-                CardioSet().apply {
-                    distance = 3.2
-                    time = "00:30:00"
-                }
-            ),
-            id = id
-        )
-    }
-
-    val cardio2 = fun(id: String): RealmWorkoutEntry {
-        return CreateMockDataSample.cardioSample(
-            workoutName = "Biking",
-            workoutType = "Cardio",
-            workoutSet = arrayOf(
-                CardioSet().apply {
-                    distance = 3.2
-                    distanceType = CardioDistanceType.KILOMETERS.stringConcatenatedValue
-                    time = "00:30:00"
-                    laps = 13.0
-                }
-            ),
-            id = id
-        )
-    }
-
     val mockLibraryList = listOf(
         CreateMockDataSample.libraryItem(
-            "Bench",
+            "Bench Press",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Close Grip Bench Press",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Incline Bench Press",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Bench Press",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Incline Bench Press",
             "Weight Training"
         ),
         CreateMockDataSample.libraryItem(
@@ -138,7 +29,95 @@ object MockData {
             "Weight Training"
         ),
         CreateMockDataSample.libraryItem(
-            "Lateral Raises",
+            "Front Squats",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Squats",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Conventional Deadlift",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Sumo Deadlift",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Lateral Raises",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Barbell Shoulder Press",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Shoulder Press",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Upright Row",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Military Press",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Barbell Row (Pronated Grip)",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Barbell Row (Supinated Grip)",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Rows",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Cable Row (Pronated Grip)",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Cable Row (Supinated Grip)",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Weighted Dips",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dips",
+            "Calisthenics"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Machine Assisted Dips",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Cable Rope Overhead Tricep Extensions",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Cable Rope Tricep Pulldowns",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Cable Single-Arm Tricep Pulldowns",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Cable Single-Arm Tricep Extensions",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Overhead Tricep Extensions",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Tricep Extensions",
             "Weight Training"
         ),
         CreateMockDataSample.libraryItem(
@@ -150,7 +129,67 @@ object MockData {
             "Calisthenics"
         ),
         CreateMockDataSample.libraryItem(
-            "Bicep Curls",
+            "Barbell Bicep Curls",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Preacher Curls",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Machine Preacher Curls",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Hammer Curls",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Alternating Hammer Curls",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Bicep Curls",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Alternating Bicep Curls",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Barbell Shrugs",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Shrugs",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Machine Shrugs",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Machine Pec Fly",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Machine Reverse Pec Fly",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Reverse Pec Fly",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Dumbbell Pec Fly",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Farmer's Walk",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Hip Thrusts",
             "Weight Training"
         ),
         CreateMockDataSample.libraryItem(
@@ -166,11 +205,27 @@ object MockData {
             "Weight Training"
         ),
         CreateMockDataSample.libraryItem(
+            "Abductor Machine",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Adductor Machine",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Weighted Step Ups",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Step Ups",
+            "Calisthenics"
+        ),
+        CreateMockDataSample.libraryItem(
             "Mountain Pose",
             "Calisthenics"
         ),
         CreateMockDataSample.libraryItem(
-            "Modified Push-Ups",
+            "Push-Ups",
             "Calisthenics"
         ),
         CreateMockDataSample.libraryItem(
@@ -178,23 +233,91 @@ object MockData {
             "Calisthenics"
         ),
         CreateMockDataSample.libraryItem(
-            "Monkey Bars",
-            "Calisthenics"
-        ),
-        CreateMockDataSample.libraryItem(
-            "Modified Burpees",
-            "Calisthenics"
-        ),
-        CreateMockDataSample.libraryItem(
             "Lunges",
             "Calisthenics"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Sit-Ups",
+            "Calisthenics"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Crunches",
+            "Calisthenics"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Planks",
+            "Calisthenics"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Russian Twist",
+            "Calisthenics"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Lunges With Dumbbells",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Lunges With Barbell",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Split Squats",
+            "Weight Training"
         ),
         CreateMockDataSample.libraryItem(
             "Lat Pulldowns",
             "Weight Training"
         ),
         CreateMockDataSample.libraryItem(
-            "Lying leg curls",
+            "Straight-Arm Lat Pulldowns",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Pull Ups",
+            "Calisthenics"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Machine Assisted Pull Ups",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Band Assisted Pull Ups",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Lying Hamstring Leg Curls",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Leg Extensions",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Back Extensions",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Good-Mornings",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Calf Raises",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Leg Press",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Single Leg Leg Press",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Wide Stance Leg Press",
+            "Weight Training"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Hamstring Curls",
             "Weight Training"
         ),
         CreateMockDataSample.libraryItem(
@@ -216,6 +339,23 @@ object MockData {
         CreateMockDataSample.libraryItem(
             "Biking",
             "Cardio"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Peloton Bike",
+            "Cardio"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Stairmaster",
+            "Cardio"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Sprints",
+            "Cardio"
+        ),
+        CreateMockDataSample.libraryItem(
+            "Swimming",
+            "Cardio"
         )
+
     )
 }
