@@ -1,11 +1,12 @@
 package com.example.fitjournal.core.presentation.commoncomponents.dialogs
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,12 +51,12 @@ fun DeleteWorkoutSection(
             .padding(Spacing.spacing16),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
+        Icon(
             modifier = Modifier
-                .height(Spacing.spacing96)
-                .fillMaxWidth(),
+                .size(Spacing.spacing96),
             painter = painterResource(id = R.drawable.icon_journal),
-            contentDescription = stringResource(id = R.string.content_desc_journal_filled_icon)
+            contentDescription = stringResource(id = R.string.content_desc_journal_filled_icon),
+            tint = MaterialTheme.colorScheme.onPrimary
         )
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         Text(

@@ -24,7 +24,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.R
-import com.example.fitjournal.core.presentation.theme.BlueVariant
+import com.example.fitjournal.core.presentation.theme.AllTimePrBadgeColor
+import com.example.fitjournal.core.presentation.theme.CurrentPrBadgeColor
+import com.example.fitjournal.core.presentation.theme.DarkGray2
+import com.example.fitjournal.core.presentation.theme.LightGray
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.PersonalRecord
 import com.example.fitjournal.statistics.domain.model.TimeRangeEnum
@@ -56,7 +59,7 @@ fun PersonalRecordBadges(
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.spacing8)
                     .background(
-                        color = BlueVariant,
+                        color = CurrentPrBadgeColor,
                         RoundedCornerShape(Spacing.spacing16)
                     )
                     .weight(1f)
@@ -69,7 +72,7 @@ fun PersonalRecordBadges(
                     .fillMaxWidth()
                     .padding(horizontal = Spacing.spacing8)
                     .background(
-                        color = MaterialTheme.colorScheme.tertiary,
+                        color = AllTimePrBadgeColor,
                         RoundedCornerShape(Spacing.spacing16)
                     )
                     .heightIn(
@@ -123,7 +126,7 @@ private fun CurrentTimePrBadge(
             Text(
                 text = personalRecordTimeRangeTitleText,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = LightGray,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -131,7 +134,7 @@ private fun CurrentTimePrBadge(
             Text(
                 text = personalRecordTitleText,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = LightGray,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -139,7 +142,7 @@ private fun CurrentTimePrBadge(
             Text(
                 text = personalRecord.personalRecord,
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = LightGray,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -147,7 +150,7 @@ private fun CurrentTimePrBadge(
             Text(
                 text = personalRecord.personalRecordDate,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = LightGray,
                 fontStyle = FontStyle.Italic,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -177,7 +180,7 @@ private fun AllTimePrBadge(
             Text(
                 text = stringResource(id = R.string.title_all_time_pr),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = DarkGray2,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -185,7 +188,7 @@ private fun AllTimePrBadge(
             Text(
                 text = personalRecordTitleText,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = DarkGray2,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -193,7 +196,7 @@ private fun AllTimePrBadge(
             Text(
                 text = personalRecord.allTimePr,
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = DarkGray2,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -202,7 +205,7 @@ private fun AllTimePrBadge(
                 text = personalRecord.allTimePrDate,
                 style = MaterialTheme.typography.bodyMedium,
                 fontStyle = FontStyle.Italic,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = DarkGray2,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )

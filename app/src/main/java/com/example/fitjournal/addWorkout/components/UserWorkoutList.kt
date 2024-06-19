@@ -1,7 +1,6 @@
 package com.example.fitjournal.addWorkout.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -67,9 +67,10 @@ private fun ExerciseItem(exercise: String) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ExerciseName(exercise = exercise)
-        Image(
+        Icon(
             painter = painterResource(id = R.drawable.ic_right_chevron),
-            contentDescription = stringResource(id = R.string.content_desc_navigate_to_add_workout_icon)
+            contentDescription = stringResource(id = R.string.content_desc_navigate_to_add_workout_icon),
+            tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }

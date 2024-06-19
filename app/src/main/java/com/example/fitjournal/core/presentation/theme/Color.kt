@@ -17,3 +17,8 @@ val DarkGray2 = Color(0xFF16161C)
 val White = Color(0xFFFFFFFF)
 val DefaultUnfocusedColor = Color(0xFF1C1B1f)
 val Red = Color(0xFFF44336)
+
+val CurrentPrBadgeColor = Color(0xFF2A62A0)
+val AllTimePrBadgeColor = Color(0xFF69AFFA)
+val DistinctPrBadgeColor = Color(0xFFDFDFE0)
+val DistinctPrBadgeColorVariant = Color(0xFF424244)

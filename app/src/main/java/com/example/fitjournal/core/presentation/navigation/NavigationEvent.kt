@@ -8,6 +8,7 @@ fun navigationEvent(
 ) {
     when (navigationInterface) {
         NavigationInterface.NavigateToHome -> {
+            navController.popBackStack()
             navController.navigate(Route.HOME_SCREEN)
         }
 

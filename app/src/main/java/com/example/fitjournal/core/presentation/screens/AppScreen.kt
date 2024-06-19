@@ -54,16 +54,16 @@ fun AppScreen(
     showAds: Boolean = true,
     bottomBarVisibility: Boolean = true
 ) {
-    var showWorkoutDialog by remember {
+    var showAddWorkoutToLibraryDialog by remember {
         mutableStateOf(false)
     }
     val interactionSource = remember { MutableInteractionSource() }
     val focusManager = LocalFocusManager.current
 
-    if (showWorkoutDialog) {
+    if (showAddWorkoutToLibraryDialog) {
         AddWorkoutToLibraryDialog(
             dismissDialog = {
-                showWorkoutDialog = false
+                showAddWorkoutToLibraryDialog = false
             },
             addNewWorkoutToLibrary = { workoutName, workoutType ->
                 addWorkoutToLibraryItemDatabase?.invoke(
@@ -73,7 +73,7 @@ fun AppScreen(
                         snackBarMessageId = R.string.text_workout_successfully_added_to_library
                     )
                 )
-                showWorkoutDialog = false
+                showAddWorkoutToLibraryDialog = false
             }
         )
     }
@@ -179,7 +179,7 @@ fun AppScreen(
                             showFabs = showChildrenFabIcons == true,
                             navigateToAddToLibraryScreen = {
                                 displayChildFabs?.invoke(false)
-                                showWorkoutDialog = true
+                                showAddWorkoutToLibraryDialog = true
                             },
                             navigateToJournalEntry = {
                                 displayChildFabs?.invoke(false)
