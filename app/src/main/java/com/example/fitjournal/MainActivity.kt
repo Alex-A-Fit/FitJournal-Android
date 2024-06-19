@@ -91,6 +91,7 @@ class MainActivity : ComponentActivity() {
                 val snackBarState = remember { SnackbarHostState() }
                 var showChildFabs by remember { mutableStateOf(false) }
                 val bottomBarVisibility = remember { (mutableStateOf(true)) }
+                val showAds = remember { (mutableStateOf(true)) }
                 val homeScreenListState = rememberLazyListState()
                 val libraryScreenListState = rememberLazyListState()
                 val isThisUserFirstTime by mainViewModel.isThisUserFirstTimeUsingApp.collectAsState()
@@ -105,6 +106,9 @@ class MainActivity : ComponentActivity() {
                         startDestination = LOTTIE_INTRO
                     ) {
                         composable(Route.ONBOARDING_SCREEN) {
+                            LaunchedEffect(key1 = Unit) {
+                                showAds.value = false
+                            }
                             val onboardingViewModel = hiltViewModel<OnboardingViewModel>()
                             AppScreen(
                                 modifier = Modifier,
@@ -187,7 +191,7 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                                 bottomBarVisibility = bottomBarVisibility.value,
                                 showMainFabIcon = false,
-                                showAds = false
+                                showAds = showAds.value
                             )
                         }
                         composable(Route.WORKOUT_LIBRARY_SCREEN) {
@@ -259,7 +263,8 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 navController = navController,
-                                bottomBarVisibility = bottomBarVisibility.value
+                                bottomBarVisibility = bottomBarVisibility.value,
+                                showAds = showAds.value
                             )
                         }
                         composable(Route.HOME_SCREEN) {
@@ -335,7 +340,8 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 navController = navController,
-                                bottomBarVisibility = bottomBarVisibility.value
+                                bottomBarVisibility = bottomBarVisibility.value,
+                                showAds = showAds.value
                             )
                         }
                         composable(Route.WORKOUT_STATISTICS_SCREEN) {
@@ -379,7 +385,8 @@ class MainActivity : ComponentActivity() {
                                         navController = navController
                                     )
                                 },
-                                navController = navController
+                                navController = navController,
+                                showAds = showAds.value
                             )
                         }
                         composable("${Route.WORKOUT_STATISTICS_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}") { backStackEntry ->
@@ -427,7 +434,8 @@ class MainActivity : ComponentActivity() {
                                         navController = navController
                                     )
                                 },
-                                navController = navController
+                                navController = navController,
+                                showAds = showAds.value
                             )
                         }
                         composable("${Route.ADD_WORKOUT_SCREEN}${Arguments.WORKOUT_DATE}") { backStackEntry ->
@@ -478,7 +486,8 @@ class MainActivity : ComponentActivity() {
                                 },
                                 navigateToDestination = { },
                                 navController = navController,
-                                bottomBarVisibility = bottomBarVisibility.value
+                                bottomBarVisibility = bottomBarVisibility.value,
+                                showAds = showAds.value
                             )
                         }
                         composable("${Route.ADD_WORKOUT_DETAILS_SCREEN}${Arguments.WORKOUT_NAME}${Arguments.WORKOUT_TYPE}${Arguments.WORKOUT_DATE}") { backStackEntry ->
@@ -549,7 +558,8 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 navController = navController,
-                                bottomBarVisibility = bottomBarVisibility.value
+                                bottomBarVisibility = bottomBarVisibility.value,
+                                showAds = showAds.value
                             )
                         }
                         composable(LOTTIE_INTRO) {
@@ -597,7 +607,8 @@ class MainActivity : ComponentActivity() {
                                 },
                                 navController = navController,
                                 bottomBarVisibility = bottomBarVisibility.value,
-                                showMainFabIcon = false
+                                showMainFabIcon = false,
+                                showAds = showAds.value
                             )
                         }
                     }

@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.fitjournal.R
-import com.example.fitjournal.core.presentation.theme.DarkGray2
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
@@ -30,14 +30,15 @@ fun HelpIcon(
             )
             .border(
                 width = Spacing.spacing2,
-                color = DarkGray2,
+                color = MaterialTheme.colorScheme.onPrimary,
                 shape = RoundedCornerShape(percent = 100)
             )
     ) {
         Icon(
             painter = painterResource(id = R.drawable.icon_question_mark),
             contentDescription = contentDescription,
-            modifier = modifier
+            modifier = modifier,
+            tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }

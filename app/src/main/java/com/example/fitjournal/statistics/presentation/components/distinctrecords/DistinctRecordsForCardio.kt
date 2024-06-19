@@ -1,6 +1,7 @@
 package com.example.fitjournal.statistics.presentation.components.distinctrecords
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.R
+import com.example.fitjournal.core.presentation.theme.DistinctPrBadgeColor
+import com.example.fitjournal.core.presentation.theme.DistinctPrBadgeColorVariant
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.DistinctDistanceForTime
 
@@ -26,6 +29,8 @@ fun DistinctRecordsForCardio(
     bestDistinctDistanceForTime: List<DistinctDistanceForTime>,
     modifier: Modifier = Modifier
 ) {
+    val isDarkMode = isSystemInDarkTheme()
+
     Column(modifier = modifier) {
         Text(
             text = stringResource(id = R.string.title_best_mile_times),
@@ -39,8 +44,8 @@ fun DistinctRecordsForCardio(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = MaterialTheme.colorScheme.onSecondary,
-                        RoundedCornerShape(Spacing.spacing12)
+                        color = if (isDarkMode) DistinctPrBadgeColorVariant else DistinctPrBadgeColor,
+                        shape = RoundedCornerShape(Spacing.spacing12)
                     )
                     .padding(
                         horizontal = Spacing.spacing16,

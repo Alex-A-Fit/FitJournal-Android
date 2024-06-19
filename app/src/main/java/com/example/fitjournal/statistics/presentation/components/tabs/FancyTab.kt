@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.fitjournal.core.presentation.theme.DarkGray2
 import com.example.fitjournal.core.presentation.theme.Spacing
 
 @Composable
@@ -20,7 +21,7 @@ fun FancyTab(
     title: String,
     modifier: Modifier = Modifier,
     selectedColor: Color = MaterialTheme.colorScheme.primary,
-    unselectedColor: Color = MaterialTheme.colorScheme.onPrimary
+    unselectedColor: Color = DarkGray2
 ) {
     Tab(
         selected = selected,
