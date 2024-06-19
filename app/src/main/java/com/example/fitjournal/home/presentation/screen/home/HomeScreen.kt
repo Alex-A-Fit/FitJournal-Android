@@ -20,12 +20,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
 import com.example.fitjournal.R
 import com.example.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.AddToJournalButton
-import com.example.fitjournal.core.presentation.commoncomponents.dialogs.FilterWorkoutTypeDialog
+import com.example.fitjournal.core.presentation.commoncomponents.dialogs.ViewTutorialDialog
 import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.screens.LoadingScreen
@@ -60,8 +61,8 @@ fun HomeScreen(
     val isDatePickerDialogShowing by rememberSaveable(homeScreenState.isDatePickerDialogShowing) {
         mutableStateOf(homeScreenState.isDatePickerDialogShowing)
     }
-    val isFilterDialogShowing by rememberSaveable(homeScreenState.isFilterDialogShowing) {
-        mutableStateOf(homeScreenState.isFilterDialogShowing)
+    var isHelpDialogShowing by rememberSaveable(homeScreenState.isHelpDialogShowing) {
+        mutableStateOf(homeScreenState.isHelpDialogShowing)
     }
     val clickIndication = LocalIndication.current
     val dateUpdatedText = stringResource(id = R.string.text_date_updated)
@@ -88,22 +89,29 @@ fun HomeScreen(
             )
         }
 
-        if (isFilterDialogShowing) {
-            FilterWorkoutTypeDialog(
+        if (isHelpDialogShowing) {
+            ViewTutorialDialog(
                 properties = DialogProperties(),
-                filterList = homeScreenState.filterList,
                 onDismissDialog = {
-                    homeScreenState.homeScreenEvents(HomeScreenEvents.DismissFilterExercisesDialog)
-                },
-                onConfirmDialog = { listOfWorkoutTypes ->
                     homeScreenState.homeScreenEvents(
-                        HomeScreenEvents.OnConfirmFilterExercisesDialog(
-                            listOfWorkoutTypes
+                        HomeScreenEvents.UpdateHelpDialog(
+                            isDialogShowing = false,
+                            onCallback = {
+                                isHelpDialogShowing = false
+                            }
                         )
                     )
                 },
-                clearFilterList = {
-                    homeScreenState.homeScreenEvents(HomeScreenEvents.ClearFilterExercisesDialog)
+                onConfirmDialog = {
+                    homeScreenState.homeScreenEvents(
+                        HomeScreenEvents.UpdateHelpDialog(
+                            isDialogShowing = false,
+                            onCallback = {
+                                isHelpDialogShowing = false
+                                navigateToDestination(NavigationInterface.NavigateToOnboarding)
+                            }
+                        )
+                    )
                 }
             )
         }
@@ -202,7 +210,11 @@ fun HomeScreen(
                     item {
                         AddToJournalButton(
                             navigate = {
-                                navigateToDestination(NavigationInterface.NavigateToAddWorkout(workoutDate = homeScreenState.currentDate))
+                                navigateToDestination(
+                                    NavigationInterface.NavigateToAddWorkout(
+                                        workoutDate = homeScreenState.currentDate
+                                    )
+                                )
                             }
                         )
                         Spacer(modifier = Modifier.height(Spacing.spacing96))

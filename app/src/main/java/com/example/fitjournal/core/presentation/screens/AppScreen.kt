@@ -6,6 +6,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ import com.example.fitjournal.core.presentation.commoncomponents.appbars.BottomA
 import com.example.fitjournal.core.presentation.commoncomponents.dialogs.AddWorkoutToLibraryDialog
 import com.example.fitjournal.core.presentation.commoncomponents.floatingactionbutton.AddWorkoutFab
 import com.example.fitjournal.core.presentation.commoncomponents.floatingactionbutton.AnimatedFabColumn
+import com.example.fitjournal.core.presentation.commoncomponents.googleads.AdaptiveBannerAd
 import com.example.fitjournal.core.presentation.navigation.NavigationInterface
 import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.core.util.localdate.formatToCommonDate
@@ -49,6 +51,7 @@ fun AppScreen(
     navigateToDestination: (NavigationInterface) -> Unit,
     addWorkoutToLibraryItemDatabase: ((AddWorkoutToLibraryModel) -> Unit)? = null,
     displayChildFabs: ((Boolean) -> Unit)? = null,
+    showAds: Boolean = true,
     bottomBarVisibility: Boolean = true
 ) {
     var showWorkoutDialog by remember {
@@ -100,90 +103,100 @@ fun AppScreen(
             )
         }
     ) { padding ->
-        Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.padding(padding)) {
+            if (showAds) {
+                AdaptiveBannerAd(
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center)
-                    .clickable(
-                        interactionSource = interactionSource,
-                        indication = null
-                    ) {
-                        displayChildFabs?.invoke(false)
-                    }
-                    .then(
-                        if (android.os.Build.VERSION.SDK_INT > 30) {
-                            Modifier
-                                .blur(if (showChildrenFabIcons == true) Spacing.blurDensity10 else Spacing.blurDensity0)
-                        } else {
-                            Modifier
-                        }
-                    )
+                    .fillMaxSize()
             ) {
-                if (android.os.Build.VERSION.SDK_INT < 30) {
-                    if (showChildrenFabIcons == true) {
-                        Cloudy(
-                            radius = 25,
-                            modifier = Modifier.clickable(
-                                interactionSource = interactionSource,
-                                indication = null
-                            ) {
-                                displayChildFabs?.invoke(false)
-                                focusManager.clearFocus(force = true)
-                            }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center)
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null
                         ) {
+                            displayChildFabs?.invoke(false)
+                        }
+                        .then(
+                            if (android.os.Build.VERSION.SDK_INT > 30) {
+                                Modifier
+                                    .blur(if (showChildrenFabIcons == true) Spacing.blurDensity10 else Spacing.blurDensity0)
+                            } else {
+                                Modifier
+                            }
+                        )
+                ) {
+                    if (android.os.Build.VERSION.SDK_INT < 30) {
+                        if (showChildrenFabIcons == true) {
+                            Cloudy(
+                                radius = 25,
+                                modifier = Modifier.clickable(
+                                    interactionSource = interactionSource,
+                                    indication = null
+                                ) {
+                                    displayChildFabs?.invoke(false)
+                                    focusManager.clearFocus(force = true)
+                                }
+                            ) {
+                                mainScreen(
+                                    Modifier
+                                        .fillMaxSize()
+                                )
+                            }
+                        } else {
                             mainScreen(
                                 Modifier
-                                    .padding(padding)
                                     .fillMaxSize()
                             )
                         }
                     } else {
                         mainScreen(
                             Modifier
-                                .padding(padding)
                                 .fillMaxSize()
+                                .clickable(
+                                    interactionSource = interactionSource,
+                                    indication = null
+                                ) {
+                                    displayChildFabs?.invoke(false)
+                                }
                         )
                     }
-                } else {
-                    mainScreen(
-                        Modifier
-                            .padding(padding)
-                            .fillMaxSize()
-                            .clickable(
-                                interactionSource = interactionSource,
-                                indication = null
-                            ) {
-                                displayChildFabs?.invoke(false)
-                            }
-                    )
                 }
-            }
-            if (showMainFabIcon) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(padding)
-                        .align(Alignment.BottomEnd),
-                    contentAlignment = Alignment.BottomEnd
-                ) {
-                    AnimatedFabColumn(
-                        showFabs = showChildrenFabIcons == true,
-                        navigateToAddToLibraryScreen = {
-                            displayChildFabs?.invoke(false)
-                            showWorkoutDialog = true
-                        },
-                        navigateToJournalEntry = {
-                            displayChildFabs?.invoke(false)
-                            navigateToDestination(NavigationInterface.NavigateToAddWorkout(workoutDate = LocalDate.now().formatToCommonDate()))
-                        }
-                    )
-                    AddWorkoutFab(
-                        showFloatingActionButtonValue = showChildrenFabIcons == true,
-                        showFloatingActionButtons = {
-                            displayChildFabs?.invoke(it)
-                        }
-                    )
+                if (showMainFabIcon) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomEnd),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        AnimatedFabColumn(
+                            showFabs = showChildrenFabIcons == true,
+                            navigateToAddToLibraryScreen = {
+                                displayChildFabs?.invoke(false)
+                                showWorkoutDialog = true
+                            },
+                            navigateToJournalEntry = {
+                                displayChildFabs?.invoke(false)
+                                navigateToDestination(
+                                    NavigationInterface.NavigateToAddWorkout(
+                                        workoutDate = LocalDate.now().formatToCommonDate()
+                                    )
+                                )
+                            }
+                        )
+                        AddWorkoutFab(
+                            showFloatingActionButtonValue = showChildrenFabIcons == true,
+                            showFloatingActionButtons = {
+                                displayChildFabs?.invoke(it)
+                            }
+                        )
+                    }
                 }
             }
         }

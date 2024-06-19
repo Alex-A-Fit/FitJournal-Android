@@ -6,6 +6,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import com.example.fitjournal.core.presentation.theme.SuccessGreen
 import com.example.fitjournal.core.presentation.theme.White
 
@@ -20,6 +22,7 @@ fun SaveButton(
         disabledContentColor = MaterialTheme.colorScheme.onTertiary
     ),
     textModifier: Modifier = Modifier,
+    textStyle: TextStyle = MaterialTheme.typography.titleLarge,
     isEnabled: Boolean = true,
     onClick: () -> Unit
 ) {
@@ -31,8 +34,9 @@ fun SaveButton(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = textModifier
+            style = textStyle,
+            modifier = textModifier,
+            textAlign = TextAlign.Center
         )
     }
 }

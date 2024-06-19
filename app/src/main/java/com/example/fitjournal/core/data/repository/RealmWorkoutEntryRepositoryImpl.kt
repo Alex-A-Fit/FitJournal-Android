@@ -1,44 +1,18 @@
 package com.example.fitjournal.core.data.repository
 
 import com.example.fitjournal.FitJournal
-import com.example.fitjournal.core.data.mockdata.MockData
 import com.example.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
 import com.example.fitjournal.core.data.util.getLatestResultViaQuery
 import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
-import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.ext.toRealmList
-import io.realm.kotlin.types.RealmList
-import org.mongodb.kbson.ObjectId
 import javax.inject.Inject
 
 class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryRepository {
     private val realm = FitJournal.realm
 
     override var shouldViewModelFetchRealmData: Boolean = false
-
-    override suspend fun addMockDataToRealm() {
-        // this is how we would write workout to realm db
-        realm.write {
-            val workouts: RealmList<RealmWorkoutEntry> = realmListOf()
-            workouts.addAll(
-                listOf(
-                    MockData.weightTraining1(createWorkoutId()),
-                    MockData.weightTraining2(createWorkoutId()),
-                    MockData.calisthenics1(createWorkoutId()),
-                    MockData.calisthenics2(createWorkoutId()),
-                    MockData.calisthenics3(createWorkoutId()),
-                    MockData.cardio1(createWorkoutId()),
-                    MockData.cardio2(createWorkoutId())
-                )
-            )
-            // running for each to simplify adding each individual workout entry
-            workouts.forEach {
-                copyToRealm(it, updatePolicy = UpdatePolicy.ALL)
-            }
-        }
-    }
 
     // query realm db and find values based on query
     // check if values exist
@@ -158,9 +132,5 @@ class RealmWorkoutEntryRepositoryImpl @Inject constructor() : RealmWorkoutEntryR
 
     override fun updateShouldViewModelFetchRealmData(shouldFetch: Boolean) {
         shouldViewModelFetchRealmData = shouldFetch
-    }
-
-    private fun createWorkoutId(): String {
-        return ObjectId().toHexString()
     }
 }

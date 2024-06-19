@@ -1,8 +1,12 @@
 package com.example.fitjournal.statistics.presentation.components.graphs.ui
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.fitjournal.R
+import com.example.fitjournal.core.presentation.theme.Spacing
 import com.example.fitjournal.statistics.domain.model.GraphData
 import com.example.fitjournal.statistics.presentation.model.GraphUiTypes
 import kotlin.math.roundToInt
@@ -29,6 +33,12 @@ fun GraphSectionForCalisthenics(
         },
         convertYaxisValue = {
             return@LineChartGraph it.roundToInt()
-        }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(
+                min = Spacing.spacing300,
+                max = Spacing.spacing500
+            )
     )
 }

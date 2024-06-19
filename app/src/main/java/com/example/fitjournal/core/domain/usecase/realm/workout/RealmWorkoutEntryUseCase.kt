@@ -1,8 +1,6 @@
 package com.example.fitjournal.core.domain.usecase.realm.workout
 
 data class RealmWorkoutEntryUseCase(
-    val createMockDataOfRealmWorkoutEntryUseCase: CreateMockDataOfRealmWorkoutEntryUseCase,
-
     // GET ALL ENTRIES AS LIST
     val getRealmWorkoutEntryList: GetRealmWorkoutEntryList,
 

@@ -38,5 +38,9 @@ fun navigationEvent(
         is NavigationInterface.NavigateToStatisticsDetails -> {
             navController.navigate("${Route.WORKOUT_STATISTICS_DETAILS_SCREEN}/${navigationInterface.workoutName}")
         }
+
+        NavigationInterface.NavigateToOnboarding -> {
+            navController.navigate(Route.ONBOARDING_SCREEN)
+        }
     }
 }

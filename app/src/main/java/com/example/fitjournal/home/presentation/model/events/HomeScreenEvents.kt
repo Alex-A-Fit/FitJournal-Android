@@ -1,14 +1,13 @@
 package com.example.fitjournal.home.presentation.model.events
 
-import com.example.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
-
 sealed class HomeScreenEvents {
     data object DismissDatePicker : HomeScreenEvents()
-    data object DismissFilterExercisesDialog : HomeScreenEvents()
     data object ClearFilterExercisesDialog : HomeScreenEvents()
     data object CollectRealmWorkoutEntryFromDb : HomeScreenEvents()
     data object SyncRealmWorkoutEntryFromDb : HomeScreenEvents()
-    data class OnConfirmFilterExercisesDialog(val filterList: List<WorkoutTypeEnum>) : HomeScreenEvents()
     data class SelectDateFromDatePicker(val userSelectedDate: Long) : HomeScreenEvents()
-    data class UpdateFilterDialog(val isDialogShowing: Boolean) : HomeScreenEvents()
+    data class UpdateHelpDialog(
+        val isDialogShowing: Boolean,
+        val onCallback: () -> Unit
+    ) : HomeScreenEvents()
 }

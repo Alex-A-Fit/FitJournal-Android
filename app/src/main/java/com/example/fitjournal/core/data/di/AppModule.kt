@@ -1,7 +1,15 @@
 package com.example.fitjournal.core.data.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.preferencesDataStoreFile
+import com.example.fitjournal.core.data.repository.OnboardingTutorialRepositoryImpl
 import com.example.fitjournal.core.data.repository.RealmWorkoutEntryRepositoryImpl
 import com.example.fitjournal.core.data.repository.RealmWorkoutLibraryRepositoryImpl
+import com.example.fitjournal.core.domain.repository.OnboardingTutorialRepository
 import com.example.fitjournal.core.domain.repository.RealmWorkoutEntryRepository
 import com.example.fitjournal.core.domain.repository.RealmWorkoutLibraryRepository
 import com.example.fitjournal.core.domain.usecase.editworkoutdialog.CreateModelForEditWorkoutDialogUseCase
@@ -13,7 +21,6 @@ import com.example.fitjournal.core.domain.usecase.realm.library.RealmWorkoutLibr
 import com.example.fitjournal.core.domain.usecase.realm.library.SyncWorkoutLibraryDbWithViewModelUseCase
 import com.example.fitjournal.core.domain.usecase.realm.library.UpdateLibraryItemInRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.AddSingleWorkoutEntryToRealmDbUseCase
-import com.example.fitjournal.core.domain.usecase.realm.workout.CreateMockDataOfRealmWorkoutEntryUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.DeleteWorkoutEntryFromRealmDbUseCase
 import com.example.fitjournal.core.domain.usecase.realm.workout.GetRealmWorkoutEntryList
 import com.example.fitjournal.core.domain.usecase.realm.workout.GetRealmWorkoutEntryListWithNameUseCase
@@ -33,6 +40,7 @@ import com.example.fitjournal.statistics.domain.usecase.GetWorkoutsByTimeSelecte
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -58,9 +66,6 @@ object AppModule {
         realmWorkoutEntryRepository: RealmWorkoutEntryRepository
     ): RealmWorkoutEntryUseCase {
         return RealmWorkoutEntryUseCase(
-            createMockDataOfRealmWorkoutEntryUseCase = CreateMockDataOfRealmWorkoutEntryUseCase(
-                realmWorkoutEntryRepository = realmWorkoutEntryRepository
-            ),
             getRealmWorkoutEntryList = GetRealmWorkoutEntryList(
                 realmWorkoutEntryRepository = realmWorkoutEntryRepository
             ),
@@ -133,4 +138,24 @@ object AppModule {
 
     @Provides
     fun provideGetWorkoutsByTimeUseCase(): GetWorkoutsByTimeSelectedUseCase = GetWorkoutsByTimeSelectedUseCase()
+
+    private const val DATASTORE_PREFERENCE_NAME = "onboarding_preference"
+
+    @Singleton
+    @Provides
+    fun provideDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> {
+        val datastore = PreferenceDataStoreFactory.create {
+            context.preferencesDataStoreFile(DATASTORE_PREFERENCE_NAME)
+        }
+        return datastore
+    }
+
+    private val Context.datastore by preferencesDataStore(name = DATASTORE_PREFERENCE_NAME)
+
+    @Singleton
+    @Provides
+    fun providePreferencesStorage(@ApplicationContext context: Context): OnboardingTutorialRepository =
+        OnboardingTutorialRepositoryImpl(context.datastore)
 }

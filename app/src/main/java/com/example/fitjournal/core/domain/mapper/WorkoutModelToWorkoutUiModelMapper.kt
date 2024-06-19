@@ -70,7 +70,6 @@ fun WorkoutModel.mapToWorkoutUiModel(): WorkoutUiModel {
             var hours = 0
             var minutes = 0
             var seconds = 0
-            var time: TimeModel? = null
             var weight = 0.0
 
             val entireSession =
