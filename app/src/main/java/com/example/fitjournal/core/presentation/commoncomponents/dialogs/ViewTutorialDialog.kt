@@ -64,7 +64,7 @@ fun ViewTutorialSection(
         )
         Spacer(modifier = Modifier.height(Spacing.spacing16))
         Text(
-            text = "Would you like to view the tutorial again?",
+            text = stringResource(id = R.string.title_view_tutorial_again),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onPrimary,
             textAlign = TextAlign.Center,
@@ -72,7 +72,7 @@ fun ViewTutorialSection(
         )
         Spacer(modifier = Modifier.height(Spacing.spacing16))
 
-        SaveButton(text = "Watch Tutorial") {
+        SaveButton(text = stringResource(id = R.string.button_watch_tutorial)) {
             onConfirmDialog()
         }
         Spacer(modifier = Modifier.height(Spacing.spacing16))

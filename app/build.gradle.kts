@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -7,6 +9,9 @@ plugins {
 }
 
 android {
+
+    android.buildFeatures.buildConfig = true
+
     namespace = "com.example.fitjournal"
     compileSdk = 34
 
@@ -25,8 +30,15 @@ android {
 
     buildTypes {
         release {
+            val ADS_ID_VALUE: String = gradleLocalProperties(rootDir, providers).getProperty("ADS_ID_PROD")
+            buildConfigField("String", "ADS_ID", ADS_ID_VALUE)
+
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+        debug {
+            val ADS_ID_VALUE: String = gradleLocalProperties(rootDir, providers).getProperty("ADS_ID")
+            buildConfigField("String", "ADS_ID", ADS_ID_VALUE)
         }
     }
     compileOptions {

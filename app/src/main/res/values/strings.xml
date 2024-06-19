@@ -70,6 +70,7 @@
     <string name="title_date_vs_total_volume">Date Vs Total Volume</string>
     <string name="title_onboarding_intro">Welcome to Fit Journal!</string>
     <string name="title_onboarding_outro">End of Tutorial</string>
+    <string name="title_view_tutorial_again">Would you like to view the tutorial again</string>
 
     // SubTitle Strings
     <string name="subtitle_filter_workouts_description">Select which type of exercises to show in your Fit Journal</string>
@@ -161,6 +162,7 @@
     <string name="button_view_statistics">View Statistics</string>
     <string name="button_proceed_to_outro">Proceed to End of Tutorial</string>
     <string name="button_onboarding_outro">Proceed to Fit Journal</string>
+    <string name="button_watch_tutorial">Watch Tutorial</string>
 
     // Success Strings
     <string name="text_workout_successfully_added_to_library">\"%1$s\" was added to your Library!</string>

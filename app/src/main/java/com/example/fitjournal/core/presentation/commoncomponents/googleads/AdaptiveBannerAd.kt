@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.window.layout.WindowMetrics
 import androidx.window.layout.WindowMetricsCalculator
+import com.example.fitjournal.BuildConfig
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -35,8 +36,7 @@ fun AdaptiveBannerAd(modifier: Modifier = Modifier) {
                         adWidth
                     )
                 )
-                // not actual prod id
-                adUnitId = "ca-app-pub-3940256099942544/9214589741"
+                adUnitId = BuildConfig.ADS_ID
                 loadAd(AdRequest.Builder().build())
             }
         }
