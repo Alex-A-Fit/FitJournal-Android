@@ -12,14 +12,14 @@ android {
 
     android.buildFeatures.buildConfig = true
 
-    namespace = "com.example.fitjournal"
+    namespace = "com.alexafit.fitjournal"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.fitjournal"
+        applicationId = "com.alexafit.fitjournal"
         minSdk = 29
         targetSdk = 34
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -33,7 +33,7 @@ android {
             val ADS_ID_VALUE: String = gradleLocalProperties(rootDir, providers).getProperty("ADS_ID_PROD")
             buildConfigField("String", "ADS_ID", ADS_ID_VALUE)
 
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         debug {

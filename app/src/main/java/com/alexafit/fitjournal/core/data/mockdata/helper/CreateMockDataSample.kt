@@ -1,0 +1,90 @@
+package com.alexafit.fitjournal.core.data.mockdata.helper
+
+import com.alexafit.fitjournal.core.data.model.realmdb.library.RealmWorkoutLibrary
+import com.alexafit.fitjournal.core.data.model.realmdb.workout.CalisthenicsSet
+import com.alexafit.fitjournal.core.data.model.realmdb.workout.CardioSet
+import com.alexafit.fitjournal.core.data.model.realmdb.workout.RealmWorkout
+import com.alexafit.fitjournal.core.data.model.realmdb.workout.RealmWorkoutEntry
+import com.alexafit.fitjournal.core.data.model.realmdb.workout.RealmWorkoutProperties
+import com.alexafit.fitjournal.core.data.model.realmdb.workout.StrengthTrainingSet
+import com.alexafit.fitjournal.core.util.localdate.formatToCommonDate
+import io.realm.kotlin.ext.toRealmList
+import java.time.LocalDate
+
+object CreateMockDataSample {
+    fun weightTrainingSample(
+        workoutName: String,
+        workoutType: String,
+        id: String,
+        vararg workoutSet: StrengthTrainingSet
+    ): RealmWorkoutEntry {
+        return RealmWorkoutEntry().apply {
+            workout = RealmWorkout().apply {
+                name = workoutName
+                type = workoutType
+                realmWorkoutProperties = RealmWorkoutProperties().apply {
+                    listOfWeightLiftingSets = workoutSet.map { it }.toRealmList()
+                }
+            }
+            workoutId = id
+        }
+    }
+
+    fun calisthenicsSample(
+        workoutName: String,
+        workoutType: String,
+        id: String,
+        vararg workoutSet: CalisthenicsSet
+    ): RealmWorkoutEntry {
+        return RealmWorkoutEntry().apply {
+            workout = RealmWorkout().apply {
+                name = workoutName
+                type = workoutType
+                realmWorkoutProperties = RealmWorkoutProperties().apply {
+                    listOfCalisthenicsSet = workoutSet.map { it }.toRealmList()
+                }
+            }
+            workoutId = id
+            timeStamp = LocalDate.now().minusDays(2).formatToCommonDate()
+        }
+    }
+
+    fun cardioSample(
+        workoutName: String,
+        workoutType: String,
+        id: String,
+        vararg workoutSet: CardioSet
+    ): RealmWorkoutEntry {
+        return RealmWorkoutEntry().apply {
+            workout = RealmWorkout().apply {
+                name = workoutName
+                type = workoutType
+                realmWorkoutProperties = RealmWorkoutProperties().apply {
+                    listOfCardioSets = workoutSet.map { it }.toRealmList()
+                }
+            }
+            workoutId = id
+            timeStamp = LocalDate.now().plusDays(2).formatToCommonDate()
+        }
+    }
+
+    private fun libraryItemSample(
+        workoutName: String,
+        workoutType: String
+    ): RealmWorkoutLibrary {
+        return RealmWorkoutLibrary().apply {
+            name = workoutName
+            type = workoutType
+        }
+    }
+
+    val libraryItem = fun(
+        name: String,
+        type: String
+    ): RealmWorkoutLibrary {
+        return libraryItemSample(
+            workoutName = name,
+            workoutType = type
+        )
+    }
+}
