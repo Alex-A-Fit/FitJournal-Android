@@ -791,4 +791,13 @@ class AddWorkoutDetailViewModel @Inject constructor(
             callback(Result.FAILURE)
         }
     }
+
+    fun showSnackBar(
+        snackBarMessage: String,
+        snackBarCallback: suspend (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            snackBarCallback(snackBarMessage)
+        }
+    }
 }

@@ -9,7 +9,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.alexafit.fitjournal.R
-import com.alexafit.fitjournal.core.presentation.navigation.NavigationInterface
+import com.alexafit.fitjournal.core.presentation.navigation.NavigationDirectionInterface
 import com.alexafit.fitjournal.core.presentation.navigation.navigationEvent
 
 @Composable
@@ -31,12 +31,12 @@ fun LottieHomeScreenAnimation(
     if (progress == 1f) {
         if (isThisUserFirstTime) {
             navigationEvent(
-                navigationInterface = NavigationInterface.NavigateToOnboarding,
+                navigationDirectionInterface = NavigationDirectionInterface.NavigateToOnboarding,
                 navController = navController
             )
         } else {
             navigationEvent(
-                navigationInterface = NavigationInterface.NavigateToHome,
+                navigationDirectionInterface = NavigationDirectionInterface.NavigateToHome,
                 navController = navController
             )
         }

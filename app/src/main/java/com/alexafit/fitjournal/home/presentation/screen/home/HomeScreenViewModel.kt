@@ -52,7 +52,6 @@ class HomeScreenViewModel @Inject constructor(
             )
 
             HomeScreenEvents.ClearFilterExercisesDialog -> clearFilter()
-            HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> getDataFromRealmDb()
             HomeScreenEvents.SyncRealmWorkoutEntryFromDb -> {
                 val shouldSyncOccur =
                     realmWorkoutEntryUseCase.syncWorkoutEntryDbWithViewModelUseCase()
@@ -203,7 +202,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     // should be call on load or when needed for loading screen
-    private fun getDataFromRealmDb() {
+    fun getDataFromRealmDb() {
         updateHomeScreenState(
             newHomeScreenState = homeScreenState.copy(
                 listOfVisibleWorkoutsUiState = UiState.Loading

@@ -28,7 +28,7 @@ import com.alexafit.fitjournal.R
 import com.alexafit.fitjournal.core.presentation.commoncomponents.buttons.standardbuttons.AddToJournalButton
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.ViewTutorialDialog
 import com.alexafit.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
-import com.alexafit.fitjournal.core.presentation.navigation.NavigationInterface
+import com.alexafit.fitjournal.core.presentation.navigation.NavigationDirectionInterface
 import com.alexafit.fitjournal.core.presentation.screens.LoadingScreen
 import com.alexafit.fitjournal.core.presentation.theme.Spacing
 import com.alexafit.fitjournal.core.util.state.UiState
@@ -49,9 +49,9 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     homeScreenState: HomeScreenUiState,
     lazyListState: LazyListState,
-    navigateToDestination: (NavigationInterface) -> Unit,
+    navigateToDestination: (NavigationDirectionInterface) -> Unit,
     isBlurActive: Boolean,
-    removeBlur: () -> Unit,
+    setChildFabsVisibility: (Boolean) -> Unit,
     showSnackBar: suspend (String) -> Unit
 ) {
     LaunchedEffect(key1 = true) {
@@ -108,7 +108,7 @@ fun HomeScreen(
                             isDialogShowing = false,
                             onCallback = {
                                 isHelpDialogShowing = false
-                                navigateToDestination(NavigationInterface.NavigateToOnboarding)
+                                navigateToDestination(NavigationDirectionInterface.NavigateToOnboarding)
                             }
                         )
                     )
@@ -124,7 +124,7 @@ fun HomeScreen(
                 HomeEmptyScreen(
                     modifier = Modifier.fillMaxSize(),
                     navigateToAddWorkoutScreen = {
-                        navigateToDestination(NavigationInterface.NavigateToAddWorkout(workoutDate = homeScreenState.currentDate))
+                        navigateToDestination(NavigationDirectionInterface.NavigateToAddWorkout(workoutDate = homeScreenState.currentDate))
                     }
                 )
             }
@@ -149,10 +149,10 @@ fun HomeScreen(
                                             if (isBlurActive) null else clickIndication
                                         ) {
                                             if (isBlurActive) {
-                                                removeBlur()
+                                                setChildFabsVisibility(false)
                                             } else {
                                                 navigateToDestination(
-                                                    NavigationInterface.NavigateToEditWorkout(
+                                                    NavigationDirectionInterface.NavigateToEditWorkout(
                                                         workout.id
                                                     )
                                                 )
@@ -171,10 +171,10 @@ fun HomeScreen(
                                             indication = if (isBlurActive) null else clickIndication
                                         ) {
                                             if (isBlurActive) {
-                                                removeBlur()
+                                                setChildFabsVisibility(false)
                                             } else {
                                                 navigateToDestination(
-                                                    NavigationInterface.NavigateToEditWorkout(
+                                                    NavigationDirectionInterface.NavigateToEditWorkout(
                                                         workout.id
                                                     )
                                                 )
@@ -193,10 +193,10 @@ fun HomeScreen(
                                             indication = if (isBlurActive) null else clickIndication
                                         ) {
                                             if (isBlurActive) {
-                                                removeBlur()
+                                                setChildFabsVisibility(false)
                                             } else {
                                                 navigateToDestination(
-                                                    NavigationInterface.NavigateToEditWorkout(
+                                                    NavigationDirectionInterface.NavigateToEditWorkout(
                                                         workout.id
                                                     )
                                                 )
@@ -211,7 +211,7 @@ fun HomeScreen(
                         AddToJournalButton(
                             navigate = {
                                 navigateToDestination(
-                                    NavigationInterface.NavigateToAddWorkout(
+                                    NavigationDirectionInterface.NavigateToAddWorkout(
                                         workoutDate = homeScreenState.currentDate
                                     )
                                 )

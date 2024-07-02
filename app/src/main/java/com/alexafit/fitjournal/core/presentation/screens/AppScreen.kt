@@ -31,7 +31,7 @@ import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.AddWor
 import com.alexafit.fitjournal.core.presentation.commoncomponents.floatingactionbutton.AddWorkoutFab
 import com.alexafit.fitjournal.core.presentation.commoncomponents.floatingactionbutton.AnimatedFabColumn
 import com.alexafit.fitjournal.core.presentation.commoncomponents.googleads.AdaptiveBannerAd
-import com.alexafit.fitjournal.core.presentation.navigation.NavigationInterface
+import com.alexafit.fitjournal.core.presentation.navigation.NavigationDirectionInterface
 import com.alexafit.fitjournal.core.presentation.theme.Spacing
 import com.alexafit.fitjournal.core.util.localdate.formatToCommonDate
 import com.alexafit.fitjournal.library.domain.model.AddWorkoutToLibraryModel
@@ -48,7 +48,7 @@ fun AppScreen(
     navController: NavController,
     topAppBar: @Composable () -> Unit,
     mainScreen: @Composable (Modifier) -> Unit,
-    navigateToDestination: (NavigationInterface) -> Unit,
+    navigateToDestination: (NavigationDirectionInterface) -> Unit,
     addWorkoutToLibraryItemDatabase: ((AddWorkoutToLibraryModel) -> Unit)? = null,
     displayChildFabs: ((Boolean) -> Unit)? = null,
     showAds: Boolean = true,
@@ -184,7 +184,7 @@ fun AppScreen(
                             navigateToJournalEntry = {
                                 displayChildFabs?.invoke(false)
                                 navigateToDestination(
-                                    NavigationInterface.NavigateToAddWorkout(
+                                    NavigationDirectionInterface.NavigateToAddWorkout(
                                         workoutDate = LocalDate.now().formatToCommonDate()
                                     )
                                 )

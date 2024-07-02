@@ -23,7 +23,7 @@ import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.AddWor
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.DeleteWorkoutDialog
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.TransparentLoadingScreenDialog
 import com.alexafit.fitjournal.core.presentation.commoncomponents.textField.SearchBar
-import com.alexafit.fitjournal.core.presentation.navigation.NavigationInterface
+import com.alexafit.fitjournal.core.presentation.navigation.NavigationDirectionInterface
 import com.alexafit.fitjournal.core.presentation.theme.Spacing
 import com.alexafit.fitjournal.core.util.localdate.formatToCommonDate
 import com.alexafit.fitjournal.library.domain.model.AddWorkoutToLibraryModel
@@ -43,7 +43,7 @@ fun LibraryScreen(
     removeBlur: (Boolean) -> Unit,
     libraryScreenListState: LazyListState,
     showSnackbar: suspend (String) -> Unit,
-    navigateToDestination: (NavigationInterface) -> Unit
+    navigateToDestination: (NavigationDirectionInterface) -> Unit
 ) {
     LaunchedEffect(key1 = true) {
         libraryWorkoutState.libraryWorkoutClickEvent(LibraryWorkoutClickEvents.SyncRealmWorkoutEntryFromDb)
@@ -114,7 +114,7 @@ fun LibraryScreen(
             onAddToJournalButtonClick = {
                 openEditLibraryWorkoutDialog = false
                 navigateToDestination(
-                    NavigationInterface.NavigateToAddWorkoutDetails(
+                    NavigationDirectionInterface.NavigateToAddWorkoutDetails(
                         workoutName = libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutName,
                         workoutType = context.getString(libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutTypeEnum.stringId),
                         workoutDate = LocalDate.now().formatToCommonDate()
