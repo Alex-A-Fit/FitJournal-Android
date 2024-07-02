@@ -35,7 +35,6 @@ import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.Delete
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.EditWorkoutSetDialog
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.TransparentLoadingScreenDialog
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
-import com.alexafit.fitjournal.core.presentation.commoncomponents.text.CommonSubtitleText
 import com.alexafit.fitjournal.core.presentation.commoncomponents.text.CommonTitleText
 import com.alexafit.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.alexafit.fitjournal.core.presentation.screens.LoadingScreen

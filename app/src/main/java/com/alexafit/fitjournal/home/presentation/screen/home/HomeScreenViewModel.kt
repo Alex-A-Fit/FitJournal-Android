@@ -3,7 +3,6 @@ package com.alexafit.fitjournal.home.presentation.screen.home
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alexafit.fitjournal.core.domain.managers.DateManager
@@ -11,7 +10,6 @@ import com.alexafit.fitjournal.core.domain.mapper.mapToWorkoutUiModel
 import com.alexafit.fitjournal.core.domain.model.WorkoutModel
 import com.alexafit.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.alexafit.fitjournal.core.presentation.model.WorkoutUiModel
-import com.alexafit.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.alexafit.fitjournal.core.util.state.UiState
 import com.alexafit.fitjournal.home.presentation.model.events.HomeAppBarEvents
 import com.alexafit.fitjournal.home.presentation.model.events.HomeScreenEvents
