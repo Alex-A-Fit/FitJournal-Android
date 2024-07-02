@@ -105,7 +105,8 @@ class LibraryScreenViewModel @Inject constructor(
                     newWorkoutTypeEnum = event.context.getString(event.workoutTypeEnum.stringId)
                 )
                 viewModelScope.launch {
-                    val wasItemUpdated = realmWorkoutLibraryUseCase.updateLibraryItemInRealmDbUseCase(realmModel)
+                    val wasItemUpdated =
+                        realmWorkoutLibraryUseCase.updateLibraryItemInRealmDbUseCase(realmModel)
                     if (wasItemUpdated) {
                         updateLibraryWorkoutState(
                             newLibraryWorkoutState = libraryWorkoutState.copy(
@@ -126,6 +127,7 @@ class LibraryScreenViewModel @Inject constructor(
                     }
                 }
             }
+
             LibraryWorkoutClickEvents.SyncRealmWorkoutEntryFromDb -> {
                 val shouldSyncOccur = realmWorkoutLibraryUseCase.syncRealmWorkoutLibraryUseCase()
                 if (shouldSyncOccur) {
@@ -173,12 +175,12 @@ class LibraryScreenViewModel @Inject constructor(
             val workoutList = realmWorkoutLibraryUseCase.getRealmWorkoutLibraryList()
             if (workoutList.isNotEmpty()) {
                 val libraryList = workoutList.groupBy { it.name.first().uppercase() }.toSortedMap()
-                val masterWorkoutList = mapToLibraryUiList(libraryList)
+                val masterWorkoutList = mapToLibraryUiList(libraryList).toMutableStateList()
                 updateLibraryWorkoutState(
                     newLibraryWorkoutState = libraryWorkoutState.copy(
                         masterWorkoutList = masterWorkoutList,
                         listOfSearchedWorkouts = if (libraryWorkoutState.searchedTerm.isEmpty()) {
-                            masterWorkoutList.toMutableStateList()
+                            masterWorkoutList
                         } else {
                             searchForText(
                                 libraryWorkoutState.searchedTerm,
