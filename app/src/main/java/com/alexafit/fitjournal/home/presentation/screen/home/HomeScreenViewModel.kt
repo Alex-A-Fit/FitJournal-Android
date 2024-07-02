@@ -162,28 +162,28 @@ class HomeScreenViewModel @Inject constructor(
             )
         )
     }
-
-    private fun filterWorkouts(
-        filteredWorkoutList: List<WorkoutTypeEnum>
-    ) {
-        val currentFilterList = homeScreenState.filterList
-        // Adjust the filter list with the passed in parameter values
-        val newFilteredList = currentFilterList.map {
-            FilterWorkoutUiModel(
-                isWorkoutFilterSelected = filteredWorkoutList.contains(it.exerciseType),
-                exerciseType = it.exerciseType
-            )
-        }.toMutableStateList()
-        updateHomeScreenState(
-            newHomeScreenState = homeScreenState.copy(
-                filterList = newFilteredList,
-                listOfVisibleWorkoutsUiState = createWorkoutUiModel(
-                    workoutList = homeScreenState.currentDateListOfWorkouts,
-                    filterList = newFilteredList
-                )
-            )
-        )
-    }
+//    Removing Filter functionality as it was not needed at the time
+//    private fun filterWorkouts(
+//        filteredWorkoutList: List<WorkoutTypeEnum>
+//    ) {
+//        val currentFilterList = homeScreenState.filterList
+//        // Adjust the filter list with the passed in parameter values
+//        val newFilteredList = currentFilterList.map {
+//            FilterWorkoutUiModel(
+//                isWorkoutFilterSelected = filteredWorkoutList.contains(it.exerciseType),
+//                exerciseType = it.exerciseType
+//            )
+//        }.toMutableStateList()
+//        updateHomeScreenState(
+//            newHomeScreenState = homeScreenState.copy(
+//                filterList = newFilteredList,
+//                listOfVisibleWorkoutsUiState = createWorkoutUiModel(
+//                    workoutList = homeScreenState.currentDateListOfWorkouts,
+//                    filterList = newFilteredList
+//                )
+//            )
+//        )
+//    }
 
     private fun createWorkoutUiModel(
         workoutList: List<WorkoutModel>,

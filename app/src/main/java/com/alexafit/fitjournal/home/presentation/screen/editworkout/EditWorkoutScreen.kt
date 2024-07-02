@@ -494,13 +494,3 @@ fun WorkoutTitle(
             .padding(vertical = Spacing.spacing16)
     )
 }
-
-@Composable
-private fun WorkoutDate(workoutDate: String) {
-    CommonSubtitleText(
-        subtitleText = "Date: $workoutDate",
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Spacing.spacing16)
-    )
-}
