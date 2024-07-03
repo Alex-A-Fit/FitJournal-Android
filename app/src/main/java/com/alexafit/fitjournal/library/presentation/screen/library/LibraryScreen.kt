@@ -57,7 +57,6 @@ fun LibraryScreen(
     var openDeleteWorkoutDialog by rememberSaveable { mutableStateOf(false) }
     var showLoadingDialog by rememberSaveable { mutableStateOf(false) }
     var updateUi: Boolean by rememberSaveable { mutableStateOf(false) }
-    var snackBarMessage: String by rememberSaveable { mutableStateOf("") }
     var showAddWorkoutToLibraryDialog by rememberSaveable { mutableStateOf(false) }
 
     if (showAddWorkoutToLibraryDialog) {
@@ -97,7 +96,7 @@ fun LibraryScreen(
                         context = context,
                         onSuccessCallback = {
                             updateUi = true
-                            snackBarMessage = it
+                            showSnackbar(it)
                         },
                         onErrorCallback = {
                             updateUi = false
@@ -138,6 +137,7 @@ fun LibraryScreen(
                         onSuccessCallback = {
                             updateUi = true
                             showLoadingDialog = false
+                            showSnackbar(it)
                         },
                         onErrorCallback = {
                             updateUi = false
@@ -202,7 +202,6 @@ fun LibraryScreen(
                         updateLibraryListUiCallback = {
                             updateUi = false
                             showLoadingDialog = false
-                            showSnackbar(snackBarMessage)
                         }
                     )
                 }
