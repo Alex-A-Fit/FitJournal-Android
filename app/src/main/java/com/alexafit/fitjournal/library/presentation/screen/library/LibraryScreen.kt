@@ -23,7 +23,7 @@ import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.AddWor
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.DeleteWorkoutDialog
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.TransparentLoadingScreenDialog
 import com.alexafit.fitjournal.core.presentation.commoncomponents.textField.SearchBar
-import com.alexafit.fitjournal.core.presentation.navigation.NavigationInterface
+import com.alexafit.fitjournal.core.presentation.navigation.NavigationDirectionInterface
 import com.alexafit.fitjournal.core.presentation.theme.Spacing
 import com.alexafit.fitjournal.core.util.localdate.formatToCommonDate
 import com.alexafit.fitjournal.library.domain.model.AddWorkoutToLibraryModel
@@ -43,7 +43,7 @@ fun LibraryScreen(
     removeBlur: (Boolean) -> Unit,
     libraryScreenListState: LazyListState,
     showSnackbar: suspend (String) -> Unit,
-    navigateToDestination: (NavigationInterface) -> Unit
+    navigateToDestination: (NavigationDirectionInterface) -> Unit
 ) {
     LaunchedEffect(key1 = true) {
         libraryWorkoutState.libraryWorkoutClickEvent(LibraryWorkoutClickEvents.SyncRealmWorkoutEntryFromDb)
@@ -57,12 +57,7 @@ fun LibraryScreen(
     var openDeleteWorkoutDialog by rememberSaveable { mutableStateOf(false) }
     var showLoadingDialog by rememberSaveable { mutableStateOf(false) }
     var updateUi: Boolean by rememberSaveable { mutableStateOf(false) }
-    var snackbarMessage: String by rememberSaveable { mutableStateOf("") }
     var showAddWorkoutToLibraryDialog by rememberSaveable { mutableStateOf(false) }
-
-    val libraryWorkoutList by remember(libraryWorkoutState.masterWorkoutList) {
-        mutableStateOf(libraryWorkoutState.masterWorkoutList)
-    }
 
     if (showAddWorkoutToLibraryDialog) {
         AddWorkoutToLibraryDialog(
@@ -101,7 +96,7 @@ fun LibraryScreen(
                         context = context,
                         onSuccessCallback = {
                             updateUi = true
-                            snackbarMessage = it
+                            showSnackbar(it)
                         },
                         onErrorCallback = {
                             updateUi = false
@@ -114,7 +109,7 @@ fun LibraryScreen(
             onAddToJournalButtonClick = {
                 openEditLibraryWorkoutDialog = false
                 navigateToDestination(
-                    NavigationInterface.NavigateToAddWorkoutDetails(
+                    NavigationDirectionInterface.NavigateToAddWorkoutDetails(
                         workoutName = libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutName,
                         workoutType = context.getString(libraryWorkoutState.workoutItemDialogUiModel.libraryWorkoutItem.workoutTypeEnum.stringId),
                         workoutDate = LocalDate.now().formatToCommonDate()
@@ -142,6 +137,7 @@ fun LibraryScreen(
                         onSuccessCallback = {
                             updateUi = true
                             showLoadingDialog = false
+                            showSnackbar(it)
                         },
                         onErrorCallback = {
                             updateUi = false
@@ -160,60 +156,62 @@ fun LibraryScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if (libraryWorkoutList.isEmpty()) {
-            LibraryNoneScreen(
-                modifier = Modifier.fillMaxSize(),
-                openAddWorkoutToLibraryDialog = {
-                    showAddWorkoutToLibraryDialog = true
+        when {
+            libraryWorkoutState.masterWorkoutList.isNotEmpty() -> {
+                Column(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(horizontal = Spacing.spacing16)
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null
+                        ) {
+                            keyboardController?.hide()
+                            focusManager.clearFocus(true)
+                            removeBlur(true)
+                        }
+                ) {
+                    SearchBar(
+                        searchedTerm = libraryWorkoutState.searchedTerm,
+                        updateSearch = { searchedText ->
+                            libraryWorkoutState.libraryWorkoutClickEvent(
+                                LibraryWorkoutClickEvents.UpdateSearch(searchedText)
+                            )
+                        },
+                        clearSearch = {
+                            libraryWorkoutState.libraryWorkoutClickEvent(
+                                LibraryWorkoutClickEvents.ClearSearch
+                            )
+                        },
+                        keyboardController = keyboardController,
+                        focusManager = focusManager
+                    )
+                    AddNewWorkoutText(
+                        modifier = Modifier.padding(vertical = Spacing.spacing8),
+                        onClick = {
+                            showAddWorkoutToLibraryDialog = true
+                        }
+                    )
+                    LibraryListSection(
+                        libraryWorkoutState = libraryWorkoutState,
+                        isBlurActive = isBlurActive,
+                        libraryScreenListState = libraryScreenListState,
+                        showEditLibraryWorkoutDialog = { openEditLibraryWorkoutDialog = true },
+                        removeBlur = removeBlur,
+                        updateLibraryListUi = updateUi,
+                        updateLibraryListUiCallback = {
+                            updateUi = false
+                            showLoadingDialog = false
+                        }
+                    )
                 }
-            )
-        }
-        if (libraryWorkoutList.isNotEmpty()) {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(horizontal = Spacing.spacing16)
-                    .clickable(
-                        interactionSource = interactionSource,
-                        indication = null
-                    ) {
-                        keyboardController?.hide()
-                        focusManager.clearFocus(true)
-                        removeBlur(true)
-                    }
-            ) {
-                SearchBar(
-                    searchedTerm = libraryWorkoutState.searchedTerm,
-                    updateSearch = { searchedText ->
-                        libraryWorkoutState.libraryWorkoutClickEvent(
-                            LibraryWorkoutClickEvents.UpdateSearch(searchedText)
-                        )
-                    },
-                    clearSearch = {
-                        libraryWorkoutState.libraryWorkoutClickEvent(
-                            LibraryWorkoutClickEvents.ClearSearch
-                        )
-                    },
-                    keyboardController = keyboardController,
-                    focusManager = focusManager
-                )
-                AddNewWorkoutText(
-                    modifier = Modifier.padding(vertical = Spacing.spacing8),
-                    onClick = {
+            }
+
+            else -> {
+                LibraryNoneScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    openAddWorkoutToLibraryDialog = {
                         showAddWorkoutToLibraryDialog = true
-                    }
-                )
-                LibraryListSection(
-                    libraryWorkoutState = libraryWorkoutState,
-                    isBlurActive = isBlurActive,
-                    libraryScreenListState = libraryScreenListState,
-                    showEditLibraryWorkoutDialog = { openEditLibraryWorkoutDialog = true },
-                    removeBlur = removeBlur,
-                    updateLibraryListUi = updateUi,
-                    updateLibraryListUiCallback = {
-                        updateUi = false
-                        showLoadingDialog = false
-                        showSnackbar(snackbarMessage)
                     }
                 )
             }

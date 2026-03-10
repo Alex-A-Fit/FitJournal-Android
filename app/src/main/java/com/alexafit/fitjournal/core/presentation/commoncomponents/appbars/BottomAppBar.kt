@@ -17,14 +17,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.alexafit.fitjournal.R
 import com.alexafit.fitjournal.core.presentation.navigation.Arguments
-import com.alexafit.fitjournal.core.presentation.navigation.NavigationInterface
+import com.alexafit.fitjournal.core.presentation.navigation.NavigationDirectionInterface
 import com.alexafit.fitjournal.core.presentation.navigation.Route
 import com.alexafit.fitjournal.core.presentation.theme.Spacing
 
 @Composable
 fun BottomAppBar(
     navController: NavController,
-    navigate: (NavigationInterface) -> Unit
+    navigate: (NavigationDirectionInterface) -> Unit
 ) {
     androidx.compose.material3.BottomAppBar(
         modifier = Modifier.fillMaxWidth(),
@@ -44,7 +44,7 @@ fun BottomAppBar(
                 selected = false,
                 onClick = {
                     if (currentDestination?.route != Route.ONBOARDING_SCREEN) {
-                        navigate(NavigationInterface.NavigateToWorkoutLibrary)
+                        navigate(NavigationDirectionInterface.NavigateToWorkoutLibrary)
                     }
                 },
                 icon = {
@@ -66,7 +66,7 @@ fun BottomAppBar(
                 selected = false,
                 onClick = {
                     if (currentDestination?.route != Route.ONBOARDING_SCREEN) {
-                        navigate(NavigationInterface.NavigateToHome)
+                        navigate(NavigationDirectionInterface.NavigateToHome)
                     }
                 },
                 icon = {
@@ -88,7 +88,7 @@ fun BottomAppBar(
                 selected = false,
                 onClick = {
                     if (currentDestination?.route != Route.ONBOARDING_SCREEN) {
-                        navigate(NavigationInterface.NavigateToWorkoutStatistics)
+                        navigate(NavigationDirectionInterface.NavigateToWorkoutStatistics)
                     }
                 },
                 icon = {

@@ -35,7 +35,6 @@ import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.Delete
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.EditWorkoutSetDialog
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.TransparentLoadingScreenDialog
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.components.editworkoutset.model.WorkoutTypeDialog
-import com.alexafit.fitjournal.core.presentation.commoncomponents.text.CommonSubtitleText
 import com.alexafit.fitjournal.core.presentation.commoncomponents.text.CommonTitleText
 import com.alexafit.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.alexafit.fitjournal.core.presentation.screens.LoadingScreen
@@ -53,7 +52,7 @@ import com.alexafit.fitjournal.home.presentation.screen.editworkout.components.E
 fun EditWorkoutScreen(
     modifier: Modifier = Modifier,
     editWorkoutUiState: EditWorkoutUiState,
-    showSnackbar: suspend (String) -> Unit,
+    showSnackBar: suspend (String) -> Unit,
     navigateToJournal: () -> Unit
 ) {
     var showDeleteDialog by rememberSaveable {
@@ -137,7 +136,7 @@ fun EditWorkoutScreen(
                                 workoutTypeDialog = it,
                                 workoutModel = uiState.data,
                                 workoutType = workoutTypeAsString,
-                                onUpdateErrorCallback = { showSnackbar(errorWithUpdatingSets) },
+                                onUpdateErrorCallback = { showSnackBar(errorWithUpdatingSets) },
                                 onSuccessfulUpdateCallback = {
                                     showLoadingDialog = false
                                 }
@@ -163,7 +162,7 @@ fun EditWorkoutScreen(
                         editWorkoutUiState.editWorkoutEvents(
                             EditWorkoutEvents.DeleteEntireWorkout(
                                 workoutId = workoutUpForDeletion,
-                                onDeleteErrorCallback = { showSnackbar(onDeleteFailedSnackBarText) },
+                                onDeleteErrorCallback = { showSnackBar(onDeleteFailedSnackBarText) },
                                 onSuccessfulDeleteCallback = {
                                     navigateToJournal()
                                 }
@@ -184,13 +183,13 @@ fun EditWorkoutScreen(
                                 userSelectedDate = selectedDate,
                                 onSuccessfulUpdateCallback = {
                                     showDatePickerDialog = false
-                                    showSnackbar(dateUpdatedText)
+                                    showSnackBar(dateUpdatedText)
                                 },
                                 workout = uiState.data,
                                 workoutType = workoutTypeAsString,
                                 onErrorCallback = {
                                     showDatePickerDialog = false
-                                    showSnackbar(dateFailedToUpdateText)
+                                    showSnackBar(dateFailedToUpdateText)
                                 }
                             )
                         )
@@ -250,7 +249,7 @@ fun EditWorkoutScreen(
                                             newWeightLiftingItem = newWeightTrainingItem,
                                             workoutType = workoutTypeAsString,
                                             workoutModel = uiState.data,
-                                            onAddErrorCallback = { showSnackbar(errorWithAddingSets) }
+                                            onAddErrorCallback = { showSnackBar(errorWithAddingSets) }
                                         )
                                     )
                                 }
@@ -279,7 +278,7 @@ fun EditWorkoutScreen(
                                             newCalisthenicItem = newCalisthenicItem,
                                             workoutType = workoutTypeAsString,
                                             workoutModel = uiState.data,
-                                            onAddErrorCallback = { showSnackbar(errorWithAddingSets) }
+                                            onAddErrorCallback = { showSnackBar(errorWithAddingSets) }
                                         )
                                     )
                                 }
@@ -300,7 +299,7 @@ fun EditWorkoutScreen(
                                             newCardioItem = newCardioItem,
                                             workoutType = workoutTypeAsString,
                                             workoutModel = uiState.data,
-                                            onAddErrorCallback = { showSnackbar(errorWithAddingSets) }
+                                            onAddErrorCallback = { showSnackBar(errorWithAddingSets) }
                                         )
                                     )
                                 }
@@ -346,7 +345,7 @@ fun EditWorkoutScreen(
                                             workoutType = workoutTypeAsString,
                                             workoutModel = uiState.data,
                                             onDeleteErrorCallback = {
-                                                showSnackbar(
+                                                showSnackBar(
                                                     errorWithSetsBeingDeleted
                                                 )
                                             }
@@ -387,7 +386,7 @@ fun EditWorkoutScreen(
                                             workoutType = workoutTypeAsString,
                                             workoutModel = uiState.data,
                                             onDeleteErrorCallback = {
-                                                showSnackbar(
+                                                showSnackBar(
                                                     errorWithSetsBeingDeleted
                                                 )
                                             }
@@ -428,7 +427,7 @@ fun EditWorkoutScreen(
                                             workoutType = workoutTypeAsString,
                                             workoutModel = uiState.data,
                                             onDeleteErrorCallback = {
-                                                showSnackbar(
+                                                showSnackBar(
                                                     errorWithSetsBeingDeleted
                                                 )
                                             }
@@ -492,15 +491,5 @@ fun WorkoutTitle(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = Spacing.spacing16)
-    )
-}
-
-@Composable
-private fun WorkoutDate(workoutDate: String) {
-    CommonSubtitleText(
-        subtitleText = "Date: $workoutDate",
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Spacing.spacing16)
     )
 }

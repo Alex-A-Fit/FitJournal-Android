@@ -1,5 +1,7 @@
 package com.alexafit.fitjournal
 
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alexafit.fitjournal.core.data.repository.OnboardingTutorialRepositoryImpl
@@ -33,12 +35,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getDataFromRealm(
-        getDataFromRealmForHomeScreen: () -> Unit
-    ) {
-        getDataFromRealmForHomeScreen()
-    }
-
     fun addWorkoutToLibraryDatabase(
         workoutName: String,
         workoutType: String,
@@ -60,6 +56,21 @@ class MainViewModel @Inject constructor(
             } else {
                 errorCallback()
             }
+        }
+    }
+
+    fun showSnackBar(
+        snackBarHostState: SnackbarHostState,
+        message: String,
+        actionLabelId: String? = null
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            snackBarHostState.showSnackbar(
+                message = message,
+                actionLabel = actionLabelId,
+                withDismissAction = true,
+                duration = SnackbarDuration.Short
+            )
         }
     }
 }

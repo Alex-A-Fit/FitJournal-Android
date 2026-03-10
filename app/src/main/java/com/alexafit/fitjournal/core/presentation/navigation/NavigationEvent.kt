@@ -3,44 +3,44 @@ package com.alexafit.fitjournal.core.presentation.navigation
 import androidx.navigation.NavController
 
 fun navigationEvent(
-    navigationInterface: NavigationInterface,
+    navigationDirectionInterface: NavigationDirectionInterface,
     navController: NavController
 ) {
-    when (navigationInterface) {
-        NavigationInterface.NavigateToHome -> {
+    when (navigationDirectionInterface) {
+        NavigationDirectionInterface.NavigateToHome -> {
             navController.popBackStack()
             navController.navigate(Route.HOME_SCREEN)
         }
 
-        NavigationInterface.NavigateToWorkoutLibrary -> {
+        NavigationDirectionInterface.NavigateToWorkoutLibrary -> {
             navController.navigate(Route.WORKOUT_LIBRARY_SCREEN)
         }
 
-        NavigationInterface.NavigateToWorkoutStatistics -> {
+        NavigationDirectionInterface.NavigateToWorkoutStatistics -> {
             navController.navigate(Route.WORKOUT_STATISTICS_SCREEN)
         }
 
-        is NavigationInterface.NavigateToAddWorkout -> {
+        is NavigationDirectionInterface.NavigateToAddWorkout -> {
             navController.navigate(
-                "${Route.ADD_WORKOUT_SCREEN}/${navigationInterface.workoutDate}"
+                "${Route.ADD_WORKOUT_SCREEN}/${navigationDirectionInterface.workoutDate}"
             )
         }
 
-        is NavigationInterface.NavigateToEditWorkout -> {
+        is NavigationDirectionInterface.NavigateToEditWorkout -> {
             navController.navigate(
-                route = "${Route.EDIT_JOURNAL_SCREEN}/${navigationInterface.workoutId}"
+                route = "${Route.EDIT_JOURNAL_SCREEN}/${navigationDirectionInterface.workoutId}"
             )
         }
 
-        is NavigationInterface.NavigateToAddWorkoutDetails -> {
-            navController.navigate("${Route.ADD_WORKOUT_DETAILS_SCREEN}/${navigationInterface.workoutName}/${navigationInterface.workoutType}/${navigationInterface.workoutDate}")
+        is NavigationDirectionInterface.NavigateToAddWorkoutDetails -> {
+            navController.navigate("${Route.ADD_WORKOUT_DETAILS_SCREEN}/${navigationDirectionInterface.workoutName}/${navigationDirectionInterface.workoutType}/${navigationDirectionInterface.workoutDate}")
         }
 
-        is NavigationInterface.NavigateToStatisticsDetails -> {
-            navController.navigate("${Route.WORKOUT_STATISTICS_DETAILS_SCREEN}/${navigationInterface.workoutName}")
+        is NavigationDirectionInterface.NavigateToStatisticsDetails -> {
+            navController.navigate("${Route.WORKOUT_STATISTICS_DETAILS_SCREEN}/${navigationDirectionInterface.workoutName}")
         }
 
-        NavigationInterface.NavigateToOnboarding -> {
+        NavigationDirectionInterface.NavigateToOnboarding -> {
             navController.navigate(Route.ONBOARDING_SCREEN)
         }
     }

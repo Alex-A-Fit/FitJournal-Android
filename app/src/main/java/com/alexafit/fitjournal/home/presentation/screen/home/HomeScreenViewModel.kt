@@ -3,7 +3,6 @@ package com.alexafit.fitjournal.home.presentation.screen.home
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alexafit.fitjournal.core.domain.managers.DateManager
@@ -11,7 +10,6 @@ import com.alexafit.fitjournal.core.domain.mapper.mapToWorkoutUiModel
 import com.alexafit.fitjournal.core.domain.model.WorkoutModel
 import com.alexafit.fitjournal.core.domain.usecase.realm.workout.RealmWorkoutEntryUseCase
 import com.alexafit.fitjournal.core.presentation.model.WorkoutUiModel
-import com.alexafit.fitjournal.core.presentation.model.enums.WorkoutTypeEnum
 import com.alexafit.fitjournal.core.util.state.UiState
 import com.alexafit.fitjournal.home.presentation.model.events.HomeAppBarEvents
 import com.alexafit.fitjournal.home.presentation.model.events.HomeScreenEvents
@@ -52,7 +50,6 @@ class HomeScreenViewModel @Inject constructor(
             )
 
             HomeScreenEvents.ClearFilterExercisesDialog -> clearFilter()
-            HomeScreenEvents.CollectRealmWorkoutEntryFromDb -> getDataFromRealmDb()
             HomeScreenEvents.SyncRealmWorkoutEntryFromDb -> {
                 val shouldSyncOccur =
                     realmWorkoutEntryUseCase.syncWorkoutEntryDbWithViewModelUseCase()
@@ -163,28 +160,28 @@ class HomeScreenViewModel @Inject constructor(
             )
         )
     }
-
-    private fun filterWorkouts(
-        filteredWorkoutList: List<WorkoutTypeEnum>
-    ) {
-        val currentFilterList = homeScreenState.filterList
-        // Adjust the filter list with the passed in parameter values
-        val newFilteredList = currentFilterList.map {
-            FilterWorkoutUiModel(
-                isWorkoutFilterSelected = filteredWorkoutList.contains(it.exerciseType),
-                exerciseType = it.exerciseType
-            )
-        }.toMutableStateList()
-        updateHomeScreenState(
-            newHomeScreenState = homeScreenState.copy(
-                filterList = newFilteredList,
-                listOfVisibleWorkoutsUiState = createWorkoutUiModel(
-                    workoutList = homeScreenState.currentDateListOfWorkouts,
-                    filterList = newFilteredList
-                )
-            )
-        )
-    }
+//    Removing Filter functionality as it was not needed at the time
+//    private fun filterWorkouts(
+//        filteredWorkoutList: List<WorkoutTypeEnum>
+//    ) {
+//        val currentFilterList = homeScreenState.filterList
+//        // Adjust the filter list with the passed in parameter values
+//        val newFilteredList = currentFilterList.map {
+//            FilterWorkoutUiModel(
+//                isWorkoutFilterSelected = filteredWorkoutList.contains(it.exerciseType),
+//                exerciseType = it.exerciseType
+//            )
+//        }.toMutableStateList()
+//        updateHomeScreenState(
+//            newHomeScreenState = homeScreenState.copy(
+//                filterList = newFilteredList,
+//                listOfVisibleWorkoutsUiState = createWorkoutUiModel(
+//                    workoutList = homeScreenState.currentDateListOfWorkouts,
+//                    filterList = newFilteredList
+//                )
+//            )
+//        )
+//    }
 
     private fun createWorkoutUiModel(
         workoutList: List<WorkoutModel>,
@@ -203,7 +200,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     // should be call on load or when needed for loading screen
-    private fun getDataFromRealmDb() {
+    fun getDataFromRealmDb() {
         updateHomeScreenState(
             newHomeScreenState = homeScreenState.copy(
                 listOfVisibleWorkoutsUiState = UiState.Loading

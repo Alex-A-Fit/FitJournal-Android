@@ -23,7 +23,7 @@ import com.alexafit.fitjournal.addWorkout.model.AddWorkoutUiModel
 import com.alexafit.fitjournal.addWorkout.model.events.AddWorkoutEvents
 import com.alexafit.fitjournal.core.presentation.commoncomponents.dialogs.AddWorkoutToLibraryDialog
 import com.alexafit.fitjournal.core.presentation.commoncomponents.textField.SearchBar
-import com.alexafit.fitjournal.core.presentation.navigation.NavigationInterface
+import com.alexafit.fitjournal.core.presentation.navigation.NavigationDirectionInterface
 import com.alexafit.fitjournal.core.presentation.theme.Spacing
 import com.alexafit.fitjournal.library.domain.model.AddWorkoutToLibraryModel
 
@@ -33,7 +33,7 @@ fun AddWorkoutScreen(
     addWorkoutUiState: AddWorkoutUiModel,
     workoutDate: String,
     showSnackBar: suspend (String) -> Unit,
-    navigateToDestination: (NavigationInterface) -> Unit
+    navigateToDestination: (NavigationDirectionInterface) -> Unit
 ) {
     LaunchedEffect(key1 = true) {
         addWorkoutUiState.handleAddWorkoutClickEvents(AddWorkoutEvents.SyncRealmWorkoutEntryFromDb)
@@ -118,7 +118,7 @@ fun AddWorkoutScreen(
                 workoutList = addWorkoutUiState.listOfSearchedWorkouts,
                 selectedWorkout = { name, type ->
                     navigateToDestination(
-                        NavigationInterface.NavigateToAddWorkoutDetails(
+                        NavigationDirectionInterface.NavigateToAddWorkoutDetails(
                             name,
                             type,
                             date
