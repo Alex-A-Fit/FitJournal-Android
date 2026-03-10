@@ -30,15 +30,15 @@ android {
 
     buildTypes {
         release {
-            val ADS_ID_VALUE: String = gradleLocalProperties(rootDir, providers).getProperty("ADS_ID_PROD")
-            buildConfigField("String", "ADS_ID", ADS_ID_VALUE)
+//            val ADS_ID_VALUE: String = gradleLocalProperties(rootDir, providers).getProperty("ADS_ID_PROD")
+//            buildConfigField("String", "ADS_ID", ADS_ID_VALUE)
 
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         debug {
-            val ADS_ID_VALUE: String = gradleLocalProperties(rootDir, providers).getProperty("ADS_ID")
-            buildConfigField("String", "ADS_ID", ADS_ID_VALUE)
+//            val ADS_ID_VALUE: String = gradleLocalProperties(rootDir, providers).getProperty("ADS_ID")
+//            buildConfigField("String", "ADS_ID", ADS_ID_VALUE)
         }
     }
     compileOptions {

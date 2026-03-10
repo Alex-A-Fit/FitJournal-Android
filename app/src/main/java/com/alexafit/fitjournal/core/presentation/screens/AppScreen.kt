@@ -51,7 +51,7 @@ fun AppScreen(
     navigateToDestination: (NavigationInterface) -> Unit,
     addWorkoutToLibraryItemDatabase: ((AddWorkoutToLibraryModel) -> Unit)? = null,
     displayChildFabs: ((Boolean) -> Unit)? = null,
-    showAds: Boolean = true,
+    showAds: Boolean = false,
     bottomBarVisibility: Boolean = true
 ) {
     var showAddWorkoutToLibraryDialog by remember {
@@ -104,11 +104,11 @@ fun AppScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            if (showAds) {
-                AdaptiveBannerAd(
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+//            if (showAds) {
+//                AdaptiveBannerAd(
+//                    modifier = Modifier.fillMaxWidth()
+//                )
+//            }
             Box(
                 modifier = Modifier
                     .fillMaxSize()

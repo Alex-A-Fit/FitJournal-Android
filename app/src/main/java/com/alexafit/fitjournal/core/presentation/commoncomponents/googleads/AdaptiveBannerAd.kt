@@ -36,7 +36,8 @@ fun AdaptiveBannerAd(modifier: Modifier = Modifier) {
                         adWidth
                     )
                 )
-                adUnitId = BuildConfig.ADS_ID
+                // no local ad id configured
+//                adUnitId = BuildConfig.ADS_ID
                 loadAd(AdRequest.Builder().build())
             }
         }
